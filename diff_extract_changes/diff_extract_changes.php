@@ -70,7 +70,6 @@ if ($options['help']) {
 
 Options:
 -h, --help            Print out this help
---
 -d, --diff            Unified diff file to process
 -o, --output          Output format (txt or xml)
 
@@ -132,6 +131,8 @@ class diff_changes_extractor {
         $cfile = ''; // Current file
         $clineinfile = 0; // Current line in current file
         $clineint = array(); // Current line interval being modfied
+        $inchunk = false; // To determine if we are in a chunk or no
+        $deletefile = false; // To detect delete operation and skip those files
 
         // Skip always these lines
         $skiplines = array('diff', 'inde', '--- ');
@@ -146,28 +147,46 @@ class diff_changes_extractor {
                 // Get very 4 first chars, that's enough to analyze the diff
                 $lineheader = substr($line, 0, 4);
 
-                // We can safely ignore some lines
+                // We can safely ignore some lines always
                 if (in_array($lineheader, $skiplines)) {
+                    continue;
+                }
+
+                // If it's one deleted file, we mark it to ignore
+                if ($lineheader === 'dele') {
+                    $deletefile = true;
                     continue;
                 }
 
                 // Detect if we are changing of file
                 if ($lineheader === '+++ ') {
+
+                    $clineinfile = 0;
+                    $inchunk = false;
+
                     // Output interval end
                     if (!empty($clineint)) {
                         $this->output_interval_end($clineint);
+                        $clineint = array();
                     }
+
                     // Output file end
                     if ($cfile) {
                         $this->output_file_end($cfile);
+                        $cfile = '';
                     }
+
+                    // Skip new file if deleting
+                    if ($deletefile) {
+                        $deletefile = false;
+                        continue;
+                    }
+
                     // Reset variables for new file
-                    if (!preg_match('/^\+\+\+ (b\/)?(.*)/', $line, $match)) {
+                    if (!preg_match('/^\+\+\+ (b\/)?([^\s]*)/', $line, $match)) {
                         print_error('Error: Something went wrong matching file. Line: ' . $line);
                     }
                     $cfile = $match[2];
-                    $clineinfile = 0;
-                    $clineint = array();
                     // Output file begin
                     $this->output_file_begin($cfile);
                     continue;
@@ -178,13 +197,27 @@ class diff_changes_extractor {
                     // Output interval end
                     if (!empty($clineint)) {
                         $this->output_interval_end($clineint);
+                        $clineint = array();
                     }
+
                     // Change variables for new chunk
-                    if (!preg_match('/^@@ .*\+(\d*),.*/', $line, $match)) {
+                    if (!preg_match('/^@@ .*\+(\d*).*@@/', $line, $match)) {
                         print_error('Error: Something went wrong matching chunk. Line: ' . $line);
                     }
+
+                    // If the line matched is < 0 (delete all), skip the chunk
+                    if ($match[1] < 1) {
+                        continue;
+                    }
+
                     $clineinfile = $match[1] - 1; // Position to line before chunk begins
                     $clineint = array();
+                    $inchunk = true;
+                    continue;
+                }
+
+                // Skip any further processing if we are not $inchunk
+                if (!$inchunk) {
                     continue;
                 }
 
@@ -202,8 +235,8 @@ class diff_changes_extractor {
                     // Output interval end
                     if (!empty($clineint)) {
                         $this->output_interval_end($clineint);
+                        $clineint = array();
                     }
-                    $clineint = array();
                     continue;
                 }
 
@@ -227,10 +260,12 @@ class diff_changes_extractor {
             // Output interval end
             if (!empty($clineint)) {
                 $this->output_interval_end($clineint);
+                $clineint = array();
             }
             // output file end
             if ($cfile) {
                 $this->output_file_end($cfile);
+                $cfile = '';
             }
             // Finished, output end
             $this->output_end();
@@ -304,7 +339,7 @@ class diff_changes_extractor {
      */
     private function output_interval_end($interval) {
         if ($this->output == 'xml') {
-            echo 'to="' . $interval[1] . '" />' . PHP_EOL;
+            echo 'to="' . $interval[1] . '"/>' . PHP_EOL;
         } else {
             echo $interval[1] . ';';
         }
