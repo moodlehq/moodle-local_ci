@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -34,8 +33,9 @@
  *     component: optional, the name of the component the setting belongs to (forum, auth_manual...)
  *     value: the configuration value (only on add rules).
  *
- * @package    core
- * @subpackage ci
+ * @category   ci
+ * @package    local_ci
+ * @subpackage configure_site
  * @copyright  2011 Eloy Lafuente (http://stronk7.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
