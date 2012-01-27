@@ -104,6 +104,7 @@ fi
 mysqladmin --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --default-character-set=utf8 --force drop $installdb
 mysqladmin --user=$dbuser2 --password=$dbpass2 --host=$dbhost2 --default-character-set=utf8 --force drop $upgradedb
 rm -fr config.php
+rm -fr $datadir
 
 # If arrived here, return the exitstatus of the php execution
 exit $exitstatus
