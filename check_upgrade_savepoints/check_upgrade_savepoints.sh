@@ -23,7 +23,7 @@ rm -fr $gitdir/check_upgrade_savepoints.php
 
 # Look for ERROR or WARN in the resultsfile
 count=`grep -P "ERROR|WARN" "$resultfile" | wc -l`
-# Number of incorrect whitespace has grown
+# Check if there are problems
 if (($count > 0))
 then
     exit 1
