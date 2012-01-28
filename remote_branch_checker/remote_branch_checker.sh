@@ -81,6 +81,11 @@ set -e
 
 # ########## ########## ########## ##########
 
+# Disable exit-on-error for the rest of the script, it will
+# advance no matter of any check returning error. At the end
+# we will decide based on gathered information
+set +e
+
 # First, we execute all the checks requiring complete site codebase
 
 # Run the db install/upgrade comparison check
@@ -89,14 +94,29 @@ set -e
 # Run the simpletest unittests
 
 # Run the PHPCPD
+#/opt/local/bin/php ${mydir}/../copy_paste_detector/copy_paste_detector.php \
+#    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
 # ########## ########## ########## ##########
-
-# Now run all the checks that only need the patchset affected files
 
 # Now we can proceed to delete all the files not being part of the
 # patchset and also the excluded paths, because all the remaining checks
 # are perfomed against the code introduced by the patchset
+
+# Remove all the excluded (but .git)
+set -e
+for todelete in ${excluded}; do
+    if [[ ${todelete} =~ ".git" ]]; then
+        continue
+    fi
+    rm -fr ${WORKSPACE}/${todelete}
+done
+
+# Remove all the files not part of the patchset
+
+# ########## ########## ########## ##########
+
+# Now run all the checks that only need the patchset affected files
 
 # Run the upgrade savepoints checker
 # (only if there is any *upgrade* file involved)
