@@ -69,6 +69,14 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 set -e
 
+# Get all the files affected by the patchset, plus the .git and work directories
+set +x
+echo "${WORKSPACE}/.git
+${WORKSPACE}/work
+$( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
+    awk -v w="${WORKSPACE}" -F\" '{print w"/"$2}' )" > ${WORKSPACE}/work/patchset.files
+set -x
+
 # Try to merge the patchset (detecting conflicts)
 set +e
 /opt/local/bin/git merge FETCH_HEAD
@@ -94,8 +102,8 @@ set +e
 # Run the simpletest unittests
 
 # Run the PHPCPD
-#/opt/local/bin/php ${mydir}/../copy_paste_detector/copy_paste_detector.php \
-#    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
+/opt/local/bin/php ${mydir}/../copy_paste_detector/copy_paste_detector.php \
+    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
 # ########## ########## ########## ##########
 
@@ -104,33 +112,49 @@ set +e
 # are perfomed against the code introduced by the patchset
 
 # Remove all the excluded (but .git)
-set -e
+set -e +x
 for todelete in ${excluded}; do
     if [[ ${todelete} =~ ".git" ]]; then
         continue
     fi
     rm -fr ${WORKSPACE}/${todelete}
 done
+set -x
 
-# Remove all the files not part of the patchset
+# Remove all the files, but the patchset ones and .git and work
+find ${WORKSPACE} -type f | grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
+
+# Remove all the empty dirs remaining, but .git and work
+find ${WORKSPACE} -type d -depth -empty -not \( -name .git -o -name work -prune \) -delete
 
 # ########## ########## ########## ##########
 
 # Now run all the checks that only need the patchset affected files
 
-# Run the upgrade savepoints checker
-# (only if there is any *upgrade* file involved)
+# Disable exit-on-error for the rest of the script, it will
+# advance no matter of any check returning error. At the end
+# we will decide based on gathered information
+set +e
+
+# Run the upgrade savepoints checker, converting it to checkstyle format
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
-/opt/local/bin/php ${WORKSPACE}/check_upgrade_savepoints.php > ${WORKSPACE}/work/savepoints.txt
+/opt/local/bin/php ${WORKSPACE}/check_upgrade_savepoints.php |
+    /opt/local/bin/php ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
+
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPPMD
+/opt/local/bin/php ${mydir}/../project_mess_detector/project_mess_detector.php \
+    ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
 
 # Run the PHPCS
+/opt/local/bin/php ${mydir}/../coding_standards_detector/coding_standards_detector.php \
+    --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
+    --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
 
-# Run the PHPDOCS
-
-# Run the TODOs
+# Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
+/opt/local/bin/php ${mydir}/../../moodlecheck/cli/moodlecheck.php \
+    --path=${WORKSPACE} --format=xml > "${WORKSPACE}/work/docs.xml"
 
 # ########## ########## ########## ##########
 
