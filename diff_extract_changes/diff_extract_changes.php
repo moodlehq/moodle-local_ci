@@ -74,7 +74,7 @@ Options:
 -o, --output          Output format (txt or xml)
 
 Example:
-\$sudo -u www-data /usr/bin/php admin/ci/diff_extract_changes/diff_extract_changes.php --file=example.diff --output=txt
+\$sudo -u www-data /usr/bin/php local/ci/diff_extract_changes/diff_extract_changes.php --file=example.diff --output=txt
 ";
     echo $help;
     exit(0);

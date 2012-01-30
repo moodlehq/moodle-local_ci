@@ -89,7 +89,7 @@ Options:
 --dbprefixX           Prefix to apply to all DB objects. Defaults to mdl. 2nd defaults to 1st
 
 Example:
-\$sudo -u www-data /usr/bin/php admin/ci/compare_databases/compare_databases.php --dbuser1=stronk7 --dbpass1=mojitos --dbname1=dbone --dbname2=dbtwo
+\$sudo -u www-data /usr/bin/php local/ci/compare_databases/compare_databases.php --dbuser1=stronk7 --dbpass1=mojitos --dbname1=dbone --dbname2=dbtwo
 ";
 
     echo $help;

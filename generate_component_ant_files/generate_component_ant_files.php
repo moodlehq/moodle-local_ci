@@ -58,7 +58,7 @@ Options:
 --basedir             Full path to the moodle base dir to fill with build.xml files
 
 Example:
-\$sudo -u www-data /usr/bin/php admin/ci/generate_component_ant_files/generate_component_ant_files.php --basedir=/home/moodle/git
+\$sudo -u www-data /usr/bin/php local/ci/generate_component_ant_files/generate_component_ant_files.php --basedir=/home/moodle/git
 ";
 
     echo $help;
