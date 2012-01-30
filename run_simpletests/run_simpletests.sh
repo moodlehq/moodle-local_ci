@@ -34,7 +34,7 @@ cp $mydir/../configure_site/*.php $gitdir/local/ci/configure_site/
 /opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,38911
 
 # Fill the site with some auto-generated information
-/opt/local/bin/php admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
+/opt/local/bin/php ${gitdir}/admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
 
 # Copy the run utility to the $gitdir
 mkdir -p $gitdir/local/ci/run_simpletests

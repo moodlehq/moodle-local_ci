@@ -75,7 +75,7 @@ if ($moodle20stable) {
     unlink($CFG->dirroot.'/portfolio/boxnet/simpletest/testportfoliopluginboxnet.php');
     unlink($CFG->dirroot.'/portfolio/download/simpletest/testportfolioplugindownload.php');
 }
-require_once($CFG->dirroot.'/'.$CFG->admin.'/ci/run_simpletests/lib.php');
+require_once($CFG->dirroot.'/local/ci/run_simpletests/lib.php');
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(

@@ -38,7 +38,7 @@ function confsite_load_rules($preset) {
         $preset .= '.txt';
     }
 
-    $presetfile = $CFG->dirroot.'/'.$CFG->admin.'/ci/configure_site/presets/'.$preset;
+    $presetfile = $CFG->dirroot.'/local/ci/configure_site/presets/'.$preset;
     if (!file_exists($presetfile) || !is_readable($presetfile)) {
         return;
     }
