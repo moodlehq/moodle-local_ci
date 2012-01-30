@@ -55,8 +55,22 @@ else
 fi
 set -e
 
+# Try to merge the patchset (detecting conflicts)
+set +e
+/opt/local/bin/git merge FETCH_HEAD
+exitstatus=${PIPESTATUS[0]}
+if [[ ${exitstatus} -ne 0 ]]; then
+    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${integrateto}" >> ${errorfile}
+    exit ${exitstatus}
+fi
+set -e
+
 # Calculate the differences and store them
-git diff ${integrateto}_precheck...FETCH_HEAD > ${WORKSPACE}/work/patchset.diff
+git diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
+
+# Generate the patches and store them
+mkdir patches
+git format-patch -o ${WORKSPACE}/work/patches ${integrateto}
 
 # Extract the changed files and lines from the patchset
 set +e
@@ -76,16 +90,6 @@ ${WORKSPACE}/work
 $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
     awk -v w="${WORKSPACE}" -F\" '{print w"/"$2}' )" > ${WORKSPACE}/work/patchset.files
 set -x
-
-# Try to merge the patchset (detecting conflicts)
-set +e
-/opt/local/bin/git merge FETCH_HEAD
-exitstatus=${PIPESTATUS[0]}
-if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${integrateto}" >> ${errorfile}
-    exit ${exitstatus}
-fi
-set -e
 
 # ########## ########## ########## ##########
 
@@ -158,5 +162,7 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # ########## ########## ########## ##########
 
-# Everything has been generated in the work directory, time to generate the
-# report and decide what to do with it
+# Everything has been generated in the work directory, generate the report
+set -e
+/opt/local/bin/php ${mydir}/remote_branch_reporter.php \
+    --directory="${WORKSPACE}/work" --format=xml --patchset=patchset.xml > "${WORKSPACE}/work/smurf.xml"
