@@ -72,6 +72,8 @@ git diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.di
 # Generate the patches and store them
 mkdir patches
 git format-patch -o ${WORKSPACE}/work/patches ${integrateto}
+zip -r ${WORKSPACE}/work/patches.zip ${WORKSPACE}/work/patches
+rm -fr ${WORKSPACE}/work/patches
 
 # Extract the changed files and lines from the patchset
 set +e
