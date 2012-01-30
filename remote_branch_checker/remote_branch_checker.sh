@@ -3,6 +3,7 @@
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
+# $filtering: Report about only modified lines (true), or about the whole files (false)
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -162,7 +163,11 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # ########## ########## ########## ##########
 
-# Everything has been generated in the work directory, generate the report
+# Everything has been generated in the work directory, generate the report, observing $filtering
+filter=""
+if [[ "${filtering}" = "true" ]]; then
+    filter="--patchset=patchset.xml"
+fi
 set -e
 /opt/local/bin/php ${mydir}/remote_branch_reporter.php \
-    --directory="${WORKSPACE}/work" --format=xml --patchset=patchset.xml > "${WORKSPACE}/work/smurf.xml"
+    --directory="${WORKSPACE}/work" --format=xml ${filter} > "${WORKSPACE}/work/smurf.xml"

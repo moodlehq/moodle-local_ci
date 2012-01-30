@@ -63,12 +63,12 @@ if ($options['help']) {
 Options:
 -h, --help            Print out this help
 -d, --directory       Full path to the directory where all the check results are stored
--f, --filter          Patchset file name (@ directory) used to filter the problems
+-p, --patchset        Patchset file name (@ directory) used to filter the problems
 -f, --format          Select the output format (txt, html, xml, xunit), defaults to xml
 
 
 Example:
-\$sudo -u www-data /usr/bin/php local/ci/remote_branch_reporter.php directory=/tmp/results --format=txt
+\$sudo -u www-data /usr/bin/php local/ci/remote_branch_reporter.php directory=/tmp/results --patchset=patchset.xml --format=txt
 ";
 
     echo $help;
