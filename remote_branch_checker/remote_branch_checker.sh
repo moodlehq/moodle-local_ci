@@ -8,6 +8,21 @@
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Set the build display name using jenkins-cli
+# Based on issue + integrateto, decide the display name to be used
+displayname=""
+if [[ ! "${issue}" = "" ]]; then
+    if [[ "${integrateto}" = "master" ]]; then
+        displayname="${issue}"
+    else
+        if [[ ${integrateto} =~ ^MOODLE_([0-9]*)_STABLE$ ]]; then
+            displayname="${issue}_${BASH_REMATCH[1]}"
+        fi
+    fi
+    java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s http://localhost:8080 \
+        set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
+fi
+
 # List of excluded dirs
 set +x
 . ${mydir}/../define_excluded/define_excluded.sh
