@@ -212,14 +212,16 @@ class remote_branch_reporter {
         if (empty($xmlcontents)) {
             return null;
         }
-        // read the xsl
         $xml = new SimpleXMLElement($xmlcontents);
+
         // read the xslt
         $xslt = new XSLTProcessor();
         $xslcontents = file_get_contents('xslt/checkstyle2smurf.xsl');
         $xslt->importStylesheet(new SimpleXMLElement($xslcontents));
+
         // set params
         $xslt->setParameter('', $params);
+
         // conver to DOMDocument
         return $xslt->transformToDoc($xml);
     }
