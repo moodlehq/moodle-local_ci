@@ -47,7 +47,8 @@ search/
 theme/mymobile/javascript/
 theme/mymobile/style/jmobile
 webservice/amf/testclient/AMFTester.mxml
-webservice/amf/testclient/customValidators/JSONValidator.as"
+webservice/amf/testclient/customValidators/JSONValidator.as
+work/"
 
 # Exclude syntax for grep commands (egrep-like regexp)
 excluded_grep=""
