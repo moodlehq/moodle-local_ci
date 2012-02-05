@@ -85,10 +85,12 @@ set -e
 git diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
 
 # Generate the patches and store them
-mkdir patches
+mkdir ${WORKSPACE}/work/patches
 git format-patch -o ${WORKSPACE}/work/patches ${integrateto}
-zip -r ${WORKSPACE}/work/patches.zip ${WORKSPACE}/work/patches
+cd ${WORKSPACE}/work
+zip -r ${WORKSPACE}/work/patches.zip ./patches
 rm -fr ${WORKSPACE}/work/patches
+cd ${WORKSPACE}
 
 # Extract the changed files and lines from the patchset
 set +e
@@ -127,16 +129,26 @@ set +e
 /opt/local/bin/php ${mydir}/../copy_paste_detector/copy_paste_detector.php \
     ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
+# Before deleting all the files not part of the patchest we calculate the
+# complete list of valid components (plugins, subplugins and subsystems)
+# so later various utilities can use it for their own checks/reports.
+# The format of the list is (comma separated):
+#    type (plugin, subsystem)
+#    name (frankestyle component name)
+#    path (full or null)
+/opt/local/bin/php ${mydir}/../list_valid_components/list_valid_components.php \
+    --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
+
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the
 # patchset and also the excluded paths, because all the remaining checks
 # are perfomed against the code introduced by the patchset
 
-# Remove all the excluded (but .git)
+# Remove all the excluded (but .git and work)
 set -e +x
 for todelete in ${excluded}; do
-    if [[ ${todelete} =~ ".git" ]]; then
+    if [[ ${todelete} =~ ".git" || ${todelete} =~ "work" ]]; then
         continue
     fi
     rm -fr ${WORKSPACE}/${todelete}
@@ -159,10 +171,10 @@ find ${WORKSPACE} -type d -depth -empty -not \( -name .git -o -name work -prune 
 set +e
 
 # Run the upgrade savepoints checker, converting it to checkstyle format
+# (it requires to be installed in the root of the dir being checked)
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
 /opt/local/bin/php ${WORKSPACE}/check_upgrade_savepoints.php |
     /opt/local/bin/php ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
-
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPPMD
@@ -175,8 +187,9 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
     --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
 
 # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
+# (we pass to it the list of valid components that was built before deleting files)
 /opt/local/bin/php ${mydir}/../../moodlecheck/cli/moodlecheck.php \
-    --path=${WORKSPACE} --format=xml > "${WORKSPACE}/work/docs.xml"
+    --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
 # ########## ########## ########## ##########
 
