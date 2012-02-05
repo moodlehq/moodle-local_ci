@@ -116,14 +116,11 @@ foreach ($types as $type => $typerelpath) {
 $subsystems = get_core_subsystems();
 $subsystems['core'] = '.'; // To get the main one too
 foreach ($subsystems as $subsystem => $subsystempath) {
-    if (empty($subsystempath)) {
-        continue;
-    }
     if ($subsystem == 'backup') { // Because I want, yes :-P
         $subsystempath = 'backup';
     }
     $component = $subsystem;
-    if ($options['absolute']) {
+    if ($options['absolute'] and !empty($subsystempath)) {
         $subsystempath = $options['basedir'] . '/' . $subsystempath;
     }
     echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
