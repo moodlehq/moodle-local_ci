@@ -75,12 +75,7 @@ if (!is_writable($options['basedir'])) {
     cli_error('Non-writable directory: ' . $options['basedir']);
 }
 
-// Always run the comparison in developer debug mode.
-$CFG->debug = DEBUG_DEVELOPER;
-error_reporting($CFG->debug);
-raise_memory_limit(MEMORY_EXTRA);
-
-// Get all the plugin and subplugin types
+ Get all the plugin and subplugin types
 $types = get_plugin_types(false);
 // For each type, get their available implementations
 foreach ($types as $type => $typerelpath) {
