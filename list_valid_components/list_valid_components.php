@@ -97,6 +97,8 @@ $CFG->dirroot = $options['basedir'];
 
 // Get all the plugin and subplugin types
 $types = get_plugin_types(false);
+// Sort types in reverse order, so we get subplugins earlier than plugins
+$types = array_reverse($types);
 // For each type, get their available implementations
 foreach ($types as $type => $typerelpath) {
     $plugins = get_plugin_list($type);
