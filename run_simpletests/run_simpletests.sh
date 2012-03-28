@@ -30,8 +30,9 @@ rm -fr config.php
 mkdir -p $gitdir/local/ci/configure_site
 cp $mydir/../configure_site/*.php $gitdir/local/ci/configure_site/
 
-# Inject $CFG->debug = 38911 (DEBUG_DEVELOPER) in database (generator requies that)
-/opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,38911
+# Inject $CFG->debug = E_ALL | E_STRICT (DEBUG_DEVELOPER) in database (generator requires that)
+debugval=$(php -r 'echo E_ALL | E_STRICT;')
+/opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,$debugval
 
 # Fill the site with some auto-generated information
 /opt/local/bin/php ${gitdir}/admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
