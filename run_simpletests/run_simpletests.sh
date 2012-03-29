@@ -30,12 +30,26 @@ rm -fr config.php
 mkdir -p $gitdir/local/ci/configure_site
 cp $mydir/../configure_site/*.php $gitdir/local/ci/configure_site/
 
-# Inject $CFG->debug = E_ALL | E_STRICT (DEBUG_DEVELOPER) in database (generator requires that)
-debugval=$(php -r 'echo E_ALL | E_STRICT;')
-/opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,$debugval
+# Set the proper values for running generator and simpletest
+# Defaults for 2.3 and upwards
+generatordebugval=$(php -r 'echo E_ALL | E_STRICT;')
+simpletestdebugval=${generatordebugval}
+# CRAP, we cannot run E_STRICT until simpletest is updated to 1.1.0
+simpletestdebugval=$(php -r 'echo (E_ALL | E_STRICT) & ~E_STRICT;')
+# Defaults for 2.0 .. 2.2
+if [[ ${gitbranch} =~ MOODLE_(20|21|22)_STABLE ]]; then
+    generatordebugval=38911
+    simpletestdebugval=${generatordebugval}
+fi
+
+# Inject $CFG->debug in database (generator requires that)
+/opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,${generatordebugval}
 
 # Fill the site with some auto-generated information
 /opt/local/bin/php ${gitdir}/admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
+
+# Inject $CFG->debug in database (some branches may require different value from generator)
+/opt/local/bin/php ${gitdir}/local/ci/configure_site/configure_site.php --rule=db,add,debug,${simpletestdebugval}
 
 # Copy the run utility to the $gitdir
 mkdir -p $gitdir/local/ci/run_simpletests
