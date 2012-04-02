@@ -60,7 +60,11 @@ class cli_xml_reporter extends XMLReporter {
             if ($post < $this->pre) {
                 $duration = 0;
             }
-            print $this->_getIndent(1);
+            if (method_exists($this, 'getIndent')) { // Simpletest 1.1.0 and upwards (Moodle 2.3 and upwards)
+                print $this->getIndent(1);
+            } else if (method_exists($this, '_getIndent')) { // Simpletest before 1.1.0 (before Moodle 2.3)
+                print $this->_getIndent(1);
+            }
             print "<time>$duration</time>\n";
         }
         parent::paintMethodEnd($test_name);
