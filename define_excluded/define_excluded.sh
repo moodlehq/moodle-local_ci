@@ -40,6 +40,7 @@ lib/xhprof/xhprof_html/
 lib/xhprof/xhprof_lib/
 lib/xmlize.php
 mod/lti/OAuthBody.php
+mod/wiki/tests/fixtures/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
