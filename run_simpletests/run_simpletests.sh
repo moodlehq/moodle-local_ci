@@ -13,9 +13,9 @@ resultfile=${WORKSPACE}/run_simpletests.xml
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-installdb=ci_installed_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
+installdb=ci_simpletest_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
-dbprefixinstall="cit_"
+dbprefixinstall="sit_"
 
 # Going to install the $gitbranch database
 # Create the database
