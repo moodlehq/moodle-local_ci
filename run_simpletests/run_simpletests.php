@@ -39,6 +39,7 @@ require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once($CFG->libdir.'/clilib.php');      // cli only functions
 require_once($CFG->libdir.'/cronlib.php');
 require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir.'/filelib.php');
 
 // For 22_STABLE and upwards
 $moodle22stableandup = false;
