@@ -8,6 +8,8 @@
 # $dbpass: DB password
 # $pearpath: Path where the pear executables are available
 
+# file to capture execution output
+outputfile=${WORKSPACE}/run_phpunittests.out
 # file where results will be sent
 resultfile=${WORKSPACE}/run_phpunittests.xml
 
@@ -61,8 +63,15 @@ mkdir $datadir
 /opt/local/bin/php ${gitdir}/admin/tool/phpunit/cli/util.php --buildconfig
 
 # Execute the phpunit utility
-phpunit --log-junit "${resultfile}"
+phpunit --log-junit "${resultfile}" | tee "${outputfile}"
 exitstatus=${PIPESTATUS[0]}
+
+# Look for any stack sent to output, it will lead to failed execution
+stacks=$(grep 'Call Stack:' "${outputfile}" | wc -l)
+if [[ ${stacks} -gt 0 ]]; then
+    exitstatus=1
+    rm "${resultfile}"
+fi
 
 # Drop the databases and delete files
 # TODO: Based on $dbtype, execute different DB deletion commands
