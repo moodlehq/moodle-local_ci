@@ -73,7 +73,7 @@ set -e
 
 # Try to merge the patchset (detecting conflicts)
 set +e
-/opt/local/bin/git merge FETCH_HEAD
+/opt/local/bin/git merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: The ${branch} branch at ${remote} does not apply clean to ${integrateto}" >> ${errorfile}
