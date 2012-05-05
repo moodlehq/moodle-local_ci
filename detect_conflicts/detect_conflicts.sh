@@ -26,7 +26,7 @@ do
     then
         continue
     fi
-    content=`grep -PIn '^(<<<<<<|======|>>>>>>' $i`
+    content=`grep -PIn '^(<<<<<<|>>>>>>)' $i`
     if [ ! -z "$content" ]
     then
         echo "## $i ##" >> "$lastfile"
