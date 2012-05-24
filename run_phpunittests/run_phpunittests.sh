@@ -1,4 +1,5 @@
 #!/bin/bash
+# $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
 # $dblibrary: Type of library (native, pdo...)
@@ -7,6 +8,9 @@
 # $dbuser: DB user
 # $dbpass: DB password
 # $pearpath: Path where the pear executables are available
+
+# Don't be strict. Script has own error control handle
+set +e
 
 # file to capture execution output
 outputfile=${WORKSPACE}/run_phpunittests.out
@@ -20,17 +24,22 @@ PATH="$PATH:/opt/local/bin/:$pearpath"; export PATH
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 installdb=ci_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
-dbprefixinstall="pit_"
-pearbase="$( dirname ${pearpath} )"
 
 # Going to install the $gitbranch database
 # Create the database
 # TODO: Based on $dbtype, execute different DB creation commands
 mysql --user=$dbuser --password=$dbpass --host=$dbhost --execute="CREATE DATABASE $installdb CHARACTER SET utf8 COLLATE utf8_bin"
+# Error creating DB, we cannot continue. Exit
+exitstatus=${PIPESTATUS[0]}
+if [ $exitstatus -ne 0 ]; then
+    echo "Error creating database $installdb to run phpunit tests"
+    exit $exitstatus
+fi
 
 # Do the moodle install
 cd $gitdir && git checkout $gitbranch && git reset --hard origin/$gitbranch
 rm -fr config.php
+rm -fr ${resultfile}
 
 # To execute the phpunit tests we don't need a real site installed, just the phpunit-prefixed one.
 # For now we are using one template config.php containing all the required vars and then we run the init shell script
@@ -57,20 +66,37 @@ echo "${text}" > ${gitdir}/config.php
 mkdir $datadir
 
 # Run the phpunit init script
-/opt/local/bin/php ${gitdir}/admin/tool/phpunit/cli/util.php --install
+${phpcmd} ${gitdir}/admin/tool/phpunit/cli/util.php --install
+exitstatus=${PIPESTATUS[0]}
+if [ $exitstatus -ne 0 ]; then
+    echo "Error installing database $installdb to run phpunit tests"
+fi
 
 # Build a new config file with all the tests
-/opt/local/bin/php ${gitdir}/admin/tool/phpunit/cli/util.php --buildconfig
+# Conditionally
+if [ $exitstatus -eq 0 ]; then
+    ${phpcmd} ${gitdir}/admin/tool/phpunit/cli/util.php --buildconfig
+    exitstatus=${PIPESTATUS[0]}
+    if [ $exitstatus -ne 0 ]; then
+        echo "Error building config to run phpunit tests"
+    fi
+fi
 
 # Execute the phpunit utility
-phpunit --log-junit "${resultfile}" | tee "${outputfile}"
-exitstatus=${PIPESTATUS[0]}
+# Conditionally
+if [ $exitstatus -eq 0 ]; then
+    phpunit --log-junit "${resultfile}" | tee "${outputfile}"
+    exitstatus=${PIPESTATUS[0]}
+fi
 
 # Look for any stack sent to output, it will lead to failed execution
-stacks=$(grep 'Call Stack:' "${outputfile}" | wc -l)
-if [[ ${stacks} -gt 0 ]]; then
-    exitstatus=1
-    rm "${resultfile}"
+# Conditionally
+if [ $exitstatus -eq 0 ]; then
+    stacks=$(grep 'Call Stack:' "${outputfile}" | wc -l)
+    if [[ ${stacks} -gt 0 ]]; then
+        exitstatus=1
+        rm "${resultfile}"
+    fi
 fi
 
 # Drop the databases and delete files
