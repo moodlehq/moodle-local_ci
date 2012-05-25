@@ -8,6 +8,7 @@ $CFG = new stdClass();
 $CFG->wwwroot   = 'http://localhost';
 $CFG->admin     = 'admin';
 $CFG->directorypermissions = 00777;
+$CFG->dataroot='%%DATADIR%%';
 
 // DB settings
 $CFG->dblibrary='%%DBLIBRARY%%';
@@ -20,7 +21,7 @@ $CFG->dboptions=array();
 
 // PHPUNIT settings
 $CFG->phpunit_prefix='p_';
-$CFG->phpunit_dataroot='%%DATADIR%%';
+$CFG->phpunit_dataroot='%%DATADIRPHPUNIT%%';
 
 // Set correct server timezone
 date_default_timezone_set('Europe/Madrid');

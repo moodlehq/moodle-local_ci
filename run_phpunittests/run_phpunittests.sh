@@ -24,6 +24,7 @@ PATH="$PATH:/opt/local/bin/:$pearpath"; export PATH
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 installdb=ci_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
+datadirphpunit=/tmp/ci_dataroot_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 
 # Going to install the $gitbranch database
 # Create the database
@@ -51,7 +52,8 @@ replacements="%%DBLIBRARY%%#${dblibrary}
 %%DBUSER%%#${dbuser}
 %%DBPASS%%#${dbpass}
 %%DBNAME%%#${installdb}
-%%DATADIR%%#${datadir}"
+%%DATADIR%%#${datadir}
+%%DATADIRPHPUNIT%%#${datadirphpunit}"
 
 # Apply template transformations
 text="$( cat ${mydir}/config.php.template )"
@@ -63,7 +65,8 @@ done
 echo "${text}" > ${gitdir}/config.php
 
 # Create the moodledata dir
-mkdir $datadir
+mkdir ${datadir}
+mkdir ${datadirphpunit}
 
 # Run the phpunit init script
 ${phpcmd} ${gitdir}/admin/tool/phpunit/cli/util.php --install
@@ -104,7 +107,8 @@ fi
 mysqladmin --user=$dbuser --password=$dbpass --host=$dbhost --default-character-set=utf8 --force drop $installdb
 rm -fr config.php
 rm -fr $gitdir/local/ci
-rm -fr $datadir
+rm -fr ${datadir}
+rm -fr ${datadirphpunit}
 
 # If arrived here, return the exitstatus of the php execution
 exit $exitstatus
