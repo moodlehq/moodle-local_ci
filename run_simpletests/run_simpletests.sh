@@ -72,10 +72,15 @@ fi
 
 # Fill the site with some auto-generated information
 if [ $exitstatus -eq 0 ]; then
-    ${phpcmd} ${gitdir}/admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
-    exitstatus=${PIPESTATUS[0]}
-    if [ $exitstatus -ne 0 ]; then
-        echo "Error executing generator to run simpletest"
+    # Generator (admin/generator.php) under 20 and 21 stables is 100% borked, so ommit its execution
+    if [[ ${gitbranch} =~ MOODLE_(20|21)_STABLE ]]; then
+        echo "Generator for 20_STABLE and 21_STABLE not working, skipping"
+    else
+        ${phpcmd} ${gitdir}/admin/tool/generator/cli/generate.php --verbose --database_prefix=$dbprefixinstall --username=$dbuser --password=$dbpass --number_of_courses=1 --number_of_students=2 --number_of_sections=3 --number_of_modules=1 --modules_list=label --questions_per_course=0
+        exitstatus=${PIPESTATUS[0]}
+        if [ $exitstatus -ne 0 ]; then
+            echo "Error executing generator to run simpletest"
+        fi
     fi
 fi
 
