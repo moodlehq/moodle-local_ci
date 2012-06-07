@@ -32,17 +32,30 @@ basereq="${basereq} lalala --login ${token} "
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND status = 'Reopened' \
-                 AND updated < '-8h' \
+                 AND updated < '-3h' \
                  AND 'Currently in integration' is not empty" \
            --file "${resultfile}"
 
 # Iterate over found issues and send them out from integration with a comment
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
-    ${basereq} --action updateIssue \
-               --issue ${issue} \
-               --custom "customfield_10211:" \
-               --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
+    # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
+    # we are setting some custom fields not available (on purpose) on that screen. So we have created a
+    # global transition, only available to the bots, not transitioning but bringing access to all the fields
+    # via special screen. So we'll ne using that global transition via progressIssue instead.
+    # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
+    # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
+    # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
+    # that non-transitional transition and use normal update.
+    #${basereq} --action updateIssue \
+    #    --issue ${issue} \
+    #    --custom "customfield_10211:" \
+    #    --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
+    ${basereq} --action progressIssue \
+        --issue ${issue} \
+        --step "CI Global Self-Transition" \
+        --custom "customfield_10211:" \
+        --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_ID ${issue}" >> "${logfile}"
 done
 
