@@ -180,6 +180,11 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
     else
         # Everything looks, ok, let's replace
         for i in ${allfiles}; do
+            # Skip the main version.php file. Let's force to perform manual update there
+            # (without it, upgrade won't work)
+            if [ "${i}" == "${gitdir}/version.php" ]; then
+                continue
+            fi
             echo "- ${i}:" >> "${resultfile}"
             replaceregex="s/(=.*)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
             perl -p -i -e ${replaceregex} ${i}
