@@ -57,7 +57,18 @@ for i in ${allfiles}; do
             version=${BASH_REMATCH[1]}
             echo "  + INFO: Correct version found: ${version}" >> "${resultfile}"
         else
+            version=""
             echo "  + ERROR: No correct version (10 digits + opt 2 more) found" >> "${resultfile}"
+        fi
+    fi
+
+    # Activity and block plugins cannot have decimals in the version (they are stored into int db columns)
+    if [ ! -z "${version}" ] && [[ ${i} =~ /(mod|blocks)/[^/]*/version.php ]]; then
+        # Extract the version
+        if [[ ${version} =~ [0-9]{10}\.[0-9] ]]; then
+            echo "  + ERROR: Activity and block versions cannot have decimal part" >> "${resultfile}"
+        else
+            echo "  + INFO: Correct mod and blocks version has no decimals" >> "${resultfile}"
         fi
     fi
 
