@@ -35,6 +35,17 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
     define('LINEFEED', "\n");
 }
 
+// Nasty but need this here to include version.php, grrr
+define('MOODLE_INTERNAL',   1);
+define('MATURITY_ALPHA',    50);    // internals can be tested using white box techniques
+define('MATURITY_BETA',     100);   // feature complete, ready for preview and testing
+define('MATURITY_RC',       150);   // tested, will be released unless there are fatal bugs
+define('MATURITY_STABLE',   200);   // ready for production deployment
+
+// Detect if we are in 2.3 and up by looking for $branch
+require_once('version.php');
+$moodle23andup = isset($branch) ? true : false;
+
 $dir = dirname(__FILE__);
 
 $files = files_to_check($dir);
@@ -45,17 +56,49 @@ foreach ($files as $file) {
     $contents = file_get_contents($file);
 
     $function_regexp = '\s*function\s+xmldb_[a-zA-Z0-9_]+?_upgrade\s*\(.*?version.*?\)\s*(?=\{)';
+    $return_regexp = '\s*return true;';
+    $anyfunction_regexp = '\s*function\s*[a-z0-9_]+?\s*\(.*?\)\s*{'; // MDL-34103
 
 /// Find we have some xmldb_xxxx_function in code
-    if (! $count = preg_match_all('@' . $function_regexp . '@is', $contents, $matches)) {
-        echo "    + NOTE: upgrade function not found" . LINEFEED;
+    if (! $countxmldb = preg_match_all('@' . $function_regexp . '@is', $contents, $matches)) {
+        echo "    + ERROR: upgrade function not found" . LINEFEED;
         continue;
     }
 /// Verify there is only one upgrade function
-    if ($count !== 1) {
+    if ($countxmldb !== 1) {
         echo "    + ERROR: multiple upgrade functions detected" . LINEFEED;
         continue;
     }
+
+    // These checks are only performed for 23_STABLE and up
+    if ($moodle23andup) {
+
+        // Find we have some return true; in code
+        if (! $countreturn = preg_match_all('@' . $return_regexp . '@is', $contents, $matches)) {
+            echo "    + ERROR: 'return true;' not found" . LINEFEED;
+            continue;
+        }
+        // Verify there is only one return true;
+        if ($countreturn !== 1) {
+            echo "    + ERROR: multiple 'return true;' detected" . LINEFEED;
+            continue;
+        }
+
+        /** Commented till MDL-34103 is fixed to avoid getting fails
+        // Find we have some function in code
+        if (! $countfunction = preg_match_all('@' . $anyfunction_regexp . '@is', $contents, $matches)) {
+            echo "    + ERROR: functions not found" . LINEFEED;
+            continue;
+        }
+        // Verify there is only one function
+        if ($countfunction !== 1) {
+            echo "    + ERROR: multiple functions detected (use upgradelib, plz)" . LINEFEED;
+            continue;
+        }
+        */
+
+    }
+
 /// Arrived here, extract function contents
     if (! preg_match_all('@' . $function_regexp . '.*?(\{(?>(?>[^{}]+)|(?1))*\})@is', $contents, $matches)) {
         echo "    + NOTE: cannot find upgrade function contents" . LINEFEED;
