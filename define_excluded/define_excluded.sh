@@ -1,4 +1,6 @@
 #!/bin/bash
+# $gitdir: Directory containing git repo
+# $gitbranch: Branch we are going to examine
 
 # Define directories usually excluded by various CI tools
 excluded=".git/
@@ -12,6 +14,8 @@ lib/alfresco/
 lib/bennu/
 lib/dragmath/
 lib/editor/tinymce/tiny_mce/
+lib/editor/tinymce/plugins/moodleimage
+lib/editor/tinymce/plugins/spellchecker
 lib/evalmath/
 lib/excel/
 lib/flowplayer/
@@ -29,7 +33,11 @@ lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
 lib/typo3/
-lib/yui/
+lib/yui/2.9.0/
+lib/yui/3.4.1/
+lib/yui/3.5.1/
+lib/yui/phploader/
+lib/yuilib/
 lib/zend/
 lib/base32.php
 lib/csshover.htc
@@ -50,6 +58,21 @@ theme/mymobile/style/jmobile
 webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
 work/"
+
+# Some well-known exceptions... to be deleted once the branch
+# gets out from support
+if [[ ${gitbranch} == "MOODLE_19_STABLE" ]]
+then
+excluded="${excluded}
+lib/yui/"
+fi
+if [[ ${gitbranch} == "MOODLE_20_STABLE" ]]
+then
+excluded="${excluded}
+lib/yui/2.8.2/
+lib/yui/3.2.0/
+lib/yui/readme_moodle.txt"
+fi
 
 # Exclude syntax for grep commands (egrep-like regexp)
 excluded_grep=""
