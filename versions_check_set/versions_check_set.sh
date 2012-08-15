@@ -197,8 +197,8 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
                 continue
             fi
             echo "- ${i}:" >> "${resultfile}"
-            replaceregex="s/(=.*)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
-            perl -p -i -e ${replaceregex} ${i}
+            replaceregex="s/(=>? *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
+            perl -p -i -e "${replaceregex}" ${i}
         done
     fi
 fi
