@@ -26,9 +26,7 @@ if [[ ! "${issue}" = "" ]]; then
 fi
 
 # List of excluded dirs
-set +x
 . ${mydir}/../define_excluded/define_excluded.sh
-set -x
 
 # Create the work directory where all the tasks will happen/be stored
 mkdir work
@@ -106,12 +104,10 @@ fi
 set -e
 
 # Get all the files affected by the patchset, plus the .git and work directories
-set +x
 echo "${WORKSPACE}/.git
 ${WORKSPACE}/work
 $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
     awk -v w="${WORKSPACE}" -F\" '{print w"/"$2}' )" > ${WORKSPACE}/work/patchset.files
-set -x
 
 # ########## ########## ########## ##########
 
@@ -148,14 +144,13 @@ ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
 # are perfomed against the code introduced by the patchset
 
 # Remove all the excluded (but .git and work)
-set -e +x
+set -e
 for todelete in ${excluded}; do
     if [[ ${todelete} =~ ".git" || ${todelete} =~ "work" ]]; then
         continue
     fi
     rm -fr ${WORKSPACE}/${todelete}
 done
-set -x
 
 # Remove all the files, but the patchset ones and .git and work
 find ${WORKSPACE} -type f | grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
