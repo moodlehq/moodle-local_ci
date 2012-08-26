@@ -1,4 +1,6 @@
 #!/bin/bash
+# $gitcmd: Path to git executable.
+# $phpcmd: Path to php executable.
 # $remote: Remote repo where the branch to check resides.
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
@@ -36,19 +38,19 @@ errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
 # Checkout pristine copy of the configured branch
-cd ${WORKSPACE} && git checkout ${integrateto} && git fetch && git reset --hard origin/${integrateto}
+cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && ${gitcmd} fetch && ${gitcmd} reset --hard origin/${integrateto}
 
 # Create the precheck branch, checking if it exists
-branchexists="$( git branch | grep ${integrateto}_precheck | wc -l )"
+branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
 if [[ ${branchexists} -eq 0 ]]; then
-    git checkout -b ${integrateto}_precheck
+    ${gitcmd} checkout -b ${integrateto}_precheck
 else
-    git checkout ${integrateto}_precheck && git reset --hard origin/${integrateto}
+    ${gitcmd} checkout ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
 fi
 
 # Fetch the remote branch
 set +e
-git fetch ${remote} ${branch}
+${gitcmd} fetch ${remote} ${branch}
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: Unable to fetch information from ${branch} branch at ${remote}." >> ${errorfile}
@@ -58,13 +60,13 @@ set -e
 
 # Look for the common ancestor and its date, warn if too old
 set +e
-ancestor="$( git rev-list --boundary ${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+ancestor="$( ${gitcmd} rev-list --boundary ${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and ${integrateto} don't have any common ancestor." >> ${errorfile}
     exit 1
 else
     # Ancestor found, let's see if it's recent (< 14 days, covers last 2 weeklies)
-    recentancestor="$( git rev-list --after '14 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
+    recentancestor="$( ${gitcmd} rev-list --after '14 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
         echo "Warning: The ${branch} branch at ${remote} has not been rebased recently." >> ${errorfile}
     fi
@@ -73,7 +75,7 @@ set -e
 
 # Try to merge the patchset (detecting conflicts)
 set +e
-/opt/local/bin/git merge --no-edit FETCH_HEAD
+${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: The ${branch} branch at ${remote} does not apply clean to ${integrateto}" >> ${errorfile}
@@ -82,11 +84,11 @@ fi
 set -e
 
 # Calculate the differences and store them
-git diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
+${gitcmd} diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
 
 # Generate the patches and store them
 mkdir ${WORKSPACE}/work/patches
-git format-patch -o ${WORKSPACE}/work/patches ${integrateto}
+${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${integrateto}
 cd ${WORKSPACE}/work
 zip -r ${WORKSPACE}/work/patches.zip ./patches
 rm -fr ${WORKSPACE}/work/patches
@@ -94,7 +96,7 @@ cd ${WORKSPACE}
 
 # Extract the changed files and lines from the patchset
 set +e
-/opt/local/bin/php /Users/stronk7/git_moodle/ci/local/ci/diff_extract_changes/diff_extract_changes.php \
+${phpcmd} /Users/stronk7/git_moodle/ci/local/ci/diff_extract_changes/diff_extract_changes.php \
     --diff=${WORKSPACE}/work/patchset.diff --output=xml > ${WORKSPACE}/work/patchset.xml
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
@@ -120,14 +122,14 @@ set +e
 
 # First, we execute all the checks requiring complete site codebase
 
-# Run the db install/upgrade comparison check
+# TODO: Run the db install/upgrade comparison check
 # (only if there is any *install* or *upgrade* file involved)
 
-# Run the simpletest unittests
+# TODO: Run the phpunit unittests
 
-# Run the PHPCPD
-/opt/local/bin/php ${mydir}/../copy_paste_detector/copy_paste_detector.php \
-    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
+# Run the PHPCPD (commented out 20120823 Eloy)
+#${phpcmd} ${mydir}/../copy_paste_detector/copy_paste_detector.php \
+#    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
@@ -136,7 +138,7 @@ set +e
 #    type (plugin, subsystem)
 #    name (frankestyle component name)
 #    path (full or null)
-/opt/local/bin/php ${mydir}/../list_valid_components/list_valid_components.php \
+${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
 
 # ########## ########## ########## ##########
@@ -173,22 +175,22 @@ set +e
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
-/opt/local/bin/php ${WORKSPACE}/check_upgrade_savepoints.php |
-    /opt/local/bin/php ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
+${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php |
+    ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
-# Run the PHPPMD
-/opt/local/bin/php ${mydir}/../project_mess_detector/project_mess_detector.php \
+# Run the PHPPMD (commented out 20120823 Eloy)
+#${phpcmd} ${mydir}/../project_mess_detector/project_mess_detector.php \
     ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
 
 # Run the PHPCS
-/opt/local/bin/php ${mydir}/../coding_standards_detector/coding_standards_detector.php \
+${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
 
 # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
 # (we pass to it the list of valid components that was built before deleting files)
-/opt/local/bin/php ${mydir}/../../moodlecheck/cli/moodlecheck.php \
+${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
     --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
 # ########## ########## ########## ##########
@@ -199,5 +201,5 @@ if [[ "${filtering}" = "true" ]]; then
     filter="--patchset=patchset.xml"
 fi
 set -e
-/opt/local/bin/php ${mydir}/remote_branch_reporter.php \
+${phpcmd} ${mydir}/remote_branch_reporter.php \
     --directory="${WORKSPACE}/work" --format=xml ${filter} > "${WORKSPACE}/work/smurf.xml"
