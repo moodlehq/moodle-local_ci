@@ -96,7 +96,7 @@ cd ${WORKSPACE}
 
 # Extract the changed files and lines from the patchset
 set +e
-${phpcmd} /Users/stronk7/git_moodle/ci/local/ci/diff_extract_changes/diff_extract_changes.php \
+${phpcmd} ${mydir}/../diff_extract_changes/diff_extract_changes.php \
     --diff=${WORKSPACE}/work/patchset.diff --output=xml > ${WORKSPACE}/work/patchset.xml
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
@@ -181,7 +181,7 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPPMD (commented out 20120823 Eloy)
 #${phpcmd} ${mydir}/../project_mess_detector/project_mess_detector.php \
-    ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
+#    ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
 
 # Run the PHPCS
 ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
