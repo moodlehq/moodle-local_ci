@@ -1,5 +1,7 @@
 #!/bin/bash
 # $phpcmd: Path to the PHP CLI executable
+# $psqlcmd: Path to the psql CLI executable
+# $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
 # $dblibrary: Type of library (native, pdo...)
@@ -28,8 +30,18 @@ datadirphpunit=/tmp/ci_dataroot_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 
 # Going to install the $gitbranch database
 # Create the database
-# TODO: Based on $dbtype, execute different DB creation commands
-mysql --user=$dbuser --password=$dbpass --host=$dbhost --execute="CREATE DATABASE $installdb CHARACTER SET utf8 COLLATE utf8_bin"
+# Based on $dbtype, execute different DB creation commands (mysqli, pgsql)
+if [[ "${dbtype}" == "pgsql" ]]; then
+    export PGPASSWORD=${dbpass}
+    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d template1 \
+        -c "CREATE DATABASE ${installdb} ENCODING 'utf8'"
+elif [[ "${dbtype}" == "mysqli" ]]; then
+    ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
+        --execute="CREATE DATABASE ${installdb} CHARACTER SET utf8 COLLATE utf8_bin"
+else
+    echo "Error: Incorrect dbtype=${dbtype}"
+    exit 1
+fi
 # Error creating DB, we cannot continue. Exit
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
@@ -103,8 +115,18 @@ if [ $exitstatus -eq 0 ]; then
 fi
 
 # Drop the databases and delete files
-# TODO: Based on $dbtype, execute different DB deletion commands
-mysqladmin --user=$dbuser --password=$dbpass --host=$dbhost --default-character-set=utf8 --force drop $installdb
+# Based on $dbtype, execute different DB deletion commands (pgsql, mysqli)
+if [[ "${dbtype}" == "pgsql" ]]; then
+    export PGPASSWORD=${dbpass}
+    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d template1 \
+        -c "DROP DATABASE ${installdb}"
+elif [[ "${dbtype}" == "mysqli" ]]; then
+    ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
+        --execute="DROP DATABASE ${installdb}"
+else
+    echo "Error: Incorrect dbtype=${dbtype}"
+    exit 1
+fi
 rm -fr config.php
 rm -fr $gitdir/local/ci
 rm -fr ${datadir}
