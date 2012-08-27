@@ -43,7 +43,9 @@ define('MATURITY_RC',       150);   // tested, will be released unless there are
 define('MATURITY_STABLE',   200);   // ready for production deployment
 
 // Detect if we are in 2.3 and up by looking for $branch
-require_once('version.php');
+if (file_exists('version.php')) {
+    require_once('version.php');
+}
 $moodle23andup = isset($branch) ? true : false;
 
 $dir = dirname(__FILE__);
@@ -188,7 +190,7 @@ foreach ($files as $file) {
 
             $fullpath = $path . '/' . $file;
 
-            if (substr($file, 0, 1)=='.' || $file=='CVS') { /// Exclude some dirs
+            if (substr($file, 0, 1)=='.' || $file=='CVS' || $file=='.git') { /// Exclude some dirs
                 continue;
             }
 
