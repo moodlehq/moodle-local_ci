@@ -174,8 +174,8 @@ set +e
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
-${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php |
-    ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
+${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php > "${WORKSPACE}/work/savepoints.txt"
+cat "${WORKSPACE}/work/savepoints.txt" | ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPPMD (commented out 20120823 Eloy)
