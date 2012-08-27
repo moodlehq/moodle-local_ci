@@ -7,6 +7,10 @@
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
 # $filtering: Report about only modified lines (true), or about the whole files (false)
 
+# Don't want debugging @ start, but want exit on error
+set +x
+set -e
+
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
