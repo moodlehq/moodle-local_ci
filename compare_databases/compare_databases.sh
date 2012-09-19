@@ -1,5 +1,6 @@
 #!/bin/bash
 # $phpcmd: Path to the PHP CLI executable
+# $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranchinstalled: Branch we are going to install the DB (and upgrade to)
 # $gitbranchupgraded: Branch we are going to upgrade the DB from
@@ -41,7 +42,7 @@ fi
 # Going to install the $gitbranchinstalled database
 # Create the database to install
 # TODO: Based on $dbtype, execute different DB creation commands
-mysql --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --execute="CREATE DATABASE $installdb CHARACTER SET utf8 COLLATE utf8_bin"
+${mysqlcmd} --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --execute="CREATE DATABASE $installdb CHARACTER SET utf8 COLLATE utf8_bin"
 # Error creating DB, we cannot continue. Exit
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
@@ -51,7 +52,7 @@ fi
 
 # Create the database to upgrade
 # TODO: Based on $dbtype, execute different DB creation commands
-mysql --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --execute="CREATE DATABASE $upgradedb CHARACTER SET utf8 COLLATE utf8_bin"
+${mysqlcmd} --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --execute="CREATE DATABASE $upgradedb CHARACTER SET utf8 COLLATE utf8_bin"
 # Error creating DB, we cannot continue. Exit
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
@@ -105,8 +106,10 @@ fi
 
 # Drop the databases and delete files
 # TODO: Based on $dbtype, execute different DB deletion commands
-mysqladmin --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 --default-character-set=utf8 --force drop $installdb
-mysqladmin --user=$dbuser2 --password=$dbpass2 --host=$dbhost2 --default-character-set=utf8 --force drop $upgradedb
+${mysqlcmd} --user=${dbuser1} --password=${dbpass1} --host=${dbhost1} \
+        --execute="DROP DATABASE ${installdb}"
+${mysqlcmd} --user=${dbuser2} --password=${dbpass2} --host=${dbhost2} \
+        --execute="DROP DATABASE ${upgradedb}"
 rm -fr config.php
 rm -fr $datadir
 
