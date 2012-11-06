@@ -57,7 +57,10 @@ theme/mymobile/javascript/
 theme/mymobile/style/jmobile
 webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
-work/"
+work/
+*.gif
+*.png
+*.svg"
 
 # Some well-known exceptions... to be deleted once the branch
 # gets out from support

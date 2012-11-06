@@ -26,7 +26,7 @@ do
     then
         continue
     fi
-    content=`grep -PIn '^[ \t]+$|^ *\t *.+$|^.*[ \t]+$' $i`
+    content=`grep -PIn '^[ \t]+$|^ *\t *.+$|^.*[ \t]+$' ${i}`
     if [ ! -z "$content" ]
     then
         echo "## $i ##" >> "$lastfile"
