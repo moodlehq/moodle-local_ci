@@ -32,6 +32,7 @@ lib/smarty/
 lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
+lib/tests/fixtures/tabfile.csv
 lib/typo3/
 lib/yui/2.9.0/
 lib/yui/3.4.1/
