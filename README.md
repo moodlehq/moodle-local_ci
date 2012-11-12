@@ -17,4 +17,4 @@ integration happens.
 
 ## Self-versions
 
-+ 20121112 - Eloy - Initial version
++ 20121112 - Eloy - Initial version of this README.md.
