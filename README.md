@@ -9,6 +9,7 @@ integration happens.
 + Some checks require a MySQL, master-based site to be up and running.
 + Some checks require the installation of 3rd part tools (phpunit...).
 + Some checks require the presence of both local_codechecker and local_moodlecheck local plugins.
++ Visit [HQ-326](http://tracker.moodle.org/browse/HQ-326) for a step by step record about the installation of http://integration.moodle.org:8080 It can be useful to know what to install and the real php/pear dependencies.
 
 ## TODO
 
