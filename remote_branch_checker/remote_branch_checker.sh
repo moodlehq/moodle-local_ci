@@ -19,10 +19,10 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 displayname=""
 if [[ ! "${issue}" = "" ]]; then
     if [[ "${integrateto}" = "master" ]]; then
-        displayname="${issue}"
+        displayname="#${BUILD_NUMBER}:${issue}"
     else
         if [[ ${integrateto} =~ ^MOODLE_([0-9]*)_STABLE$ ]]; then
-            displayname="${issue}_${BASH_REMATCH[1]}"
+            displayname="#${BUILD_NUMBER}:${issue}_${BASH_REMATCH[1]}"
         fi
     fi
     java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s http://localhost:8080 \
