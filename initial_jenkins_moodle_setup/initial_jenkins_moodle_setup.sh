@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e +x
 # This script must be executed by the "jenkins" user
 # (manually or from jenkins) in order to get the initial
 # installation of Jenkins + Moodle ready.
@@ -133,7 +133,7 @@ userexists=$( ${mysqlcmd} --user=${mysqladminuser} --password=${mysqladminpass} 
     --execute="SELECT * FROM user WHERE user = '${mysqlmoodleuser}'")
 if [ -z "${userexists}" ]; then
     ${mysqlcmd} --user=${mysqladminuser} --password=${mysqladminpass} \
-    --execute="GRANT ALL PRIVILEGES ON ${moodledir}.* TO '${mysqlmoodleuser}'@'%' IDENTIFIED BY '${mysqlmoodlepass}' WITH GRANT OPTION"
+    --execute="GRANT ALL PRIVILEGES ON ${moodledir}.* TO '${mysqlmoodleuser}'@'localhost' IDENTIFIED BY '${mysqlmoodlepass}' WITH GRANT OPTION"
     exitstatus=${PIPESTATUS[0]}
     if [ $exitstatus -ne 0 ]; then
         echo "Error creating the user ${mysqlmoodleuser}"
@@ -149,7 +149,7 @@ userexists=$( ${mysqlcmd} --user=${mysqladminuser} --password=${mysqladminpass} 
     --execute="SELECT * FROM user WHERE user = '${mysqljenkinsuser}'")
 if [ -z "${userexists}" ]; then
     ${mysqlcmd} --user=${mysqladminuser} --password=${mysqladminpass} \
-    --execute="GRANT ALL PRIVILEGES ON *.* TO '${mysqljenkinsuser}'@'%' IDENTIFIED BY '${mysqljenkinspass}' WITH GRANT OPTION"
+    --execute="GRANT ALL PRIVILEGES ON *.* TO '${mysqljenkinsuser}'@'localhost' IDENTIFIED BY '${mysqljenkinspass}' WITH GRANT OPTION"
     exitstatus=${PIPESTATUS[0]}
     if [ $exitstatus -ne 0 ]; then
         echo "Error creating the user ${mysqljenkinsuser}"
