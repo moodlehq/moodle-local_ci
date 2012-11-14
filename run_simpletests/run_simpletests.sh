@@ -108,7 +108,6 @@ fi
 
 # Drop the databases and delete files
 # TODO: Based on $dbtype, execute different DB deletion commands
-mysqladmin --user=$dbuser --password=$dbpass --host=$dbhost --default-character-set=utf8 --force drop $installdb
 ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
         --execute="DROP DATABASE ${installdb}"
 rm -fr config.php
