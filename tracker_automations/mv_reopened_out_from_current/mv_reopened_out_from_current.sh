@@ -1,12 +1,21 @@
 #!/bin/bash
 # Look all reopened issues under current integration and move them out
 #jiraclicmd: fill execution path of the jira cli
-#jirasever: jira server url we are going to connect to
+#jiraserver: jira server url we are going to connect to
 #jirauser: user that will perform the execution
 #jirapass: password of the user
 
 # Let's go strict (exit on error)
 set -e
+
+# Verify everything is set
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+for var in $required; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
 
 # file where results will be sent
 resultfile=$WORKSPACE/mv_reopened_out_from_current.csv
@@ -17,7 +26,7 @@ logfile=$WORKSPACE/mv_reopened_out_from_current.log
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jirasever} --user ${jirauser} --password "
+basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password "
 
 # Let's connect to the tracker and get session token
 token="$( ${basereq} ${jirapass} --action login )"
