@@ -36,7 +36,7 @@ if [ ! -f "${lastintegrationfile}" ]; then
 else
     # load the contents of the last integration detected (1st line, date in tracker and date it was detected)
     lastintegrationjira=$( head -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f2 )
-    lastintegrationdate=$( head -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f5 -f6 )
+    lastintegrationdate=$( head -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f5,6 )
     lastintegrationnum=$( tail -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f2 )
 fi
 echo "Last integration cycle ended with info ${lastintegrationjira} on ${lastintegrationdate} with ${lastintegrationnum} reopened issues since then"
@@ -123,7 +123,7 @@ echo "Cycle ${integrationjira} closed on ${lastintegrationdate}" > "${lastintegr
 echo >> "${lastintegrationfile}"
 echo -n "Started new cycle on ${lastintegrationdate}" >> "${lastintegrationfile}"
 echo -e "${results}" >> "${lastintegrationfile}"
-echo "Found ${lastintegrationnum} reopenend issues since ${lastintegrationdate}." >> "${lastintegrationfile}"
+echo "Found ${lastintegrationnum} reopenend issues since ${lastintegrationdate}" >> "${lastintegrationfile}"
 
 # Remove temp file
 rm -fr "${tempfile}"
