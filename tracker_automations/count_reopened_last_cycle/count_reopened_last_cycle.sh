@@ -19,14 +19,14 @@ for var in $required; do
 done
 
 # temp file for intermediate storing of results
-tempfile=$WORKSPACE/count_reopened_temp.csv
+tempfile="${WORKSPACE}/count_reopened_temp.csv"
 echo -n > "${tempfile}"
 
 # file where the last detected integration date is annotated
 # with all the reopened issues since then.
 # First line = jiradate, date it was detected "yyyy/MM/dd HH:mm" and number of issues
 # Next lines = List of reopened issues
-lastintegrationfile=$WORKSPACE/count_reopened_last_cycle.csv
+lastintegrationfile="${WORKSPACE}/count_reopened_last_cycle.csv"
 
 # Init the last integration file if needed (with some good date in the past)
 if [ ! -f "${lastintegrationfile}" ]; then
@@ -35,14 +35,14 @@ if [ ! -f "${lastintegrationfile}" ]; then
     lastintegrationnum=0
 else
     # load the contents of the last integration detected (1st line, date in tracker and date it was detected)
-    lastintegrationjira=$( head -n 1 ${lastintegrationfile} | cut -d ' ' -s -f2 )
-    lastintegrationdate=$( head -n 1 ${lastintegrationfile} | cut -d ' ' -s -f5 -f6 )
-    lastintegrationnum=$( tail -n 1 ${lastintegrationfile} | cut -d ' ' -s -f2 )
+    lastintegrationjira=$( head -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f2 )
+    lastintegrationdate=$( head -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f5 -f6 )
+    lastintegrationnum=$( tail -n 1 "${lastintegrationfile}" | cut -d ' ' -s -f2 )
 fi
 echo "Last integration cycle ended with info ${lastintegrationjira} on ${lastintegrationdate} with ${lastintegrationnum} reopened issues since then"
 
 # file where all the history of integration cycles and their reopened issues is stored
-allintegrationfile=$WORKSPACE/count_reopened_all_cycles.csv
+allintegrationfile="${WORKSPACE}/count_reopened_all_cycles.csv"
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -77,14 +77,14 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
 done
 
 # get the contents of the integration date
-integrationjira=$( cat ${tempfile} )
+integrationjira=$( cat "${tempfile}" )
 
 # if the last integration at jira has changed... start a new cycle
 if [ "${lastintegrationjira}" != "${integrationjira}" ]; then
     # Copy all the information in lastintegrationfile to allintegrationfile
     if [ -f "${lastintegrationfile}" ]; then
-        cat ${lastintegrationfile} >> ${allintegrationfile}
-        echo >> ${allintegrationfile}
+        cat "${lastintegrationfile}" >> "${allintegrationfile}"
+        echo >> "${allintegrationfile}"
     fi
     # Reset lastintegrationfile to new cycle information
     lastintegrationjira=${integrationjira}
@@ -119,14 +119,14 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
 done
 
 # Fill lastintegrationfile contents
-echo "Cycle ${integrationjira} closed on ${lastintegrationdate}" > ${lastintegrationfile}
-echo >> ${lastintegrationfile}
-echo -n "Started new cycle on ${lastintegrationdate}" >> ${lastintegrationfile}
-echo -e "${results}" >> ${lastintegrationfile}
-echo "Found ${lastintegrationnum} reopenend issues since ${lastintegrationdate}." >> ${lastintegrationfile}
+echo "Cycle ${integrationjira} closed on ${lastintegrationdate}" > "${lastintegrationfile}"
+echo >> "${lastintegrationfile}"
+echo -n "Started new cycle on ${lastintegrationdate}" >> "${lastintegrationfile}"
+echo -e "${results}" >> "${lastintegrationfile}"
+echo "Found ${lastintegrationnum} reopenend issues since ${lastintegrationdate}." >> "${lastintegrationfile}"
 
 # Remove temp file
-rm -fr ${tempfile}
+rm -fr "${tempfile}"
 
 # Let's disconnect
 echo "$( ${basereq} --action logout )"
