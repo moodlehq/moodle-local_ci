@@ -37,11 +37,11 @@ basereq="${basereq} lalala --login ${token} "
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
 
-# Let's search all the reopened issues under current integration, not updated in 8h
+# Let's search all the reopened issues under current integration, not updated in 1h
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND status = 'Reopened' \
-                 AND updated < '-3h' \
+                 AND updated < '-1h' \
                  AND 'Currently in integration' is not empty" \
            --file "${resultfile}"
 
