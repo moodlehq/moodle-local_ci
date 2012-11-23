@@ -100,13 +100,11 @@ lastintegrationnum=0
 lastintegrationdatequoted=\'${lastintegrationdate}\'
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
-               AND status CHANGED AFTER ${lastintegrationdatequoted} TO 'Reopened' \
-               AND status WAS IN ( \
+               AND status CHANGED AFTER ${lastintegrationdatequoted} FROM ( \
                    'Integration review in progress', \
                    'Waiting for testing', \
                    'Passed', \
-                   'Failed', \
-                   'Tested') AFTER ${lastintegrationdatequoted}" \
+                   'Tested') TO 'Reopened'" \
            --file "${tempfile}"
 
 # Iterate over found issues, annotating them
