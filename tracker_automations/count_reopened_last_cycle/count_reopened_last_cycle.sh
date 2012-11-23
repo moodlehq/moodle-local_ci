@@ -102,7 +102,6 @@ ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                AND status CHANGED AFTER ${lastintegrationdatequoted} TO 'Reopened' \
                AND status WAS IN ( \
-                   'Waiting for integration review', \
                    'Integration review in progress', \
                    'Waiting for testing', \
                    'Passed', \
