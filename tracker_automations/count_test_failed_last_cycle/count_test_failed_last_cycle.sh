@@ -118,7 +118,7 @@ echo "Cycle ${integrationjira} closed on ${lastintegrationdate}" > "${lastintegr
 echo >> "${lastintegrationfile}"
 echo -n "Started new cycle on ${lastintegrationdate}" >> "${lastintegrationfile}"
 echo -e "${results}" >> "${lastintegrationfile}"
-echo "Found ${lastintegrationnum} reopenend issues since ${lastintegrationdate}" >> "${lastintegrationfile}"
+echo "Found ${lastintegrationnum} test-failed issues since ${lastintegrationdate}" >> "${lastintegrationfile}"
 
 # Remove temp file
 rm -fr "${tempfile}"
