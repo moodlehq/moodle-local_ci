@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * CI scripts version information
+ * CI scripts lang strings
  *
  * @package    local_ci
  * @copyright  2012 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
@@ -24,12 +24,4 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2012113000;
-$plugin->requires  = 2012110900;        // Moodle 2.4beta release and upwards.
-$plugin->dependencies = array(          // Also requires these plugins to be installed.
-    'local_codechecker' => '2012061600',
-    'local_moodlecheck' => '2012011000'
-);
-$plugin->component = 'local_ci';
-$plugin->release   = '0.9.1';
-$plugin->maturity  = MATURITY_BETA;
+$string['pluginname'] = 'CI scripts';
