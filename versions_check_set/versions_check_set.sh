@@ -248,8 +248,56 @@ for i in ${allfiles}; do
 done
 
 # Now, look for backup/backup.class.php to ensure it matches main /version.php
-# - backup::VERSION must be always >= $version (8 first digits comparison)
-# - backup::RELEASE must match $release (x.y) and $branch (if available)
+echo "- ${gitdir}/backup/backup.class.php:" >> "${resultfile}"
+if [ ! -f "${gitdir}/backup/backup.class.php" ]; then
+    echo "  + ERROR: File backup/backup.class.php not found" >> "${resultfile}"
+else
+    # - backup::VERSION must be always >= $version (8 first digits comparison)
+    backupversion="$( grep "const.*VERSION.*=.*;" "${gitdir}/backup/backup.class.php" || true )"
+    if [ -z "${backupversion}" ]; then
+        echo "  + ERROR: backup/backup.class.php is missing: const VERSION = XXXXX line." >> "${resultfile}"
+    fi
+    if [[ ${backupversion} =~ const\ *VERSION\ *=\ *([0-9]{10})\; ]]; then
+        backupversion=${BASH_REMATCH[1]}
+        echo "  + INFO: Correct backup version found: ${backupversion}" >> "${resultfile}"
+    else
+        backupversion=""
+        echo "  + ERROR: No correct backup version YYYYYMMDDZZ found" >> "${resultfile}"
+    fi
+    # But this only applies to STABLE branches, let's try to get current one
+    gitbranch=$( cd "${gitdir}" && git symbolic-ref --short -q HEAD )
+    if [[ ${gitbranch} =~ MOODLE_[0-9]*_STABLE ]]; then
+        cutmainversion=$( echo ${mainversion} | cut -c -8 )
+        cutbackupversion=$( echo ${backupversion} | cut -c -8 )
+        # Integer comparison
+        satisfied=$( echo "${cutbackupversion} >= ${cutmainversion}" | bc )
+        if [ "${satisfied}" != "0" ]; then
+            echo "  + INFO: Backup version ${cutbackupversion} satisfies main version." >> "${resultfile}"
+        else
+            echo "  + ERROR: Backup version ${cutbackupversion} does not satisfy main version ${cutmainversion}." >> "${resultfile}"
+        fi
+    else
+        echo "  + INFO: Detected git branch ${gitbranch}. Skipping the backup version verification." >> "${resultfile}"
+    fi
+
+    # - backup::RELEASE must match $release (X.Y only)
+    backuprelease="$( grep "const.*RELEASE.*=.*;" "${gitdir}/backup/backup.class.php" || true )"
+    if [ -z "${backuprelease}" ]; then
+        echo "  + ERROR: backup/backup.class.php is missing: const RELEASE = 'X.Y' line." >> "${resultfile}"
+    fi
+    if [[ ${backuprelease} =~ const\ *RELEASE\ *=\ *.([0-9]\.[0-9]{1,2}).\; ]]; then
+        backuprelease=${BASH_REMATCH[1]}
+        echo "  + INFO: Correct backup release found: ${backuprelease}" >> "${resultfile}"
+    else
+        backuprelease=""
+        echo "  + ERROR: No correct backup release 'X.Y' found" >> "${resultfile}"
+    fi
+    if [[ ! ${mainrelease} =~ ${backuprelease} ]]; then
+        echo "  + ERROR: Backup release ${backuprelease} does not match main release ${mainrelease}"  >> "${resultfile}"
+    else
+        echo "  + INFO: Backup release ${backuprelease} matches main release ${mainrelease}"  >> "${resultfile}"
+    fi
+fi
 
 # Look for ERROR in the resultsfile (WARN does not lead to failed build)
 count=`grep -P "ERROR:" "$resultfile" | wc -l`
@@ -272,6 +320,11 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
             replaceregex="s/(=>? *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
             perl -p -i -e "${replaceregex}" ${i}
         done
+        # also the backup/backup.class.php file
+        i=${gitdir}/backup/backup.class.php
+        echo "- ${i}:" >> "${resultfile}"
+        replaceregex="s/(const *VERSION *= *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
+        perl -p -i -e "${replaceregex}" ${i}
     fi
 fi
 
