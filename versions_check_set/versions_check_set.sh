@@ -24,10 +24,17 @@ ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${gitdir}" --absolute=true > "${WORKSPACE}/valid_components.txt"
 
 # Find all the version.php files
-allfiles=$( find "${gitdir}" -name version.php )
+allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}' | sort -n | cut -f 2- )
 
 # Perform various checks with the version.php files
 for i in ${allfiles}; do
+    # Exclude some well-know local plugins, not part of core
+    if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
+           [[ "${i}" =~ ${gitdir}/local/codecheck/version.php ]] ||
+           [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
+        continue;
+    fi
+
     echo "- ${i}:" >> "${resultfile}"
 
     # Calculate prefix for all the regexp operations below
@@ -74,9 +81,56 @@ for i in ${allfiles}; do
 
     # If we are in main version.php
     if [ "${i}" == "${gitdir}/version.php" ]; then
-        # TODO: Some checks for main version.php can be added here (release, branch...)
+        mainversion=${version}
+
+        mainrelease="$( grep "${prefix}release.*=.*;" ${i} || true )"
+        if [ -z "${mainrelease}" ]; then
+            echo "  + ERROR: File is missing: ${prefix}release = 'xxxxxx' line." >> "${resultfile}"
+        fi
+        if [[ ${mainrelease} =~ release\ *=\ *.([0-9]\.[0-9]{1,2}(\.[0-9]{1,2})?)[^0-9].*\(Build:\ *[0-9]{8}\).\; ]]; then
+            mainrelease=${BASH_REMATCH[1]}
+            echo "  + INFO: Correct release found: ${mainrelease}" >> "${resultfile}"
+        else
+            mainrelease=""
+            echo "  + ERROR: No correct version 'X.YY[+|beta|rc] (Build: YYYYMMDD)' found" >> "${resultfile}"
+        fi
+
+        mainbranch="$( grep "${prefix}branch.*=.*;" ${i} || true )"
+        if [ -z "${mainbranch}" ]; then
+            echo "  + ERROR: File is missing: ${prefix}branch = 'xx' line." >> "${resultfile}"
+        fi
+        if [[ ${mainbranch} =~ branch\ *=\ *.([0-9]{2,3}).\; ]]; then
+            mainbranch=${BASH_REMATCH[1]}
+            echo "  + INFO: Correct branch found: ${mainbranch}" >> "${resultfile}"
+        else
+            mainbranch=""
+            echo "  + ERROR: No correct branch 'XY[Z]' found" >> "${resultfile}"
+        fi
+
+        mainmaturity="$( grep "${prefix}maturity.*=.*;" ${i} || true )"
+        if [ -z "${mainmaturity}" ]; then
+            echo "  + ERROR: File is missing: ${prefix}maturity = MATURITY_XXX line." >> "${resultfile}"
+        fi
+        if [[ ${mainmaturity} =~ maturity\ *=\ *(MATURITY_(ALPHA|BETA|RC|STABLE))\; ]]; then
+            mainmaturity=${BASH_REMATCH[1]}
+            echo "  + INFO: Correct mainmaturity found: ${mainmaturity}" >> "${resultfile}"
+        else
+            mainmaturity=""
+            echo "  + ERROR: No correct mainmaturity MATURITY_XXXX found" >> "${resultfile}"
+        fi
+
+        # Verify branch matches normalised release
+        normalisedrelease=${mainrelease/\./}
+        if [[ ! ${normalisedrelease} =~ ${mainbranch} ]]; then
+            echo "  + ERROR: Branch ${mainbranch} does not match release ${mainrelease}"  >> "${resultfile}"
+        else
+            echo "  + INFO: Branch ${mainbranch} matches release ${mainrelease}"  >> "${resultfile}"
+        fi
+
         continue
     fi
+
+    # Tests following are not applied to main version.php but to all the other versions
 
     # Verify the file has requires defined
     requires="$( grep "${prefix}requires.*=.*;" ${i} || true )"
@@ -91,7 +145,21 @@ for i in ${allfiles}; do
             requires=${BASH_REMATCH[1]}
             echo "  + INFO: Correct requires found: ${requires}" >> "${resultfile}"
         else
+            requires=""
             echo "  + ERROR: No correct requires (10 digits + opt 2 more) found" >> "${resultfile}"
+        fi
+    fi
+
+    # Verify the requires is <= main version
+    if [ -z "${mainversion}" ]; then
+        echo "  + ERROR: Processing requires before knowing about main version." >> "${resultfile}"
+    else
+        # Float comparison
+        satisfied=$( echo "${requires} <= ${mainversion}" | bc )
+        if [ "${satisfied}" != "0" ]; then
+            echo "  + INFO: Requires ${requires} satisfies main version." >> "${resultfile}"
+        else
+            echo "  + ERROR: Requires ${requires} does not satisfy main version ${mainversion}." >> "${resultfile}"
         fi
     fi
 
@@ -178,6 +246,10 @@ for i in ${allfiles}; do
         fi
     done
 done
+
+# Now, look for backup/backup.class.php to ensure it matches main /version.php
+# - backup::VERSION must be always >= $version (8 first digits comparison)
+# - backup::RELEASE must match $release (x.y) and $branch (if available)
 
 # Look for ERROR in the resultsfile (WARN does not lead to failed build)
 count=`grep -P "ERROR:" "$resultfile" | wc -l`
