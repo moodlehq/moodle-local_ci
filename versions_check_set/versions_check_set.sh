@@ -30,7 +30,7 @@ allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}'
 for i in ${allfiles}; do
     # Exclude some well-know local plugins, not part of core
     if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/local/codecheck/version.php ]] ||
+           [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
         continue;
     fi
@@ -313,7 +313,7 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
         for i in ${allfiles}; do
             # Exclude some well-know local plugins, not part of core
             if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
-                   [[ "${i}" =~ ${gitdir}/local/codecheck/version.php ]] ||
+                   [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
                    [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
                 continue;
             fi
