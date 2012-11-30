@@ -265,7 +265,7 @@ else
         echo "  + ERROR: No correct backup version YYYYYMMDDZZ found" >> "${resultfile}"
     fi
     # But this only applies to STABLE branches, let's try to get current one
-    gitbranch=$( cd "${gitdir}" && git symbolic-ref --short -q HEAD )
+    gitbranch=$( basename $( cd "${gitdir}" && git symbolic-ref -q HEAD ) )
     if [[ ${gitbranch} =~ MOODLE_[0-9]*_STABLE ]]; then
         cutmainversion=$( echo ${mainversion} | cut -c -8 )
         cutbackupversion=$( echo ${backupversion} | cut -c -8 )
