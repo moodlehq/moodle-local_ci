@@ -311,6 +311,12 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
     else
         # Everything looks, ok, let's replace
         for i in ${allfiles}; do
+            # Exclude some well-know local plugins, not part of core
+            if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
+                   [[ "${i}" =~ ${gitdir}/local/codecheck/version.php ]] ||
+                   [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
+                continue;
+            fi
             # Skip the main version.php file. Let's force to perform manual update there
             # (without it, upgrade won't work)
             if [ "${i}" == "${gitdir}/version.php" ]; then
