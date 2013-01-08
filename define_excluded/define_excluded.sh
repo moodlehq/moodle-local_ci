@@ -25,6 +25,7 @@ lib/jabber/
 lib/minify/
 lib/overlib/
 lib/pear/
+lib/phpexcel/
 lib/phpmailer/
 lib/simplepie/
 lib/simpletestlib/
