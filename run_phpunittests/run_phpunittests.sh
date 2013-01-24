@@ -107,8 +107,24 @@ fi
 # Look for any stack sent to output, it will lead to failed execution
 # Conditionally
 if [ $exitstatus -eq 0 ]; then
+    # notices/warnings/errors under simpletest (phpunit captures them)
     stacks=$(grep 'Call Stack:' "${outputfile}" | wc -l)
     if [[ ${stacks} -gt 0 ]]; then
+        echo "ERROR: uncontrolled notice/warning/error output on execution."
+        exitstatus=1
+        rm "${resultfile}"
+    fi
+    # debugging messages
+    debugging=$(grep 'Debugging:' "${outputfile}" | wc -l)
+    if [[ ${debugging} -gt 0 ]]; then
+        echo "ERROR: uncontrolled debugging output on execution."
+        exitstatus=1
+        rm "${resultfile}"
+    fi
+    # general backtrace information
+    backtrace=$(grep 'line [0-9]* of .*: call to' "${outputfile}" | wc -l)
+    if [[ ${backtrace} -gt 0 ]]; then
+        echo "ERROR: uncontrolled backtrace output on execution."
         exitstatus=1
         rm "${resultfile}"
     fi
