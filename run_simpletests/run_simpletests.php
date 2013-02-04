@@ -46,12 +46,6 @@ $moodle22stableandup = false;
 if (file_exists($CFG->dirroot.'/'.$CFG->admin.'/tool/unittest/simpletestcoveragelib.php')) {
     $moodle22stableandup = true;
 }
-// For 20_STABLE
-$moodle20stable = false;
-$versiontxt = file_get_contents($CFG->dirroot.'/version.php');
-if (preg_match('!\$release  = \'2\.0\..*\(Build:.*version name$!sm', $versiontxt)) {
-    $moodle20stable = true;
-}
 
 if ($moodle22stableandup) {
     require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/unittest/simpletestcoveragelib.php');
@@ -63,19 +57,6 @@ if ($moodle22stableandup) {
     require_once($CFG->dirroot.'/'.$CFG->admin.'/report/unittest/ex_reporter.php');
 }
 
-// Horrible hack, delete a bunch of tests (100% broken under CLI 20_STABLE!)
-if ($moodle20stable) {
-    unlink($CFG->dirroot.'/blog/simpletest/testbloglib.php');
-    unlink($CFG->libdir.'/simpletest/testrepositorylib.php');
-    unlink($CFG->libdir.'/simpletest/testportfoliolib.php');
-    unlink($CFG->dirroot.'/mod/assignment/simpletest/test_assignment_portfolio_callers.php');
-    unlink($CFG->dirroot.'/mod/chat/simpletest/test_chat_portfolio_callers.php');
-    unlink($CFG->dirroot.'/mod/data/simpletest/test_data_portfolio_callers.php');
-    unlink($CFG->dirroot.'/mod/forum/simpletest/test_forum_portfolio_callers.php');
-    unlink($CFG->dirroot.'/mod/glossary/simpletest/test_glossary_portfolio_callers.php');
-    unlink($CFG->dirroot.'/portfolio/boxnet/simpletest/testportfoliopluginboxnet.php');
-    unlink($CFG->dirroot.'/portfolio/download/simpletest/testportfolioplugindownload.php');
-}
 require_once($CFG->dirroot.'/local/ci/run_simpletests/lib.php');
 
 // now get cli options
@@ -205,7 +186,7 @@ if ($format == 'xunit') {
         // On 22 stable and upwards, require all (fail, error, skipped to pass)
         $check = '!0 failed, 0 exceptions, 0 skipped!';
     } else {
-        // We don't look for skipped in 20 and 21 stables (no cli generator there)
+        // We don't look for skipped in 21 stable (no cli generator there)
         $check = '!0 failed, 0 exceptions,!';
     }
     if (preg_match($check, $junitresults)) {
