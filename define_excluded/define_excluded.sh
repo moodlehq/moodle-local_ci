@@ -71,13 +71,6 @@ then
 excluded="${excluded}
 lib/yui/"
 fi
-if [[ ${gitbranch} == "MOODLE_20_STABLE" ]]
-then
-excluded="${excluded}
-lib/yui/2.8.2/
-lib/yui/3.2.0/
-lib/yui/readme_moodle.txt"
-fi
 
 # Exclude syntax for grep commands (egrep-like regexp)
 excluded_grep=""
