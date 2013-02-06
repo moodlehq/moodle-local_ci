@@ -106,7 +106,7 @@ definedtests=$(grep -r "directory suffix" ${gitdir}/phpunit.xml | sed 's/^[^>]*>
 # Load all the existing tests
 existingtests=$(cd ${gitdir} && find . -name tests | sed 's/^\.\/\(.*\)$/\1/g')
 # Some well-known "tests" that we can ignore here
-ignoretests="local/codechecker/pear/PHP/tests lib/phpexcel/PHPExcel/Shared/JAMA/tests auth/tests blocks/tests"
+ignoretests="local/codechecker/pear/PHP/tests lib/phpexcel/PHPExcel/Shared/JAMA/tests"
 # Verify that each existing test is covered by some defined test
 for existing in ${existingtests}
 do
@@ -127,6 +127,11 @@ do
         fi
     done
     if [[ -z ${found} ]]; then
+        # Last chance to skip, directory does not contain test units (files)
+        if [[ -z $(ls ${existing} | grep "_test.php$") ]]; then
+            echo "NOTE: Ignoring ${existing}, does not contain any test unit file."
+            continue;
+        fi
         echo "ERROR: ${existing} is not matched/covered by any definition in phpunit.xml !"
         exitstatus=1
     fi
