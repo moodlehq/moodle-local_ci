@@ -10,6 +10,8 @@
 # $dbuser: DB user
 # $dbpass: DB password
 # $pearpath: Path where the pear executables are available
+# $multipleclassiserror: Does multiple classes in test file
+#                        raise error or just warning (dlft).
 
 # Don't be strict. Script has own error control handle
 set +e
@@ -107,7 +109,12 @@ definedtests=$(grep -r "directory suffix" ${gitdir}/phpunit.xml | sed 's/^[^>]*>
 existingtests=$(cd ${gitdir} && find . -name tests | sed 's/^\.\/\(.*\)$/\1/g')
 # Some well-known "tests" that we can ignore here
 ignoretests="local/codechecker/pear/PHP/tests lib/phpexcel/PHPExcel/Shared/JAMA/tests"
+# Unit test classes to look for with each file (must be 1 and only 1). MDLSITE-2096
+# TODO: Some day replace this with the list of abstract classes, from PHPUnit_Framework_TestCase using some classmap
+unittestclasses="basic_testcase advanced_testcase database_driver_testcase externallib_advanced_testcase data_loading_method_test_base question_testcase question_attempt_upgrader_test_base qbehaviour_walkthrough_test_base grade_base_testcase"
+
 # Verify that each existing test is covered by some defined test
+# and that, all the test files have only one phpunit testcase class.
 for existing in ${existingtests}
 do
     found=""
@@ -135,6 +142,18 @@ do
         echo "ERROR: ${existing} is not matched/covered by any definition in phpunit.xml !"
         exitstatus=1
     fi
+    # Look inside all the test files, counting occurrences of $unittestclasses
+    unittestclassesregex=$(echo ${unittestclasses} | sed 's/ /|/g')
+    for testfile in $(ls ${existing} | grep "_test.php$")
+    do
+        classcount=$(grep -iP " extends *(${unittestclassesregex}) *{" ${existing}/${testfile} | wc -l)
+        if [[ ! ${classcount} -eq 1 ]]; then
+            echo "WARNING: ${existing}/${testfile} has incorrect (${classcount}) number of unit test classes."
+            if [[ -n "${multipleclassiserror}" ]]; then
+                exitstatus=1
+            fi
+        fi
+    done
 done
 
 # Execute the phpunit utility
