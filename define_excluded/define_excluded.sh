@@ -24,6 +24,7 @@ lib/htmlpurifier/
 lib/jabber/
 lib/minify/
 lib/overlib/
+lib/password_compat/
 lib/pear/
 lib/phpexcel/
 lib/phpmailer/
