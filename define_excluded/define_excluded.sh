@@ -62,6 +62,7 @@ webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
 work/
 *.gif
+*.jpg
 *.png
 *.svg"
 
