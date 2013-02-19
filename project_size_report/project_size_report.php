@@ -16,13 +16,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Simple wrapper over the phpcpd PECL tool (copy/paste detector)
- * https://github.com/sebastianbergmann/phpcpd
+ * Simple wrapper over the phploc PECL tool (size reporter)
+ * https://github.com/sebastianbergmann/phploc
  *
- * This script looks for duplicated sections of code againt the codebase
- * reporting them in PMD format, so can be processed later by some tools
- * like DRY (don't repeat yourself) ones. Useful to build some CI jobs
- * on top of it.
+ * To track various codebase size aspects.
  *
  * @package    core
  * @subpackage ci
@@ -33,5 +30,11 @@
 // Increase memory, codebase is huge
 ini_set('memory_limit', '1024M');
 
-require 'PHPLOC/TextUI/Command.php';
-PHPLOC_TextUI_Command::main();
+if (strpos('/opt/local/bin/php', '@php_bin') === 0) {
+        require __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'autoload.php';
+} else {
+        require 'SebastianBergmann/PHPLOC/autoload.php';
+}
+
+$textui = new SebastianBergmann\PHPLOC\TextUI\Command;
+$textui->main();
