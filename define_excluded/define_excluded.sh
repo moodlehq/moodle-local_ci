@@ -52,9 +52,6 @@ lib/xhprof/xhprof_lib/
 lib/xmlize.php
 mod/lti/OAuthBody.php
 mod/wiki/tests/fixtures/
-question/format/blackboard/tests/fixtures/
-question/format/blackboard_six/tests/fixtures/
-question/format/xml/tests/fixtures/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
