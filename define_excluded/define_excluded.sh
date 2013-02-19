@@ -20,6 +20,7 @@ lib/evalmath/
 lib/excel/
 lib/flowplayer/
 lib/gallery/
+lib/google/
 lib/htmlpurifier/
 lib/jabber/
 lib/minify/
