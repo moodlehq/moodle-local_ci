@@ -1,8 +1,14 @@
 #!/bin/bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to check
+# $pearpath: Path where the pear executables are available
+# $phpcmd: php cli executable
+
 # file where results will be sent
 resultfile=${WORKSPACE}/project_size_report.csv
+
+# add the PEAR path
+PATH="$PATH:/opt/local/bin/:$pearpath"; export PATH
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -14,4 +20,4 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ${gitdir} && git checkout ${gitbranch} && git fetch && git reset --hard origin/${gitbranch}
 
 # Run phploc against the whole codebase
-/opt/local/bin/php ${mydir}/project_size_report.php ${excluded_list} --count-tests --log-csv "${resultfile}" ${gitdir}
+${phpcmd} ${mydir}/project_size_report.php ${excluded_list} --count-tests --log-csv "${resultfile}" ${gitdir}
