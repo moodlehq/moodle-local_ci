@@ -84,11 +84,11 @@ done
 excluded_grep=${excluded_grep//|\/\.git/\/.git}
 excluded_grep=${excluded_grep//\./\\.}
 
-# Exclude syntax for phpcpd (list of exclude parameters)
+# Exclude syntax for phpcpd/phploc../phploc... (list of exclude parameters without trailing slash)
 excluded_list=""
 for i in ${excluded}
 do
-    excluded_list="${excluded_list} --exclude ${i}"
+    excluded_list="${excluded_list} --exclude ${i%\/}"
 done
 
 # Exclude syntax for apigen (list of exclude parameters with * wildcards)
