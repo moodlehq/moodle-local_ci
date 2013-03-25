@@ -23,6 +23,7 @@ lib/gallery/
 lib/google/
 lib/htmlpurifier/
 lib/jabber/
+lib/jquery/
 lib/minify/
 lib/overlib/
 lib/password_compat/
