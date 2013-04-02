@@ -90,6 +90,13 @@ if (!is_bool($options['absolute'])) {
     cli_error('Incorrect absolute value, bool expected: ' . $options['absolute']);
 }
 
+// Purge all caches, we don't want anything but fresh results. MDLSITE-2184.
+// TODO: Alternatively, we should be creating a new site to make this work
+// without the moodle_ci_site requirement and the fake dirroot.
+if (function_exists('purge_all_caches')) {
+        purge_all_caches();
+}
+
 // Let's fake dirroot to look in the correct directory
 global $CFG;
 $olddirroot = $CFG->dirroot;
