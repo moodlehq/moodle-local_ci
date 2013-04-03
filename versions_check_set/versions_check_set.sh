@@ -31,7 +31,8 @@ for i in ${allfiles}; do
     # Exclude some well-know local plugins, not part of core
     if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
+           [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]] ||
+           [[ "${i}" =~ ${gitdir}/admin/tool/installaddon/tests/fixtures/* ]]; then
         continue;
     fi
 
