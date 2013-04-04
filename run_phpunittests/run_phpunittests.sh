@@ -52,7 +52,7 @@ if [ $exitstatus -ne 0 ]; then
 fi
 
 # Do the moodle install
-cd $gitdir && git checkout $gitbranch && git reset --hard origin/$gitbranch
+cd $gitdir && git reset --hard $gitbranch
 rm -fr config.php
 rm -fr ${resultfile}
 

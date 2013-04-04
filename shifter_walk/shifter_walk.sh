@@ -21,7 +21,7 @@ outputfile=${WORKSPACE}/shifter_walk.txt
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Ensure git is ready
-cd ${gitdir} && git checkout ${gitbranch} && git reset --hard origin/${gitbranch}
+cd ${gitdir} && git reset --hard ${gitbranch}
 rm -fr config.php
 rm -fr ${outputfile}
 
