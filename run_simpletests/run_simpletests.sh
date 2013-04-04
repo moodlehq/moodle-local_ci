@@ -34,7 +34,7 @@ if [ $exitstatus -ne 0 ]; then
 fi
 
 # Do the moodle install
-cd $gitdir && git checkout $gitbranch && git reset --hard origin/$gitbranch
+cd $gitdir && git reset --hard $gitbranch
 rm -fr config.php
 ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost --dbname=$installdb --dbuser=$dbuser --dbpass=$dbpass --prefix=$dbprefixinstall --fullname=$installdb --shortname=$installdb --adminuser=$dbuser --adminpass=$dbpass
 # Error installing, we cannot continue.

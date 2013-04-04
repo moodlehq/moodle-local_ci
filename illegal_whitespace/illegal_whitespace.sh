@@ -16,7 +16,7 @@ countfile=$WORKSPACE/illegal_whitespace_counters_$gitbranch.csv
 mincountfile=$WORKSPACE/illegal_whitespace_mincounter_$gitbranch.csv
 
 # Co to proper gitdir and gitpath
-cd $gitdir && git checkout $gitbranch && git reset --hard origin/$gitbranch
+cd $gitdir && git reset --hard $gitbranch
 
 # Search and send to $lastfile
 echo -n > "$lastfile"

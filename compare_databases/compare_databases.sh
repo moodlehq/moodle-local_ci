@@ -61,7 +61,7 @@ if [ $exitstatus -ne 0 ]; then
 fi
 
 # Do the moodle install of $installdb
-cd $gitdir && git checkout $gitbranchinstalled && git reset --hard origin/$gitbranchinstalled
+cd $gitdir && git reset --hard $gitbranchinstalled
 rm -fr config.php
 ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost1 --dbname=$installdb --dbuser=$dbuser1 --dbpass=$dbpass1 --prefix=$dbprefixinstall --fullname=$installdb --shortname=$installdb --adminuser=$dbuser1 --adminpass=$dbpass1
 # Error installing, we cannot continue. Exit
@@ -75,7 +75,8 @@ fi
 # Do the moodle install of $upgradedb
 # only if we don't come from an erroneus previous situation
 if [ $exitstatus -eq 0 ]; then
-    cd $gitdir && git checkout $gitbranchupgraded && git reset --hard origin/$gitbranchupgraded
+    # Detached head, good enough
+    cd $gitdir && git checkout origin/$gitbranchupgraded
     rm -fr config.php
     ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost2 --dbname=$upgradedb --dbuser=$dbuser2 --dbpass=$dbpass2 --prefix=$dbprefixupgrade --fullname=$upgradedb --shortname=$upgradedb --adminuser=$dbuser2 --adminpass=$dbpass2
     # Error installing, we cannot continue. Exit
@@ -88,7 +89,7 @@ fi
 # Do the moodle upgrade
 # only if we don't come from an erroneus previous situation
 if [ $exitstatus -eq 0 ]; then
-    cd $gitdir && git checkout $gitbranchinstalled && git reset --hard origin/$gitbranchinstalled
+    cd $gitdir && git reset --hard $gitbranchinstalled
     ${phpcmd} admin/cli/upgrade.php --non-interactive --allow-unstable
     # Error upgrading, inform and continue
     exitstatus=${PIPESTATUS[0]}
