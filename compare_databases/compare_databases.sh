@@ -89,7 +89,8 @@ fi
 # Do the moodle upgrade
 # only if we don't come from an erroneus previous situation
 if [ $exitstatus -eq 0 ]; then
-    cd $gitdir && git reset --hard $gitbranchinstalled
+    # Need to checkout back to gitbranchinstalled from detached gitbranchupgraded
+    cd $gitdir && git checkout $gitbranchinstalled && git reset --hard $gitbranchinstalled
     ${phpcmd} admin/cli/upgrade.php --non-interactive --allow-unstable
     # Error upgrading, inform and continue
     exitstatus=${PIPESTATUS[0]}
