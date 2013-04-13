@@ -149,7 +149,7 @@ do
         classcount=$(grep -iP " extends *(${unittestclassesregex}) *{" ${existing}/${testfile} | wc -l)
         if [[ ! ${classcount} -eq 1 ]]; then
             echo "WARNING: ${existing}/${testfile} has incorrect (${classcount}) number of unit test classes."
-            if [[ -n "${multipleclassiserror}" ]]; then
+            if [[ "${multipleclassiserror}" == "yes" ]]; then
                 exitstatus=1
             fi
         fi
