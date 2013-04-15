@@ -60,7 +60,6 @@ repository/s3/S3.php
 repository/url/locallib.php
 search/
 theme/bootstrap/less/bootstrap
-theme/bootstrap/javascript/bootstrapdropdown.js
 theme/mymobile/javascript/
 theme/mymobile/jquery/
 theme/mymobile/style/jmobile
