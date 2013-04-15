@@ -189,8 +189,9 @@ ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
 
 # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
 # (we pass to it the list of valid components that was built before deleting files)
-${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
-    --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
+# Commented until MDLSITE-2216 is fixed.
+#${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
+#    --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
 # ########## ########## ########## ##########
 
