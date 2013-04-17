@@ -33,7 +33,7 @@ for i in ${allfiles}; do
            [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/admin/tool/installaddon/tests/fixtures/* ]] ||
-           [[ "${i}" =~ ${gitdir}/lib/tests/fixtures/mockplugins/* ]] then
+           [[ "${i}" =~ ${gitdir}/lib/tests/fixtures/mockplugins/* ]]; then
         continue;
     fi
 
