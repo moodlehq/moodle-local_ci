@@ -32,7 +32,8 @@ for i in ${allfiles}; do
     if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
            [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/admin/tool/installaddon/tests/fixtures/* ]]; then
+           [[ "${i}" =~ ${gitdir}/admin/tool/installaddon/tests/fixtures/* ]] ||
+           [[ "${i}" =~ ${gitdir}/lib/tests/fixtures/mockplugins/* ]] then
         continue;
     fi
 
