@@ -59,7 +59,7 @@ question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
 search/
-theme/bootstrap/less/bootstrap
+theme/bootstrapbase/less/bootstrap
 theme/mymobile/javascript/
 theme/mymobile/jquery/
 theme/mymobile/style/jmobile
