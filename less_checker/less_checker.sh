@@ -124,9 +124,10 @@ if [[ -z ${changes} ]]; then
     echo "OK: All .less files are perfectly compiled and matching git contents" | tee -a "${outputfile}"
 else
     echo | tee -a "${outputfile}"
-    echo "ERROR: Some .less files are not properly compiled. Changes detected:" | tee -a "${outputfile}"
+    echo "ERROR: Some .less files are not matching git contents. Changes detected:" | tee -a "${outputfile}"
     echo | tee -a "${outputfile}"
     echo "${changes}" | tee -a "${outputfile}"
+    echo | tee -a "${outputfile}"
     exitstatus=1
 fi
 exit ${exitstatus}
