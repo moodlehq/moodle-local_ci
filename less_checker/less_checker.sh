@@ -77,8 +77,7 @@ for themepath in $(ls ${gitdir}/theme); do
         exitstatus=1
     fi
     # Look for .less files not placed properly
-    for lessfile in $(find ${gitdir}/theme/${themepath} -name "*.less" \
-                      -not -path "${gitdir}/theme/bootstrapbase/less/bootstrap/*"); do
+    for lessfile in $(find ${gitdir}/theme/${themepath} -name "*.less"); do
         if [[ ! $lessfile =~ "${gitdir}/theme/${themepath}/less/" ]]; then
             echo "    - ERROR: Wrong path for .less file found: $lessfile" | tee -a "${outputfile}"
             exitstatus=1
