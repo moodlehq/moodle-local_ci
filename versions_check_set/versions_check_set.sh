@@ -26,14 +26,14 @@ ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
 # Find all the version.php files
 allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}' | sort -n | cut -f 2- )
 
+# version.php files to ignore
+ignorefiles="(local/(ci|codechecker|moodlecheck)/version.php|.*/tests/fixtures/.*/version.php)"
+
 # Perform various checks with the version.php files
 for i in ${allfiles}; do
-    # Exclude some well-know local plugins, not part of core
-    if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]] ||
-           [[ "${i}" =~ ${gitdir}/admin/tool/installaddon/tests/fixtures/* ]] ||
-           [[ "${i}" =~ ${gitdir}/lib/tests/fixtures/mockplugins/* ]]; then
+    # Exclude the version.php if matches ignorefiles
+    if [[ "${i}" =~ ${gitdir}/${ignorefiles} ]]; then
+        echo "- ${i}: Ignored"  >> "${resultfile}"
         continue;
     fi
 
@@ -313,10 +313,9 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
     else
         # Everything looks, ok, let's replace
         for i in ${allfiles}; do
-            # Exclude some well-know local plugins, not part of core
-            if [[ "${i}" =~ ${gitdir}/local/ci/version.php ]] ||
-                   [[ "${i}" =~ ${gitdir}/local/codechecker/version.php ]] ||
-                   [[ "${i}" =~ ${gitdir}/local/moodlecheck/version.php ]]; then
+            # Exclude the version.php if matches ignorefiles
+            if [[ "${i}" =~ ${gitdir}/${ignorefiles} ]]; then
+                echo "- ${i}: Ignored"  >> "${resultfile}"
                 continue;
             fi
             # Skip the main version.php file. Let's force to perform manual update there
