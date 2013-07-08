@@ -38,6 +38,20 @@ define('NO_OUTPUT_BUFFERING', true);
 require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once($CFG->libdir.'/clilib.php');      // cli only functions
 
+/**
+ * Helper class used to rest core_component built in caches
+ */
+class reseteable_core_component extends core_component {
+    public static function reset() {
+        self::$plugintypes = null;
+        self::$plugins = null;
+        self::$subsystems = null;
+        self::$classmap = null;
+        self::init();
+    }
+}
+
+
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
                                                    'help'   => false,
@@ -90,24 +104,28 @@ if (!is_bool($options['absolute'])) {
     cli_error('Incorrect absolute value, bool expected: ' . $options['absolute']);
 }
 
+global $CFG;
+
 // Purge all caches, we don't want anything but fresh results. MDLSITE-2184.
 // TODO: Alternatively, we should be creating a new site to make this work
 // without the moodle_ci_site requirement and the fake dirroot.
 if (function_exists('purge_all_caches')) {
-        purge_all_caches();
+    purge_all_caches();
 }
 
 // Let's fake dirroot to look in the correct directory
-global $CFG;
 $olddirroot = $CFG->dirroot;
 $CFG->dirroot = $options['basedir'];
+// Reset any component cache, so next get_xxx() calls will need
+// to look for fresh information.
+reseteable_core_component::reset();
 
 // Get all the plugin and subplugin types
-$types = get_plugin_types(false);
+$types = get_plugin_types(true);
 // Sort types in reverse order, so we get subplugins earlier than plugins
 $types = array_reverse($types);
 // For each type, get their available implementations
-foreach ($types as $type => $typerelpath) {
+foreach ($types as $type => $fullpath) {
     $plugins = get_plugin_list($type);
     // For each plugin, let's calculate the proper component name and generate
     // the corresponding build.xml file
@@ -122,18 +140,18 @@ foreach ($types as $type => $typerelpath) {
 
 // Get all the subsystems and
 // generate the corresponding build.xml file
-$subsystems = get_core_subsystems();
+$subsystems = get_core_subsystems(true);
 $subsystems['core'] = '.'; // To get the main one too
 foreach ($subsystems as $subsystem => $subsystempath) {
     if ($subsystem == 'backup') { // Because I want, yes :-P
-        $subsystempath = 'backup';
+        $subsystempath = $options['basedir'] . '/backup';
     }
     $component = $subsystem;
-    if ($options['absolute'] and !empty($subsystempath)) {
-        $subsystempath = $options['basedir'] . '/' . $subsystempath;
+    if (!$options['absolute'] and !empty($subsystempath)) {
+        $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
     }
     echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
 }
 
-// Return to real dirroot
+// Return to real dirroot and cachedir
 $CFG->dirroot = $olddirroot;

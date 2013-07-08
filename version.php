@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->version   = 2012113000;
-$plugin->requires  = 2012110900;        // Moodle 2.4beta release and upwards.
+$plugin->requires  = 2013070400;        // Moodle 2.6dev (Build 20130704) and upwards.
 $plugin->dependencies = array(          // Also requires these plugins to be installed.
     'local_codechecker' => '2012061600',
     'local_moodlecheck' => '2012011000'
