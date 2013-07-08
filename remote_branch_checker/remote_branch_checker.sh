@@ -6,6 +6,7 @@
 # $integrateto: Local branch where the remote branch is going to be integrated.
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
 # $filtering: Report about only modified lines (true), or about the whole files (false)
+# $format: Format of the final smurf file (xml | html)
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -13,6 +14,9 @@ set -e
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# format, defaults to 'html'
+format=${format:-html}
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -201,4 +205,4 @@ if [[ "${filtering}" = "true" ]]; then
 fi
 set -e
 ${phpcmd} ${mydir}/remote_branch_reporter.php \
-    --directory="${WORKSPACE}/work" --format=xml ${filter} > "${WORKSPACE}/work/smurf.xml"
+    --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"

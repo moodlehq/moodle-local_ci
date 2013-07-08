@@ -62,7 +62,7 @@ class remote_branch_reporter {
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 50,
             'warningweight' => 10);
-        if ($node = $this->process_cs($params, 'savepoints.xml')) {
+        if ($node = $this->apply_xslt($params, $this->directory . '/savepoints.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
                 $smurf->appendChild($snode);
@@ -77,7 +77,7 @@ class remote_branch_reporter {
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
             'warningweight' => 1);
-        if ($node = $this->process_cs($params, 'cs.xml')) {
+        if ($node = $this->apply_xslt($params, $this->directory . '/cs.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
                 $smurf->appendChild($snode);
@@ -92,7 +92,7 @@ class remote_branch_reporter {
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 3,
             'warningweight' => 1);
-        if ($node = $this->process_cs($params, 'docs.xml')) {
+        if ($node = $this->apply_xslt($params, $this->directory . '/docs.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
                 $smurf->appendChild($snode);
@@ -108,6 +108,12 @@ class remote_branch_reporter {
         switch ($format) {
             case 'xml':
                 return $doc->saveXML();
+                break;
+            case 'html':
+                file_put_contents($this->directory . '/tmp.xml', $doc->saveXML());
+                $result = $this->apply_xslt($params, $this->directory . '/tmp.xml', 'gargamel.xsl');
+                unlink($this->directory . '/tmp.xml');
+                return $result->saveXML();
                 break;
             default:
                 throw new exception('Sorry, format not implemented: ' . $format);
@@ -198,31 +204,39 @@ class remote_branch_reporter {
      }
 
     /**
-     * Transform one checkstyle file into an smurf check
+     * Apply a xslt transformation
+     *
+     * @param $params array of xlst params.
+     * @param $file full path to the file to process.
+     * @param $xsltfile transformation to sheet to apply (must exist in the "xslt" directory).
+     * @return string contents transformed
      */
-    protected function process_cs($params, $file) {
-        // Let's transform the cs file if present
-        $file = $this->directory . '/' . $file;
+    protected function apply_xslt($params, $file, $xsltfile) {
+        // Verify $file exists.
         if (!is_readable($file)) {
             return null;
         }
+        // Verify $xslt exists
+        if (!is_readable('xslt/' . $xsltfile)) {
+            return null;
+        }
 
-        // read the file
+        // Read $file.
         $xmlcontents = file_get_contents($file);
         if (empty($xmlcontents)) {
             return null;
         }
         $xml = new SimpleXMLElement($xmlcontents);
 
-        // read the xslt
+        // Read $xslt.
         $xslt = new XSLTProcessor();
-        $xslcontents = file_get_contents('xslt/checkstyle2smurf.xsl');
+        $xslcontents = file_get_contents('xslt/' . $xsltfile);
         $xslt->importStylesheet(new SimpleXMLElement($xslcontents));
 
-        // set params
+        // Set $params.
         $xslt->setParameter('', $params);
 
-        // conver to DOMDocument
+        // Apply the transformations and return the results.
         return $xslt->transformToDoc($xml);
     }
 }
