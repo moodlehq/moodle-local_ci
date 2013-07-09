@@ -16,6 +16,7 @@ lib/bennu/
 lib/dragmath/
 lib/editor/tinymce/tiny_mce/
 lib/editor/tinymce/plugins/moodleimage
+lib/editor/tinymce/plugins/pdw
 lib/editor/tinymce/plugins/spellchecker
 lib/evalmath/
 lib/excel/
