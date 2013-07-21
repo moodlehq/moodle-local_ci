@@ -126,11 +126,6 @@ set +e
 
 # First, we execute all the checks requiring complete site codebase
 
-# TODO: Run the db install/upgrade comparison check
-# (only if there is any *install* or *upgrade* file involved)
-
-# TODO: Run the phpunit unittests
-
 # Run the PHPCPD (commented out 20120823 Eloy)
 #${phpcmd} ${mydir}/../copy_paste_detector/copy_paste_detector.php \
 #    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
@@ -145,6 +140,14 @@ set +e
 ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
 
+# TODO: Run the db install/upgrade comparison check
+# (only if there is any *install* or *upgrade* file involved)
+
+# TODO: Run the unit tests for the affected components
+
+# TODO: Run the acceptance tests for the affected components
+
+# ########## ########## ########## ##########
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the
@@ -166,6 +169,7 @@ find ${WORKSPACE} -type f | grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
 # Remove all the empty dirs remaining, but .git and work
 find ${WORKSPACE} -type d -depth -empty -not \( -name .git -o -name work -prune \) -delete
 
+# ########## ########## ########## ##########
 # ########## ########## ########## ##########
 
 # Now run all the checks that only need the patchset affected files
@@ -196,6 +200,7 @@ ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
 ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
     --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
+# ########## ########## ########## ##########
 # ########## ########## ########## ##########
 
 # Everything has been generated in the work directory, generate the report, observing $filtering
