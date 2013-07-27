@@ -4,7 +4,7 @@ ${basereq} --action removeLabels \
     --labels "cime"
 
 # Add the comment with results
-comment=$(cat "${resultfile}.${issue}")
+comment=$(cat "${resultfile}.${issue}.txt")
 ${basereq} --action addComment \
     --issue ${issue} \
     --comment "${comment}"
