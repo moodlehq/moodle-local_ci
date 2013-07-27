@@ -68,9 +68,15 @@ set -e
 set +e
 ancestor="$( ${gitcmd} rev-list --boundary ${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
 if [[ ! ${ancestor} ]]; then
-    echo "Error: The ${branch} branch at ${remote} and ${integrateto} don't have any common ancestor." >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} and ${integrateto} does not have any common ancestor." >> ${errorfile}
     exit 1
 else
+    # Ancestor found, if it is old (> 60 days) exit asking for mandatory rebase
+    recentancestor="$( ${gitcmd} rev-list --after '60 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
+    if [[ ! ${recentancestor} ]]; then
+        echo "Error: The ${branch} branch at ${remote} is very old. Please rebase against current ${integrateto}." >> ${errorfile}
+        exit 1
+    fi
     # Ancestor found, let's see if it's recent (< 14 days, covers last 2 weeklies)
     recentancestor="$( ${gitcmd} rev-list --after '14 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
