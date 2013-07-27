@@ -23,6 +23,9 @@ for var in $required; do
     fi
 done
 
+# wipe the workspace
+rm -fr $WORKSPACE/*
+
 # file where results will be sent
 resultfile=$WORKSPACE/bulk_precheck_issues
 echo -n > "${resultfile}"
