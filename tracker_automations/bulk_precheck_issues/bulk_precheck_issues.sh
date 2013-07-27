@@ -53,7 +53,7 @@ echo "Using criteria: ${criteria}"
 
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
-    echo "Results for ${issue}" > "${resultfile}.${issue}"
+    echo "Results for ${issue}" > "${resultfile}.${issue}.txt"
     echo "Processing ${issue}"
     # Fetch repository
     ${basereq} --action getFieldValue \
@@ -63,7 +63,7 @@ while read issue; do
     repository=$(cat "${resultfile}.repository")
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        echo "Error: repository field empty. Nothing to check." >> "${resultfile}.${issue}"
+        echo "Error: repository field empty. Nothing to check." >> "${resultfile}.${issue}.txt"
         echo "  - Error: repository field empty"
         continue
     fi
@@ -86,9 +86,9 @@ while read issue; do
         # Branch found
         if [[ -n "${branch}" ]]; then
             branchesfound=1
-            echo >> "${resultfile}.${issue}"
+            echo >> "${resultfile}.${issue}.txt"
             echo "  - Remote branch ${branch} to be integrated into upstream ${target}"
-            echo "- Branch ${branch} to be integrated into upstream ${target}" >> "${resultfile}.${issue}"
+            echo "- Branch ${branch} to be integrated into upstream ${target}" >> "${resultfile}.${issue}.txt"
             # Launch the prechecker for current repo and branch, waiting till it ends
             # looking for its exit code.
             set +e
@@ -108,8 +108,8 @@ while read issue; do
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
             rm "${resultfile}.jiracli"
             echo "    - Executed job ${job}, with exit status: ${status} (${joburl})"
-            echo "    -- Executed job ${joburl}" >> "${resultfile}.${issue}"
-            echo "    -- Execution status: ${status}" >> "${resultfile}.${issue}"
+            echo "    -- Executed job ${joburl}" >> "${resultfile}.${issue}.txt"
+            echo "    -- Execution status: ${status}" >> "${resultfile}.${issue}.txt"
             # Fetch the errors.txt file and add its contents to output
             set +e
             errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
@@ -117,17 +117,19 @@ while read issue; do
             set -e
             if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
                 echo "    - ${errors}"
-                echo "    -- ${errors}" >> "${resultfile}.${issue}"
+                echo "    -- ${errors}" >> "${resultfile}.${issue}.txt"
             fi
             # TODO: Print any summary information
             # Finally link to the results file
-            echo "    - Details: ${joburl}/artifact/work/smurf.html"
-            echo "    -- Details: ${joburl}/artifact/work/smurf.html" >> "${resultfile}.${issue}"
+            if [[ ${status} -eq 0 ]]; then
+                echo "    - Details: ${joburl}/artifact/work/smurf.html"
+                echo "    -- Details: ${joburl}/artifact/work/smurf.html" >> "${resultfile}.${issue}.txt"
+            fi
         fi
     done
     # Verify we have processed some branch.
     if [[ -z "${branchesfound}" ]]; then
-        echo "Error: all branch fields are empty. Nothing to check." >> "${resultfile}.${issue}"
+        echo "Error: all branch fields are empty. Nothing to check." >> "${resultfile}.${issue}.txt"
         echo "  - Error: all branch fields are empty"
     fi
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
