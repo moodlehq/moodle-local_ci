@@ -1,11 +1,26 @@
 #!/bin/bash
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
+# $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo
+# $dblibrary: Type of library (native, pdo...)
+# $dbtype: Name of the driver (mysqli...)
+# $dbhost: DB host
+# $dbuser: DB user
+# $dbpass: DB password
 # $setversion: 10digits (YYYYMMDD00) to set all versions to. Empty = not set
 
 # Let's go strict (exit on error)
 set -e
+
+# Verify everything is set
+required="WORKSPACE phpcmd mysqlcmd gitdir dblibrary dbtype dbhost dbuser dbpass"
+for var in $required; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -20,8 +35,7 @@ echo -n > "${resultfile}"
 #    type (plugin, subsystem)
 #    name (frankestyle component name)
 #    path (full or null)
-${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
-    --basedir="${gitdir}" --absolute=true > "${WORKSPACE}/valid_components.txt"
+${mydir}/../list_valid_components/list_valid_components.sh > "${WORKSPACE}/valid_components.txt"
 
 # Find all the version.php files
 allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}' | sort -n | cut -f 2- )

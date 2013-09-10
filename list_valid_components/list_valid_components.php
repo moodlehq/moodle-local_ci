@@ -38,20 +38,6 @@ define('NO_OUTPUT_BUFFERING', true);
 require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once($CFG->libdir.'/clilib.php');      // cli only functions
 
-/**
- * Helper class used to rest core_component built in caches
- */
-class reseteable_core_component extends core_component {
-    public static function reset() {
-        self::$plugintypes = null;
-        self::$plugins = null;
-        self::$subsystems = null;
-        self::$classmap = null;
-        self::init();
-    }
-}
-
-
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
                                                    'help'   => false,
@@ -104,23 +90,9 @@ if (!is_bool($options['absolute'])) {
     cli_error('Incorrect absolute value, bool expected: ' . $options['absolute']);
 }
 
-global $CFG;
-
-// Purge all caches, we don't want anything but fresh results. MDLSITE-2184.
-// TODO: Alternatively, we should be creating a new site to make this work
-// without the moodle_ci_site requirement and the fake dirroot.
-if (function_exists('purge_all_caches')) {
-    purge_all_caches();
-}
-
-// Let's fake dirroot to look in the correct directory
-$olddirroot = $CFG->dirroot;
-$CFG->dirroot = $options['basedir'];
-// Reset any component cache, so next get_xxx() calls will need
-// to look for fresh information.
-reseteable_core_component::reset();
-
 // Get all the plugin and subplugin types
+// TODO: Once 2.5 is out we can change this by the new core_component::get_xxx() calls.
+// until then will be using the deprecated ones.
 $types = get_plugin_types(true);
 // Sort types in reverse order, so we get subplugins earlier than plugins
 $types = array_reverse($types);
@@ -152,6 +124,3 @@ foreach ($subsystems as $subsystem => $subsystempath) {
     }
     echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
 }
-
-// Return to real dirroot and cachedir
-$CFG->dirroot = $olddirroot;
