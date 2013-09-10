@@ -143,6 +143,13 @@ set +e
 #    type (plugin, subsystem)
 #    name (frankestyle component name)
 #    path (full or null)
+# Here we are using the list of components valid for the moodle-ci site, not the
+# components of the branch being checked. We may change to the later, but that would
+# imply installing the site all over the time and ususally we don't drop plugins but add
+# new ones, so master should be ok 99.99% of times.
+# If, not, just change the call to the  shell script instead of the php script
+# and add the required (dbxxxx) variables to the job.
+# Note that will cause every execution to spend > 1 minute installing.
 ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
 
