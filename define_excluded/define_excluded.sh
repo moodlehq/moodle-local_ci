@@ -64,6 +64,7 @@ theme/bootstrapbase/less/bootstrap
 theme/mymobile/javascript/
 theme/mymobile/jquery/
 theme/mymobile/style/jmobile
+vendor/
 webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
 work/
