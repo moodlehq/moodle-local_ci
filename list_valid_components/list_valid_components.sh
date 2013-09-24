@@ -60,7 +60,7 @@ fi
 # TODO: Based on $dbtype, execute different DB deletion commands
 ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
         --execute="DROP DATABASE ${installdb}"
-rm -fr ${gitdir}/local/ci/list_valid_components/list_valid_components.php
+rm -fr ${gitdir}/local/ci
 rm -fr ${gitdir}/config.php
 rm -fr ${datadir}
 
