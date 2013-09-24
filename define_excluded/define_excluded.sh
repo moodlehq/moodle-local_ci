@@ -50,6 +50,7 @@ lib/base32.php
 lib/csshover.htc
 lib/cookies.js
 lib/html2text.php
+lib/markdown/
 lib/markdown.php
 lib/xhprof/xhprof_html/
 lib/xhprof/xhprof_lib/
