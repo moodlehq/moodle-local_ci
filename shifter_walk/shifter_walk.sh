@@ -55,6 +55,9 @@ fi
 
 # Run shifter against the git repo
 cd ${gitdir}
+# First delete all shifted files so we can detect stale files in the build dir
+rm -fr `find . -path '*/yui/build' -type d`
+
 ${shifterbase}/${shifterversion}/node_modules/shifter/bin/shifter --walk --recursive | tee "${outputfile}"
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
