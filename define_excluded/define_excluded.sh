@@ -70,6 +70,7 @@ vendor/
 webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
 work/
+yui/build/
 *.gif
 *.jpg
 *.png
