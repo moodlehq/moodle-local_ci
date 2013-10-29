@@ -20,4 +20,4 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ${gitdir} && git checkout ${gitbranch} && git fetch && git reset --hard origin/${gitbranch}
 
 # Run phploc against the whole codebase
-${phpcmd} ${mydir}/project_size_report.php ${excluded_list} --count-tests --log-csv "${resultfile}" ${gitdir}
+phploc ${excluded_list} --count-tests --log-csv "${resultfile}" ${gitdir}
