@@ -285,8 +285,8 @@ else
     if [[ ${gitbranch} =~ MOODLE_[0-9]*_STABLE ]]; then
         cutmainversion=$( echo ${mainversion} | cut -c -8 )
         cutbackupversion=$( echo ${backupversion} | cut -c -8 )
-        # Integer comparison
-        satisfied=$( echo "${cutbackupversion} >= ${cutmainversion}" | bc )
+        # Integer comparison (give it 15 days before start failing and requiring to adjust stable backup version)
+        satisfied=$( echo "(${cutbackupversion} + 15 ) >= ${cutmainversion}" | bc )
         if [ "${satisfied}" != "0" ]; then
             echo "  + INFO: Backup version ${cutbackupversion} satisfies main version." >> "${resultfile}"
         else
