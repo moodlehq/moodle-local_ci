@@ -35,8 +35,7 @@
 define('CLI_SCRIPT', true);
 define('NO_OUTPUT_BUFFERING', true);
 
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once($CFG->libdir.'/clilib.php');      // cli only functions
+require_once('clilib.php');      // cli only functions
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
@@ -63,7 +62,7 @@ Options:
 --absolute            Return absolute (true, default) or relative (false) paths.
 
 Example:
-\$sudo -u www-data /usr/bin/php local/ci/remote_branch_checker/list_valid_components.php --basedir=/home/moodle/git --absoulte=false
+\$sudo -u www-data /usr/bin/php local/ci/list_valid_components/list_valid_components.php --basedir=/home/moodle/git --absoulte=false
 ";
 
     echo $help;
@@ -90,9 +89,59 @@ if (!is_bool($options['absolute'])) {
     cli_error('Incorrect absolute value, bool expected: ' . $options['absolute']);
 }
 
-// Get all the plugin and subplugin types
+// For Moodle 2.6 and upwards, we execute this specific code that does not require
+// the site to be installed (relying on new classes only available since then).
+if (file_exists($options['basedir'] . '/lib/classes/component.php')) {
+    define('IGNORE_COMPONENT_CACHE', 1);
+    define('MOODLE_INTERNAL', 1);
+    unset($CFG);
+    global $CFG;
+    $CFG = new stdClass();
+    $CFG->dirroot = $options['basedir'];
+    $CFG->admin = 'admin';
+    require_once($CFG->dirroot . '/lib/classes/component.php');
+
+    // Get all the plugins and subplugin types.
+    $types = core_component::get_plugin_types();
+    // Sort types in reverse order, so we get subplugins earlier than plugins.
+    $types = array_reverse($types);
+    // For each type, get their available implementations.
+    foreach ($types as $type => $fullpath) {
+        $plugins = core_component::get_plugin_list($type);
+        // For each plugin, let's calculate the proper component name and output it.
+        foreach ($plugins as $plugin => $pluginpath) {
+            $component = $type . '_' . $plugin;
+            if (!$options['absolute']) {
+                $pluginpath = str_replace($options['basedir'] . '/', '', $pluginpath);
+            }
+            echo 'plugin,' . $component . ',' . $pluginpath . PHP_EOL;
+        }
+    }
+
+    // Get all the subsystems.
+    $subsystems = core_component::get_core_subsystems();
+    $subsystems['core'] = '.'; // To get the main one too
+    foreach ($subsystems as $subsystem => $subsystempath) {
+        if ($subsystem == 'backup') { // Because I want, yes :-P
+            $subsystempath = $options['basedir'] . '/backup';
+        }
+        $component = $subsystem;
+        if (!$options['absolute'] and !empty($subsystempath)) {
+            $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
+        }
+        echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
+    }
+    // We are done, end here.
+    exit(0);
+}
+
+// Up to Moodle 2.5, we use the old global API, that requires the site to be installed
+// (the shell script calling this handles those reqs automatically)
 // TODO: Once 2.5 is out we can change this by the new core_component::get_xxx() calls.
 // until then will be using the deprecated ones.
+require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
+
+// Get all the plugin and subplugin types
 $types = get_plugin_types(true);
 // Sort types in reverse order, so we get subplugins earlier than plugins
 $types = array_reverse($types);

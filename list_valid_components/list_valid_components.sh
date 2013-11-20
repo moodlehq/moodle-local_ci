@@ -22,6 +22,22 @@ done
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Since Moodle 2.6 we don't need to install the moodle site nor copy the php script to it.
+if [[ -f "${gitdir}/lib/classes/component.php" ]]; then
+    cd ${mydir}
+    ${phpcmd} list_valid_components.php --basedir="${gitdir}" --absolute=true
+    exitstatus=${PIPESTATUS[0]}
+    if [ $exitstatus -ne 0 ]; then
+        echo "Problem executing the >= 2.6 alternative"
+    fi
+    # Done, it was easy and cheap!
+    exit $exitstatus
+fi
+
+# Up to Moodle 2.5 we need to install a complete site and copy the script to local/ci/list_valid_components
+# to get a reliable list of components.
+
 installdb=ci_installed_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 dbprefixinstall="cii_"
@@ -51,7 +67,7 @@ fi
 # only if we don't come from an erroneus previous situation
 if [ $exitstatus -eq 0 ]; then
     mkdir -p ${gitdir}/local/ci/list_valid_components
-    cp ${mydir}/list_valid_components.php ${gitdir}/local/ci/list_valid_components
+    cp ${mydir}/*.php ${gitdir}/local/ci/list_valid_components
     ${phpcmd} ${gitdir}/local/ci/list_valid_components/list_valid_components.php \
         --basedir="${gitdir}" --absolute=true
 fi
