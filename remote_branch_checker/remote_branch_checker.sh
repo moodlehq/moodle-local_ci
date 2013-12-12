@@ -7,6 +7,7 @@
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
 # $filtering: Report about only modified lines (true), or about the whole files (false)
 # $format: Format of the final smurf file (xml | html)
+# $maxcommits: Max number of commits accepted per run. Error if exceeded.
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -94,6 +95,13 @@ if [[ ${exitstatus} -ne 0 ]]; then
     exit ${exitstatus}
 fi
 set -e
+
+# Verify the number of commits
+numcommits=$(${gitcmd} log ${integrateto}..${integrateto}_precheck --oneline --no-merges | wc -l)
+if [[ ${numcommits} -gt ${maxcommits} ]]; then
+    echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" >> ${errorfile}
+    exit 1
+fi
 
 # Calculate the differences and store them
 ${gitcmd} diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
