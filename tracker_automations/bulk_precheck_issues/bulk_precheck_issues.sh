@@ -8,14 +8,17 @@
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
-#jenkinsserver: jenkins server url
 #jenkinsjobname: job in the server that we are going to execute
+#jenkinsserver: private jenkins server url (where the prechecker will be executed.
+#               note this must be a direct url. no proxies/rewrites/redirects allowed. Usually http://localhost:8080.
+#publishserver: public jenkins server url (where result will be available).
+#               note this can be behind proxies, redirects... Public URL like http://integration.moodle.org.
 
 # Let's go strict (exit on error)
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass cf_repository cf_branches criteria quiet jenkinsserver jenkinsjobname"
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass cf_repository cf_branches criteria quiet jenkinsjobname jenkinsserver publishserver"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -107,7 +110,7 @@ while read issue; do
             # Calculate the job number and its url from output
             [[ $(head -n 1 "${resultfile}.jiracli") =~ ^Started.*#([0-9]*)$ ]]
             job=${BASH_REMATCH[1]}
-            joburl="${jenkinsserver}/job/${jenkinsjobname}/${job}"
+            joburl="${publishserver}/job/${jenkinsjobname}/${job}"
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
             rm "${resultfile}.jiracli"
             echo "    - Executed job ${job}, with exit status: ${status} (${joburl})"
