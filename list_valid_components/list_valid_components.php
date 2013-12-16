@@ -120,16 +120,20 @@ if (file_exists($options['basedir'] . '/lib/classes/component.php')) {
 
     // Get all the subsystems.
     $subsystems = core_component::get_core_subsystems();
-    $subsystems['core'] = '.'; // To get the main one too
+    $subsystems['core'] = $options['basedir']; // To get the main one too
     foreach ($subsystems as $subsystem => $subsystempath) {
         if ($subsystem == 'backup') { // Because I want, yes :-P
             $subsystempath = $options['basedir'] . '/backup';
         }
-        $component = $subsystem;
+        // All subsystems are core_ prefixed.
+        $component = 'core_' . $subsystem;
+        if ($subsystem === 'core') { // But core.
+            $component = 'core';
+        }
         if (!$options['absolute'] and !empty($subsystempath)) {
             $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
         }
-        echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
+        echo 'subsystem,' . $component . ',' . $subsystempath . PHP_EOL;
     }
     // We are done, end here.
     exit(0);
@@ -162,14 +166,18 @@ foreach ($types as $type => $fullpath) {
 // Get all the subsystems and
 // generate the corresponding build.xml file
 $subsystems = get_core_subsystems(true);
-$subsystems['core'] = '.'; // To get the main one too
+$subsystems['core'] = $options['basedir']; // To get the main one too
 foreach ($subsystems as $subsystem => $subsystempath) {
     if ($subsystem == 'backup') { // Because I want, yes :-P
         $subsystempath = $options['basedir'] . '/backup';
     }
-    $component = $subsystem;
+    // All subsystems are core_ prefixed.
+    $component = 'core_' . $subsystem;
+    if ($subsystem === 'core') { // But core.
+        $component = 'core';
+    }
     if (!$options['absolute'] and !empty($subsystempath)) {
         $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
     }
-    echo 'subsystem,' . $subsystem . ',' . $subsystempath . PHP_EOL;
+    echo 'subsystem,' . $component . ',' . $subsystempath . PHP_EOL;
 }
