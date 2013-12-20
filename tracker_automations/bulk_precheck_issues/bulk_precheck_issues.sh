@@ -122,8 +122,10 @@ while read issue; do
             curlstatus=${PIPESTATUS[0]}
             set -e
             if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
-                echo "    - ${errors}"
-                echo "    -- ${errors}" >> "${resultfile}.${issue}.txt"
+                perrors=$(echo "${errors}" | sed 's/^/    - /g')
+                echo "${perrors}"
+                perrors=$(echo "${errors}" | sed 's/^/    -- /g')
+                echo "${perrors}" >> "${resultfile}.${issue}.txt"
             fi
             # TODO: Print any summary information
             # Finally link to the results file
