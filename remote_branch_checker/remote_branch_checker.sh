@@ -212,7 +212,7 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 # Run the PHPCS
 ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
-    --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
+    --extensions=php --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
 
 # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
 # (we pass to it the list of valid components that was built before deleting files)
