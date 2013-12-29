@@ -27,10 +27,10 @@ for var in $required; do
 done
 
 # wipe the workspace
-rm -fr $WORKSPACE/*
+rm -fr "${WORKSPACE}"/*
 
 # file where results will be sent
-resultfile=$WORKSPACE/bulk_precheck_issues
+resultfile=${WORKSPACE}/bulk_precheck_issues
 echo -n > "${resultfile}"
 
 # Calculate some variables
@@ -59,8 +59,8 @@ echo "Using criteria: ${criteria}"
 
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
-    echo "Results for ${issue}" > "${resultfile}.${issue}.txt"
-    echo "Processing ${issue}"
+    echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
+    echo "Results for ${issue}" >> "${resultfile}.${issue}.txt"
     # Fetch repository
     ${basereq} --action getFieldValue \
                --issue ${issue} \
@@ -69,15 +69,18 @@ while read issue; do
     repository=$(cat "${resultfile}.repository")
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        echo "Error: repository field empty. Nothing to check." >> "${resultfile}.${issue}.txt"
-        echo "  - Error: repository field empty"
-        continue
+        echo "  - Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+    else
+        echo "  - Remote repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
     fi
-    echo "  - Remote repository: ${repository}"
 
     # Iterate over the candidate branches
     branchesfound=""
     for candidate in ${cf_branches//,/ }; do
+        # Nothing to process with empty repository
+        if [[ -z "${repository}" ]]; then
+            break
+        fi
         # Split into target branch and custom field
         target=${candidate%%:*}
         cf_branch=${candidate##*:}
@@ -93,8 +96,7 @@ while read issue; do
         if [[ -n "${branch}" ]]; then
             branchesfound=1
             echo >> "${resultfile}.${issue}.txt"
-            echo "  - Remote branch ${branch} to be integrated into upstream ${target}"
-            echo "- Branch ${branch} to be integrated into upstream ${target}" >> "${resultfile}.${issue}.txt"
+            echo "  - Remote branch ${branch} to be integrated into upstream ${target}" | tee -a "${resultfile}.${issue}.txt"
             # Launch the prechecker for current repo and branch, waiting till it ends
             # looking for its exit code.
             set +e
@@ -113,32 +115,27 @@ while read issue; do
             joburl="${publishserver}/job/${jenkinsjobname}/${job}"
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
             rm "${resultfile}.jiracli"
-            echo "    - Executed job ${job}, with exit status: ${status} (${joburl})"
-            echo "    -- Executed job ${joburl}" >> "${resultfile}.${issue}.txt"
-            echo "    -- Execution status: ${status}" >> "${resultfile}.${issue}.txt"
+            echo "    -- Executed job ${joburl}" | tee -a "${resultfile}.${issue}.txt"
+            echo "    -- Execution status: ${status}"
             # Fetch the errors.txt file and add its contents to output
             set +e
             errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
             curlstatus=${PIPESTATUS[0]}
             set -e
             if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
-                perrors=$(echo "${errors}" | sed 's/^/    - /g')
-                echo "${perrors}"
                 perrors=$(echo "${errors}" | sed 's/^/    -- /g')
-                echo "${perrors}" >> "${resultfile}.${issue}.txt"
+                echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
             fi
             # TODO: Print any summary information
             # Finally link to the results file
             if [[ ${status} -eq 0 ]]; then
-                echo "    - Details: ${joburl}/artifact/work/smurf.html"
-                echo "    -- Details: ${joburl}/artifact/work/smurf.html" >> "${resultfile}.${issue}.txt"
+                echo "    -- Details: ${joburl}/artifact/work/smurf.html" | tee -a "${resultfile}.${issue}.txt"
             fi
         fi
     done
     # Verify we have processed some branch.
-    if [[ -z "${branchesfound}" ]]; then
-        echo "Error: all branch fields are empty. Nothing to check." >> "${resultfile}.${issue}.txt"
-        echo "  - Error: all branch fields are empty"
+    if [[ ! -z  "${repository}" ]] && [[ -z "${branchesfound}" ]]; then
+        echo "  - Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     fi
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
