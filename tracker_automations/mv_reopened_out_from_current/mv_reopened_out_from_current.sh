@@ -26,13 +26,7 @@ logfile=$WORKSPACE/mv_reopened_out_from_current.log
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password "
-
-# Let's connect to the tracker and get session token
-token="$( ${basereq} ${jirapass} --action login )"
-
-# Calculate the basereq including token for subsequent calls
-basereq="${basereq} lalala --login ${token} "
+basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
@@ -67,6 +61,3 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_ID ${issue}" >> "${logfile}"
 done
-
-# Let's disconnect
-echo "$( ${basereq} --action logout )"

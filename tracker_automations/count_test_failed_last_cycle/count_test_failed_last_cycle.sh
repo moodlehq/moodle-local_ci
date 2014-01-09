@@ -46,13 +46,7 @@ allintegrationfile="${WORKSPACE}/count_test_failed_all_cycles.csv"
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password "
-
-# Let's connect to the tracker and get session token
-token="$( ${basereq} ${jirapass} --action login )"
-
-# Calculate the basereq including token for subsequent calls
-basereq="${basereq} lalala --login ${token} "
+basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 
 # Let's search the latest Integration date in the Tracker
 # (we cannot get the Integration date with this query because
@@ -122,6 +116,3 @@ echo "Found ${lastintegrationnum} test-failed issues since ${lastintegrationdate
 
 # Remove temp file
 rm -fr "${tempfile}"
-
-# Let's disconnect
-echo "$( ${basereq} --action logout )"
