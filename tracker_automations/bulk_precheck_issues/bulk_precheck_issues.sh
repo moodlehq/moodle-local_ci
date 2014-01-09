@@ -35,16 +35,10 @@ echo -n > "${resultfile}"
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password "
+basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 
 # Normalise criteria
 criteria=${criteria// /_}
-
-# Let's connect to the tracker and get session token
-token="$( ${basereq} ${jirapass} --action login )"
-
-# Calculate the basereq including token for subsequent calls
-basereq="${basereq} lalala --login ${token} "
 
 # Validate criteria
 if [[ ! -f "${mydir}/criteria/${criteria}/query.sh" ]]; then
@@ -143,6 +137,3 @@ while read issue; do
         . "${mydir}/criteria/${criteria}/postissue.sh"
     fi
 done < "${resultfile}"
-
-# Let's disconnect
-echo "$( ${basereq} --action logout )"
