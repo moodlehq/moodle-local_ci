@@ -3,6 +3,7 @@
 #   - clean the integrator field
 #   - clean the integration date
 #   - check the "current in integration" flag.
+#   - add a comment about the move.
 #   - delete the "ci" label.
 #jiraclicmd: fill execution path of the jira cli
 #jiraserver: jira server url we are going to connect to
@@ -60,7 +61,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
-        --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes"
+        --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes" \
+        --comment "Moving this issue to current integration cycle, will be reviewed soon. Thanks for the hard work!"
     ${basereq} --action removeLabels \
         --issue ${issue} \
         --labels "ci"
