@@ -91,14 +91,14 @@ else
     daysago="${rebaseerror} days ago"
     recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
-        echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}d). Please rebase against current ${integrateto}." >> ${errorfile}
+        echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." >> ${errorfile}
         exit 1
     fi
     # Ancestor found, let's see if it's recent (< 14 days, covers last 2 weeklies)
     daysago="${rebasewarn} days ago"
     recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
-        echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago}d)." >> ${errorfile}
+        echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." >> ${errorfile}
     fi
 fi
 set -e
