@@ -5,19 +5,34 @@
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
-# $filtering: Report about only modified lines (true), or about the whole files (false)
-# $format: Format of the final smurf file (xml | html)
-# $maxcommits: Max number of commits accepted per run. Error if exceeded.
+# $filtering: Report about only modified lines (default, true), or about the whole files (false)
+# $format: Format of the final smurf file (xml | html). Defaults to html.
+# $maxcommits: Max number of commits accepted per run. Error if exceeded. Defaults to 15.
+# $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
+# $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 
 # Don't want debugging @ start, but want exit on error
 set +x
 set -e
 
+# Apply some defaults
+filtering=${filtering:-true}
+format=${format:-html}
+maxcommits=${maxcommits:-15}
+rebasewarn=${rebasewarn:-20}
+rebaseerror=${rebaseerror:-60}
+
+# Verify everything is set
+required="WORKSPACE gitcmd phpcmd remote branch integrateto issue"
+for var in ${required}; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
+
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# format, defaults to 'html'
-format=${format:-html}
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -73,15 +88,17 @@ if [[ ! ${ancestor} ]]; then
     exit 1
 else
     # Ancestor found, if it is old (> 60 days) exit asking for mandatory rebase
-    recentancestor="$( ${gitcmd} rev-list --after '60 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
+    daysago="${rebaseerror} days ago"
+    recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
-        echo "Error: The ${branch} branch at ${remote} is very old. Please rebase against current ${integrateto}." >> ${errorfile}
+        echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}d). Please rebase against current ${integrateto}." >> ${errorfile}
         exit 1
     fi
     # Ancestor found, let's see if it's recent (< 14 days, covers last 2 weeklies)
-    recentancestor="$( ${gitcmd} rev-list --after '14 days ago ' --boundary ${integrateto} | grep ${ancestor} )"
+    daysago="${rebasewarn} days ago"
+    recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
     if [[ ! ${recentancestor} ]]; then
-        echo "Warning: The ${branch} branch at ${remote} has not been rebased recently." >> ${errorfile}
+        echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago}d)." >> ${errorfile}
     fi
 fi
 set -e
