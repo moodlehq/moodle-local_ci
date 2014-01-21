@@ -157,7 +157,11 @@ foreach ($types as $type => $fullpath) {
     foreach ($plugins as $plugin => $pluginpath) {
         $component = $type . '_' . $plugin;
         if (!$options['absolute']) {
-            $pluginpath = str_replace($options['basedir'] . '/', '', $pluginpath);
+            // Want relatives, clean dirroot.
+            $pluginpath = str_replace($CFG->dirroot . '/', '', $pluginpath);
+        } else {
+            // Want absolutes, replace dirroot by basedir.
+            $pluginpath = str_replace($CFG->dirroot, $options['basedir'] , $pluginpath);
         }
         echo 'plugin,' . $component . ',' . $pluginpath . PHP_EOL;
     }
@@ -176,8 +180,15 @@ foreach ($subsystems as $subsystem => $subsystempath) {
     if ($subsystem === 'core') { // But core.
         $component = 'core';
     }
-    if (!$options['absolute'] and !empty($subsystempath)) {
-        $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
+    // If it's a subsystem with path.
+    if (!empty($subsystempath)) {
+        if (!$options['absolute']) {
+            // Want relatives, clean dirroot.
+            $subsystempath = str_replace($CFG->dirroot . '/', '', $subsystempath);
+        } else {
+            // Want absolutes, replace dirroot by basedir.
+            $subsystempath = str_replace($CFG->dirroot, $options['basedir'], $subsystempath);
+        }
     }
     echo 'subsystem,' . $component . ',' . $subsystempath . PHP_EOL;
 }
