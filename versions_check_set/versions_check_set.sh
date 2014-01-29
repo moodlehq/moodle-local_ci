@@ -30,6 +30,19 @@ versionregex="^([0-9]{10}(\.[0-9]{2})?)$"
 resultfile=${WORKSPACE}/versions_check_set.txt
 echo -n > "${resultfile}"
 
+# First of all, guess the current branch from main version.php file ($branch). We'll be using
+# it to decide about different checks later.
+currentbranch="$( grep "\$branch.*=.*;" "${gitdir}/version.php" || true )"
+if [ -z "${currentbranch}" ]; then
+    echo "+ ERROR: Main version.php file is missing: \$branch = 'xx' line." >> "${resultfile}"
+elif [[ ${currentbranch} =~ branch\ *=\ *.([0-9]{2,3}).\; ]]; then
+    currentbranch=${BASH_REMATCH[1]}
+    echo "+ INFO: Correct main version.php branch found: ${currentbranch}" >> "${resultfile}"
+else
+    currentbranch="27"
+    echo "+ WARN: No correct main version.php branch 'XY[Z]' found. Using ${currentbranch}" >> "${resultfile}"
+fi
+
 # Calculate the list of valid components for checks later
 # The format of the list is (comma separated):
 #    type (plugin, subsystem)
@@ -58,7 +71,11 @@ for i in ${allfiles}; do
     if [ "${i}" == "${gitdir}/version.php" ]; then
         prefix='\$'
     elif [[ "${i}" =~ ${gitdir}/mod/[^/]*/version.php ]]; then
-        prefix='\$(module|plugin)->'
+        # Before 2.7, both "module" and "plugin" were allowed in core for activity modules. For 2.7 and up
+        # only the default "plugin" is allowed.
+        if [[ "${currentbranch}" -lt "27" ]]; then
+            prefix='\$(module|plugin)->'
+        fi
     fi
 
     # Verify the file has MOODLE_INTERNAL check
