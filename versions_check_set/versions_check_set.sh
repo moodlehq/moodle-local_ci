@@ -54,11 +54,11 @@ for i in ${allfiles}; do
     echo "- ${i}:" >> "${resultfile}"
 
     # Calculate prefix for all the regexp operations below
-    prefix='$plugin->'
+    prefix='\$plugin->'
     if [ "${i}" == "${gitdir}/version.php" ]; then
-        prefix='$'
+        prefix='\$'
     elif [[ "${i}" =~ ${gitdir}/mod/[^/]*/version.php ]]; then
-        prefix='$module->'
+        prefix='\$(module|plugin)->'
     fi
 
     # Verify the file has MOODLE_INTERNAL check
@@ -68,7 +68,7 @@ for i in ${allfiles}; do
     fi
 
     # Verify the file has version defined
-    version="$( grep "${prefix}version.*=.*;" ${i} || true )"
+    version="$( grep -P "${prefix}version.*=.*;" ${i} || true )"
     if [ -z "${version}" ]; then
         echo "  + ERROR: File is missing: ${prefix}version = 'xxxxxx' line." >> "${resultfile}"
     fi
@@ -149,7 +149,7 @@ for i in ${allfiles}; do
     # Tests following are not applied to main version.php but to all the other versions
 
     # Verify the file has requires defined
-    requires="$( grep "${prefix}requires.*=.*;" ${i} || true )"
+    requires="$( grep -P "${prefix}requires.*=.*;" ${i} || true )"
     if [ -z "${requires}" ]; then
         echo "  + ERROR: File is missing: ${prefix}requires = 'xxxxxx' line." >> "${resultfile}"
     fi
@@ -180,7 +180,7 @@ for i in ${allfiles}; do
     fi
 
     # Verify the file has component defined
-    component="$( grep "${prefix}component.*=.*'.*';" ${i} || true )"
+    component="$( grep -P "${prefix}component.*=.*'.*';" ${i} || true )"
     if [ -z "${component}" ]; then
         echo "  + ERROR: File is missing: ${prefix}component = 'xxxxxx' line." >> "${resultfile}"
     fi
@@ -204,7 +204,7 @@ for i in ${allfiles}; do
 
     # Verify files with maturity are set to stable (warn)
     # Extract maturity
-    maturity="$( grep "${prefix}maturity.*=.*;" ${i} || true )"
+    maturity="$( grep -P "${prefix}maturity.*=.*;" ${i} || true )"
     if [ ! -z "${maturity}" ]; then
         # Maturity found, verify it is MATURITY_STABLE
         if [[ ${maturity} =~ maturity\ *=\ *(.*)\; ]]; then
@@ -252,7 +252,7 @@ for i in ${allfiles}; do
 
     # Look for all defined attributes and validate all them are valid
     validattrs="version|release|requires|component|dependencies|cron|maturity"
-    grep "^${prefix}[a-z]* *=.*;" ${i} | while read attr; do
+    grep -P "^${prefix}[a-z]* *=.*;" ${i} | while read attr; do
         # Extract the attribute
         [[ "${attr}" =~ [^a-z]([a-z]*)\ *=.*\; ]]
         attr=${BASH_REMATCH[1]}
