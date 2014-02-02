@@ -148,6 +148,10 @@ ${WORKSPACE}/work
 $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
     awk -v w="${WORKSPACE}" -F\" '{print w"/"$2}' )" > ${WORKSPACE}/work/patchset.files
 
+# Trim patchset.files from any blank line (cannot use in-place sed).
+sed '/^$/d' ${WORKSPACE}/work/patchset.files >  ${WORKSPACE}/work/patchset.files.tmp
+mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
+
 # ########## ########## ########## ##########
 
 # Disable exit-on-error for the rest of the script, it will
@@ -171,7 +175,7 @@ set +e
 # For 2.6 and upwards the list of components is calculated for the branch
 # being checked (100% correct behavior). For previous branches we are using
 # the list of components available in the moodle-ci-site, because getting
-# the list from the checkd branch does require installing the site completely and
+# the list from the checked branch does require installing the site completely and
 # that would slowdown the checker a lot. It's ok 99% of times.
 ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
