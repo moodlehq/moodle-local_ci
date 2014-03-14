@@ -159,7 +159,7 @@ done
 # Execute the phpunit utility
 # Conditionally
 if [ $exitstatus -eq 0 ]; then
-    phpunit --log-junit "${resultfile}" | tee "${outputfile}"
+    phpunit --log-junit "${resultfile}" 2>&1 | tee "${outputfile}"
     exitstatus=${PIPESTATUS[0]}
 fi
 
@@ -184,6 +184,13 @@ if [ $exitstatus -eq 0 ]; then
     backtrace=$(grep 'line [0-9]* of .*: call to' "${outputfile}" | wc -l)
     if [[ ${backtrace} -gt 0 ]]; then
         echo "ERROR: uncontrolled backtrace output on execution."
+        exitstatus=1
+        rm "${resultfile}"
+    fi
+    # anything exceptional (not dots and numbers) in the execution lines.
+    exceptional=$(grep -P '^\.|%\)$' "${outputfile}" | grep -vP '^[\.SIEF]*[ \d/\(\)%]*$' | wc -l)
+    if [[ ${exceptional} -gt 0 ]]; then
+        echo "ERROR: uncontrolled exceptional output on execution."
         exitstatus=1
         rm "${resultfile}"
     fi
