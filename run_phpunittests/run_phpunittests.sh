@@ -9,7 +9,6 @@
 # $dbhost: DB host
 # $dbuser: DB user
 # $dbpass: DB password
-# $pearpath: Path where the pear executables are available
 # $multipleclassiserror: Does multiple classes in test file
 #                        raise error or just warning (dlft).
 
@@ -21,14 +20,14 @@ outputfile=${WORKSPACE}/run_phpunittests.out
 # file where results will be sent
 resultfile=${WORKSPACE}/run_phpunittests.xml
 
-# add the PEAR path
-PATH="$PATH:/opt/local/bin/:$pearpath"; export PATH
-
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 installdb=ci_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadirphpunit=/tmp/ci_dataroot_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
+
+# prepare the composer stuff needed to run this job
+. ${mydir}/../prepare_composer_stuff/prepare_composer_stuff.sh
 
 # Going to install the $gitbranch database
 # Create the database
@@ -159,6 +158,7 @@ done
 # Execute the phpunit utility
 # Conditionally
 if [ $exitstatus -eq 0 ]; then
+    which phpunit
     phpunit --log-junit "${resultfile}" 2>&1 | tee "${outputfile}"
     exitstatus=${PIPESTATUS[0]}
 fi
