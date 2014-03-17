@@ -7,7 +7,7 @@
 # $githuboauthtoken: Token for accessing gitub without limits.
 
 # Let's be strict. Any problem will abort execution.
-set +e
+set -e
 
 # Set the composer env variable so it always use the correct php when multiple are installed.
 export PATH=$(dirname ${phpcmd}):${PATH}
@@ -43,4 +43,7 @@ export PATH=${composerdir}/vendor/bin:${PATH}
 
 # And link it to dirroot/vendor as far as we have dependencies in tool_phpunit
 # requiring vendor to be there, grrr.
+if [[ -L ${gitdir}/vendor ]]; then
+    rm -f ${gitdir}/vendor
+fi
 ln -s ${composerdir}/vendor ${gitdir}/vendor
