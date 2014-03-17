@@ -30,12 +30,15 @@ cp ${gitdir}/composer.json ${composerdir}
 
 # If there is not any "vendor" directory there, proceeed by installing, else updating.
 if [[ -d ${composerdir}/vendor ]]; then
+    echo "Updating composer packages @ ${composerdir}"
     ${composercmd} update --working-dir=${composerdir} --prefer-dist
 else
+    echo "Installing composer packages @ ${composerdir}"
     ${composercmd} config --global github-oauth.github.com ${githuboauthtoken}
     ${composercmd} install --working-dir=${composerdir} --prefer-dist
 fi
 # Optimize autoloader of installed stuff.
+echo "Optimizing composer autoload @ ${composerdir}"
 ${composercmd} dump-autoload --optimize --working-dir=${composerdir}
 
 # Add the bin directory to the PATH, so it can be used
@@ -43,6 +46,7 @@ export PATH=${composerdir}/vendor/bin:${PATH}
 
 # And link it to dirroot/vendor as far as we have dependencies in tool_phpunit
 # requiring vendor to be there, grrr.
+echo "Linking ${composerdir}/vendor from ${gitdir}/vendor"
 if [[ -L ${gitdir}/vendor ]]; then
     rm -f ${gitdir}/vendor
 fi
