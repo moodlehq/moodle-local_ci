@@ -1,4 +1,5 @@
 #!/bin/bash
+# $phpcmd: Path to the PHP CLI executable
 # $composercmd: Path to the composer (usually installed globally in the CI server) executable
 # $composerdirbase: Path to the directory where composer will be installed (--working-dir). branch name will be automatically added.
 # $gitdir: Directory containing git repo
@@ -8,8 +9,11 @@
 # Let's be strict. Any problem will abort execution.
 set +e
 
+# Set the composer env variable so it always use the correct php when multiple are installed.
+export PATH=$(dirname ${phpcmd}):${PATH}
+
 # Verify everything is set
-required="composercmd composerdirbase gitdir gitbranch githuboauthtoken"
+required="phpcmd composercmd composerdirbase gitdir gitbranch githuboauthtoken"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
