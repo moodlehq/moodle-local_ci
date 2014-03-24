@@ -26,6 +26,7 @@ lib/google/
 lib/htmlpurifier/
 lib/jabber/
 lib/jquery/
+lib/lessphp/
 lib/minify/
 lib/overlib/
 lib/password_compat/
