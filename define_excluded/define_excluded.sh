@@ -14,6 +14,7 @@ lib/adodb/
 lib/alfresco/
 lib/bennu/
 lib/dragmath/
+lib/editor/atto/yui/src/rangy/js
 lib/editor/tinymce/tiny_mce/
 lib/editor/tinymce/plugins/moodleimage
 lib/editor/tinymce/plugins/pdw
