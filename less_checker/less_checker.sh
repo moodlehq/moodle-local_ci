@@ -1,4 +1,5 @@
 #!/bin/bash
+# $WORKSPACE: Directory where results/artifacts will be created
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to verify
 # $extrapath: Extra paths to be available (global)
@@ -8,11 +9,20 @@
 # $recessversion: Version of recess to be used by this job
 
 # Let's be strict. Any problem leads to failure.
-set +e
+set -e
+
+# Verify everything is set
+required="WORKSPACE gitdir gitbranch extrapath gitcmd npmcmd recessbase recessversion"
+for var in ${required}; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
 
 # Let add $path to PATH
 if [[ -n ${extrapath} ]]; then
-    export PATH=${PATH}:${extrapath}
+    export PATH=${extrapath}:${PATH}
 fi
 
 # file to capture execution output
@@ -76,6 +86,32 @@ for themepath in $(ls ${gitdir}/theme); do
         echo "    - WARN: The theme is missing a style directory" | tee -a "${outputfile}"
         exitstatus=1
     fi
+    # Verify if the theme is using built-in compiler for any less file (only one is supported)
+    # and perform some custom checks with it
+    builtinlessfile=$(sed -nr 's/^\$THEME->lessfile *= *'\''(.*)'\'';$/\1/p' "${gitdir}/theme/${themepath}/config.php")
+    if [[ -n "${builtinlessfile}" ]]; then
+        echo "    - NOTE: Found \$THEME->lessfile with '${builtinlessfile}' contents" | tee -a "${outputfile}"
+        # Confirm the less file exists
+        builtinlessfile=${builtinlessfile}.less
+        if [[ ! -f "${gitdir}/theme/${themepath}/less/${builtinlessfile}" ]]; then
+            echo "      - ERROR: /theme/${themepath}/less/${builtinlessfile} not found" | tee -a "${outputfile}"
+            exitstatus=1
+        fi
+        # Compile the .less file to verify it's basically correct
+        echo "      - Compiling .less file: ${gitdir}/theme/${themepath}/less/${builtinlessfile}" | tee -a "${outputfile}"
+        set +e
+        ${recessbase}/${recessversion}/node_modules/recess/bin/recess --compile --compress \
+                "${gitdir}/theme/${themepath}/less/${builtinlessfile}" > /dev/null
+        compilestatus=${PIPESTATUS[0]}
+        set -e
+        if [ $exitstatus -ne 0 ]; then
+            echo "        - ERROR: Problems compiling (recess) the file" | tee -a "${outputfile}"
+            exitstatus=1
+        else
+            echo "        - OK: File compiled (recess) without errors" | tee -a "${outputfile}"
+        fi
+    fi
+
     # Look for .less files not placed properly
     for lessfile in $(find ${gitdir}/theme/${themepath} -name "*.less"); do
         if [[ ! $lessfile =~ "${gitdir}/theme/${themepath}/less/" ]]; then
@@ -94,6 +130,11 @@ for themepath in $(ls ${gitdir}/theme); do
         filename="${filename%.*}"
         cssfile="${gitdir}/theme/${themepath}/style/${filename}.css"
         echo "    - Verifying .less file: ${lessfile}" | tee -a "${outputfile}"
+        # If the lessfile being processed is the builtinlessfile, we can safely skip any check on it
+        if [[ "$(basename "$lessfile")" == "${builtinlessfile}" ]]; then
+            echo "      - OK: Skipping .less file. It's handled by builtin compiler" | tee -a "${outputfile}"
+            continue;
+        fi
         # Verify .css counterpart exists
         if [[ ! -f "${cssfile}" ]]; then
             echo "      - ERROR: css counterpart not found: ${cssfile}" | tee -a "${outputfile}"
@@ -104,9 +145,11 @@ for themepath in $(ls ${gitdir}/theme); do
         fi
         # Compile the .less file replacing current .css
         echo "    - Compiling .less file: ${lessfile}" | tee -a "${outputfile}"
+        set +e
         ${recessbase}/${recessversion}/node_modules/recess/bin/recess --compile --compress \
                 "${lessfile}" > "${cssfile}"
         compilestatus=${PIPESTATUS[0]}
+        set -e
         if [ $exitstatus -ne 0 ]; then
             echo "      - ERROR: Problems compiling (recess) the file" | tee -a "${outputfile}"
             exitstatus=1
