@@ -1,4 +1,5 @@
 #!/bin/bash
+# WORKSPACE: Path to the directory where previous compare results are stored
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 #
@@ -7,7 +8,7 @@
 # by returning 0 (execute) or 1 (skip) as exit status.
 #
 # Rules:
-# If the modified files DO NOT match any of this, then the tests can
+# If the modified files MATCH any of this, then the tests CANNOT
 # be skipped:
 #   - ^version.php$
 #   - install.xml$
@@ -15,13 +16,16 @@
 #   - installlib.php$
 #   - upgrade.php$
 #   - upgradelib.php$
-#
+# If the WORKSPACE/compare_databases_xxxx.txt file DOES NOT EXIST,
+# then the test CANNOT be skipped.
+# If The WORKSPACE/compare_databases_xxxx.txt EXISTS and IS NOT EMPTY,
+# then the test CANNOT be skipped.
 rules=('^version\.php$' 'install\.xml$' 'install\.php$' 'installlib\.php$' 'upgrade\.php$' 'upgradelib\.php$')
 # Don't be strict. Script has own error control handle
 set +e
 
 # Verify everything is set
-required="gitcmd gitdir"
+required="gitcmd gitdir WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -31,6 +35,23 @@ done
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Verify there is 1 (and only 1) result file in the WORKSPACE
+count=$(ls -1 "${WORKSPACE}"/compare_databases_*.txt 2>/dev/null | wc -l)
+if [[ ! $count -eq 1 ]]; then
+    echo "Incorrect number of files in WORKSPACE (1 expected, ${count} found. The job cannot be skipped."
+    exit 0
+else
+    # Verify the result file is empty (previous execution ended without error)
+    file=$(ls "${WORKSPACE}"/compare_databases_*.txt)
+    echo "Correct number of expected files (1) found ($file)"
+    if [[ -s "${file}" ]]; then
+        echo "Previous execution failed based on ($file). The job cannot be skipped."
+        exit 0
+    else
+        echo "Previous execution succeed. The job may be skipped (other conditions will decide)."
+    fi
+fi
 
 # Verify we have GIT_PREVIOUS_COMMIT and GIT_COMMIT
 if [[ -z "${GIT_PREVIOUS_COMMIT}" ]] || [[ -z "${GIT_COMMIT}" ]] ; then
