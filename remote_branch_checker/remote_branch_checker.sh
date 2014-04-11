@@ -34,10 +34,23 @@ done
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# First of all, we need a clean clone of moodle in the repository,
+# verify if it's there or no.
+if [[ ! -d "$WORKSPACE/.git" ]]; then
+    echo "Warn: git not found, proceeding to clone git://git.moodle.org/moodle.git"
+    rm -fr "${WORKSPACE}/"
+    ${gitcmd} clone git://git.moodle.org/moodle.git "${WORKSPACE}"
+fi
+
+# Now, ensure the repository in completely clean.
+echo "Cleaning worktree"
+cd "${WORKSPACE}" && ${gitcmd} clean -dfx && ${gitcmd} reset --hard
+
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
+# Do this optionally, only if we are running under Jenkins.
 displayname=""
-if [[ ! "${issue}" = "" ]]; then
+if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
     if [[ "${integrateto}" = "master" ]]; then
         displayname="#${BUILD_NUMBER}:${issue}"
     else
@@ -45,6 +58,7 @@ if [[ ! "${issue}" = "" ]]; then
             displayname="#${BUILD_NUMBER}:${issue}_${BASH_REMATCH[1]}"
         fi
     fi
+    echo "Setting build display name: ${displayname}"
     java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s http://localhost:8080 \
         set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
 fi
@@ -53,7 +67,7 @@ fi
 . ${mydir}/../define_excluded/define_excluded.sh
 
 # Create the work directory where all the tasks will happen/be stored
-mkdir work
+mkdir ${WORKSPACE}/work
 
 # Prepare the errors and warnings files
 errorfile=${WORKSPACE}/work/errors.txt
