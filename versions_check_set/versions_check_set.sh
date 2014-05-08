@@ -232,6 +232,8 @@ for i in ${allfiles}; do
     # Look for dependencies (multiline) and verify they are correct
     dependencies="$( sed -n "/${prefix}dependencies/,/);/p" ${i})"
     if [ ! -z "${dependencies}" ]; then
+        # Cleanup any potential comment
+        dependencies="$(echo "${dependencies}" | sed -e 's/\/\/.*$//g')"
         # Convert dependencies to one line
         dependencies=$( echo ${dependencies} | sed -e "s/[ '\"	]*//g" )
         echo "  + INFO: Dependencies found" >> "${resultfile}"
