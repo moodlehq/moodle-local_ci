@@ -1,20 +1,14 @@
 #!/bin/bash
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
-# $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo
-# $dblibrary: Type of library (native, pdo...)
-# $dbtype: Name of the driver (mysqli...)
-# $dbhost: DB host
-# $dbuser: DB user
-# $dbpass: DB password
 # $setversion: 10digits (YYYYMMDD00) to set all versions to. Empty = not set
 
 # Let's go strict (exit on error)
 set -e
 
 # Verify everything is set
-required="WORKSPACE phpcmd mysqlcmd gitdir dblibrary dbtype dbhost dbuser dbpass"
+required="WORKSPACE phpcmd gitdir"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."

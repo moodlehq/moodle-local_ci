@@ -11,8 +11,9 @@
 # Don't be strict. Script has own error control handle
 set +e
 
-# Verify everything is set
-required="phpcmd mysqlcmd gitdir dblibrary dbtype dbhost dbuser dbpass"
+# Primarily only these 2 are mandatory always. Other are
+# also conditionally required below for old branches.
+required="phpcmd gitdir"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -37,6 +38,15 @@ fi
 
 # Up to Moodle 2.5 we need to install a complete site and copy the script to local/ci/list_valid_components
 # to get a reliable list of components.
+
+# We need these extra params to be able to install the site.
+required="mysqlcmd dblibrary dbtype dbhost dbuser dbpass"
+for var in $required; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
 
 installdb=ci_installed_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
