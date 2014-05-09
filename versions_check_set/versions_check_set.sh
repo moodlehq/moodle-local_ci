@@ -3,6 +3,7 @@
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo
 # $setversion: 10digits (YYYYMMDD00) to set all versions to. Empty = not set
+# $setrequires: 10digits (YYYYMMDD00) to set all dependencies to. Empty = $setversion
 
 # Let's go strict (exit on error)
 set -e
@@ -54,7 +55,12 @@ ignorefiles="(local/(ci|codechecker|moodlecheck)/version.php|.*/tests/fixtures/.
 for i in ${allfiles}; do
     # Exclude the version.php if matches ignorefiles
     if [[ "${i}" =~ ${gitdir}/${ignorefiles} ]]; then
-        echo "- ${i}: Ignored"  >> "${resultfile}"
+        echo "- ${i}: Ignored (ignored files)"  >> "${resultfile}"
+        continue;
+    fi
+    # Exclude the version.php if has own .git repo different from top
+    if [[ "${i}" =~ ${gitdir}/.*/version.php ]] && [[ -d "$(dirname "${i}")/.git" ]]; then
+        echo "- ${i}: Ignored (git repo)"  >> "${resultfile}"
         continue;
     fi
 
@@ -338,27 +344,45 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
         echo "- ${gitdir}:" >> "${resultfile}"
         echo "  + ERROR: Cannot use incorrect version ${setversion}" >> "${resultfile}"
     else
-        # Everything looks, ok, let's replace
-        for i in ${allfiles}; do
-            # Exclude the version.php if matches ignorefiles
-            if [[ "${i}" =~ ${gitdir}/${ignorefiles} ]]; then
-                echo "- ${i}: Ignored"  >> "${resultfile}"
-                continue;
-            fi
-            # Skip the main version.php file. Let's force to perform manual update there
-            # (without it, upgrade won't work)
-            if [ "${i}" == "${gitdir}/version.php" ]; then
-                continue
-            fi
+        # Calculate $setrequires
+        if [ -z "${setrequires}" ]; then
+            setrequires=${setversion}
+        fi
+        if [[ ! "${setrequires}" =~ ${versionregex} ]]; then
+            echo "- ${gitdir}:" >> "${resultfile}"
+            echo "  + ERROR: Cannot use incorrect requires ${setrequires}" >> "${resultfile}"
+        else
+            # Everything looks, ok, let's replace
+            for i in ${allfiles}; do
+                # Exclude the version.php if matches ignorefiles
+                if [[ "${i}" =~ ${gitdir}/${ignorefiles} ]]; then
+                    echo "- ${i}: Ignored (ignoredfiles)"  >> "${resultfile}"
+                    continue;
+                fi
+                # Exclude the version.php if has own .git repo different from top one
+                if [[ "${i}" =~ ${gitdir}/.*/version.php ]] && [[ -d "$(dirname "${i}")/.git" ]]; then
+                    echo "- ${i}: Ignored (git repo)"  >> "${resultfile}"
+                    continue;
+                fi
+                # Skip the main version.php file. Let's force to perform manual update there
+                # (without it, upgrade won't work)
+                if [ "${i}" == "${gitdir}/version.php" ]; then
+                    continue
+                fi
+                echo "- ${i}:" >> "${resultfile}"
+                # First set everything to $setrequires
+                replaceregex="s/(=>? *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setrequires}/g"
+                perl -p -i -e "${replaceregex}" ${i}
+                # Then set only 'version' lines to $setversion
+                replaceregex="s/(>version.*= *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
+                perl -p -i -e "${replaceregex}" ${i}
+            done
+            # also the backup/backup.class.php file
+            i=${gitdir}/backup/backup.class.php
             echo "- ${i}:" >> "${resultfile}"
-            replaceregex="s/(=>? *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
+            replaceregex="s/(const *VERSION *= *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
             perl -p -i -e "${replaceregex}" ${i}
-        done
-        # also the backup/backup.class.php file
-        i=${gitdir}/backup/backup.class.php
-        echo "- ${i}:" >> "${resultfile}"
-        replaceregex="s/(const *VERSION *= *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
-        perl -p -i -e "${replaceregex}" ${i}
+        fi
     fi
 fi
 
