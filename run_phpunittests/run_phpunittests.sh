@@ -11,6 +11,7 @@
 # $dbpass: DB password
 # $multipleclassiserror: Does multiple classes in test file
 #                        raise error or just warning (dlft).
+# $extraconfig: Extra settings that will be injected ti config.php
 
 # Don't be strict. Script has own error control handle
 set +e
@@ -73,6 +74,10 @@ text="$( cat ${mydir}/config.php.template )"
 for i in ${replacements}; do
     text=$( echo "${text}" | sed "s#${i}#g" )
 done
+
+# Apply extra configuration separatedly (multiline...)
+text=$( echo "${text}" | perl -0pe "s!%%EXTRACONFIG%%!${extraconfig}!g" )
+
 
 # Save the config.php into destination
 echo "${text}" > ${gitdir}/config.php
