@@ -54,7 +54,6 @@ echo "Using criteria: ${criteria}"
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
     echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
-    echo "Results for ${issue}" >> "${resultfile}.${issue}.txt"
     # Fetch repository
     ${basereq} --action getFieldValue \
                --issue ${issue} \
@@ -63,13 +62,14 @@ while read issue; do
     repository=$(cat "${resultfile}.repository")
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        echo "  - Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+        echo "  Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     else
-        echo "  - Remote repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
+        echo "  Checked ${issue} using repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
     fi
 
     # Iterate over the candidate branches
     branchesfound=""
+    codingerrorsfound=""
     for candidate in ${cf_branches//,/ }; do
         # Nothing to process with empty repository
         if [[ -z "${repository}" ]]; then
@@ -89,8 +89,6 @@ while read issue; do
         # Branch found
         if [[ -n "${branch}" ]]; then
             branchesfound=1
-            echo >> "${resultfile}.${issue}.txt"
-            echo "  - Remote branch ${branch} to be integrated into upstream ${target}" | tee -a "${resultfile}.${issue}.txt"
             # Launch the prechecker for current repo and branch, waiting till it ends
             # looking for its exit code.
             set +e
@@ -98,7 +96,7 @@ while read issue; do
                       build "${jenkinsjobname}" \
                       -p "remote=${repository}" -p "branch=${branch}" \
                       -p "integrateto=${target}" -p "issue=${issue}" \
-                      -p "filtering=true" -p "format=html" -s > "${resultfile}.jiracli"
+                      -p "filtering=true" -p "format=html" -s -v > "${resultfile}.jiracli"
             status=${PIPESTATUS[0]}
             set -e
             # Let's wait artifacts to be written
@@ -108,29 +106,65 @@ while read issue; do
             job=${BASH_REMATCH[1]}
             joburl="${publishserver}/job/${jenkinsjobname}/${job}"
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
-            rm "${resultfile}.jiracli"
-            echo "    -- Executed job ${joburl}" | tee -a "${resultfile}.${issue}.txt"
-            echo "    -- Execution status: ${status}"
-            # Fetch the errors.txt file and add its contents to output
-            set +e
-            errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
-            curlstatus=${PIPESTATUS[0]}
-            set -e
-            if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
-                perrors=$(echo "${errors}" | sed 's/^/    -- /g')
-                echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
+
+            if grep -q "SMURFILE: OK" "${resultfile}.jiracli"; then
+               codeok=true
+            else
+               codeok=false
+               codingerrorsfound=1
             fi
+            rm "${resultfile}.jiracli"
+
             # TODO: Print any summary information
             # Finally link to the results file
             if [[ ${status} -eq 0 ]]; then
-                echo "    -- Details: ${joburl}/artifact/work/smurf.html" | tee -a "${resultfile}.${issue}.txt"
+
+                # Output for Jira:
+                if $codeok; then
+                    echo -n " - (/)"  >> "${resultfile}.${issue}.txt"
+                else
+                    echo -n " - (x)"  >> "${resultfile}.${issue}.txt"
+                fi
+
+                echo " $target (branch: ${branch} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
+                if ! $codeok; then
+                    echo "  -- [Coding style problems found |${joburl}/artifact/work/smurf.html]" >> "${resultfile}.${issue}.txt"
+                fi
+
+                # Output for console:
+                echo "    - Checked ${branch} for ${target} exit status: ${status}"
+            else
+                codingerrorsfound=1
+                # Output for Jira:
+                echo "    - ${target} (branch: ${branch} | [CI Job|${joburl}])" >> a "${resultfile}.${issue}.txt"
+                # Output for console:
+                echo "    - Checked ${branch} for ${target} exit status: ${status}"
+
+                # Fetch the errors.txt file and add its contents to output
+                set +e
+                errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
+                curlstatus=${PIPESTATUS[0]}
+                set -e
+                if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
+                    perrors=$(echo "${errors}" | sed 's/^/    - (x) /g')
+                    echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
+                fi
             fi
         fi
     done
     # Verify we have processed some branch.
     if [[ ! -z  "${repository}" ]] && [[ -z "${branchesfound}" ]]; then
-        echo "  - Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+        echo "  (x) Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+    else
+        # Append a +1/-1 to the head of the file..
+        if [[ -z "${codingerrorsfound}" ]]; then
+            printf "+1 code verified against automated checks. :)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        else
+            printf ":( Fails against automated checks.\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        fi
+        mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
     fi
+
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
         echo "  - Sending results to the Tracker"
