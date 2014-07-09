@@ -33,6 +33,14 @@
 // Increase memory, codebase is huge
 ini_set('memory_limit', '4352M');
 
+// Verify local_codechecker is installed and use
+// it if available. Else, try default execution that
+// will lead to use the one installed via pear.
+$localcspath = __DIR__ . '/../../codechecker/pear';
+if (file_exists($localcspath)) {
+    set_include_path($localcspath . PATH_SEPARATOR . get_include_path());
+}
+
 error_reporting(E_ALL | E_STRICT);
 include_once 'PHP/CodeSniffer/CLI.php';
 $phpcs = new PHP_CodeSniffer_CLI();
