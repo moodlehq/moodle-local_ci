@@ -106,6 +106,7 @@ while read issue; do
             job=${BASH_REMATCH[1]}
             joburl="${publishserver}/job/${jenkinsjobname}/${job}"
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
+            branchlink="[${branch}|${joburl}/artifact/work/patchset.diff]"
 
             if grep -q "SMURFILE: OK" "${resultfile}.jiracli"; then
                codeok=true
@@ -126,7 +127,7 @@ while read issue; do
                     echo -n " - (x)"  >> "${resultfile}.${issue}.txt"
                 fi
 
-                echo " $target (branch: ${branch} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
+                echo " $target (branch: ${branchlink} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
                 if ! $codeok; then
                     echo "  -- [Coding style problems found |${joburl}/artifact/work/smurf.html]" >> "${resultfile}.${issue}.txt"
                 fi
@@ -136,7 +137,7 @@ while read issue; do
             else
                 codingerrorsfound=1
                 # Output for Jira:
-                echo "    - ${target} (branch: ${branch} | [CI Job|${joburl}])" >> a "${resultfile}.${issue}.txt"
+                echo "    - ${target} (branch: ${branchlink} | [CI Job|${joburl}])" >> a "${resultfile}.${issue}.txt"
                 # Output for console:
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
 
