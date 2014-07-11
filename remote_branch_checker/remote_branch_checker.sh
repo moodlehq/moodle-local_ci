@@ -265,3 +265,14 @@ fi
 set -e
 ${phpcmd} ${mydir}/remote_branch_reporter.php \
     --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"
+
+# FIXME: Nasty hack to determine if smurf file is empty!
+# (To avoid reachitecting remote_branch_reporter.php at this point in time)
+checksum="$(shasum ${WORKSPACE}/work/smurf.html | cut -d' ' -f1)"
+echo "SHA1: ${checksum}"
+
+if [[ "${checksum}" = "b486b1a00f2dba2e96c319194b8ba2399a33fb75" ]]; then
+    echo "SMURFILE: OK"
+else
+    echo "SMURFILE: FAILING"
+fi
