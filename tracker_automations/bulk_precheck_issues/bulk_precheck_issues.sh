@@ -53,6 +53,7 @@ echo "Using criteria: ${criteria}"
 
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
+    codingerrorsfound=""
     echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
     # Fetch repository
     ${basereq} --action getFieldValue \
@@ -62,14 +63,14 @@ while read issue; do
     repository=$(cat "${resultfile}.repository")
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        echo "  Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+        codingerrorsfound=1
+        echo "  (x) Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     else
         echo "  Checked ${issue} using repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
     fi
 
     # Iterate over the candidate branches
     branchesfound=""
-    codingerrorsfound=""
     for candidate in ${cf_branches//,/ }; do
         # Nothing to process with empty repository
         if [[ -z "${repository}" ]]; then
@@ -155,16 +156,17 @@ while read issue; do
     done
     # Verify we have processed some branch.
     if [[ ! -z  "${repository}" ]] && [[ -z "${branchesfound}" ]]; then
+        codingerrorsfound=1
         echo "  (x) Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
-    else
-        # Append a +1/-1 to the head of the file..
-        if [[ -z "${codingerrorsfound}" ]]; then
-            printf "+1 code verified against automated checks. :)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
-        else
-            printf ":( Fails against automated checks.\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
-        fi
-        mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
     fi
+
+    # Append a +1/-1 to the head of the file..
+    if [[ -z "${codingerrorsfound}" ]]; then
+        printf "+1 code verified against automated checks. :)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+    else
+        printf ":( Fails against automated checks.\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+    fi
+    mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
