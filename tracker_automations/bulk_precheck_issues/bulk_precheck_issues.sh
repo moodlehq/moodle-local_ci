@@ -169,8 +169,8 @@ while read issue; do
     mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
 
     # Add an information link to the bottom of the report
-    echo "" > "${resultfile}.${issue}.txt"
-    echo "~[More information about this report|http://docs.moodle.org/dev/Automated_Code_Review]~" > "${resultfile}.${issue}.txt"
+    echo "" >> "${resultfile}.${issue}.txt"
+    echo "~[More information about this report|http://docs.moodle.org/dev/Automated_Code_Review]~" >> "${resultfile}.${issue}.txt"
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
