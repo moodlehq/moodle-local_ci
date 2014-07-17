@@ -6,6 +6,7 @@
 #jirapass: password of the user
 #cf_repository: id for "Pull from Repository" custom field (customfield_10100)
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
+#cf_testinginstructions: id for testing instructions custom field (customfield_10117)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
 #jenkinsjobname: job in the server that we are going to execute
@@ -18,7 +19,7 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass cf_repository cf_branches criteria quiet jenkinsjobname jenkinsserver publishserver"
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass cf_repository cf_branches cf_testinginstructions criteria quiet jenkinsjobname jenkinsserver publishserver"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -158,6 +159,18 @@ while read issue; do
     if [[ ! -z  "${repository}" ]] && [[ -z "${branchesfound}" ]]; then
         codingerrorsfound=1
         echo "  (x) Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
+    fi
+
+    # Check if there are testing instructions
+    ${basereq} --action getFieldValue \
+               --issue ${issue} \
+               --field ${cf_testinginstructions} \
+               --file "${resultfile}.testinginstructions" > /dev/null
+    testinginstructions=$(cat "${resultfile}.testinginstructions")
+    rm "${resultfile}.testinginstructions"
+    if [[ -z "${testinginstructions}" ]]; then
+        codingerrorsfound=1
+        echo "  (x) Testing instructions missing." | tee -a "${resultfile}.${issue}.txt"
     fi
 
     # Append a +1/-1 to the head of the file..
