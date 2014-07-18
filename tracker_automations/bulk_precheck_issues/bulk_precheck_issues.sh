@@ -170,7 +170,7 @@ while read issue; do
     rm "${resultfile}.testinginstructions"
     if [[ -z "${testinginstructions}" ]]; then
         codingerrorsfound=1
-        echo "  (x) Testing instructions missing." | tee -a "${resultfile}.${issue}.txt"
+        echo " - (x) Testing instructions are missing." | tee -a "${resultfile}.${issue}.txt"
     fi
 
     # Append a +1/-1 to the head of the file..
