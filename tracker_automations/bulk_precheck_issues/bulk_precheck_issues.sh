@@ -139,7 +139,7 @@ while read issue; do
             else
                 codingerrorsfound=1
                 # Output for Jira:
-                echo "    - ${target} (branch: ${branchlink} | [CI Job|${joburl}])" >> a "${resultfile}.${issue}.txt"
+                echo "    - ${target} failed (branch: ${branchlink} | [CI Job|${joburl}] | status: ${status})" >> "${resultfile}.${issue}.txt"
                 # Output for console:
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
 
