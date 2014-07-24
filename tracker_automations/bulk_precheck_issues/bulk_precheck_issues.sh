@@ -139,7 +139,7 @@ while read issue; do
             else
                 codingerrorsfound=1
                 # Output for Jira:
-                echo "    - ${target} failed (branch: ${branchlink} | [CI Job|${joburl}] | status: ${status})" >> "${resultfile}.${issue}.txt"
+                echo "    - (x) ${target} (branch: ${branchlink} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
                 # Output for console:
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
 
@@ -149,8 +149,10 @@ while read issue; do
                 curlstatus=${PIPESTATUS[0]}
                 set -e
                 if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
-                    perrors=$(echo "${errors}" | sed 's/^/    - (x) /g')
+                    perrors=$(echo "${errors}" | sed 's/^/    -- /g')
                     echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
+                else
+                    echo "  -- CI Job exited with status ${status}" | tee -a "${resultfile}.${issue}.txt"
                 fi
             fi
         fi
