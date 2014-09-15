@@ -201,6 +201,14 @@ set +e
 
 # TODO: Run the acceptance tests for the affected components
 
+# Run the commit checker (verify_commit_messages)
+export initialcommit=${integrateto}
+export finalcommit=${integrateto}_precheck
+export gitdir="${WORKSPACE}"
+export issuecode=${issue}
+${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
+cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
+
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the
