@@ -65,6 +65,11 @@ $ccommit   = '';
 $cseverity = '';
 $cmessage = '';
 $lastcommit = '';
+
+// Output begins, we always produce the preamble and checkstyle container.
+$output .= '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
+'<checkstyle version="1.3.2">' . PHP_EOL;
+
 while ($line = trim(fgets(STDIN))) {
     if (trim($line) === '') {
         continue;
@@ -76,13 +81,9 @@ while ($line = trim(fgets(STDIN))) {
     $ccommit = $matches[1];
     $cseverity = $matches[2];
     $cmessage = $matches[3];
+
     // Severity found, output xml
     if (!empty($cseverity)) {
-        // no output, yet, send XML preamble and root element
-        if (empty($output)) {
-            $output .= '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
-                '<checkstyle version="1.3.2">' . PHP_EOL;
-        }
         // Change of commit.
         if ($ccommit !== $lastcommit) {
             if ( $lastcommit !== '') {
@@ -96,8 +97,9 @@ while ($line = trim(fgets(STDIN))) {
     }
     $lastcommit = $ccommit;
 }
-// output exists, close root element
-if (!empty($output)) {
-    $output .= '  </file>' . PHP_EOL . '</checkstyle>';
+if ($ccommit) { // There is a commit (aka, file) pending to close.
+    $output .= '  </file>' . PHP_EOL;
 }
+$output .= '</checkstyle>';
+
 echo $output;

@@ -51,14 +51,7 @@ if ($unrecognized) {
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-if (empty($reporttxt)) {
-    exit(0);
-}
-
 $reportarr = preg_split('/(\r?\n)/', $reporttxt);
-if (strpos($reportarr[0], '  - ') !== 0 or strpos($reportarr[1], '    + ') !== 0) {
-    cli_error('Error: Input file does not seem to be a check_upgrade_savepoints.txt one');
-}
 
 if ($options['help']) {
     $help =
@@ -78,6 +71,11 @@ Example:
 $output = '';
 $cfile   = '';
 $cseverity = '';
+
+// Output begins, we always produce the preamble and checkstyle container.
+$output .= '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
+    '<checkstyle version="1.3.2">' . PHP_EOL;
+
 foreach ($reportarr as $line) {
     // If it's a file description, save it
     if (strpos($line, '  - ') === 0) {
@@ -93,11 +91,6 @@ foreach ($reportarr as $line) {
     }
     // Severity found, output xml
     if (!empty($cseverity)) {
-        // no output, yet, send XML preamble and root element
-        if (empty($output)) {
-            $output .= '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
-                '<checkstyle version="1.3.2">' . PHP_EOL;
-        }
         $output .= '  <file name="' . $cfile . '">' . PHP_EOL;
         // Use line and column 0, we don't really know the real line in the original format
         $output .= '    <error line="0" column="0" severity="' . $cseverity . '" message="' .
@@ -105,8 +98,6 @@ foreach ($reportarr as $line) {
         $output .= '  </file>' . PHP_EOL;
     }
 }
-// output exists, close root element
-if (!empty($output)) {
-    $output .= '</checkstyle>';
-}
+$output .= '</checkstyle>';
+
 echo $output;
