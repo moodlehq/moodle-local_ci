@@ -45,6 +45,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:attribute name="url"><xsl:value-of select="$url"/></xsl:attribute>
+      <xsl:attribute name="type"><xsl:value-of select="./@severity"/></xsl:attribute>
       <xsl:choose>
         <xsl:when test="./@severity = 'error'">
           <xsl:attribute name="weight"><xsl:value-of select="$errorweight"/></xsl:attribute>

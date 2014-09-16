@@ -276,7 +276,7 @@ ${phpcmd} ${mydir}/remote_branch_reporter.php \
 checksum="$(shasum ${WORKSPACE}/work/smurf.html | cut -d' ' -f1)"
 echo "SHA1: ${checksum}"
 
-if [[ "${checksum}" = "b486b1a00f2dba2e96c319194b8ba2399a33fb75" ]]; then
+if [[ "${checksum}" = "b161cce8930b9bf88f1054c120a435315b7f470f" ]]; then
     echo "SMURFILE: OK"
 else
     echo "SMURFILE: FAILING"

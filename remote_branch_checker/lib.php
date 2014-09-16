@@ -54,25 +54,10 @@ class remote_branch_reporter {
 
         $doc->appendChild($smurf);
 
-        // Process the savepoints output, weighting errors with 50 and warnings with 10
-        $params = array(
-            'title' => 'Update savepoints problems',
-            'description' => 'This sections shows problems detected with the handling of upgrade savepoints',
-            'url' => 'http://docs.moodle.org/dev/Upgrade_API',
-            'codedir' => dirname($this->directory) . '/',
-            'errorweight' => 50,
-            'warningweight' => 10);
-        if ($node = $this->apply_xslt($params, $this->directory . '/savepoints.xml', 'checkstyle2smurf.xsl')) {
-            if ($check = $node->getElementsByTagName('check')->item(0)) {
-                $snode = $doc->importNode($check, true);
-                $smurf->appendChild($snode);
-            }
-        }
-
         // Process the cs output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'Coding style problems',
-            'description' => 'This sections shows the coding style problems detected in the code by phpcs',
+            'description' => 'This section shows the coding style problems detected in the code by phpcs',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
@@ -87,12 +72,42 @@ class remote_branch_reporter {
         // Process the docs output, weighting errors with 3 and warnings with 1
         $params = array(
             'title' => 'PHPDocs style problems',
-            'description' => 'This sections shows the phpdocs problems detected in the code by local_moodlecheck',
+            'description' => 'This section shows the phpdocs problems detected in the code by local_moodlecheck',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 3,
             'warningweight' => 1);
         if ($node = $this->apply_xslt($params, $this->directory . '/docs.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
+        // Process the commits output, weighting errors with 3 and warnings with 1
+        $params = array(
+            'title' => 'Commit messages problems',
+            'description' => 'This section shows the problems detected in the commit messages by the commits checker',
+            'url' => 'https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages',
+            'codedir' => '', // We are storing the commit hashes so, nothing to trim from them.
+            'errorweight' => 3,
+            'warningweight' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/commits.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
+        // Process the savepoints output, weighting errors with 50 and warnings with 10
+        $params = array(
+            'title' => 'Update savepoints problems',
+            'description' => 'This sections shows problems detected with the handling of upgrade savepoints',
+            'url' => 'http://docs.moodle.org/dev/Upgrade_API',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 50,
+            'warningweight' => 10);
+        if ($node = $this->apply_xslt($params, $this->directory . '/savepoints.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
                 $smurf->appendChild($snode);
@@ -162,14 +177,14 @@ class remote_branch_reporter {
           $linefrom = $problem->getAttribute('linefrom');
           $lineto = $problem->getAttribute('lineto');
 
-          // If the file is not present in the patchset, no match
-          if (!array_key_exists($file, $patchsetinfo)) {
-              return false;
-          }
-
           // If both the linefrom and the lineto are empty, match
           if (empty($linefrom) and empty($lineto)) {
               return true;
+          }
+
+          // If the file is not present in the patchset, no match
+          if (!array_key_exists($file, $patchsetinfo)) {
+              return false;
           }
 
           // Let's see if $linefrom or $lineto matches any of the
