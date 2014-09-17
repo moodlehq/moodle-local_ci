@@ -102,7 +102,7 @@ class remote_branch_reporter {
         // Process the savepoints output, weighting errors with 50 and warnings with 10
         $params = array(
             'title' => 'Update savepoints problems',
-            'description' => 'This sections shows problems detected with the handling of upgrade savepoints',
+            'description' => 'This section shows problems detected with the handling of upgrade savepoints',
             'url' => 'http://docs.moodle.org/dev/Upgrade_API',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 50,
