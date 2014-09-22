@@ -119,6 +119,9 @@ class remote_branch_reporter {
             $this->patchset_filter($doc, $patchset);
         }
 
+        // Calculate totals.
+        $this->calculate_totals($doc);
+
         // And finally return the results
         switch ($format) {
             case 'xml':
@@ -138,8 +141,11 @@ class remote_branch_reporter {
     /**
      * Given one already built DOMDcocument and one patchset.xml file
      * filter the document so only target lines are shown
+     *
+     * @param DomDocument $doc The XML we are going to calculate totals of.
+     * @param string $file Path to the patchset XML file used to filter results.
      */
-     protected function patchset_filter($doc, $file) {
+    protected function patchset_filter($doc, $file) {
         $file = $this->directory . '/' . $file;
         if (!is_readable($file)) {
             throw new exception('Error: cannot access to the patchset xml file: ' . $patchset);
@@ -157,6 +163,34 @@ class remote_branch_reporter {
                 $problem->parentNode->removeChild($problem);
             }
         }
+     }
+
+     /**
+      * Given an already completed smurf dom, perform the final calculations on it (numerrors...)
+      *
+      * @param DomDocument $doc The XML we are going to calculate totals of.
+      */
+     protected function calculate_totals($doc) {
+
+        $xpath = new DOMXPath($doc);
+
+        // Need to recalculate every check numerrors and numwarnings because
+        // filtering may have modified them.
+        $checks = $xpath->query('//smurf/check');
+        foreach ($checks as $check) {
+            $numerrors = $xpath->evaluate("count(mess/problem[@type = 'error'])", $check);
+            $numwarnings = $xpath->evaluate("count(mess/problem[@type = 'warning'])", $check);
+            $check->setAttribute('numerrors', $numerrors);
+            $check->setAttribute('numwarnings', $numwarnings);
+        }
+
+        // Calculate final numerrors and numwarnings applying them to main element.
+        $numerrors = $xpath->evaluate('sum(//smurf/check/@numerrors)');
+        $numwarnings = $xpath->evaluate('sum(//smurf/check/@numwarnings)');
+
+        $smurfele = $xpath->query('//smurf');
+        $smurfele->item(0)->setAttribute('numerrors', $numerrors);
+        $smurfele->item(0)->setAttribute('numwarnings', $numwarnings);
      }
 
      /**

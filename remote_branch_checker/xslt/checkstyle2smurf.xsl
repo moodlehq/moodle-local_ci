@@ -16,6 +16,8 @@
     <check>
       <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
       <xsl:attribute name="url"><xsl:value-of select="$url"/></xsl:attribute>
+      <xsl:attribute name="numerrors"><xsl:value-of select="count(//error[@severity = 'error'])"/></xsl:attribute>
+      <xsl:attribute name="numwarnings"><xsl:value-of select="count(//error[@severity != 'error'])"/></xsl:attribute>
       <description>
         <xsl:value-of select="$description"/>
       </description>
