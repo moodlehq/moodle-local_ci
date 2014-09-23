@@ -52,6 +52,13 @@ echo "Using criteria: ${criteria}"
 # Execute the criteria query. It will save a list of issues (format 101) to $resultfile.
 . "${mydir}/criteria/${criteria}/query.sh"
 
+maxcommits=100
+# Some criteria might want to override default settings.
+if [[ -f "${mydir}/criteria/${criteria}/override-defaults.sh" ]]; then
+    echo "Applying additional defaults from criteria: ${criteria}"
+    . "${mydir}/criteria/${criteria}/override-defaults.sh"
+fi
+
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
     codingerrorsfound=""
@@ -98,7 +105,8 @@ while read issue; do
                       build "${jenkinsjobname}" \
                       -p "remote=${repository}" -p "branch=${branch}" \
                       -p "integrateto=${target}" -p "issue=${issue}" \
-                      -p "filtering=true" -p "format=html" -s -v > "${resultfile}.jiracli"
+                      -p "filtering=true" -p "format=html" -p "maxcommits=${maxcommits}" \
+                      -s -v > "${resultfile}.jiracli"
             status=${PIPESTATUS[0]}
             set -e
             # Let's wait artifacts to be written
