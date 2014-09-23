@@ -50,6 +50,10 @@ if [[ ! -d "$WORKSPACE/.git" ]]; then
     ${gitcmd} clone git://git.moodle.org/moodle.git "${WORKSPACE}"
 fi
 
+# So far, I haven't found a decent way to determine if a bloody remote exists already..
+echo "Adding integration remote unconditionally.."
+cd "${WORKSPACE}" && ${gitcmd} remote add integration git://git.moodle.org/integration.git || echo 'Integration remote already exists'
+
 # Now, ensure the repository in completely clean.
 echo "Cleaning worktree"
 cd "${WORKSPACE}" && ${gitcmd} clean -dfx && ${gitcmd} reset --hard
@@ -82,7 +86,7 @@ errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
 # Checkout pristine copy of the configured branch
-cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && ${gitcmd} fetch && ${gitcmd} reset --hard origin/${integrateto}
+cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && ${gitcmd} fetch origin && ${gitcmd} fetch integration && ${gitcmd} reset --hard origin/${integrateto}
 
 # Create the precheck branch, checking if it exists
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
@@ -106,7 +110,8 @@ set -e
 
 # Look for the common ancestor and its date, warn if too old
 set +e
-ancestor="$( ${gitcmd} rev-list --boundary ${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+ancestor="$( ${gitcmd} rev-list --boundary origin/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and ${integrateto} does not have any common ancestor." >> ${errorfile}
     exit 1
@@ -127,6 +132,16 @@ else
 fi
 set -e
 
+# Work out the common anestor betwen our remote branch and the integration remote.
+integrationancestor="$( ${gitcmd} rev-list --boundary integration/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+if [[ "${ancestor}" != "${integrationancestor}" ]]; then
+    # If the common ancestor is different on the integration remote, it means the branch is based off integration.
+    echo "Warn: the branch is based off integration." >> ${errorfile}
+    echo "Warn: the branch is based off integration."
+    $gitcmd reset --hard integration/${integrateto}
+    ancestor=$integrationancestor
+fi
+
 # Try to merge the patchset (detecting conflicts)
 set +e
 ${gitcmd} merge --no-edit FETCH_HEAD
@@ -138,18 +153,18 @@ fi
 set -e
 
 # Verify the number of commits
-numcommits=$(${gitcmd} log ${integrateto}..${integrateto}_precheck --oneline --no-merges | wc -l)
+numcommits=$(${gitcmd} log ${ancestor}..${integrateto}_precheck --oneline --no-merges | wc -l)
 if [[ ${numcommits} -gt ${maxcommits} ]]; then
     echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" >> ${errorfile}
     exit 1
 fi
 
 # Calculate the differences and store them
-${gitcmd} diff ${integrateto}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
+${gitcmd} diff ${ancestor}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
 
 # Generate the patches and store them
 mkdir ${WORKSPACE}/work/patches
-${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${integrateto}
+${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${ancestor}
 cd ${WORKSPACE}/work
 zip -r ${WORKSPACE}/work/patches.zip ./patches
 rm -fr ${WORKSPACE}/work/patches
@@ -216,7 +231,7 @@ set +e
 # TODO: Run the acceptance tests for the affected components
 
 # Run the commit checker (verify_commit_messages)
-export initialcommit=${integrateto}
+export initialcommit=${ancestor}
 export finalcommit=${integrateto}_precheck
 export gitdir="${WORKSPACE}"
 export issuecode=${issue}
