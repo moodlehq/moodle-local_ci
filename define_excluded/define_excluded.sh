@@ -24,6 +24,7 @@ lib/excel/
 lib/flowplayer/
 lib/gallery/
 lib/google/
+lib/horde/
 lib/htmlpurifier/
 lib/jabber/
 lib/jquery/
