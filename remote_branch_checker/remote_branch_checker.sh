@@ -23,7 +23,7 @@ rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd remote branch integrateto issue"
+required="WORKSPACE gitcmd phpcmd remote branch integrateto"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
