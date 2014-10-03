@@ -157,7 +157,7 @@ for c in ${commits}; do
                 fi
                 # verify there are no multiple : in the subject line. Error.
                 # verify subject line is <= 72 chars long. Error.
-                len=$(echo "${line}" | wc -c)
+                len=$(echo -n "${line}" | wc -c)
                 if [[ ${len} -gt 72 ]]; then
                     echo "${c}*error*The first line has more than 72 characters (found: ${len})"
                     numproblems=$((numproblems+1))
