@@ -5,6 +5,7 @@
 # $finalcommit: hash of the final commit
 # $issuecode: code of the issue to verify
 # $debug: to return results in human-readable format for debugging
+# $verifyissuecodeinmerge: to apply the issue code matching checks to merge commits.
 
 # Verify commit messages observe Moodle's rules (MDLSITE-1990):
 #   http://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages
@@ -35,8 +36,9 @@ templateissuecode=MDL-[0-9]{3,6}
 if [[ -z ${issuecode} ]]; then
     hasissuecode=""
 fi
-# ensure we have debug defined, defaulting to disabled.
+# ensure we have debug, verifyissuecodeinmerge defined, defaulting to disabled.
 debug="${debug:-}"
+verifyissuecodeinmerge="${verifyissuecodeinmerge:-}"
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -99,16 +101,19 @@ for c in ${commits}; do
             echo "${c}*error*The merge commit does not match the expected 'Merge branch ... of ...' format."
             numproblems=$((numproblems+1))
         fi
-        # verify the branch contains the template issue code. Warn.
-        if [[ ! "${message}" =~ ${templateissuecode} ]];then
-            echo "${c}*warning*The merge commit does not match the expected issue code ${templateissuecode}."
-            numproblems=$((numproblems+1))
-        fi
-        # verify the branch contains the issue code. Warn.
-        if [[ ${hasissuecode} ]]; then
-            if [[ ! "${message}" =~ ${issuecode} ]];then
-                echo "${c}*warning*The merge commit does not match the expected issue code ${issuecode}."
+        # Only if configured to do so
+        if [[ "${verifyissuecodeinmerge}" ]]; then
+            # verify the branch contains the template issue code. Warn.
+            if [[ ! "${message}" =~ ${templateissuecode} ]];then
+                echo "${c}*warning*The merge commit does not match the expected issue code ${templateissuecode}."
                 numproblems=$((numproblems+1))
+            fi
+            # verify the branch contains the issue code. Warn.
+            if [[ ${hasissuecode} ]]; then
+                if [[ ! "${message}" =~ ${issuecode} ]];then
+                    echo "${c}*warning*The merge commit does not match the expected issue code ${issuecode}."
+                    numproblems=$((numproblems+1))
+                fi
             fi
         fi
     # normal commits
