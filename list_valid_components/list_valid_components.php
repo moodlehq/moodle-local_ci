@@ -98,6 +98,7 @@ if (file_exists($options['basedir'] . '/lib/classes/component.php')) {
     global $CFG;
     $CFG = new stdClass();
     $CFG->dirroot = $options['basedir'];
+    $CFG->libdir = $CFG->dirroot . '/lib';
     $CFG->admin = 'admin';
     require_once($CFG->dirroot . '/lib/classes/component.php');
 
