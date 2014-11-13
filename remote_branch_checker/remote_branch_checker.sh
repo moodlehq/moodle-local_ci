@@ -11,10 +11,16 @@
 # $maxcommits: Max number of commits accepted per run. Error if exceeded. Defaults to 15.
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
+# $extrapath: Extra paths to be available (global)
 
 # Don't want debugging @ start, but want exit on error
 set +x
 set -e
+
+# Let add $extrapath to PATH (for node)
+if [[ -n ${extrapath} ]]; then
+    export PATH=${PATH}:${extrapath}
+fi
 
 # Apply some defaults
 filtering=${filtering:-true}
