@@ -56,13 +56,28 @@ class remote_branch_reporter {
 
         // Process the cs output, weighting errors with 5 and warnings with 1
         $params = array(
-            'title' => 'Coding style problems',
+            'title' => 'PHP coding style problems',
             'description' => 'This section shows the coding style problems detected in the code by phpcs',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
             'warningweight' => 1);
         if ($node = $this->apply_xslt($params, $this->directory . '/cs.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
+        // Process the jshint output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'Javascript coding style problems',
+            'description' => 'This section shows the coding style problems detected in the code by jshint',
+            'url' => 'https://docs.moodle.org/dev/Javascript/Coding_style',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/jshint.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
                 $smurf->appendChild($snode);

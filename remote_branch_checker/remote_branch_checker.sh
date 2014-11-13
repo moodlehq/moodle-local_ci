@@ -1,6 +1,7 @@
 #!/bin/bash
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
+# $jshintcmd: Path to jshint executable.
 # $remote: Remote repo where the branch to check resides.
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
@@ -23,7 +24,7 @@ rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd remote branch integrateto"
+required="WORKSPACE gitcmd phpcmd jshintcmd remote branch integrateto"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -166,6 +167,9 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
 sed '/^$/d' ${WORKSPACE}/work/patchset.files >  ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
+# Add jshint to patchset files to avoid it being deleted for use later..
+echo '.jshint' >> ${WORKSPACE}/work/patchset.files
+
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
 # so later various utilities can use it for their own checks/reports.
@@ -260,6 +264,9 @@ ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
 ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
     --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
+# Run the JSHINT (using the checked out .jshint file)
+${jshintcmd} --config $WORKSPACE/.jshintrc --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
+
 # ########## ########## ########## ##########
 
 # Everything has been generated in the work directory, generate the report, observing $filtering
@@ -276,7 +283,7 @@ ${phpcmd} ${mydir}/remote_branch_reporter.php \
 checksum="$(shasum ${WORKSPACE}/work/smurf.html | cut -d' ' -f1)"
 echo "SHA1: ${checksum}"
 
-if [[ "${checksum}" = "af34cff8cae528c2f6ad1e93b9d1207179829be7" ]]; then
+if [[ "${checksum}" = "eef8adfd4f090163f7c63e761f791c043951ddf0" ]]; then
     echo "SMURFILE: OK"
 else
     echo "SMURFILE: FAILING"
