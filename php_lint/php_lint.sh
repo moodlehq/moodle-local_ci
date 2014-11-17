@@ -32,8 +32,8 @@ if [[ ${fulllint} -ne 1 ]]; then
     # list_changed_files.sh and invoke it
     export initialcommit=${GIT_PREVIOUS_COMMIT}
     export finalcommit=${GIT_COMMIT}
-    mfiles=$(${mydir}/../list_changed_files/list_changed_files.sh)
-    if [[ ${PIPESTATUS[0]} -eq 0 ]]; then
+    if mfiles=$(${mydir}/../list_changed_files/list_changed_files.sh)
+    then
         echo "Running php syntax check from $initialcommit to $finalcommit:"
     else
         echo "Problems getting the list of changed files. Defaulting to full lint"
