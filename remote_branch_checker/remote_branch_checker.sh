@@ -2,6 +2,7 @@
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
 # $jshintcmd: Path to jshint executable.
+# $csslintcmd: Path to csslint executable.
 # $remote: Remote repo where the branch to check resides.
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
@@ -30,7 +31,7 @@ rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd remote branch integrateto"
+required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -173,8 +174,9 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
 sed '/^$/d' ${WORKSPACE}/work/patchset.files >  ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
-# Add jshint to patchset files to avoid it being deleted for use later..
+# Add .jshint & .csslintrc to patchset files to avoid it being deleted for use later..
 echo '.jshint' >> ${WORKSPACE}/work/patchset.files
+echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
 
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
@@ -277,6 +279,20 @@ find $WORKSPACE -type d -path \*/build/\* | sed "s|$WORKSPACE/||" > $WORKSPACE/.
 ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
     --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 
+# Run CSSLINT if css files exist in the patch.
+if grep -q \.css\$ ${WORKSPACE}/work/patchset.files
+then
+    if [ ! -f ${WORKSPACE}/.csslintrc ]; then
+        echo "csslintrc file not found, defaulting to error checking only"
+        echo '--errors=errors' > ${WORKSPACE}/.csslintrc
+    fi
+    ${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.xml"
+else
+    # Unfortunately csslint doesn't like running when there is nothing to lint, so we need to create a dummy:
+    echo "No CSS files detected in patchset so csslint not run."
+    echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
+fi
+
 # ########## ########## ########## ##########
 
 # Everything has been generated in the work directory, generate the report, observing $filtering
@@ -293,7 +309,7 @@ ${phpcmd} ${mydir}/remote_branch_reporter.php \
 checksum="$(shasum ${WORKSPACE}/work/smurf.html | cut -d' ' -f1)"
 echo "SHA1: ${checksum}"
 
-if [[ "${checksum}" = "73207dcd25a1644e29a6ec129f294b633986ad7f" ]]; then
+if [[ "${checksum}" = "4775ff9d36c000856985ccdf29fc496d759b602f" ]]; then
     echo "SMURFILE: OK"
 else
     echo "SMURFILE: FAILING"
