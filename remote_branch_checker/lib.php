@@ -84,6 +84,21 @@ class remote_branch_reporter {
             }
         }
 
+        // Process the csslint output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'CSS problems',
+            'description' => 'This section shows CSS problems detected by csslint',
+            'url' => 'https://github.com/CSSLint/csslint/wiki/Rules', //TODO: MDLSITE-1796 Create CSS guidelines and link them here.
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/csslint.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Process the docs output, weighting errors with 3 and warnings with 1
         $params = array(
             'title' => 'PHPDocs style problems',
