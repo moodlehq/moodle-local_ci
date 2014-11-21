@@ -14,6 +14,7 @@
 
   <xsl:template match="/">
     <check>
+      <xsl:attribute name="id"><xsl:value-of select="$abbr"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:value-of select="$title"/></xsl:attribute>
       <xsl:attribute name="url"><xsl:value-of select="$url"/></xsl:attribute>
       <xsl:attribute name="numerrors"><xsl:value-of select="count(//error[@severity = 'error'])"/></xsl:attribute>

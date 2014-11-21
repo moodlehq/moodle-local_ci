@@ -310,8 +310,14 @@ if [[ "${filtering}" = "true" ]]; then
     filter="--patchset=patchset.xml"
 fi
 set -e
+# Since MDLSITE-3423 we unconditionally create the xml file for later use.
 ${phpcmd} ${mydir}/remote_branch_reporter.php \
-    --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"
+    --directory="${WORKSPACE}/work" --format=xml ${filter} > "${WORKSPACE}/work/smurf.xml"
+# And, if another format has been requested, also generate it.
+if [[ "${format}" != "xml" ]]; then
+    ${phpcmd} ${mydir}/remote_branch_reporter.php \
+        --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"
+fi
 
 # FIXME: Nasty hack to determine if smurf file is empty!
 # (To avoid reachitecting remote_branch_reporter.php at this point in time)

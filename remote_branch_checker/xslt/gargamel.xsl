@@ -7,7 +7,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <html>
   <head>
     <meta charset="utf-8"/>
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"/>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"/>
     <style type="text/css">
         body { margin: 0.5em 2em; }
         h1 { font-size: 20px; line-height: 21px; margin:3px 0; }
@@ -20,14 +20,38 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   </head>
   <body>
     <header>
-      <h1>Prechecker results:</h1>
-      <p class="total-counts">(<xsl:value-of select="//smurf/@numerrors"/> errors, <xsl:value-of select="//smurf/@numwarnings"/> warnings)</p>
+      <h1 id="top">
+        Prechecker results:
+        <span>
+          <xsl:attribute name="class">text-<xsl:value-of select="//smurf/summary/@status"/></xsl:attribute>
+          <xsl:value-of select="//smurf/summary/@status"/>
+        </span>
+      </h1>
     </header>
+    <nav>
+      <span>
+        <xsl:attribute name="class">total-counts text-<xsl:value-of select="//smurf/summary/@status"/></xsl:attribute>
+        (<xsl:value-of select="//smurf/summary/@numerrors"/> errors/<xsl:value-of select="//smurf/summary/@numwarnings"/> warnings)
+        =>
+      </span>
+      <xsl:for-each select="smurf/summary/detail">
+        <a>
+          <xsl:attribute name="class">text-<xsl:value-of select="@status"/></xsl:attribute>
+          <xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute>
+          <xsl:value-of select="@name"/>
+          (<xsl:value-of select="@numerrors"/>/<xsl:value-of select="@numwarnings"/>),
+        </a>
+      </xsl:for-each>
+    </nav>
     <hr />
     <main>
       <xsl:for-each select="smurf/check">
         <article>
-          <h2><xsl:value-of select="@title"/></h2>
+          <h2>
+            <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+            <xsl:value-of select="@title"/>
+            <a href="#top"> <span class="icon icon-chevron-up"/></a>
+          </h2>
           <p>(<xsl:value-of select="@numerrors"/> errors, <xsl:value-of select="@numwarnings"/> warnings)</p>
           <p><xsl:value-of select="description"/></p>
           <dl>
@@ -50,26 +74,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
                   <xsl:value-of select="message"/>
                 </a>
               </dd>
-              <dd>
-                <details class="muted"><summary>Details:</summary>
-                  <dl class="dl-horizontal">
-                    <dt>API</dt>
-                      <dd><xsl:value-of select="@api"/></dd>
-                      <dt>Package</dt>
-                      <dd><xsl:value-of select="@package"/></dd>
-                      <dt>Class</dt>
-                      <dd><xsl:value-of select="@class"/></dd>
-                      <dt>Method</dt>
-                      <dd><xsl:value-of select="@method"/></dd>
-                      <dt>Ruleset</dt>
-                      <dd><xsl:value-of select="@ruleset"/></dd>
-                      <dt>Rule</dt>
-                      <dd><xsl:value-of select="@rule"/></dd>
-                      <dt>Code</dt>
-                      <dd><xsl:value-of select="code"/></dd>
-                    </dl>
-                  </details>
-                </dd>
             </xsl:for-each>
           </dl>
         </article>

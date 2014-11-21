@@ -50,13 +50,14 @@ class remote_branch_reporter {
         // Main smurf Dom where everything will be aggregated
         $doc = new DomDocument();
         $smurf = $doc->createElement('smurf');
-        $smurf->setAttribute('version', '0.9.0');
+        $smurf->setAttribute('version', '0.9.1');
 
         $doc->appendChild($smurf);
 
         // Process the cs output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'PHP coding style problems',
+            'abbr' => 'php',
             'description' => 'This section shows the coding style problems detected in the code by phpcs',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
@@ -72,6 +73,7 @@ class remote_branch_reporter {
         // Process the jshint output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'Javascript coding style problems',
+            'abbr' => 'js',
             'description' => 'This section shows the coding style problems detected in the code by jshint',
             'url' => 'https://docs.moodle.org/dev/Javascript/Coding_style',
             'codedir' => dirname($this->directory) . '/',
@@ -87,6 +89,7 @@ class remote_branch_reporter {
         // Process the csslint output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'CSS problems',
+            'abbr' => 'css',
             'description' => 'This section shows CSS problems detected by csslint',
             'url' => 'https://github.com/CSSLint/csslint/wiki/Rules', //TODO: MDLSITE-1796 Create CSS guidelines and link them here.
             'codedir' => dirname($this->directory) . '/',
@@ -102,6 +105,7 @@ class remote_branch_reporter {
         // Process the docs output, weighting errors with 3 and warnings with 1
         $params = array(
             'title' => 'PHPDocs style problems',
+            'abbr' => 'phpdoc',
             'description' => 'This section shows the phpdocs problems detected in the code by local_moodlecheck',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
@@ -117,6 +121,7 @@ class remote_branch_reporter {
         // Process the commits output, weighting errors with 3 and warnings with 1
         $params = array(
             'title' => 'Commit messages problems',
+            'abbr' => 'commit',
             'description' => 'This section shows the problems detected in the commit messages by the commits checker',
             'url' => 'https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages',
             'codedir' => '', // We are storing the commit hashes so, nothing to trim from them.
@@ -132,6 +137,7 @@ class remote_branch_reporter {
         // Process the savepoints output, weighting errors with 50 and warnings with 10
         $params = array(
             'title' => 'Update savepoints problems',
+            'abbr' => 'savepoint',
             'description' => 'This section shows problems detected with the handling of upgrade savepoints',
             'url' => 'http://docs.moodle.org/dev/Upgrade_API',
             'codedir' => dirname($this->directory) . '/',
@@ -151,6 +157,9 @@ class remote_branch_reporter {
 
         // Calculate totals.
         $this->calculate_totals($doc);
+
+        // Calculate summary.
+        $this->calculate_summary($doc);
 
         // And finally return the results
         switch ($format) {
@@ -221,6 +230,57 @@ class remote_branch_reporter {
         $smurfele = $xpath->query('//smurf');
         $smurfele->item(0)->setAttribute('numerrors', $numerrors);
         $smurfele->item(0)->setAttribute('numwarnings', $numwarnings);
+    }
+
+    /**
+     * Given a smurf dom with totals calculated, generate the summary section
+     *
+     * @param DomDocument $doc The XML we are going to calculate summary of.
+     */
+    protected function calculate_summary($doc) {
+
+        $xpath = new DOMXPath($doc);
+
+        $summary = $doc->createElement('summary');
+
+        // For every check, depending of numerrors and numwarnings, calculate status and some more info.
+        $checks = $xpath->query('//smurf/check');
+        foreach ($checks as $check) {
+            $id = $check->getAttribute('id');
+            $numerrors = $check->getAttribute('numerrors');
+            $numwarnings = $check->getAttribute('numwarnings');
+            if ($numerrors > 0) {
+                $status = 'error';
+            } else if ($numwarnings > 0) {
+                $status = 'warning';
+            } else {
+                $status = 'success';
+            }
+            $detail = $doc->createElement('detail');
+            $detail->setAttribute('name', $id);
+            $detail->setAttribute('status', $status);
+            $detail->setAttribute('numerrors', $numerrors);
+            $detail->setAttribute('numwarnings', $numwarnings);
+            $summary->appendChild($detail);
+        }
+
+        // Then the summary status and counters.
+        $smurf = $xpath->query('//smurf');
+        $numerrors = $smurf->item(0)->getAttribute('numerrors');
+        $numwarnings = $smurf->item(0)->getAttribute('numwarnings');
+        if ($numerrors > 0) {
+            $status = 'error';
+        } else if ($numwarnings > 0) {
+            $status = 'warning';
+        } else {
+            $status = 'success';
+        }
+        $summary->setAttribute('status', $status);
+        $summary->setAttribute('numerrors', $numerrors);
+        $summary->setAttribute('numwarnings', $numwarnings);
+
+        // Add the summary to the smurf.
+        $smurf->item(0)->insertBefore($summary, $smurf->item(0)->firstChild);
      }
 
      /**
