@@ -285,6 +285,7 @@ then
     if [ ! -f ${WORKSPACE}/.csslintrc ]; then
         echo "csslintrc file not found, defaulting to error checking only"
         echo '--errors=errors' > ${WORKSPACE}/.csslintrc
+        echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
     fi
     ${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.xml"
 else
