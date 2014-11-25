@@ -95,6 +95,8 @@ fi
 # Fetch the remote branch
 set +e
 ${gitcmd} fetch ${remote} ${branch}
+# record FETCH_HEAD for later
+remotesha=$(git rev-parse --verify FETCH_HEAD)
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: Unable to fetch information from ${branch} branch at ${remote}." >> ${errorfile}
@@ -312,10 +314,13 @@ fi
 set -e
 # Since MDLSITE-3423 we unconditionally create the xml file for later use.
 ${phpcmd} ${mydir}/remote_branch_reporter.php \
+    --repository=$remote --githash=$remotesha \
     --directory="${WORKSPACE}/work" --format=xml ${filter} > "${WORKSPACE}/work/smurf.xml"
+
 # And, if another format has been requested, also generate it.
 if [[ "${format}" != "xml" ]]; then
     ${phpcmd} ${mydir}/remote_branch_reporter.php \
+        --repository=$remote --githash=$remotesha \
         --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"
 fi
 
