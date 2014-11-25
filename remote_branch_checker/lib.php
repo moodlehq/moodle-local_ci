@@ -242,6 +242,7 @@ class remote_branch_reporter {
         $xpath = new DOMXPath($doc);
 
         $summary = $doc->createElement('summary');
+        $condensedstr = ''; // To accumulate all the results in a condensed format for transmision.
 
         // For every check, depending of numerrors and numwarnings, calculate status and some more info.
         $checks = $xpath->query('//smurf/check');
@@ -262,6 +263,10 @@ class remote_branch_reporter {
             $detail->setAttribute('numerrors', $numerrors);
             $detail->setAttribute('numwarnings', $numwarnings);
             $summary->appendChild($detail);
+
+            // Append detail condensed information.
+            // (semicolon separated list of comma separated name, status, errors & warnings)
+            $condensedstr .= $id . ',' . $status .',' . $numerrors . ',' . $numwarnings . ';';
         }
 
         // Then the summary status and counters.
@@ -275,12 +280,18 @@ class remote_branch_reporter {
         } else {
             $status = 'success';
         }
+
+        // Complete condensed information, adding the header.
+        $condensedstr = trim('smurf,' . $status .',' . $numerrors . ',' . $numwarnings . ':' . $condensedstr, ';');
+
         $summary->setAttribute('status', $status);
         $summary->setAttribute('numerrors', $numerrors);
         $summary->setAttribute('numwarnings', $numwarnings);
+        $summary->setAttribute('condensedresult', $condensedstr);
 
         // Add the summary to the smurf.
         $smurf->item(0)->insertBefore($summary, $smurf->item(0)->firstChild);
+
      }
 
      /**

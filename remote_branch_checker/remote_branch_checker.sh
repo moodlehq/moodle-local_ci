@@ -319,13 +319,7 @@ if [[ "${format}" != "xml" ]]; then
         --directory="${WORKSPACE}/work" --format=${format} ${filter} > "${WORKSPACE}/work/smurf.${format}"
 fi
 
-# FIXME: Nasty hack to determine if smurf file is empty!
-# (To avoid reachitecting remote_branch_reporter.php at this point in time)
-checksum="$(shasum ${WORKSPACE}/work/smurf.html | cut -d' ' -f1)"
-echo "SHA1: ${checksum}"
+# Look for condensed result in the XML file and output it.
+condensedresult=$(sed -n -e 's/.*condensedresult="\(smurf[^"]*\)".*/\1/p' "${WORKSPACE}/work/smurf.xml")
 
-if [[ "${checksum}" = "692f3061e9ece0acd032c6e8e06ddff060a76eae" ]]; then
-    echo "SMURFILE: OK"
-else
-    echo "SMURFILE: FAILING"
-fi
+echo "SMURFRESULT: ${condensedresult}"
