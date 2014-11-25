@@ -297,9 +297,9 @@ then
     echo "No checkable CSS files detected in patchset."
     echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
 else
-    echo "Unknown csslint error occured:"
+    echo "Unknown csslint error occured. See csslint.out" >> ${errorfile}
+    echo 'csslint exited with error:'
     cat ${WORKSPACE}/work/csslint.out
-    exit 1;
 fi
 
 # ########## ########## ########## ##########
