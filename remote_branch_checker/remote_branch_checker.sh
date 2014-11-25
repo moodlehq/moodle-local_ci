@@ -279,19 +279,27 @@ find $WORKSPACE -type d -path \*/build/\* | sed "s|$WORKSPACE/||" > $WORKSPACE/.
 ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
     --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 
-# Run CSSLINT if css files exist in the patch.
-if grep -q \.css\$ ${WORKSPACE}/work/patchset.files
+# Run CSSLINT
+if [ ! -f ${WORKSPACE}/.csslintrc ]; then
+    echo "csslintrc file not found, defaulting to error checking only"
+    echo '--errors=errors' > ${WORKSPACE}/.csslintrc
+    echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
+fi
+
+${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.out"
+# Unfortunately csslint doesn't give us decent error codes.. so we have to grep:
+if grep -q '<?xml' ${WORKSPACE}/work/csslint.out
 then
-    if [ ! -f ${WORKSPACE}/.csslintrc ]; then
-        echo "csslintrc file not found, defaulting to error checking only"
-        echo '--errors=errors' > ${WORKSPACE}/.csslintrc
-        echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
-    fi
-    ${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.xml"
-else
-    # Unfortunately csslint doesn't like running when there is nothing to lint, so we need to create a dummy:
-    echo "No CSS files detected in patchset so csslint not run."
+    echo "csslint check completed."
+    mv ${WORKSPACE}/work/csslint.out ${WORKSPACE}/work/csslint.xml
+elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
+then
+    echo "No checkable CSS files detected in patchset."
     echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
+else
+    echo "Unknown csslint error occured:"
+    cat ${WORKSPACE}/work/csslint.out
+    exit 1;
 fi
 
 # ########## ########## ########## ##########
