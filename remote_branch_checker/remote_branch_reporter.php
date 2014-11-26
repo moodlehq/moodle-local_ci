@@ -44,12 +44,16 @@ list($options, $unrecognized) = cli_get_params(array(
                                                    'help'   => false,
                                                    'directory' => '',
                                                    'patchset' => false,
-                                                   'format'   => ''),
+                                                   'format'   => '',
+                                                   'repository' => '',
+                                                   'githash' => ''),
                                                array(
                                                    'h' => 'help',
                                                    'd' => 'directory',
                                                    'p' => 'patchset',
-                                                   'f' => 'format'));
+                                                   'f' => 'format',
+                                                   'r' => 'repository',
+                                                   'h' => 'githash'));
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
@@ -65,6 +69,8 @@ Options:
 -d, --directory       Full path to the directory where all the check results are stored
 -p, --patchset        Patchset file name (@ directory) used to filter the problems
 -f, --format          Select the output format (txt, html, xml, xunit), defaults to xml
+-r, --repository      (optional) The git url of the repository - used to auto-create generate diff urls
+-h, --githash         (optional) The git hash at the tip of the branch - used to auto-create generate diff urls
 
 
 Example:
@@ -78,6 +84,8 @@ Example:
 $directory = $options['directory'];
 $format = $options['format'];
 $patchset = $options['patchset'];
+$repository = $options['repository'];
+$githash = $options['githash'];
 
 if (empty($directory) or empty($format)) {
     cli_error('Error: Always specify both directory and format');
@@ -86,5 +94,10 @@ if (empty($directory) or empty($format)) {
 raise_memory_limit(MEMORY_EXTRA);
 
 $reporter = new remote_branch_reporter($directory);
+
+if (!empty($repository) && !empty($githash)) {
+    $reporter->add_remote_branch_info($repository, $githash);
+}
+
 $results = $reporter->run($format, $patchset);
 echo $results;
