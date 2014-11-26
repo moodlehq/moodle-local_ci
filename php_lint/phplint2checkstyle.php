@@ -69,10 +69,10 @@ while ($line = trim(fgets(STDIN))) {
         $message = $matches[2];
         $lineno = 0;
 
-        // We could add the number number here, but it might cause the prechecker to filter out the errors.
-        //  if (preg_match('/on line (\d+)/', $message, $matches)) {
-        //     $lineno = $matches[1];
-        // }
+        if (preg_match('/on line (\d+)/', $message, $matches) === 1) {
+            // Only specify line number when exactly one detected in trace.
+            $lineno = $matches[1];
+        }
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="error" ';

@@ -66,7 +66,8 @@ class remote_branch_reporter {
             'url' => 'http://php.net/docs.php',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
-            'warningweight' => 1);
+            'warningweight' => 1,
+            'allowfiltering' => 0);
         if ($node = $this->apply_xslt($params, $this->directory . '/phplint.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
@@ -248,7 +249,7 @@ class remote_branch_reporter {
         // Iterate over all the 'problem' nodes in the document,
         // filtering them out if no matching is found in the patchset
         $xpath = new DOMXPath($doc);
-        $problems = $xpath->query('//smurf/check/mess/problem');
+        $problems = $xpath->query('//smurf/check[contains(@allowfiltering, "1")]/mess/problem');
         foreach ($problems as $problem) {
             // TODO: Not good to pass the whole array all the time, but ok for now
             if (!$this->problem_matches($problem, $patchsetinfo)) {
