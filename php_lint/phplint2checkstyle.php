@@ -60,7 +60,7 @@ Example:
 }
 
 // Output begins, we always produce the preamble and checkstyle container.
-$output .= '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
+$output = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
 '<checkstyle version="1.3.2">' . PHP_EOL;
 
 while ($line = trim(fgets(STDIN))) {
