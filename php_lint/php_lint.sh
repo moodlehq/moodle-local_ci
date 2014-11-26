@@ -52,19 +52,20 @@ for mfile in ${mfiles} ; do
     # Only run on php files.
     if [[ "${mfile}" =~ ".php" ]] ; then
         fullpath=$gitdir/$mfile
-        echo "${mfile}..."
 
         if [ -e $fullpath ] ; then
-            if $phpcmd -l $fullpath >/dev/null
+            if LINTERRORS=$(($phpcmd -l $fullpath >/dev/null) 2>&1)
             then
-                echo "$mfile: OK"
+                echo "$fullpath - OK"
             else
                 errorfound=1
-                echo "$mfile: PROBLEM"
+                # Filter out the paths from errors:
+                ERRORS=$(echo $LINTERRORS | sed "s#$gitdir##")
+                echo "$fullpath - ERROR: $ERRORS"
             fi
             if grep -q $'\xEF\xBB\xBF' $fullpath
             then
-                echo "$mfile: PROBLEM (BOM character found)"
+                echo "$fullpath - ERROR: BOM character found"
                 errorfound=1
             fi
         else
@@ -72,7 +73,7 @@ for mfile in ${mfiles} ; do
             # get actual file contents from the latest commit to avoid
             # this situation. But in the end we are checking against the
             # current state of the codebase, so its no bad thing..
-            echo "$mfile: SKIPPED (file no longer exists)"
+            echo "$fullpath - SKIPPED (file no longer exists)"
         fi
     fi
 done
