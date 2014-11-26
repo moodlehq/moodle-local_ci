@@ -223,6 +223,11 @@ export issuecode=${issue}
 ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
 cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
 
+# Run the php linter (php_lint)
+export GIT_PREVIOUS_COMMIT=${ancestor}
+export GIT_COMMIT=${integrateto}_precheck
+${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
+cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the

@@ -11,6 +11,7 @@
   <xsl:param name="codedir"/>
   <xsl:param name="errorweight">3</xsl:param>
   <xsl:param name="warningweight">1</xsl:param>
+  <xsl:param name="allowfiltering">1</xsl:param>
 
   <xsl:template match="/">
     <check>
@@ -19,6 +20,7 @@
       <xsl:attribute name="url"><xsl:value-of select="$url"/></xsl:attribute>
       <xsl:attribute name="numerrors"><xsl:value-of select="count(//error[@severity = 'error'])"/></xsl:attribute>
       <xsl:attribute name="numwarnings"><xsl:value-of select="count(//error[@severity != 'error'])"/></xsl:attribute>
+      <xsl:attribute name="allowfiltering"><xsl:value-of select="$allowfiltering"/></xsl:attribute>
       <description>
         <xsl:value-of select="$description"/>
       </description>
