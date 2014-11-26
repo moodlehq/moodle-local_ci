@@ -33,7 +33,7 @@ class remote_branch_reporter {
     /** A diffurl template using {FILE} and {LINENO} */
     protected $diffurltemplate = false;
     /** A commit template using {COMMIT} */
-    protected $commitpagetemplate = false;
+    protected $commiturltemplate = false;
 
     public function __construct($directory) {
         if (!file_exists($directory) or !is_dir($directory) or !is_readable($directory)) {
@@ -198,19 +198,19 @@ class remote_branch_reporter {
             $username = $matches[2];
             $repositoryname = $matches[3];
             $this->diffurltemplate = "https://github.com/$username/$repositoryname/blob/$githashofbranch/{FILE}#L{LINENO}";
-            $this->commitpagetemplate = "https://github.com/$username/$repositoryname/commit/{COMMIT}";
+            $this->commiturltemplate = "https://github.com/$username/$repositoryname/commit/{COMMIT}";
         } else if (preg_match('#^https://bitbucket.org/([^/]+)/([^\./]+)?#', $repositoryurl, $matches)) {
             // Bitbucket.
             $username = $matches[1];
             $repositoryname = $matches[2];
             $this->diffurltemplate = "https://bitbucket.org/$username/$repositoryname/src/$githashofbranch/{FILE}#cl-{LINENO}";
-            $this->commitpagetemplate = "https://bitbucket.org/$username/$repositoryname/commits/{COMMIT}";
+            $this->commiturltemplate = "https://bitbucket.org/$username/$repositoryname/commits/{COMMIT}";
         } else if (preg_match('#^(https|git)://gitorious.org/([^/]+)/([^\./]+)?#', $repositoryurl, $matches)) {
             // Gitorious.
             $username = $matches[2];
             $repositoryname = $matches[3];
             $this->diffurltemplate = "https://gitorious.org/$username/$repositoryname/source/$githashofbranch:{FILE}#L{LINENO}";
-            $this->commitpagetemplate = "https://gitorious.org/$username/$repositoryname/commit/{COMMIT}";
+            $this->commiturltemplate = "https://gitorious.org/$username/$repositoryname/commit/{COMMIT}";
         }
     }
 
@@ -337,30 +337,31 @@ class remote_branch_reporter {
       * @param DomDocument $doc The XML we are going to add diff urls to..
       */
     protected function add_diff_urls($doc) {
-        if (!$this->diffurltemplate) {
-            return;
-        }
+        if ($this->diffurltemplate) {
+            $xpath = new DOMXPath($doc);
 
-        $xpath = new DOMXPath($doc);
-
-        // Populate all the normal problems with git diff urls.
-        $problems = $xpath->query('//check[not(contains(@id, "commit"))]//problem');
-        foreach ($problems as $problem) {
-            if ($problem->hasAttribute('file') && $problem->hasAttribute('linefrom')) {
-                // Is an actual file diff..
-                $diffurl = str_replace('{FILE}', $problem->getAttribute('file'), $this->diffurltemplate);
-                $diffurl = str_replace('{LINENO}', $problem->getAttribute('linefrom'), $diffurl);
-                $problem->setAttribute('diffurl', $diffurl);
+            // Populate all the normal problems with git diff urls.
+            $problems = $xpath->query('//check[not(contains(@id, "commit"))]//problem');
+            foreach ($problems as $problem) {
+                if ($problem->hasAttribute('file') && $problem->hasAttribute('linefrom')) {
+                    // Is an actual file diff..
+                    $diffurl = str_replace('{FILE}', $problem->getAttribute('file'), $this->diffurltemplate);
+                    $diffurl = str_replace('{LINENO}', $problem->getAttribute('linefrom'), $diffurl);
+                    $problem->setAttribute('diffurl', $diffurl);
+                }
             }
         }
 
-        // Now populate the commit message problems with diff urls linking to the commit itself.
-        $problems = $xpath->query('//check[@id="commit"]//problem');
-        foreach ($problems as $problem) {
-            if ($problem->hasAttribute('file')) {
-                // Is a commit identifier..
-                $commiturl = str_replace('{COMMIT}', $problem->getAttribute('file'), $this->commitpagetemplate);
-                $problem->setAttribute('diffurl', $commiturl);
+
+        if ($this->commiturltemplate) {
+            // Now populate the commit message problems with diff urls linking to the commit itself.
+            $problems = $xpath->query('//check[@id="commit"]//problem');
+            foreach ($problems as $problem) {
+                if ($problem->hasAttribute('file')) {
+                    // Is a commit identifier..
+                    $commiturl = str_replace('{COMMIT}', $problem->getAttribute('file'), $this->commiturltemplate);
+                    $problem->setAttribute('diffurl', $commiturl);
+                }
             }
         }
     }
