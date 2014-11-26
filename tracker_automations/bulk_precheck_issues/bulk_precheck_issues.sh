@@ -118,7 +118,7 @@ while read issue; do
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
             branchlink="[${branch}|${joburl}/artifact/work/patchset.diff]"
 
-            if grep -q "SMURFILE: OK" "${resultfile}.jiracli"; then
+            if grep -q "SMURFRESULT: smurf,success" "${resultfile}.jiracli"; then
                codeok=true
             else
                codeok=false
