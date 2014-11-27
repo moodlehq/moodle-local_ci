@@ -228,6 +228,9 @@ export GIT_PREVIOUS_COMMIT=${ancestor}
 export GIT_COMMIT=${integrateto}_precheck
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
+
+${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
+cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/../thirdparty_check/thirdparty2checkstyle.php > "${WORKSPACE}/work/thirdparty.xml"
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the
