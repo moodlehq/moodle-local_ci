@@ -61,7 +61,8 @@ fi
 
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
-    codingerrorsfound=""
+    issueresult="success"
+    echo -n > "${resultfile}.${issue}.txt"
     echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
     # Fetch repository
     ${basereq} --action getFieldValue \
@@ -71,15 +72,28 @@ while read issue; do
     repository=$(cat "${resultfile}.repository")
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        codingerrorsfound=1
+        issueresult="error"
         echo "  (x) Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     else
         echo "  Checked ${issue} using repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
     fi
 
+    # Check if there are testing instructions
+    ${basereq} --action getFieldValue \
+               --issue ${issue} \
+               --field ${cf_testinginstructions} \
+               --file "${resultfile}.testinginstructions" > /dev/null
+    testinginstructions=$(cat "${resultfile}.testinginstructions")
+    rm "${resultfile}.testinginstructions"
+    if [[ -z "${testinginstructions}" ]]; then
+        issueresult="error"
+        echo " - (x) Testing instructions are missing." | tee -a "${resultfile}.${issue}.txt"
+    fi
     # Iterate over the candidate branches
     branchesfound=""
     for candidate in ${cf_branches//,/ }; do
+        branchresult="success"
+        branchcolor="green"
         # Nothing to process with empty repository
         if [[ -z "${repository}" ]]; then
             break
@@ -118,11 +132,60 @@ while read issue; do
             joburl=$(echo ${joburl} | sed 's/ /%20/g')
             branchlink="[${branch}|${joburl}/artifact/work/patchset.diff]"
 
+            # Decide prechecker/smurf result
             if grep -q "SMURFRESULT: smurf,success" "${resultfile}.jiracli"; then
-               codeok=true
+                smurfresult="success"
+            elif grep -q "SMURFRESULT: smurf,warning" "${resultfile}.jiracli"; then
+                smurfresult="warning"
             else
-               codeok=false
-               codingerrorsfound=1
+                smurfresult="error"
+            fi
+
+            # Within the branch things only can become worse
+            if [[ ${smurfresult} == "warning" ]] && [[ ${branchresult} == "success" ]]; then
+                branchresult="warning"
+                branchcolor="orange"
+            elif [[ ${smurfresult} == "error" ]]; then
+                branchresult="error"
+                branchcolor="red"
+            fi
+
+            # Only if SMURFRESULT arrived, calculate different parts
+            condensedresult=''
+            details=''
+            totalcounters=''
+            if grep -q "SMURFRESULT: smurf," "${resultfile}.jiracli"; then
+                condensedresult=$(sed -n -e 's/.*SMURFRESULT: \(smurf,.*\)/\1/p' "${resultfile}.jiracli")
+                # Extract total errors and warnings
+                [[ ${condensedresult} =~ smurf,[^,]*,([^,]*),([^,:]*): ]]
+                errors=${BASH_REMATCH[1]}
+                warnings=${BASH_REMATCH[2]}
+                totalcounters="(${errors} errors / ${warnings} warnings)"
+                # Extract details, spliting, coloring and linking them
+                [[ ${condensedresult} =~ smurf,.*:(.*) ]]
+                detailslist=${BASH_REMATCH[1]};
+                while [[ "${detailslist}" ]]; do
+                    testcolor="green"
+                    detail="${detailslist%%;*}"
+                    if [[ -n "${detail}" ]]; then
+                        [[ ${detail} =~ ([^,]*),([^,]*),([^,]*),([^,]*) ]]
+                        testname=${BASH_REMATCH[1]}
+                        testresult=${BASH_REMATCH[2]}
+                        errors=${BASH_REMATCH[3]}
+                        warnings=${BASH_REMATCH[4]}
+                        if [[ ${testresult} == "warning" ]]; then
+                            testcolor="orange"
+                        elif [[ ${testresult} == "error" ]]; then
+                            testcolor="red"
+                        fi
+                        details="${details} [{color:${testcolor}}${testname} (${errors}/${warnings}){color}|${joburl}/artifact/work/smurf.html#${testname}],"
+                    fi
+                    if [[ "${detailslist}" == "${detail}" ]]; then
+                        detailslist=''
+                    else
+                        detailslist="${detailslist#*;}"
+                    fi
+                done
             fi
             rm "${resultfile}.jiracli"
 
@@ -131,23 +194,32 @@ while read issue; do
             if [[ ${status} -eq 0 ]]; then
 
                 # Output for Jira:
-                if $codeok; then
+                if [[ ${smurfresult} == "success" ]]; then
                     echo -n " - (/)"  >> "${resultfile}.${issue}.txt"
+                elif [[ ${smurfresult} == "warning" ]]; then
+                    echo -n " - (!)"  >> "${resultfile}.${issue}.txt"
                 else
                     echo -n " - (x)"  >> "${resultfile}.${issue}.txt"
                 fi
 
-                echo " $target (branch: ${branchlink} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
-                if ! $codeok; then
-                    echo "  -- [Coding style problems found |${joburl}/artifact/work/smurf.html]" >> "${resultfile}.${issue}.txt"
-                fi
-
-                # Output for console:
+                # Output for Jira
+                echo " {color:${branchcolor}}${target} ${totalcounters}{color} [branch: ${branchlink} | [CI Job|${joburl}]]" >> "${resultfile}.${issue}.txt"
+                # Output for console
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
+
+                # Output details
+                if [[ -n ${details} ]]; then
+                    # Output for Jira, but not if success.
+                    if [[ ${smurfresult} != "success" ]]; then
+                        echo "  -- ${details}" >> "${resultfile}.${issue}.txt"
+                    fi
+                    # Output for console
+                    echo "      -- ${condensedresult}"
+                fi
             else
-                codingerrorsfound=1
+                branchresult="error"
                 # Output for Jira:
-                echo "    - (x) ${target} (branch: ${branchlink} | [CI Job|${joburl}])" >> "${resultfile}.${issue}.txt"
+                echo "    - (x) {color:red}${target}{color} [branch: ${branchlink} | [CI Job|${joburl}]]" >> "${resultfile}.${issue}.txt"
                 # Output for console:
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
 
@@ -160,34 +232,32 @@ while read issue; do
                     perrors=$(echo "${errors}" | sed 's/^/    -- /g')
                     echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
                 else
-                    echo "  -- CI Job exited with status ${status}" | tee -a "${resultfile}.${issue}.txt"
+                    # Failed prechecker and nothing reported via errors, generic error message
+                    echo "  -- CI Job exited with status ${status}. This usually means that you have found some bug in the automated prechecker. Please [report it in the Tracker|https://tracker.moodle.org/secure/CreateIssueDetails!init.jspa?pid=10020&issuetype=1&components=12431&summary=Problem%20with%20job%20XXX] or contact an integrator directly." | tee -a "${resultfile}.${issue}.txt"
                 fi
             fi
+        fi
+
+        # Within the issue things only can become worse
+        if [[ ${branchresult} == "warning" ]] && [[ ${issueresult} == "success" ]]; then
+            issueresult="warning"
+        elif [[ ${branchresult} == "error" ]]; then
+            issueresult="error"
         fi
     done
     # Verify we have processed some branch.
     if [[ ! -z  "${repository}" ]] && [[ -z "${branchesfound}" ]]; then
-        codingerrorsfound=1
+        issueresult="error"
         echo "  (x) Error: all the branch fields are incorrect. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     fi
 
-    # Check if there are testing instructions
-    ${basereq} --action getFieldValue \
-               --issue ${issue} \
-               --field ${cf_testinginstructions} \
-               --file "${resultfile}.testinginstructions" > /dev/null
-    testinginstructions=$(cat "${resultfile}.testinginstructions")
-    rm "${resultfile}.testinginstructions"
-    if [[ -z "${testinginstructions}" ]]; then
-        codingerrorsfound=1
-        echo " - (x) Testing instructions are missing." | tee -a "${resultfile}.${issue}.txt"
-    fi
-
     # Append a +1/-1 to the head of the file..
-    if [[ -z "${codingerrorsfound}" ]]; then
-        printf "+1 code verified against automated checks. :)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+    if [[ ${issueresult} == "success" ]]; then
+        printf ":) *Code verified against automated checks.* (y)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+    elif [[ ${issueresult} == "warning" ]]; then
+        printf "(i) *Code verified against automated checks with warnings.*\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     else
-        printf ":( Fails against automated checks.\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        printf ":( *Fails against automated checks.* (n)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     fi
     mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
 
