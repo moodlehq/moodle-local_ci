@@ -68,7 +68,7 @@ while read issue; do
                --issue ${issue} \
                --field ${cf_repository} \
                --file "${resultfile}.repository" > /dev/null
-    repository=$(cat "${resultfile}.repository")
+    repository=$(cat "${resultfile}.repository" | tr -d ' ')
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
         codingerrorsfound=1
@@ -92,7 +92,7 @@ while read issue; do
                    --issue ${issue} \
                    --field ${cf_branch} \
                    --file "${resultfile}.branch" > /dev/null
-        branch=$(cat "${resultfile}.branch")
+        branch=$(cat "${resultfile}.branch" | tr -d ' ')
         rm "${resultfile}.branch"
 
         # Branch found
