@@ -42,7 +42,7 @@ done
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# First of all, we need a clean clone of moodle in the repository,
+# First of all, we need a clean clone of moodle.git in the repository,
 # verify if it's there or no.
 if [[ ! -d "$WORKSPACE/.git" ]]; then
     echo "Warn: git not found, proceeding to clone git://git.moodle.org/moodle.git"
@@ -50,9 +50,11 @@ if [[ ! -d "$WORKSPACE/.git" ]]; then
     ${gitcmd} clone git://git.moodle.org/moodle.git "${WORKSPACE}"
 fi
 
-# So far, I haven't found a decent way to determine if a bloody remote exists already..
-echo "Adding integration remote unconditionally.."
-cd "${WORKSPACE}" && ${gitcmd} remote add integration git://git.moodle.org/integration.git || echo 'Integration remote already exists'
+# Define the integration.git if does not exist.
+if ! $(git remote -v | grep -q '^integration[[:space:]]]*git:.*integration.git'); then
+    echo "Warn: integration remote not found, adding git://git.moodle.org/integration.git"
+    cd "${WORKSPACE}" && ${gitcmd} remote add integration git://git.moodle.org/integration.git
+fi
 
 # Now, ensure the repository in completely clean.
 echo "Cleaning worktree"
@@ -85,10 +87,12 @@ mkdir ${WORKSPACE}/work
 errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
-# Checkout pristine copy of the configured branch
-cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && ${gitcmd} fetch origin && ${gitcmd} fetch integration && ${gitcmd} reset --hard origin/${integrateto}
+# Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
+cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && \
+${gitcmd} fetch origin && ${gitcmd} fetch integration && \
+${gitcmd} reset --hard origin/${integrateto}
 
-# Create the precheck branch, checking if it exists
+# Create the precheck branch, checking if it exists, defaulting to moodle.git one.
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
 if [[ ${branchexists} -eq 0 ]]; then
     ${gitcmd} checkout -b ${integrateto}_precheck
@@ -96,7 +100,7 @@ else
     ${gitcmd} checkout ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
 fi
 
-# Fetch the remote branch
+# Fetch the remote branch.
 set +e
 ${gitcmd} fetch ${remote} ${branch}
 # record FETCH_HEAD for later
@@ -106,44 +110,51 @@ if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: Unable to fetch information from ${branch} branch at ${remote}." >> ${errorfile}
     exit ${exitstatus}
 fi
-set -e
 
-# Look for the common ancestor and its date, warn if too old
-set +e
+# Look for the common ancestor against moodle.git
 ancestor="$( ${gitcmd} rev-list --boundary origin/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
-
 if [[ ! ${ancestor} ]]; then
-    echo "Error: The ${branch} branch at ${remote} and ${integrateto} does not have any common ancestor." >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." >> ${errorfile}
     exit 1
-else
-    # Ancestor found, if it is old (> 60 days) exit asking for mandatory rebase
-    daysago="${rebaseerror} days ago"
-    recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
-    if [[ ! ${recentancestor} ]]; then
-        echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." >> ${errorfile}
-        exit 1
-    fi
-    # Ancestor found, let's see if it's recent (< 14 days, covers last 2 weeklies)
-    daysago="${rebasewarn} days ago"
-    recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
-    if [[ ! ${recentancestor} ]]; then
-        echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." >> ${errorfile}
-    fi
 fi
-set -e
 
-# Work out the common anestor betwen our remote branch and the integration remote.
+# Look for the common ancestor against integration.git
 integrationancestor="$( ${gitcmd} rev-list --boundary integration/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+# Not sure if this can happen, just imagining rare cases of rewriting history, with moodle.git passing and this failing.
+if [[ ! ${integrationancestor} ]]; then
+    echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." >> ${errorfile}
+    exit 1
+fi
+
 if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     # If the common ancestor is different on the integration remote, it means the branch is based off integration.
-    echo "Warn: the branch is based off integration." >> ${errorfile}
-    echo "Warn: the branch is based off integration."
+    echo "Warn: the branch is based off integration.git" >> ${errorfile}
+    echo "Warn: the branch is based off integration.git"
     $gitcmd reset --hard integration/${integrateto}
     ancestor=$integrationancestor
+else
+    echo "Info: the branch is based off moodle.git" >> ${errorfile}
+    echo "Info: the branch is based off moodle.git"
+fi
+
+# Let the tests and checks to start against the known ancestor.
+
+# If ancestor is old (> 60 days) exit asking for mandatory rebase
+daysago="${rebaseerror} days ago"
+recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
+if [[ ! ${recentancestor} ]]; then
+    echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." >> ${errorfile}
+    exit 1
+fi
+
+# Check ancestor is recent enough (< 14 days, covers last 2 weeklies)
+daysago="${rebasewarn} days ago"
+recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
+if [[ ! ${recentancestor} ]]; then
+    echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." >> ${errorfile}
 fi
 
 # Try to merge the patchset (detecting conflicts)
-set +e
 ${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
