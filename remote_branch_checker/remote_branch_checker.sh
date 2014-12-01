@@ -50,15 +50,17 @@ if [[ ! -d "$WORKSPACE/.git" ]]; then
     ${gitcmd} clone git://git.moodle.org/moodle.git "${WORKSPACE}"
 fi
 
+cd "${WORKSPACE}"
+
 # Define the integration.git if does not exist.
 if ! $(git remote -v | grep -q '^integration[[:space:]]]*git:.*integration.git'); then
     echo "Warn: integration remote not found, adding git://git.moodle.org/integration.git"
-    cd "${WORKSPACE}" && ${gitcmd} remote add integration git://git.moodle.org/integration.git
+    ${gitcmd} remote add integration git://git.moodle.org/integration.git
 fi
 
 # Now, ensure the repository in completely clean.
 echo "Cleaning worktree"
-cd "${WORKSPACE}" && ${gitcmd} clean -dfx && ${gitcmd} reset --hard
+${gitcmd} clean -dfx && ${gitcmd} reset --hard
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -88,9 +90,18 @@ errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
 # Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-cd ${WORKSPACE} && ${gitcmd} checkout ${integrateto} && \
+${gitcmd} checkout ${integrateto} && \
 ${gitcmd} fetch origin && ${gitcmd} fetch integration && \
+# If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
+# if they are not, then it's ok to become affected by other changes that may have landed later.
 ${gitcmd} reset --hard origin/${integrateto}
+
+# We are going to support both checks performed against moodle.git tip (default), and
+# integration.git ancestor if found. Will use this variable for that, ensuring
+# that NEVER it will point to a hash older than moodle.git tip.
+# Get moodle.git (origin) tip as default base commit
+baserepository="origin"
+basecommit=$(${gitcmd} rev-parse --verify HEAD)
 
 # Create the precheck branch, checking if it exists, defaulting to moodle.git one.
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
@@ -127,21 +138,30 @@ if [[ ! ${integrationancestor} ]]; then
 fi
 
 if [[ "${ancestor}" != "${integrationancestor}" ]]; then
-    # If the common ancestor is different on the integration remote, it means the branch is based off integration.
+    # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
+    # so we set the basecommit to point to it.
+    ancestor=${integrationancestor}
+    baserepository="integration"
+    basecommit=${integrationancestor}
     echo "Warn: the branch is based off integration.git" >> ${errorfile}
     echo "Warn: the branch is based off integration.git"
-    $gitcmd reset --hard integration/${integrateto}
-    ancestor=$integrationancestor
+    # If going to check against integration.git, we issue a warning because it's a non-ideal situation,
+    # but given the dynamic nature of that repo, we perform the checks from ancestor and not from tip
+    # to avoid being affected by other's ongoing work, already validated by integrators.
+    $gitcmd reset --hard ${basecommit}
 else
     echo "Info: the branch is based off moodle.git" >> ${errorfile}
     echo "Info: the branch is based off moodle.git"
 fi
 
+echo "Info: base commit "${basecommit}" being used as initial commit." >> ${errorfile}
+echo "Info: base commit "${basecommit}" being used as initial commit."
+
 # Let the tests and checks to start against the known ancestor.
 
 # If ancestor is old (> 60 days) exit asking for mandatory rebase
 daysago="${rebaseerror} days ago"
-recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
+recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" HEAD | grep ${ancestor} )"
 if [[ ! ${recentancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." >> ${errorfile}
     exit 1
@@ -149,33 +169,36 @@ fi
 
 # Check ancestor is recent enough (< 14 days, covers last 2 weeklies)
 daysago="${rebasewarn} days ago"
-recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" --boundary ${integrateto} | grep ${ancestor} )"
+recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" HEAD | grep ${ancestor} )"
 if [[ ! ${recentancestor} ]]; then
     echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." >> ${errorfile}
 fi
 
-# Try to merge the patchset (detecting conflicts)
+# Don't use $ancestor from here any more. $basecommit contains the initial commit to be used everywhere.
+ancestor=
+
+# Try to merge the patchset (detecting conflicts) against the decided basecommit (already checkedout above).
 ${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${integrateto}" >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baserepository}/${integrateto}" >> ${errorfile}
     exit ${exitstatus}
 fi
 set -e
 
 # Verify the number of commits
-numcommits=$(${gitcmd} log ${ancestor}..${integrateto}_precheck --oneline --no-merges | wc -l)
+numcommits=$(${gitcmd} log ${basecommit}..${integrateto}_precheck --oneline --no-merges | wc -l)
 if [[ ${numcommits} -gt ${maxcommits} ]]; then
     echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" >> ${errorfile}
     exit 1
 fi
 
 # Calculate the differences and store them
-${gitcmd} diff ${ancestor}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
+${gitcmd} diff ${basecommit}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
 
 # Generate the patches and store them
 mkdir ${WORKSPACE}/work/patches
-${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${ancestor}
+${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${basecommit}
 cd ${WORKSPACE}/work
 zip -r ${WORKSPACE}/work/patches.zip ./patches
 rm -fr ${WORKSPACE}/work/patches
@@ -242,7 +265,7 @@ set +e
 # TODO: Run the acceptance tests for the affected components
 
 # Run the commit checker (verify_commit_messages)
-export initialcommit=${ancestor}
+export initialcommit=${basecommit}
 export finalcommit=${integrateto}_precheck
 export gitdir="${WORKSPACE}"
 export issuecode=${issue}
@@ -250,7 +273,7 @@ ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/wor
 cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
 
 # Run the php linter (php_lint)
-export GIT_PREVIOUS_COMMIT=${ancestor}
+export GIT_PREVIOUS_COMMIT=${basecommit}
 export GIT_COMMIT=${integrateto}_precheck
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
