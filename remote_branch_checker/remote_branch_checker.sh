@@ -60,7 +60,8 @@ fi
 
 # Now, ensure the repository in completely clean.
 echo "Cleaning worktree"
-${gitcmd} clean -dfx && ${gitcmd} reset --hard
+${gitcmd} clean -dfx
+${gitcmd} reset --hard
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -90,8 +91,9 @@ errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
 # Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-${gitcmd} checkout ${integrateto} && \
-${gitcmd} fetch origin && ${gitcmd} fetch integration && \
+${gitcmd} checkout ${integrateto}
+${gitcmd} fetch origin
+${gitcmd} fetch integration
 # If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
 # if they are not, then it's ok to become affected by other changes that may have landed later.
 ${gitcmd} reset --hard origin/${integrateto}
@@ -101,7 +103,7 @@ ${gitcmd} reset --hard origin/${integrateto}
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
 baserepository="origin"
-basecommit=$(${gitcmd} rev-parse --verify HEAD)
+basecommit=$(${gitcmd} rev-parse --verify origin/${integrateto})
 
 # Create the precheck branch, checking if it exists, defaulting to moodle.git one.
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
@@ -123,14 +125,14 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 
 # Look for the common ancestor against moodle.git
-ancestor="$( ${gitcmd} rev-list --boundary origin/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+ancestor="$(${gitcmd} merge-base FETCH_HEAD origin/${integrateto})"
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." >> ${errorfile}
     exit 1
 fi
 
 # Look for the common ancestor against integration.git
-integrationancestor="$( ${gitcmd} rev-list --boundary integration/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+integrationancestor="$(${gitcmd} merge-base FETCH_HEAD integration/${integrateto})"
 # Not sure if this can happen, just imagining rare cases of rewriting history, with moodle.git passing and this failing.
 if [[ ! ${integrationancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." >> ${errorfile}
@@ -138,6 +140,10 @@ if [[ ! ${integrationancestor} ]]; then
 fi
 
 if [[ "${ancestor}" != "${integrationancestor}" ]]; then
+    echo -n "Info: moodle.git ancestor: "
+    git log --pretty=format:'%h %s' -n1 $ancestor
+    echo -n "Info: integration.git ancestor: "
+    git log --pretty=format:'%h %s' -n1 $integrationancestor
     # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
     # so we set the basecommit to point to it.
     ancestor=${integrationancestor}
