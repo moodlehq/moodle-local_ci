@@ -106,7 +106,7 @@ basecommit=$(${gitcmd} rev-parse --verify HEAD)
 # Create the precheck branch, checking if it exists, defaulting to moodle.git one.
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
 if [[ ${branchexists} -eq 0 ]]; then
-    ${gitcmd} checkout -b ${integrateto}_precheck
+    ${gitcmd} checkout -b ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
 else
     ${gitcmd} checkout ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
 fi
