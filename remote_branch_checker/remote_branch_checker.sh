@@ -123,14 +123,14 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 
 # Look for the common ancestor against moodle.git
-ancestor="$( ${gitcmd} rev-list --boundary origin/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+ancestor="$(${gitcmd} merge-base FETCH_HEAD origin/${integrateto})"
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." >> ${errorfile}
     exit 1
 fi
 
 # Look for the common ancestor against integration.git
-integrationancestor="$( ${gitcmd} rev-list --boundary integration/${integrateto}...FETCH_HEAD | grep ^- | tail -n1 | cut -c2- )"
+integrationancestor="$(${gitcmd} merge-base FETCH_HEAD integration/${integrateto})"
 # Not sure if this can happen, just imagining rare cases of rewriting history, with moodle.git passing and this failing.
 if [[ ! ${integrationancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." >> ${errorfile}
@@ -138,6 +138,10 @@ if [[ ! ${integrationancestor} ]]; then
 fi
 
 if [[ "${ancestor}" != "${integrationancestor}" ]]; then
+    echo -n "Info: moodle.git ancestor: "
+    git log --pretty=format:'%h %s' -n1 $ancestor
+    echo -n "Info: integration.git ancestor: "
+    git log --pretty=format:'%h %s' -n1 $integrationancestor
     # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
     # so we set the basecommit to point to it.
     ancestor=${integrationancestor}
