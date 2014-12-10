@@ -60,7 +60,8 @@ fi
 
 # Now, ensure the repository in completely clean.
 echo "Cleaning worktree"
-${gitcmd} clean -dfx && ${gitcmd} reset --hard
+${gitcmd} clean -dfx
+${gitcmd} reset --hard
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -90,8 +91,9 @@ errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
 # Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-${gitcmd} checkout ${integrateto} && \
-${gitcmd} fetch origin && ${gitcmd} fetch integration && \
+${gitcmd} checkout ${integrateto}
+${gitcmd} fetch origin
+${gitcmd} fetch integration
 # If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
 # if they are not, then it's ok to become affected by other changes that may have landed later.
 ${gitcmd} reset --hard origin/${integrateto}
@@ -101,7 +103,7 @@ ${gitcmd} reset --hard origin/${integrateto}
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
 baserepository="origin"
-basecommit=$(${gitcmd} rev-parse --verify HEAD)
+basecommit=$(${gitcmd} rev-parse --verify origin/${integrateto})
 
 # Create the precheck branch, checking if it exists, defaulting to moodle.git one.
 branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
