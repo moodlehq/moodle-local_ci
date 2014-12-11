@@ -13,5 +13,4 @@ ${basereq} --action removeLabels \
 comment=$(cat "${resultfile}.${issue}.txt")
 ${basereq} --action addComment \
     --issue ${issue} \
-    --comment "${comment}" \
-    --role "Integrators"
+    --comment "${comment}"
