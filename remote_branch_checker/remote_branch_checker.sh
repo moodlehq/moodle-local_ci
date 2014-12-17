@@ -90,6 +90,14 @@ mkdir ${WORKSPACE}/work
 errorfile=${WORKSPACE}/work/errors.txt
 touch ${errorfile}
 
+# Calculate if the execution is a isplugin one (in order to skip some of the checks)
+isplugin=""
+if [[ ${issue} =~ ^PLUGIN-[0-9]* ]]; then
+    isplugin="yes"
+    echo "Info: Plugin execution detected ${issue}" >> ${errorfile}
+    echo "Info: Plugin execution detected ${issue}"
+fi
+
 # Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
 ${gitcmd} checkout ${integrateto}
 ${gitcmd} fetch origin
@@ -271,12 +279,15 @@ set +e
 # TODO: Run the acceptance tests for the affected components
 
 # Run the commit checker (verify_commit_messages)
-export initialcommit=${basecommit}
-export finalcommit=${integrateto}_precheck
-export gitdir="${WORKSPACE}"
-export issuecode=${issue}
-${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
-cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
+# We skip this if the requested build is $isplugin
+if [[ -z "${isplugin}" ]]; then
+    export initialcommit=${basecommit}
+    export finalcommit=${integrateto}_precheck
+    export gitdir="${WORKSPACE}"
+    export issuecode=${issue}
+    ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
+    cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
+fi
 
 # Run the php linter (php_lint)
 export GIT_PREVIOUS_COMMIT=${basecommit}
