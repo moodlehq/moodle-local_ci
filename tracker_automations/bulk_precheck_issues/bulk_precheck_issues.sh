@@ -253,7 +253,7 @@ while read issue; do
 
     # Append a +1/-1 to the head of the file..
     if [[ ${issueresult} == "success" ]]; then
-        printf ":) *Code verified against automated checks.* (y)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        printf ":) *Code verified against automated checks.* !https://twemoji.maxcdn.com/svg/1f384.svg|height=23, width=23!\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     elif [[ ${issueresult} == "warning" ]]; then
         printf "(i) *Code verified against automated checks with warnings.*\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     else
