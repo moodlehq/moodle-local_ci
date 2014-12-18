@@ -271,6 +271,14 @@ set +e
 #${phpcmd} ${mydir}/../copy_paste_detector/copy_paste_detector.php \
 #    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
+# Set some variables used by various scripts.
+export gitdir="${WORKSPACE}"
+export issuecode=${issue}
+export initialcommit=${basecommit}
+export GIT_PREVIOUS_COMMIT=${initialcommit}
+export finalcommit=${integrateto}_precheck
+export GIT_COMMIT=${finalcommit}
+
 # TODO: Run the db install/upgrade comparison check
 # (only if there is any *install* or *upgrade* file involved)
 
@@ -281,17 +289,11 @@ set +e
 # Run the commit checker (verify_commit_messages)
 # We skip this if the requested build is $isplugin
 if [[ -z "${isplugin}" ]]; then
-    export initialcommit=${basecommit}
-    export finalcommit=${integrateto}_precheck
-    export gitdir="${WORKSPACE}"
-    export issuecode=${issue}
     ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
     cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
 fi
 
 # Run the php linter (php_lint)
-export GIT_PREVIOUS_COMMIT=${basecommit}
-export GIT_COMMIT=${integrateto}_precheck
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
 
