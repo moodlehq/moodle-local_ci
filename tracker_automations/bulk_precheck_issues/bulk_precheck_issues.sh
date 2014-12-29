@@ -49,6 +49,9 @@ fi
 
 echo "Using criteria: ${criteria}"
 
+# Include some utility functions
+. "${mydir}/util.sh"
+
 # Execute the criteria query. It will save a list of issues (format 101) to $resultfile.
 . "${mydir}/criteria/${criteria}/query.sh"
 
@@ -253,11 +256,13 @@ while read issue; do
 
     # Append a +1/-1 to the head of the file..
     if [[ ${issueresult} == "success" ]]; then
-        printf ":) *Code verified against automated checks.* !https://twemoji.maxcdn.com/svg/1f384.svg|height=23, width=23!\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        emoticon=$(positive_tracker_emoticon)
+        printf ":) *Code verified against automated checks.* ${emoticon}\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     elif [[ ${issueresult} == "warning" ]]; then
         printf "(i) *Code verified against automated checks with warnings.*\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     else
-        printf ":( *Fails against automated checks.* (n)\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
+        emoticon=$(negative_tracker_emoticon)
+        printf ":( *Fails against automated checks.* ${emoticon}\n\n" | cat - "${resultfile}.${issue}.txt" > "${resultfile}.${issue}.txt.tmp"
     fi
     mv "${resultfile}.${issue}.txt.tmp" "${resultfile}.${issue}.txt"
 
