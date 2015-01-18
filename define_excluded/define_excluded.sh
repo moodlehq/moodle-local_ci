@@ -79,6 +79,26 @@ yui/build/
 *.png
 *.svg"
 
+# Now, look for all the thirdpartylibs.xml in codebase, adding
+# all the found locations to the list of excluded.
+if [[ -n ${gitdir} ]]; then
+    for file in $(find ${gitdir} -name thirdpartylibs.xml); do
+        absolutebase=$(dirname ${file})
+        # Everything relative to gitdir (diroot).
+        base=${absolutebase#${gitdir}/}
+        for location in $(sed -n 's/^.*<location>\(.*\)<\/location>.*$/\1/p' "${file}"); do
+            if [[ -d "${gitdir}/${base}/${location}" ]]; then
+                excluded+=$'\n'"${base}/${location}/"
+            else
+                excluded+=$'\n'"${base}/${location}"
+            fi
+        done
+    done
+fi
+
+# Sort and get rid of dupes, they (maybe) are legion.
+excluded=$(echo "${excluded}" | sort -u)
+
 # Some well-known exceptions... to be deleted once the branch
 # gets out from support
 if [[ ${gitbranch} == "MOODLE_19_STABLE" ]]
@@ -93,7 +113,7 @@ for i in ${excluded}
 do
     excluded_grep="${excluded_grep}|/${i}"
 done
-excluded_grep=${excluded_grep//|\/\.git/\/.git}
+excluded_grep=${excluded_grep#|}
 excluded_grep=${excluded_grep//\./\\.}
 
 # Exclude syntax for phpcpd/phploc../phploc... (list of exclude parameters without trailing slash)
@@ -116,7 +136,7 @@ for i in ${excluded}
 do
     excluded_comma="${excluded_comma},${i}"
 done
-excluded_comma=${excluded_comma//,\.git/.git}
+excluded_comma=${excluded_comma#,}
 
 # Exclude syntax for phpcs (coma separated with * wildcards)
 excluded_comma_wildchars=""
@@ -124,5 +144,5 @@ for i in ${excluded}
 do
     excluded_comma_wildchars="${excluded_comma_wildchars},*/${i}*"
 done
-excluded_comma_wildchars=${excluded_comma_wildchars//,\*\/\.git/*\/.git}
+excluded_comma_wildchars=${excluded_comma_wildchars#,}
 excluded_comma_wildchars=${excluded_comma_wildchars//\./\\.}
