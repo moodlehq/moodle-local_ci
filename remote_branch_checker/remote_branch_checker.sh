@@ -81,6 +81,8 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
 fi
 
 # List of excluded dirs
+export gitdir="${WORKSPACE}"
+export gitbranch="${integrateto}"
 . ${mydir}/../define_excluded/define_excluded.sh
 
 # Create the work directory where all the tasks will happen/be stored
@@ -272,7 +274,6 @@ set +e
 #    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
 
 # Set some variables used by various scripts.
-export gitdir="${WORKSPACE}"
 export issuecode=${issue}
 export initialcommit=${basecommit}
 export GIT_PREVIOUS_COMMIT=${initialcommit}
