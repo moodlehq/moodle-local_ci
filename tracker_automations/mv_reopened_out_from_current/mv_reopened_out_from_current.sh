@@ -57,6 +57,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
+        --fixVersions "" \
         --custom "customfield_10211:" \
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_ID ${issue}" >> "${logfile}"
