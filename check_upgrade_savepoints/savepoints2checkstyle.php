@@ -94,7 +94,7 @@ foreach ($reportarr as $line) {
         $output .= '  <file name="' . $cfile . '">' . PHP_EOL;
         // Use line and column 0, we don't really know the real line in the original format
         $output .= '    <error line="0" column="0" severity="' . $cseverity . '" message="' .
-            trim(preg_replace('/^    \+ (ERROR|WARN):(.*)$/', '$2', $line)) . ' "/>' . PHP_EOL;
+           s(trim(preg_replace('/^    \+ (ERROR|WARN):(.*)$/', '$2', $line))) . ' "/>' . PHP_EOL;
         $output .= '  </file>' . PHP_EOL;
     }
 }
