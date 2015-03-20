@@ -80,7 +80,7 @@ while ($line = trim(fgets(STDIN))) {
     // Arrived here, we have a correct line.
     $ccommit = $matches[1];
     $cseverity = $matches[2];
-    $cmessage = $matches[3];
+    $cmessage = htmlspecialchars($matches[3]);
 
     // Severity found, output xml
     if (!empty($cseverity)) {
