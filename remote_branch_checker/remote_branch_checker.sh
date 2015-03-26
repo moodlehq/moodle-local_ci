@@ -94,7 +94,7 @@ touch ${errorfile}
 
 # Calculate if the execution is a isplugin one (in order to skip some of the checks)
 isplugin=""
-if [[ ${issue} =~ ^PLUGIN-[0-9]* ]]; then
+if [[ ${issue} =~ ^PLUGIN-[0-9]+$ ]]; then
     isplugin="yes"
     echo "Info: Plugin execution detected ${issue}" >> ${errorfile}
     echo "Info: Plugin execution detected ${issue}"
