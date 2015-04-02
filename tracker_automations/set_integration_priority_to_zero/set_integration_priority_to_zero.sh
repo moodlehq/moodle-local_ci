@@ -27,15 +27,19 @@ logfile=$WORKSPACE/set_integration_priority_to_zero.log
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
 
-# Let's search all the issues under current integration having empty integration priority
+# Let's search all the issues in Moodle project having empty integration priority and
+# being under current integration or awaiting integration.
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
-                 AND 'Currently in integration' = 'Yes' \
-                 AND 'Integration priority' IS EMPTY" \
+                 AND 'Integration priority' IS EMPTY \
+                 AND ( \
+                       'Currently in integration' = 'Yes' \
+                       OR status = 'Waiting for integration review')" \
            --file "${resultfile}"
 
 # Iterate over found issues and set their integration priority (customfield_12210) to 0.
@@ -45,5 +49,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         --issue ${issue} \
         --step "CI Global Self-Transition" \
         --custom "customfield_12210:0"
-    echo "$BUILD_NUMBER $BUILD_ID ${issue}" >> "${logfile}"
+    echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
+
+# Remove the resultfile. We don't want to disclose those details.
+rm -fr "${resultfile}"
