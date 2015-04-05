@@ -482,7 +482,22 @@ class remote_branch_reporter {
         if (empty($xmlcontents)) {
             return null;
         }
-        $xml = new SimpleXMLElement($xmlcontents);
+
+        // Detect problems parsing XML file and return false.
+        $errorstatus = libxml_use_internal_errors(true);
+        try {
+            $xml = new SimpleXMLElement($xmlcontents);
+        } catch (Exception $e) {
+            $xml = null;
+        }
+
+        // Reset error handling to original one.
+        libxml_use_internal_errors($errorstatus);
+
+        // Something was wrong with the XML.
+        if ($xml === null) {
+            return null;
+        }
 
         // Read $xslt.
         $xslt = new XSLTProcessor();
