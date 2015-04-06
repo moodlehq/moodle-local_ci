@@ -42,6 +42,7 @@ lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
 lib/tests/fixtures/tabfile.csv
+lib/tests/fixtures/timezonewindows.xml
 lib/typo3/
 lib/yui/2.9.0/
 lib/yui/3.4.1/
