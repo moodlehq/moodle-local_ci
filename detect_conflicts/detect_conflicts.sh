@@ -26,7 +26,8 @@ do
     then
         continue
     fi
-    content=`grep -PIn '^(<<<<<<|>>>>>>)' $i`
+    # note cannot look for ={7} because it matches legit txt/markdown titles.
+    content=`grep -PIn '^(<{7}|\|{7}|>{7}) ' $i`
     if [ ! -z "$content" ]
     then
         echo "## $i ##" >> "$lastfile"
