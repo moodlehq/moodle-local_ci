@@ -59,7 +59,7 @@ git fetch security
 $gitcmd ls-remote --exit-code --heads integration $branch > /dev/null ||
     exit_with_error "Integration branch $branch not found in integration.git. Something serious has gone wrong!"
 
-# Verify that the upstream-branch exists.
+# Verify that the reference branch exists.
 $gitcmd ls-remote --exit-code --heads security $referencebranch > /dev/null ||
     exit_with_error "Reference branch $referencebranch not found in security.git. Needs manual fix."
 
