@@ -80,11 +80,6 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
         set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
 fi
 
-# List of excluded dirs
-export gitdir="${WORKSPACE}"
-export gitbranch="${integrateto}"
-. ${mydir}/../define_excluded/define_excluded.sh
-
 # Create the work directory where all the tasks will happen/be stored
 mkdir ${WORKSPACE}/work
 
@@ -244,6 +239,15 @@ mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 # Add .jshint & .csslintrc to patchset files to avoid it being deleted for use later..
 echo '.jshint' >> ${WORKSPACE}/work/patchset.files
 echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
+
+# List of excluded paths
+export gitdir="${WORKSPACE}"
+export gitbranch="${integrateto}"
+. ${mydir}/../define_excluded/define_excluded.sh
+
+echo "List of excluded paths"
+echo "${excluded}"
+echo
 
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
