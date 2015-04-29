@@ -91,8 +91,7 @@ touch ${errorfile}
 isplugin=""
 if [[ ${issue} =~ ^PLUGIN-[0-9]+$ ]]; then
     isplugin="yes"
-    echo "Info: Plugin execution detected ${issue}" >> ${errorfile}
-    echo "Info: Plugin execution detected ${issue}"
+    echo "Info: Plugin execution detected ${issue}" | tee -a ${errorfile}
 fi
 
 # Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
@@ -125,14 +124,14 @@ ${gitcmd} fetch ${remote} ${branch}
 remotesha=$(git rev-parse --verify FETCH_HEAD)
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: Unable to fetch information from ${branch} branch at ${remote}." >> ${errorfile}
+    echo "Error: Unable to fetch information from ${branch} branch at ${remote}." | tee -a ${errorfile}
     exit ${exitstatus}
 fi
 
 # Look for the common ancestor against moodle.git
 ancestor="$(${gitcmd} merge-base FETCH_HEAD origin/${integrateto})"
 if [[ ! ${ancestor} ]]; then
-    echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." | tee -a ${errorfile}
     exit 1
 fi
 
@@ -140,7 +139,7 @@ fi
 integrationancestor="$(${gitcmd} merge-base FETCH_HEAD integration/${integrateto})"
 # Not sure if this can happen, just imagining rare cases of rewriting history, with moodle.git passing and this failing.
 if [[ ! ${integrationancestor} ]]; then
-    echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." | tee -a ${errorfile}
     exit 1
 fi
 
@@ -154,19 +153,16 @@ if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     ancestor=${integrationancestor}
     baserepository="integration"
     basecommit=${integrationancestor}
-    echo "Warn: the branch is based off integration.git" >> ${errorfile}
-    echo "Warn: the branch is based off integration.git"
+    echo "Warn: the branch is based off integration.git" | tee -a ${errorfile}
     # If going to check against integration.git, we issue a warning because it's a non-ideal situation,
     # but given the dynamic nature of that repo, we perform the checks from ancestor and not from tip
     # to avoid being affected by other's ongoing work, already validated by integrators.
     $gitcmd reset --hard ${basecommit}
 else
-    echo "Info: the branch is based off moodle.git" >> ${errorfile}
-    echo "Info: the branch is based off moodle.git"
+    echo "Info: the branch is based off moodle.git" | tee -a ${errorfile}
 fi
 
-echo "Info: base commit "${basecommit}" being used as initial commit." >> ${errorfile}
-echo "Info: base commit "${basecommit}" being used as initial commit."
+echo "Info: base commit "${basecommit}" being used as initial commit." | tee -a ${errorfile}
 
 # Let the tests and checks to start against the known ancestor.
 
@@ -174,7 +170,7 @@ echo "Info: base commit "${basecommit}" being used as initial commit."
 daysago="${rebaseerror} days ago"
 recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" HEAD | grep ${ancestor} )"
 if [[ ! ${recentancestor} ]]; then
-    echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} is very old (>${daysago}). Please rebase against current ${integrateto}." | tee -a ${errorfile}
     exit 1
 fi
 
@@ -182,7 +178,7 @@ fi
 daysago="${rebasewarn} days ago"
 recentancestor="$( ${gitcmd} rev-list --after "'${daysago}'" HEAD | grep ${ancestor} )"
 if [[ ! ${recentancestor} ]]; then
-    echo "Warning: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." >> ${errorfile}
+    echo "Warn: The ${branch} branch at ${remote} has not been rebased recently (>${daysago})." | tee -a ${errorfile}
 fi
 
 # Don't use $ancestor from here any more. $basecommit contains the initial commit to be used everywhere.
@@ -192,7 +188,7 @@ ancestor=
 ${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baserepository}/${integrateto}" >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baserepository}/${integrateto}" | tee -a ${errorfile}
     exit ${exitstatus}
 fi
 set -e
@@ -200,7 +196,7 @@ set -e
 # Verify the number of commits
 numcommits=$(${gitcmd} log ${basecommit}..${integrateto}_precheck --oneline --no-merges | wc -l)
 if [[ ${numcommits} -gt ${maxcommits} ]]; then
-    echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" >> ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" | tee -a ${errorfile}
     exit 1
 fi
 
@@ -221,7 +217,7 @@ ${phpcmd} ${mydir}/../diff_extract_changes/diff_extract_changes.php \
     --diff=${WORKSPACE}/work/patchset.diff --output=xml > ${WORKSPACE}/work/patchset.xml
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: Unable to generate patchset.xml information." >> ${errorfile}
+    echo "Error: Unable to generate patchset.xml information." | tee -a ${errorfile}
     exit ${exitstatus}
 fi
 set -e
@@ -233,7 +229,7 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
     awk -v w="${WORKSPACE}" -F\" '{print w"/"$2}' )" > ${WORKSPACE}/work/patchset.files
 
 # Trim patchset.files from any blank line (cannot use in-place sed).
-sed '/^$/d' ${WORKSPACE}/work/patchset.files >  ${WORKSPACE}/work/patchset.files.tmp
+sed '/^$/d' ${WORKSPACE}/work/patchset.files > ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
 # Add .jshint & .csslintrc to patchset files to avoid it being deleted for use later..
@@ -380,7 +376,7 @@ then
     echo "No checkable CSS files detected in patchset."
     echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
 else
-    echo "Unknown csslint error occured. See csslint.out" >> ${errorfile}
+    echo "Warn: Unknown csslint error occured. See csslint.out" >> ${errorfile}
     echo 'csslint exited with error:'
     cat ${WORKSPACE}/work/csslint.out
 fi
