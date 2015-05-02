@@ -13,6 +13,8 @@
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 # $extrapath: Extra paths to be available (global)
+# $gcinterval: Number of runs before performing a manual gc of the repo. Defaults to 25. 0 means disabled.
+# $gcaggressiveinterval: Number of runs before performing an aggressive gc of the repo. Defaults to 900. 0 means disabled.
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -29,6 +31,8 @@ format=${format:-html}
 maxcommits=${maxcommits:-15}
 rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
+gcinterval=${gcinterval:-25}
+gcaggressiveinterval=${gcaggressiveinterval:-900}
 
 # Verify everything is set
 required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto"
@@ -62,6 +66,21 @@ fi
 echo "Cleaning worktree"
 ${gitcmd} clean -dfx
 ${gitcmd} reset --hard
+
+# Let's verify if a git gc is required.
+
+random=${RANDOM}
+if [[ -n "${BUILD_TAG}" ]]; then # Running jenkins, use build number.
+    random=${BUILD_NUMBER}
+fi
+
+if [[ ${gcaggressiveinterval} -gt 0 ]] && [[ $((${random} % ${gcaggressiveinterval})) -eq 0 ]]; then
+    echo "Executing git gc --aggressive"
+    ${gitcmd} gc --aggressive --quiet
+elif [[ ${gcinterval} -gt 0 ]] && [[ $((${random} % ${gcinterval})) -eq 0 ]]; then
+    echo "Executing git gc"
+    ${gitcmd} gc --quiet
+fi
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -316,10 +335,11 @@ for todelete in ${excluded}; do
 done
 
 # Remove all the files, but the patchset ones and .git and work
-find ${WORKSPACE} -type f | grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
+find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" \) | \
+    grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
 
 # Remove all the empty dirs remaining, but .git and work
-find ${WORKSPACE} -type d -depth -empty -not \( -name .git -o -name work -prune \) -delete
+find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \) -delete
 
 # ########## ########## ########## ##########
 
