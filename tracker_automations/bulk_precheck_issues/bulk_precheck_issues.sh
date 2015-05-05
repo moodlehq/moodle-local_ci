@@ -231,7 +231,9 @@ while read issue; do
                 errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
                 curlstatus=${PIPESTATUS[0]}
                 set -e
-                if [[ ! -z "${errors}" ]] && [[ ${curlstatus} -eq 0 ]]; then
+                # Look if the file contains some controlled error.
+                if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep "Error:") ]]; then
+                    # controlled errors, print them.
                     perrors=$(echo "${errors}" | sed 's/^/    -- /g')
                     echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
                 else
