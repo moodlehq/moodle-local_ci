@@ -41,6 +41,7 @@ lib/smarty/
 lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
+lib/tests/fixtures/messageinbound/
 lib/tests/fixtures/tabfile.csv
 lib/tests/fixtures/timezonewindows.xml
 lib/typo3/
