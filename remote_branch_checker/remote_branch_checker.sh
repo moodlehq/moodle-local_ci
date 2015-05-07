@@ -371,8 +371,8 @@ ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
 ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
     --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
-# Generate the built yui directories present to exclude from jshint..
-find $WORKSPACE -type d -path \*/build/\* | sed "s|$WORKSPACE/||" > $WORKSPACE/.jshintignore
+# Exclude build directories from the results (e.g. lib/yui/build, lib/amd/build/)
+find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jshintignore
 
 # Run the JSHINT (using the checked out .jshint file)
 ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
