@@ -113,10 +113,25 @@ if [[ ${issue} =~ ^PLUGIN-[0-9]+$ ]]; then
     echo "Info: Plugin execution detected ${issue}" | tee -a ${errorfile}
 fi
 
-# Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-${gitcmd} checkout ${integrateto}
+# Fetch everything from remotes
 ${gitcmd} fetch origin
 ${gitcmd} fetch integration
+
+# Verify the ${integrateto} branch already exists locally.
+if [[ ! $(${gitcmd} rev-parse --quiet --verify ${integrateto}) ]]; then
+    echo "Info: The branch ${integrateto} does not exist locally" | tee -a ${errorfile}
+    # Verify the remote ${integrateto} branch exists and branch locally tracking it.
+    if [[ $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
+        echo "Info: Branch ${integrateto} found at origin. Branching locally tracking it" | tee -a ${errorfile}
+        ${gitcmd} branch ${integrateto} --track origin/${integrateto}
+    else
+        echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
+        exit 1
+    fi
+fi
+
+# Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
+${gitcmd} checkout ${integrateto}
 # If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
 # if they are not, then it's ok to become affected by other changes that may have landed later.
 ${gitcmd} reset --hard origin/${integrateto}
