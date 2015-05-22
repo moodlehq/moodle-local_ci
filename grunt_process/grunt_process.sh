@@ -47,16 +47,16 @@ else
 fi
 
 # Verify we have already the gitbranch dir, creating if needed
-if [[ ! -d ${npmbase}/${gitbranch} ]]; then
+if [[ ! -d ${npmbase}/${gitbranch}/node_modules ]]; then
     echo "WARN: npmbase for branch (${gitbranch}) not found. Creating it"
-    mkdir -p ${npmbase}/${gitbranch}
+    mkdir -p ${npmbase}/${gitbranch}/node_modules
     echo "NOTE: npmbase for branch (${gitbranch}) created"
 else
     echo "OK: npmbase for branch (${gitbranch}) found"
 fi
 
 # Linking it.
-ln -fs ${npmbase}/${gitbranch} ${gitdir}/node_modules
+ln -fs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
 
 # Verify there is a grunt executable available, installing everrything if missing
 if [[ ! -f ${gitdir}/node_modules/grunt-cli/bin/grunt ]]; then
