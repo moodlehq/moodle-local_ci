@@ -56,7 +56,7 @@ else
 fi
 
 # Linking it.
-ln -fs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
+ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
 
 # Verify there is a grunt executable available, installing everrything if missing
 if [[ ! -f ${gitdir}/node_modules/grunt-cli/bin/grunt ]]; then

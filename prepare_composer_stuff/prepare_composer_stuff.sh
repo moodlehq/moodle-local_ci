@@ -50,4 +50,4 @@ echo "Linking ${composerdir}/vendor from ${gitdir}/vendor"
 if [[ -L ${gitdir}/vendor ]]; then
     rm -f ${gitdir}/vendor
 fi
-ln -s ${composerdir}/vendor ${gitdir}/vendor
+ln -nfs ${composerdir}/vendor ${gitdir}/vendor
