@@ -8,6 +8,7 @@
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
 #cf_testinginstructions: id for testing instructions custom field (customfield_10117)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
+#maxcommits: max number of commits allowed in the branch. Defaults to 100.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
 #jenkinsjobname: job in the server that we are going to execute
 #jenkinsserver: private jenkins server url (where the prechecker will be executed.
@@ -49,13 +50,15 @@ fi
 
 echo "Using criteria: ${criteria}"
 
+# Maxcommits limit to apply, defaulting to 100.
+maxcommits=${maxcommits:-100}
+
 # Include some utility functions
 . "${mydir}/util.sh"
 
 # Execute the criteria query. It will save a list of issues (format 101) to $resultfile.
 . "${mydir}/criteria/${criteria}/query.sh"
 
-maxcommits=100
 # Some criteria might want to override default settings.
 if [[ -f "${mydir}/criteria/${criteria}/override-defaults.sh" ]]; then
     echo "Applying additional defaults from criteria: ${criteria}"
