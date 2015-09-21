@@ -53,6 +53,7 @@ class remote_branch_reporter {
 
         // Main smurf Dom where everything will be aggregated
         $doc = new DomDocument();
+        $doc->formatOutput = true; // To workaround some "sed" limits with too long lines.
         $smurf = $doc->createElement('smurf');
         $smurf->setAttribute('version', '0.9.1');
 
