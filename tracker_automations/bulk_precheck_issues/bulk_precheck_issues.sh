@@ -8,7 +8,8 @@
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
 #cf_testinginstructions: id for testing instructions custom field (customfield_10117)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
-#maxcommits: max number of commits allowed in the branch. Defaults to 100.
+#$maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
+#$maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
 #jenkinsjobname: job in the server that we are going to execute
 #jenkinsserver: private jenkins server url (where the prechecker will be executed.
@@ -50,8 +51,9 @@ fi
 
 echo "Using criteria: ${criteria}"
 
-# Maxcommits limit to apply, defaulting to 100.
-maxcommits=${maxcommits:-100}
+# Apply some defaults
+maxcommitswarn=${maxcommitswarn:-10}
+maxcommitserror=${maxcommitserror:-100}
 
 # Include some utility functions
 . "${mydir}/util.sh"
@@ -125,7 +127,8 @@ while read issue; do
                       build "${jenkinsjobname}" \
                       -p "remote=${repository}" -p "branch=${branch}" \
                       -p "integrateto=${target}" -p "issue=${issue}" \
-                      -p "filtering=true" -p "format=html" -p "maxcommits=${maxcommits}" \
+                      -p "filtering=true" -p "format=html" \
+                      -p "maxcommitswarn=${maxcommitswarn}" -p "maxcommitserror=${maxcommitserror}" \
                       -s -v > "${resultfile}.jiracli"
             status=${PIPESTATUS[0]}
             set -e

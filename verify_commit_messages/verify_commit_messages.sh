@@ -4,6 +4,8 @@
 # $initialcommit: hash of the initial commit
 # $finalcommit: hash of the final commit
 # $issuecode: code of the issue to verify
+# $maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
+# $maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 # $debug: to return results in human-readable format for debugging
 # $verifyissuecodeinmerge: to apply the issue code matching checks to merge commits.
 
@@ -36,6 +38,9 @@ templateissuecode=MDL-[0-9]{3,6}
 if [[ -z ${issuecode} ]]; then
     hasissuecode=""
 fi
+# Apply some defaults
+maxcommitswarn=${maxcommitswarn:-10}
+maxcommitserror=${maxcommitserror:-100}
 # ensure we have debug, verifyissuecodeinmerge defined, defaulting to disabled.
 debug="${debug:-}"
 verifyissuecodeinmerge="${verifyissuecodeinmerge:-}"
@@ -72,6 +77,7 @@ commits=$(${gitcmd} rev-list --abbrev-commit ${initialcommit}..${finalcommit})
 # iterate over all commits, performing checks and reporting problems/status
 totalnumproblems=0
 mergecommits=0
+normalcommits=0
 for c in ${commits}; do
     ismerge=""
     numproblems=0
@@ -81,6 +87,8 @@ for c in ${commits}; do
     if [[ ${numparents} -gt 1 ]]; then
         ismerge=1
         mergecommits=$((mergecommits+1))
+    else
+        normalcommits=$((normalcommits+1))
     fi
     # output information with debug enabled
     if [[ $debug ]];then
@@ -200,10 +208,22 @@ for c in ${commits}; do
     fi
     totalnumproblems=$((totalnumproblems+numproblems))
 done
-# should not be more than 1 merge commit when inspecting dev branches.
+# Now perform various checks with info gathered in the loop.
+# should not be more than 1 merge commit when inspecting dev branches, warn about it.
 if [[ ${mergecommits} -gt 1 ]]; then
     echo "${initialcommit}...${finalcommit}*warning*Multiple merge commits (${mergecommits}) found. Please verify."
-    totalnumproblems=$((totalnumproblems+numproblems))
+    totalnumproblems=$((totalnumproblems+1))
+fi
+# should not be more than maxcommitserror commits, error about it.
+if [[ ${normalcommits} -gt ${maxcommitserror} ]]; then
+    echo "${initialcommit}...${finalcommit}*error*Too many commits (${normalcommits} > ${maxcommitserror}) found. Please check. This should not happen normally."
+    totalnumproblems=$((totalnumproblems+1))
+else
+    # should not be more than maxcommitswarn commits, warn about it.
+    if [[ ${normalcommits} -gt ${maxcommitswarn} ]]; then
+        echo "${initialcommit}...${finalcommit}*warning*Too many commits (${normalcommits} > ${maxcommitswarn}) found. Please consider reducing it for normal patches."
+        totalnumproblems=$((totalnumproblems+1))
+    fi
 fi
 # exiting with number of problems.
 if [[ ${debug} ]];then
