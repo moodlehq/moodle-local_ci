@@ -9,7 +9,8 @@
 # $issue: Issue code that requested the precheck. Empty means that Jira won't be notified.
 # $filtering: Report about only modified lines (default, true), or about the whole files (false)
 # $format: Format of the final smurf file (xml | html). Defaults to html.
-# $maxcommits: Max number of commits accepted per run. Error if exceeded. Defaults to 15.
+# $maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
+# $maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 # $extrapath: Extra paths to be available (global)
@@ -28,7 +29,8 @@ fi
 # Apply some defaults
 filtering=${filtering:-true}
 format=${format:-html}
-maxcommits=${maxcommits:-15}
+maxcommitswarn=${maxcommitswarn:-10}
+maxcommitserror=${maxcommitserror:-100}
 rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
 gcinterval=${gcinterval:-25}
@@ -227,12 +229,7 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 set -e
 
-# Verify the number of commits
-numcommits=$(${gitcmd} log ${basecommit}..${integrateto}_precheck --oneline --no-merges | wc -l)
-if [[ ${numcommits} -gt ${maxcommits} ]]; then
-    echo "Error: The ${branch} branch at ${remote} exceeds the maximum number of commits ( ${numcommits} > ${maxcommits})" | tee -a ${errorfile}
-    exit 1
-fi
+# Verify the number of commits. Now this is handled by the verify_commit_messages check.
 
 # Calculate the differences and store them
 ${gitcmd} diff ${basecommit}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
@@ -309,6 +306,8 @@ set +e
 
 # Set some variables used by various scripts.
 export issuecode=${issue}
+export maxcommitswarn=${maxcommitswarn}
+export maxcommitserror=${maxcommitserror}
 export initialcommit=${basecommit}
 export GIT_PREVIOUS_COMMIT=${initialcommit}
 export finalcommit=${integrateto}_precheck
