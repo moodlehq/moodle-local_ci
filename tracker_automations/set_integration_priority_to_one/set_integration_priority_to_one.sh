@@ -46,6 +46,7 @@ ${basereq} --action getIssueList \
                  AND ( \
                        labels IN (mdlqa)
                        OR fixVersion = '${mustfixversion}' \
+                       OR level IS NOT EMPTY \
                      )" \
            --file "${resultfile}"
 
