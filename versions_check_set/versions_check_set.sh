@@ -102,6 +102,31 @@ for i in ${allfiles}; do
         fi
     fi
 
+    # Verify the version 8 first digits do lead to a valid YYYYMMDD (only if we have version)
+    if [ ! -z "${version}" ]; then
+        # Extract 8 first digits (we already know they are there)
+        ymdversion=${version:0:8}
+        # Build standard YYYY-MM-DD date and verify it with date
+        set +e
+        ymddate=$(date -d ${ymdversion} -I 2>&1)
+        if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+            ymdversion=""
+            echo "  + ERROR: No correct version first 8 digits date (${ymddate})" >> "${resultfile}"
+        else
+            echo "  + INFO: Correct version first 8 digits date (${ymddate})" >> "${resultfile}"
+        fi
+        set -e
+    fi
+
+    # Verify the version is not pointing to a future > 7days date (only if we have the correct date)
+    if [ ! -z "${ymdversion}" ]; then
+        if [[ ${ymdversion} -gt $(date -d "+7 days" +"%Y%m%d") ]]; then
+            echo "  + ERROR: No correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+        else
+            echo "  + INFO: Correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+        fi
+    fi
+
     # Activity and block plugins cannot have decimals in the version (they are stored into int db columns)
     if [ ! -z "${version}" ] && [[ ${i} =~ /(mod|blocks)/[^/]*/version.php ]]; then
         # Extract the version
