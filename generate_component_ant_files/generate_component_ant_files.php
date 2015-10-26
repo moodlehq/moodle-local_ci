@@ -75,7 +75,7 @@ if (!is_writable($options['basedir'])) {
     cli_error('Non-writable directory: ' . $options['basedir']);
 }
 
- Get all the plugin and subplugin types
+// Get all the plugin and subplugin types
 $types = get_plugin_types(false);
 // For each type, get their available implementations
 foreach ($types as $type => $typerelpath) {
