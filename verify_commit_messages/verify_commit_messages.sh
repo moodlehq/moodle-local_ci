@@ -134,8 +134,8 @@ for c in ${commits}; do
             # check 1st line
             if [[ ${currentline} -eq 1 ]]; then
                 # verify subject begins with template issue code + space. Error.
-                if [[ ! "${line}" =~ ^${templateissuecode}\  ]];then
-                    echo "${c}*error*The commit does not begin with the expected issue code ${templateissuecode} and a space."
+                if [[ ! "${line}" =~ ^${templateissuecode}:?\  ]];then
+                    echo "${c}*error*The commit message does not begin with the expected issue code ${templateissuecode} and a space."
                     numproblems=$((numproblems+1))
                     missingissuecode=1
                 fi
@@ -144,17 +144,26 @@ for c in ${commits}; do
                     if [[ ! "${line}" =~ ^${issuecode}\  ]]; then
                         # If the issue code in anywhere else in the message relax it a bit. Warning. Else Error.
                         if [[ "${message}" =~ ${issuecode}\  ]]; then
-                            echo "${c}*warning*The commit contains the expected issue code ${issuecode} but in wrong place. That is allowed only for epics or issues with subtasks. Verify it."
+                            echo "${c}*warning*The commit message contains the expected issue code ${issuecode} but in wrong place. That is allowed only for epics or issues with subtasks. Verify it."
+                        elif [[ "${line}" =~ ^${issuecode}:\  ]]; then
+                            echo "${c}*warning*The commit message contains ${issuecode} followed by a colon. The expected format is '${issuecode} codearea: message'"
                         else
-                            echo "${c}*error*The commit does not contain the expected issue code ${issuecode} and a space."
+                            echo "${c}*error*The commit message does not contain the expected issue code ${issuecode} and a space."
                         fi
                         numproblems=$((numproblems+1))
                     fi
                 fi
-                # verify there is an area after the issue code, ending in :. Warn.
+
                 if [[ ! ${missingissuecode} ]]; then
-                    if [[ ! "${line}" =~ ^${templateissuecode}\ ([^:]*):\  ]];then
-                        echo "${c}*warning*The commit does not define a code area ending with a colon and a space after the issue code."
+                    # Verify there are not superfolous characters between the issuecode and codearea.
+                    if [[ ! "${line}" =~ ^${templateissuecode}:?\ *[A-Za-z] ]]; then
+                        echo "${c}*warning*The commit message does not match expected format '${issuecode} codearea: message'."
+                        numproblems=$((numproblems+1))
+                    fi
+
+                    # verify there is an area after the issue code, ending in :. Warn.
+                    if [[ ! "${line}" =~ ^${templateissuecode}:?\ ([^:]*):\  ]];then
+                        echo "${c}*warning*The commit message does not define a code area ending with a colon and a space after the issue code."
                         numproblems=$((numproblems+1))
                     else
                         codearea=${BASH_REMATCH[1]}
@@ -164,7 +173,7 @@ for c in ${commits}; do
                 if [[ ${codearea} ]]; then
                     codearealen=$(echo "${codearea}" | wc -c)
                     if [[ ${codearealen} -gt 30 ]];then
-                        echo "${c}*warning*The commit code area '${codearea}' is too long (${codearealen} > 30)"
+                        echo "${c}*warning*The commit message code area '${codearea}' is too long (${codearealen} > 30)"
                         numproblems=$((numproblems+1))
                     fi
                 fi
