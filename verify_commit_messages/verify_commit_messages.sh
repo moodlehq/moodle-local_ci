@@ -153,8 +153,15 @@ for c in ${commits}; do
                         numproblems=$((numproblems+1))
                     fi
                 fi
-                # verify there is an area after the issue code, ending in :. Warn.
+
                 if [[ ! ${missingissuecode} ]]; then
+                    # Verify there are not superfolous characters between the issuecode and codearea.
+                    if [[ ! "${line}" =~ ^${templateissuecode}:?\ *[A-Za-z] ]]; then
+                        echo "${c}*warning*The commit does not match expected format '${issuecode} codearea: message'."
+                        numproblems=$((numproblems+1))
+                    fi
+
+                    # verify there is an area after the issue code, ending in :. Warn.
                     if [[ ! "${line}" =~ ^${templateissuecode}:?\ ([^:]*):\  ]];then
                         echo "${c}*warning*The commit does not define a code area ending with a colon and a space after the issue code."
                         numproblems=$((numproblems+1))
