@@ -4,8 +4,7 @@
 # $gitbranch: Branch we are going to install the DB
 # $extrapath: Extra paths to be available (global)
 # $npmcmd: Path to the npm executable (global)
-# $npmbase: Base directory where we'll store multiple npm stuff versions (can be different by branch)
-# $npmupdatefreq: How ofter npm update is run. Defaults to 25 (1/25). Setting it to 1 will cause update to happen always
+# $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 
 # Let's be strict. Any problem leads to failure.
 set -e
@@ -29,11 +28,8 @@ outputfile=${WORKSPACE}/grunt_process.txt
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Apply some defaults
-npmupdatefreq=${npmupdatefreq:-25}
 
-# Ensure git is ready
-cd ${gitdir} && git reset --hard ${gitbranch}
+cd ${gitdir}
 rm -fr config.php
 rm -fr ${outputfile}
 
@@ -65,16 +61,7 @@ if [[ ! -f ${gitdir}/node_modules/grunt-cli/bin/grunt ]]; then
     ${npmcmd} install grunt-cli
     echo "NOTE: grunt executable installed"
 else
-    echo "OK: grunt executable found"
-    # Every $npmupdatefreq executions, perform a npm update
-    random=${RANDOM}
-    if [[ -n "${BUILD_TAG}" ]]; then # Running jenkins, use build number.
-        random=${BUILD_NUMBER}
-    fi
-    if [[ $((${random} % ${npmupdatefreq})) -eq 0 ]]; then
-        echo "NOTE: Updating all nodejs packages"
-        ${npmcmd} update
-    fi
+    ${npmcmd} update
 fi
 
 # Run grunt against the git repo
@@ -85,6 +72,10 @@ rm -fr $(find . -path '*/amd/build' -type d)
 
 ${gitdir}/node_modules/grunt-cli/bin/grunt --no-color | tee "${outputfile}"
 exitstatus=${PIPESTATUS[0]}
+
+# Cleanup symlink as not required after run (and prevent other jobs operating on it)
+rm ${gitdir}/node_modules
+
 if [ $exitstatus -ne 0 ]; then
     echo "ERROR: Problems running grunt" | tee -a "${outputfile}"
     exit $exitstatus
@@ -101,6 +92,9 @@ else
     echo | tee -a "${outputfile}"
     echo "ERROR: Some modules are not properly processed by grunt. Changes detected:" | tee -a "${outputfile}"
     echo | tee -a "${outputfile}"
-    echo "${changes}" | tee -a "${outputfile}"
+    for filename in ${changes} ; do
+        fullpath=$gitdir/$filename
+        echo "GRUNT-CHANGE: ${fullpath}" | tee -a "${outputfile}"
+    done
     exit 1
 fi
