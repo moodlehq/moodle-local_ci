@@ -331,15 +331,15 @@ fi
 
 # Run the php linter (php_lint)
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
-cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
+cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=phplint > "${WORKSPACE}/work/phplint.xml"
 
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
-cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/../thirdparty_check/thirdparty2checkstyle.php > "${WORKSPACE}/work/thirdparty.xml"
+cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
 # Run the grunt checker
 echo "Running grunt.."
 ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt"
-cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/../grunt_process/gruntchanges2checkstyle.php > "${WORKSPACE}/work/grunt.xml"
+cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
 
 
 # ########## ########## ########## ##########
