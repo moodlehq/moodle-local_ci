@@ -69,7 +69,8 @@ cd ${gitdir}
 rm -fr $(find . -path '*/yui/build' -type d)
 rm -fr $(find . -path '*/amd/build' -type d)
 
-${gitdir}/node_modules/grunt-cli/bin/grunt --no-color | tee "${outputfile}"
+# The echo here works around a problem where shifter is sending colours (MDL-52591).
+echo | ${gitdir}/node_modules/grunt-cli/bin/grunt --no-color | tee "${outputfile}"
 exitstatus=${PIPESTATUS[0]}
 
 # Cleanup symlink as not required after run (and prevent other jobs operating on it)

@@ -44,7 +44,7 @@ if ($unrecognized) {
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-$validformats = array('phplint', 'thirdparty', 'gruntdiff');
+$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter');
 
 
     $help =
@@ -171,6 +171,31 @@ function process_thirdparty($line) {
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="warning" ';
+        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= '</file>';
+    }
+
+    return $output;
+}
+
+/**
+ * Converts shifter output into checkstyle format
+ *
+ * Example input:
+ *   shifter [err] /path/to/lib/editor/atto/plugins/rtl/yui/src/button/js/button.js contains 2 lint errors
+ *
+ * @param string $line the line of file
+ * @return string the xml fragment
+ */
+function process_shifter($line) {
+    $output = '';
+    if (preg_match('/shifter \[err\] (\S+) (.*)/', $line, $matches)) {
+        $filename = $matches[1];
+        $message = $matches[2];
+        $lineno = 0;
+
+        $output.= '<file name="' . $filename. '">'.PHP_EOL;
+        $output.= '<error line="'.$lineno.'" column="0" severity="error" ';
         $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
         $output.= '</file>';
     }
