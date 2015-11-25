@@ -16,6 +16,8 @@
 # $extrapath: Extra paths to be available (global)
 # $gcinterval: Number of runs before performing a manual gc of the repo. Defaults to 25. 0 means disabled.
 # $gcaggressiveinterval: Number of runs before performing an aggressive gc of the repo. Defaults to 900. 0 means disabled.
+# $npmcmd: Path to the npm executable (global)
+# $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -37,7 +39,7 @@ gcinterval=${gcinterval:-25}
 gcaggressiveinterval=${gcaggressiveinterval:-900}
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto"
+required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmcmd npmbase"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -329,10 +331,17 @@ fi
 
 # Run the php linter (php_lint)
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
-cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/../php_lint/phplint2checkstyle.php > "${WORKSPACE}/work/phplint.xml"
+cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=phplint > "${WORKSPACE}/work/phplint.xml"
 
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
-cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/../thirdparty_check/thirdparty2checkstyle.php > "${WORKSPACE}/work/thirdparty.xml"
+cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
+
+# Run the grunt checker
+echo "Running grunt.."
+${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt"
+cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
+
+
 # ########## ########## ########## ##########
 
 # Now we can proceed to delete all the files not being part of the
