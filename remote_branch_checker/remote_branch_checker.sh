@@ -336,10 +336,12 @@ cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.ph
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
-# Run the grunt checker
-echo "Running grunt.."
-${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt"
-cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
+# Run the grunt checker if Gruntfile exists.
+if [ -f ${WORKSPACE}/Gruntfile.js ]; then
+    echo "Running grunt.."
+    ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt"
+    cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
+fi
 
 
 # ########## ########## ########## ##########
