@@ -29,7 +29,7 @@ function negative_tracker_emoticon() {
 
 
 function get_happy_image() {
-    # marys pompoms:
+    # marys pompoms (from https://tracker.moodle.org/browse/MDLSITE-3642)
     images[0]='https://tracker.moodle.org/secure/attachment/46622/AnimatedAmy.gif'
     # balloon🎈
     images[1]='https://twemoji.maxcdn.com/16x16/1f388.png'
