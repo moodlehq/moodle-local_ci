@@ -54,15 +54,14 @@ fi
 # Linking it.
 ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
 
-# Verify there is a grunt executable available, installing everrything if missing
+# Verify there is a grunt executable available, installing if missing
 if [[ ! -f ${gitdir}/node_modules/grunt-cli/bin/grunt ]]; then
     echo "WARN: grunt-cli executable not found. Installing everything"
-    ${npmcmd} install
     ${npmcmd} install grunt-cli
-    echo "NOTE: grunt executable installed"
-else
-    ${npmcmd} update
 fi
+
+# Always run npm install to keep our npm packages correct
+${npmcmd} install
 
 # Run grunt against the git repo
 cd ${gitdir}
