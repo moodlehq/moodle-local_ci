@@ -57,7 +57,7 @@ ${basereq} --action getIssueList \
                  AND status = 'Closed' \
                  AND 'Integration date' IS NOT empty
                  ORDER BY 'Integration date' DESC" \
-           --count 1 \
+           --limit 1 \
            --file "${tempfile}"
 
 # Iterate over found issues (only 1, but iterate just in case)
