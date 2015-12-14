@@ -4,6 +4,7 @@
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # dirs and files (egrep-like regexp) we are going to exclude from analysis
 . ${mydir}/../define_excluded/define_excluded.sh
@@ -43,14 +44,14 @@ fi
 
 # Count and send to countfile
 count=`cat "$lastfile" | wc -l`
-echo "$BUILD_NUMBER	$BUILD_ID	$count" >> "$countfile"
+echo "$BUILD_NUMBER	$BUILD_TIMESTAMP	$count" >> "$countfile"
 
 # Get best count ever or create it
 bestcount=999999
 if [[ ! -f "$mincountfile" ]]
 then
     # Create the file (first run) with current counter
-    echo "$BUILD_NUMBER	$BUILD_ID	$bestcount" > "$mincountfile"
+    echo "$BUILD_NUMBER	$BUILD_TIMESTAMP	$bestcount" > "$mincountfile"
 else
     # Read the best counter
     bestcount=`tail -1 "$mincountfile" | cut -s -f3`
@@ -76,7 +77,7 @@ else
     then
         # Best ever, save current counter as best, grab correctfile and delete diff
         echo "got best results ever, yay!"
-        echo "$BUILD_NUMBER	$BUILD_ID	$count" > "$mincountfile"
+        echo "$BUILD_NUMBER	$BUILD_TIMESTAMP	$count" > "$mincountfile"
         cp "$lastfile" "$correctfile"
         rm -fr "$difffile"
         status=0

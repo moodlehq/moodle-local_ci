@@ -27,6 +27,7 @@ logfile=$WORKSPACE/mv_reopened_out_from_current.log
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
@@ -60,5 +61,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         --fixVersions "" \
         --custom "customfield_10211:" \
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
-    echo "$BUILD_NUMBER $BUILD_ID ${issue}" >> "${logfile}"
+    echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
+
+# Remove the resultfile. We don't want to disclose those details.
+rm -fr "${resultfile}"
