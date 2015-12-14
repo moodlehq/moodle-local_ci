@@ -3,8 +3,8 @@ set -e
 
 # Generates tracker code for positive emotion
 function positive_tracker_emoticon() {
-    local rand=$[ RANDOM % 5]
-    # Only do fun stuff 1/6 of the time:
+    local rand=$[ RANDOM % 2]
+    # Only do fun stuff 1/3 of the time:
     if [[ $rand -eq 0 ]]
     then
         image=$(get_happy_image)
