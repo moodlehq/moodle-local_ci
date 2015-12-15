@@ -35,7 +35,7 @@ datadirphpunit=/tmp/ci_dataroot_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 # Based on $dbtype, execute different DB creation commands (mysqli, pgsql)
 if [[ "${dbtype}" == "pgsql" ]]; then
     export PGPASSWORD=${dbpass}
-    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d template1 \
+    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d postgres \
         -c "CREATE DATABASE ${installdb} ENCODING 'utf8'"
 elif [[ "${dbtype}" == "mysqli" ]]; then
     ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
@@ -205,7 +205,7 @@ fi
 # Based on $dbtype, execute different DB deletion commands (pgsql, mysqli)
 if [[ "${dbtype}" == "pgsql" ]]; then
     export PGPASSWORD=${dbpass}
-    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d template1 \
+    ${psqlcmd} -h ${dbhost} -U ${dbuser} -d postgres \
         -c "DROP DATABASE ${installdb}"
 elif [[ "${dbtype}" == "mysqli" ]]; then
     ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
