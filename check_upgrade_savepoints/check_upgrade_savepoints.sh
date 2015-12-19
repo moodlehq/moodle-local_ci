@@ -1,10 +1,20 @@
 #!/bin/bash
+# $WORKSPACE
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to check
 
 # Let's go strict (exit on error)
 set -e
+
+# Verify everything is set
+required="WORKSPACE phpcmd gitdir gitbranch"
+for var in $required; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
 
 # file where results will be sent
 resultfile=$WORKSPACE/check_upgrade_savepoints_${gitbranch}.txt
