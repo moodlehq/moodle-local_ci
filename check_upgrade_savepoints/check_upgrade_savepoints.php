@@ -101,6 +101,36 @@ foreach ($files as $file) {
 
     }
 
+    // Extract all string literals in upgrade code, we are not interested on them and can lead to
+    // incorrect calculation of function body later, see MDLSITE-4366. Replace them with simple placeholders.
+    //
+    // Note that, while we can simply discard the literals because they are not used later by any
+    // check... instead... we are being selective here, replacing the "conflictive" ones by simpler,
+    // safe alternatives and keeping the simple ones in place. That would help if we want it the future
+    // perfomr checks to savepoint function parameters or whatever.
+    // In any case, all the replacements performed are stored in $discardedliterals just in case
+    // something needs to be recovered back.
+    $regexp = '(["\'])(?:\\\\\1|.)*?\1'; // Match all quoted literals in a text, ignoring escaped ones.
+    $discardedliterals = array();
+    // Look for all quoted strings.
+    preg_match_all('@' . $regexp . '@', $contents, $matches);
+    // Iterate them, keeping safe ones and replacing by placeholder conflictive ones.
+    // All replacements are stored into $discardedliterals in case it's needed for any reason.
+    foreach (array_unique($matches[0]) as $key => $string) {
+        $unsaferegexp = '[\[\(\{\<\>\}\)\]]'; // Consider everything but [({<>})] safe.
+        if (preg_match('@' . $unsaferegexp . '@', $string)) {
+            // The string is not safe, replace it by placeholder and annotate the replacement.
+            $replacement = "'<%&%" . (string)(count($discardedliterals) +1) . "%&%>'";
+            $discardedliterals[$replacement] = $string;
+        } else {
+             // The string is safe, keep it as is, no need to replace it by placeholder.
+        }
+    }
+    // If there are literals to discard, perform them.
+    if (!empty($discardedliterals)) {
+        $contents = str_replace($discardedliterals, array_keys($discardedliterals), $contents);
+    }
+
 /// Arrived here, extract function contents
     if (! preg_match_all('@' . $function_regexp . '.*?(\{(?>(?>[^{}]+)|(?1))*\})@is', $contents, $matches)) {
         echo "    + NOTE: cannot find upgrade function contents" . LINEFEED;
