@@ -32,6 +32,7 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ${gitdir}
 rm -fr config.php
 rm -fr ${outputfile}
+rm -fr ${outputfile}.stderr
 
 # Verify we have the npmbase dir, creating if needed
 if [[ ! -d ${npmbase} ]]; then
@@ -69,8 +70,9 @@ cd ${gitdir}
 rm -fr $(find . -path '*/yui/build' -type d)
 rm -fr $(find . -path '*/amd/build' -type d)
 
+# Send both stdout and stderr to files while passing them intact (for callers consumption).
 # The echo here works around a problem where shifter is sending colours (MDL-52591).
-echo | ${gitdir}/node_modules/grunt-cli/bin/grunt --no-color | tee "${outputfile}"
+echo | ${gitdir}/node_modules/grunt-cli/bin/grunt --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
 exitstatus=${PIPESTATUS[0]}
 
 # Cleanup symlink as not required after run (and prevent other jobs operating on it)
@@ -79,6 +81,14 @@ rm ${gitdir}/node_modules
 if [ $exitstatus -ne 0 ]; then
     echo "ERROR: Problems running grunt" | tee -a "${outputfile}"
     exit $exitstatus
+fi
+
+# Look for shifter lint errors that have not ended with the process exiting with error.
+shiftererrors=$(cat "${outputfile}".stderr | grep 'shifter \[err\] .* .*' | wc -l)
+if (($shiftererrors > 0))
+then
+    echo "ERROR: Problems running grunt shifter" | tee -a "${outputfile}"
+    exit 1
 fi
 
 # Look for changes
