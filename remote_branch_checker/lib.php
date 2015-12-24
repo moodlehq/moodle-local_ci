@@ -206,6 +206,23 @@ class remote_branch_reporter {
             }
         }
 
+        // Process the shifter output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'shifter problems',
+            'abbr' => 'shifter',
+            'description' => 'This section shows problems detected by shifter',
+            'url' => 'https://docs.moodle.org/dev/YUI/Shifter',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1,
+            'allowfiltering' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/shifter.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Conditionally, perform the filtering
         if ($patchset) {
             $this->patchset_filter($doc, $patchset);

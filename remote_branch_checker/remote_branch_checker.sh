@@ -339,8 +339,9 @@ cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter
 # Run the grunt checker if Gruntfile exists.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
     echo "Running grunt.."
-    ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt"
+    ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
     cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
+    cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 fi
 
 
