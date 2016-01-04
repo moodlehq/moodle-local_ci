@@ -29,9 +29,22 @@ function negative_tracker_emoticon() {
 
 
 function get_happy_image() {
-    # Christmas time..
-    images[0]='https://twemoji.maxcdn.com/16x16/1f384.png'
-    images[1]='https://twemoji.maxcdn.com/16x16/1f385.png'
+    # marys pompoms (from https://tracker.moodle.org/browse/MDLSITE-3642)
+    images[0]='https://tracker.moodle.org/secure/attachment/46622/AnimatedAmy.gif'
+    # balloon🎈
+    images[1]='https://twemoji.maxcdn.com/16x16/1f388.png'
+    # party popper 🎉
+    images[2]='https://twemoji.maxcdn.com/16x16/1f389.png'
+    # clinking beer mugs 🍻
+    images[3]='https://twemoji.maxcdn.com/16x16/1f37b.png'
+    # cookie 🍪
+    images[4]='https://twemoji.maxcdn.com/16x16/1f36a.png'
+    # cake 🍰
+    images[5]='https://twemoji.maxcdn.com/16x16/1f370.png'
+    # glowing star 🌟
+    images[6]='https://twemoji.maxcdn.com/16x16/1f31f.png'
+    # smiling face with halo 😇
+    images[7]='https://twemoji.maxcdn.com/16x16/1f607.png'
 
     index=$[$RANDOM % ${#images[@]}]
     echo ${images[$index]}
