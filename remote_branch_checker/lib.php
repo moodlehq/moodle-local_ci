@@ -274,12 +274,12 @@ class remote_branch_reporter {
             $repositoryname = $matches[2];
             $this->diffurltemplate = "https://bitbucket.org/$username/$repositoryname/src/$githashofbranch/{FILE}#cl-{LINENO}";
             $this->commiturltemplate = "https://bitbucket.org/$username/$repositoryname/commits/{COMMIT}";
-        } else if (preg_match('#^(https|git)://gitorious.org/([^/]+)/([^\./]+)?#', $repositoryurl, $matches)) {
-            // Gitorious.
-            $username = $matches[2];
-            $repositoryname = $matches[3];
-            $this->diffurltemplate = "https://gitorious.org/$username/$repositoryname/source/$githashofbranch:{FILE}#L{LINENO}";
-            $this->commiturltemplate = "https://gitorious.org/$username/$repositoryname/commit/{COMMIT}";
+        } else if (preg_match('#^https://git.in.moodle.com/([^/]+)/([^\./]+)?#', $repositoryurl, $matches)) {
+            // HQ gitlab (used particularly for https://git.in.moodle.com/mudrd8mz/moodle-plugins-snapshots).
+            $username = $matches[1];
+            $repositoryname = $matches[2];
+            $this->diffurltemplate = "https://git.in.moodle.com/$username/$repositoryname/blob/$githashofbranch/{FILE}#L{LINENO}";
+            $this->commiturltemplate = "https://git.in.moodle.com/$username/$repositoryname/commit/{COMMIT}";
         }
     }
 
