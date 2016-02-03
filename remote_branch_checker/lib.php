@@ -79,7 +79,7 @@ class remote_branch_reporter {
         // Process the cs output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'PHP coding style problems',
-            'abbr' => 'php',
+            'abbr' => 'phpcs',
             'description' => 'This section shows the coding style problems detected in the code by phpcs',
             'url' => 'http://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
