@@ -223,6 +223,23 @@ class remote_branch_reporter {
             }
         }
 
+        // Process the travis output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'travis problems',
+            'abbr' => 'travis',
+            'description' => 'This section reports travis issues',
+            'url' => 'https://docs.moodle.org/dev/Travis_Integration',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1,
+            'allowfiltering' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/travis.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Conditionally, perform the filtering
         if ($patchset) {
             $this->patchset_filter($doc, $patchset);
@@ -410,7 +427,7 @@ class remote_branch_reporter {
             $xpath = new DOMXPath($doc);
 
             // Populate all the normal problems with git diff urls.
-            $problems = $xpath->query('//check[not(contains(@id, "commit"))]//problem');
+            $problems = $xpath->query('//check[not(contains(@id, "commit") or contains(@id, "travis"))]//problem');
             foreach ($problems as $problem) {
                 if ($problem->hasAttribute('file') && $problem->hasAttribute('linefrom')) {
                     // Is an actual file diff..
