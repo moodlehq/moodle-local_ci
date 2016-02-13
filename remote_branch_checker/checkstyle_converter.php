@@ -44,7 +44,7 @@ if ($unrecognized) {
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter');
+$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis');
 
 
     $help =
@@ -197,6 +197,35 @@ function process_shifter($line) {
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="error" ';
         $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= '</file>';
+    }
+
+    return $output;
+}
+
+/**
+ * Converts travis branch checker output into checkstyle format
+ *
+ * Example input:
+ *   ERROR: Travis build failed, see https://travis-ci.org/username/moodle/builds/108712908
+ *
+ * @param string $line the line of file
+ * @return string the xml fragment
+ */
+function process_travis($line) {
+    $output = '';
+    if (preg_match('/^(ERROR|WARNING): (.*)$/', $line, $matches)) {
+        $severity = strtolower($matches[1]);
+        $message= $matches[2];
+
+        $diffurl = '';
+        if (preg_match('#(https://\S+)#', $message, $urlmatches)) {
+            $diffurl = $urlmatches[1];
+        }
+
+        $output.= '<file name="">'.PHP_EOL;
+        $output.= '<error diffurl="'.$diffurl.'" line="0" column="0" severity="'.$severity.'" ';
+        $output.= 'message="'.$message.'"/>' . PHP_EOL;
         $output.= '</file>';
     }
 

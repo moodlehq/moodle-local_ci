@@ -344,6 +344,11 @@ if [ -f ${WORKSPACE}/Gruntfile.js ]; then
     cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 fi
 
+if [[ -z "${isplugin}" ]]; then
+    ${phpcmd} ${mydir}/../travis/check_branch_status.php --repository=$remote --branch=$branch > "${WORKSPACE}/work/travis.txt"
+    cat "${WORKSPACE}/work/travis.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=travis > "${WORKSPACE}/work/travis.xml"
+fi
+
 
 # ########## ########## ########## ##########
 

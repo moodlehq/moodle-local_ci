@@ -39,6 +39,7 @@
       <xsl:attribute name="class"></xsl:attribute>
       <xsl:attribute name="package"></xsl:attribute>
       <xsl:attribute name="api"></xsl:attribute>
+      <xsl:attribute name="diffurl"><xsl:value-of select="./@diffurl"/></xsl:attribute>
       <xsl:choose>
         <xsl:when test="contains(./@source, '.')">
           <xsl:attribute name="ruleset"><xsl:value-of select="substring-before(./@source, '.')"/></xsl:attribute>
