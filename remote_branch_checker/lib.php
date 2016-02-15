@@ -225,9 +225,9 @@ class remote_branch_reporter {
 
         // Process the travis output, weighting errors with 5 and warnings with 1
         $params = array(
-            'title' => 'travis problems',
+            'title' => 'Travis CI problems',
             'abbr' => 'travis',
-            'description' => 'This section reports travis issues',
+            'description' => 'This section reports issues detected by Travis CI.',
             'url' => 'https://docs.moodle.org/dev/Travis_Integration',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
