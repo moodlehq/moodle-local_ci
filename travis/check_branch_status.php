@@ -15,8 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Check travis status of passed git branch. Exits non-zero if the
- * build has failed and returns the build url, else returns the status.
+ * Check travis status of passed git branch. Returns output starting
+ * with (WARNING|ERROR|OK) with a summary status.
  *
  * @copyright  2016 Dan Poltawski <dan@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -79,10 +79,16 @@ $json = json_decode($response);
 
 if (isset($json->branch->state)) {
     $buildurl = 'https://travis-ci.org/'.$username.'/'.$reponame.'/builds/'.$json->branch->id;
-    if ($json->branch->state == 'failed') {
-        echo 'ERROR: Travis build failed, see '.$buildurl."\n";
-    } else {
-        echo 'OK: '.$json->branch->state." $buildurl\n";
+    switch ($json->branch->state) {
+        case 'failed':
+            echo 'ERROR: Build failed, see '.$buildurl."\n";
+            break;
+        case 'canceled':
+            echo 'WARNING: Build canceled, see '.$buildurl."\n";
+            break;
+        default:
+            echo "OK: Build status was {$json->branch->state}, see $buildurl\n";
+            break;
     }
 } else {
     // This could be because it doesn't exist.
