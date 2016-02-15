@@ -239,8 +239,8 @@ while read issue; do
                 set -e
                 # Look if the file contains some controlled error.
                 if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep "Error:") ]]; then
-                    # controlled errors, print them.
-                    perrors=$(echo "${errors}" | sed 's/^/    -- /g')
+                    # controlled errors, print them. (exclude info lines, see MDLSITE-4415)
+                    perrors=$(echo "${errors}" | grep -v '^Info:' | sed 's/^/    -- /g')
                     echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
                 else
                     # Failed prechecker and nothing reported via errors, generic error message
