@@ -68,16 +68,10 @@ if [[ -f ${gitdir}/package.json ]]; then
 
     # Always run npm install to keep our npm packages correct
     ${npmcmd} --no-color install
-    exitstatus=${PIPESTATUS[0]}
-    if [[ ${exitstatus} -ne 0 ]]; then
-        echo "ERROR: Problems installing npm stuff"
-        exit $exitstatus
-    fi
-fi
+else
 
-# Install shifter version if there is not package.json and shifter version has been specified
-# (this is required for branches < 29_STABLE)
-if [[ ! -f ${gitdir}/package.json ]] && [[ -n ${shifterversion} ]]; then
+    # Install shifter version if there is not package.json
+    # (this is required for branches < 29_STABLE)
     shifterinstall=""
     shiftercmd="$(${npmcmd} bin)"/shifter
     if [[ ! -f ${shiftercmd} ]]; then
@@ -98,17 +92,10 @@ if [[ ! -f ${gitdir}/package.json ]] && [[ -n ${shifterversion} ]]; then
     if [[ -n ${shifterinstall} ]]; then
         ${npmcmd} --no-color install shifter@${shifterversion}
         echo "INFO: shifter executable (${shifterversion}) installed"
-        exitstatus=${PIPESTATUS[0]}
-        if [[ ${exitstatus} -ne 0 ]]; then
-            echo "ERROR: Problems installing shifter ${shifterversion}"
-            exit $exitstatus
-        fi
     fi
-fi
 
-# Install recess version if there is not package.json and recess version has been specified
-# (this is required for branches < 29_STABLE)
-if [[ ! -f ${gitdir}/package.json ]] && [[ -n ${recessversion} ]]; then
+    # Install recess version if there is not package.json
+    # (this is required for branches < 29_STABLE)
     recessinstall=""
     recesscmd="$(${npmcmd} bin)"/recess
     if [[ ! -f ${recesscmd} ]]; then
@@ -128,11 +115,6 @@ if [[ ! -f ${gitdir}/package.json ]] && [[ -n ${recessversion} ]]; then
     if [[ -n ${recessinstall} ]]; then
         ${npmcmd} --no-color install recess@${recessversion}
         echo "INFO: recess executable (${recessversion}) installed"
-        exitstatus=${PIPESTATUS[0]}
-        if [[ ${exitstatus} -ne 0 ]]; then
-            echo "ERROR: Problems installing recess ${recessversion}"
-            exit $exitstatus
-        fi
     fi
 fi
 
