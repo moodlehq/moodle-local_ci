@@ -1,7 +1,6 @@
 #!/bin/bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
-# $extrapath: Extra paths to be available (global)
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
@@ -10,7 +9,7 @@
 # Let's be strict. Any problem leads to failure.
 set -e
 
-required="gitdir gitbranch extrapath npmcmd npmbase"
+required="gitdir gitbranch npmcmd npmbase"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "ERROR: ${var} environment variable is not defined. See the script comments."
@@ -20,11 +19,6 @@ done
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# Let add $extrapath to PATH
-if [[ -n ${extrapath} ]]; then
-    export PATH=${PATH}:${extrapath}
-fi
 
 # Apply some defaults.
 shifterversion=${shifterversion:-0.4.6}
