@@ -4,7 +4,8 @@
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
-# $recessversion: Optional, defaults to 1.1.6. Not installed if there is a package.json file (present in 29 and up)
+# $recessversion: Optional, defaults to 1.1.9 (Important! it's the only legacy version working. Older ones
+#    lead to empty results). Not installed if there is a package.json file (present in 29 and up)
 
 # Let's be strict. Any problem leads to failure.
 set -e
@@ -22,7 +23,7 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Apply some defaults.
 shifterversion=${shifterversion:-0.4.6}
-recessversion=${recessversion:-1.1.6}
+recessversion=${recessversion:-1.1.9}
 
 # Move to base directory
 cd ${gitdir}
