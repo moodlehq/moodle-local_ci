@@ -4,12 +4,13 @@
 #jiraserver: jira server url we are going to connect to
 #jirauser: user that will perform the execution
 #jirapass: password of the user
+#mustfixversion: fixfor version which will be preserved on reopening
 
 # Let's go strict (exit on error)
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass mustfixversion"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -38,11 +39,29 @@ ${basereq} --action getIssueList \
                  AND status = 'Reopened' \
                  AND updated < '-1h' \
                  AND 'Currently in integration' is not empty" \
+           --outputFormat "999" \
+           --columns "Key,Fix Versions" \
            --file "${resultfile}"
 
 # Iterate over found issues and send them out from integration with a comment
-for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+while read line; do
+    issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
+    keepversion=
+    if [[ -z ${issue} ]]; then
+        # No issue found... skip.
+        continue
+    fi
     echo "Processing ${issue}"
+    # If the issue has the specified mustfixversion... let's keep it on reopen
+    if [[ -n ${mustfixversion} ]]; then
+        # Look for mustfixversion match
+        keepversion=$( echo ${line} | sed -n "s/^\"MDL-[0-9]*\",\".*\(${mustfixversion}\).*/\1/p" )
+        if [[ -z ${keepversion} ]]; then
+            echo "  - No mustfix version to keep"
+        else
+            echo "  - Keeping mustfix version \"${keepversion}\""
+        fi
+    fi
     # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
     # we are setting some custom fields not available (on purpose) on that screen. So we have created a
     # global transition, only available to the bots, not transitioning but bringing access to all the fields
@@ -58,11 +77,11 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
-        --fixVersions "" \
+        --fixVersions "${keepversion}" \
         --custom "customfield_10211:" \
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
-done
+done < "${resultfile}"
 
 # Remove the resultfile. We don't want to disclose those details.
 rm -fr "${resultfile}"
