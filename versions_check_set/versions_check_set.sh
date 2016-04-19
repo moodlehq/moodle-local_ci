@@ -20,6 +20,7 @@ done
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 versionregex="^([0-9]{10}(\.[0-9]{2})?)$"
+anyversionstr="ANY_VERSION"
 
 # Prepare the output file where everything will be reported
 resultfile=${WORKSPACE}/versions_check_set.txt
@@ -288,7 +289,7 @@ for i in ${allfiles}; do
             if [ -z "${validcomponent}" ]; then
                 echo "  + ERROR: Component ${component} not valid" >> "${resultfile}"
             fi
-            if [[ ! "${version}" =~ ${versionregex} ]]; then
+            if [[ ! "${version}" =~ ${versionregex} ]] && [[ "${version}" != ${anyversionstr} ]]; then
                 echo "  + ERROR: Version ${version} not valid" >> "${resultfile}"
             fi
         done
