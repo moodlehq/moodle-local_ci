@@ -1,7 +1,7 @@
 #!/bin/bash
 # $gitcmd: Path to git executable.
-# $gitdir: Directory containing git repo
-# $gitbranch: Branch name
+# $gitdir: Directory containing git repo (will be cloned to if .git doesn't exist)
+# $gitbranch: Branch we are rebasing onto
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $integrationremote: Remote where integration is being fetched from
