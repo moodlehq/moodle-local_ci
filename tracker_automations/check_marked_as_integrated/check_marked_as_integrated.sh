@@ -28,7 +28,7 @@ for var in $required; do
 done
 
 # file where results will be sent
-resultfile=$WORKSPACE/check_marked_as_integrated.csv
+resultfile="$WORKSPACE/check_marked_as_integrated.csv"
 echo -n > "${resultfile}"
 
 # Calculate some variables
