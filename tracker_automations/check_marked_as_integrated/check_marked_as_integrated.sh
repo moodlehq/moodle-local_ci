@@ -63,7 +63,7 @@ cd $gitdir
 ${gitcmd} fetch ${gitremotename}
 
 # Iterate over found issues and check that their commits are integrated in the specified branches.
-issueslist=$( cat ${resultfile} )
+issueslist=$( cat "${resultfile}" )
 while read -r line; do
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
 
