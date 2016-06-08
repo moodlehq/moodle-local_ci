@@ -38,18 +38,17 @@ basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${ji
 # Include some utility functions
 . "${mydir}/util.sh"
 
-# Let's search all the issues having the "ci" label that have been sent back to development (form peer review or integration)
+# Let's search all the issues having the "ci" label that have been sent back
+# to development (form peer review or integration)
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
-                 AND (
-                    'Currently in integration' is not EMPTY OR \
-                    status IN ( \
+                 AND status IN ( \
                         'Waiting for testing', \
                         'Testing in progress', \
                         'Problem during testing', \
                         'Tested' \
-                    ) \
                  ) \
+                 AND 'Currently in integration' is not EMPTY \
                  AND labels not in ('skip-ci-version-check')" \
            --outputFormat "999" \
            --columns "Key,Fix Versions" \
@@ -62,7 +61,8 @@ errors=()
 cd $gitdir
 ${gitcmd} fetch ${gitremotename}
 
-# Iterate over found issues and check that their commits are integrated in the specified branches.
+# Iterate over found issues and check that their commits are integrated in the
+# specified branches.
 issueslist=$( cat "${resultfile}" )
 while read -r line; do
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
@@ -74,11 +74,14 @@ while read -r line; do
 
     echo "Processing ${issue}"
 
-    fixversions=$( echo ${line} | sed -n "s/^\"MDL-[0-9]*\",\"\(.*\)\"/\1/p"  |  grep -o "'[0-9]\+\.[0-9]\+\.\?[0-9]*'" )
+    fixversions=$( echo ${line} \
+                    | sed -n "s/^\"MDL-[0-9]*\",\"\(.*\)\"/\1/p" \
+                    | grep -o '[0-9]\+\.[0-9]\+\.\?[0-9]*'
+                  || echo '')
 
     if [[ -z ${fixversions} ]]; then
         # No fix versions found.
-        errors+=("${issue} - No fix versions")
+        errors+=("${issue} - No valid fix versions. Add 'skip-ci-version-check' label if this is expected.")
         continue
     fi
 
@@ -98,25 +101,26 @@ while read -r line; do
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
             # No commit present in the repo.
-            errors+=("${issue} - ${tagversion} marked as fixed but no commit present in '${branch}'")
+            errors+=("${issue} - ${tagversion} marked as fixed but no commit present in '${branch}'. Add 'skip-ci-version-check' label if this is expected.")
             continue
         fi
 
     done <<< "${fixversions}"
 
-    # If we haven't checked master (we don't mark next major in fixVersion) we check it here. May report false positives.
+    # If we haven't checked master (we don't mark next major in fixVersion) we
+    # check it here. May report false positives.
     if [ -z "$masterfound" ]; then
         branch=$gitremotename'/master'
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
             # No commit present in the repo.
-            errors+=("${issue} - is not present in master branch. Please check that this is expected.")
+            errors+=("${issue} - no commit present in master. Add 'skip-ci-version-check' label if this is expected.")
         fi
     fi
 
 done <<< "${issueslist}"
 
 if [ ! -z "$errors" ]; then
-    echo $errors
+    printf '%s\n' "${errors[@]}"
     exit 1
 fi
 
