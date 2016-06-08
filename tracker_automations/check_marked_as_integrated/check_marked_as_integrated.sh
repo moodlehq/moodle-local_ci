@@ -76,7 +76,7 @@ while read -r line; do
 
     fixversions=$( echo ${line} \
                     | sed -n "s/^\"MDL-[0-9]*\",\"\(.*\)\"/\1/p" \
-                    | grep -o '[0-9]\+\.[0-9]\+\.\?[0-9]*'
+                    | grep -o '[0-9]\+\.[0-9]\+\.\?[0-9]*' \
                   || echo '')
 
     if [[ -z ${fixversions} ]]; then
