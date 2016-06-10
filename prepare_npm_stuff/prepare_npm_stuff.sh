@@ -54,15 +54,15 @@ ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
 if [[ -f ${gitdir}/package.json ]]; then
     echo "INFO: Installing npm stuff following package/shrinkwrap details"
 
+    # Always run npm install to keep our npm packages correct
+    ${npmcmd} --no-color install
+
     # Verify there is a grunt executable available, installing if missing
     gruntcmd="$(${npmcmd} bin)"/grunt
     if [[ ! -f ${gruntcmd} ]]; then
         echo "WARN: grunt-cli executable not found. Installing everything"
         ${npmcmd} install --no-color grunt-cli
     fi
-
-    # Always run npm install to keep our npm packages correct
-    ${npmcmd} --no-color install
 else
 
     # Install shifter version if there is not package.json
