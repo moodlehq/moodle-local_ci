@@ -52,8 +52,8 @@ gruntcmd="$(${npmcmd} bin)"/grunt
 if [ -x $gruntcmd ]; then
     set +e
     $gruntcmd --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
-    set -e
     exitstatus=$?
+    set -e
 else
     echo "Error: grunt executable not found" | tee "${outputfile}"
     exit 1
