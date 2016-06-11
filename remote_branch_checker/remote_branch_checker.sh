@@ -278,6 +278,11 @@ echo "List of excluded paths"
 echo "${excluded}"
 echo
 
+# Everything is ready, let's install all the required node stuff that some tools will use.
+${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+# And unset npmbase because we don't want those tools to handle node_modules themselves
+npmbase=
+
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
 # so later various utilities can use it for their own checks/reports.
@@ -336,7 +341,7 @@ cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.ph
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
-# Run the grunt checker if Gruntfile exists.
+# Run the grunt checker if Gruntfile exists. node stuff has been already installed.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
     echo "Running grunt.."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
@@ -380,6 +385,9 @@ find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \
 set +e
 
 # Now run all the checks that only need the patchset affected files
+
+# Don't need node stuff anymore, avoid it being analysed by any of the next tools.
+rm ${gitdir}/node_modules
 
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)

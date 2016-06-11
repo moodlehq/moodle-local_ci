@@ -46,13 +46,17 @@ else
     echo "OK: npmbase for branch (${gitbranch}) found"
 fi
 
-# Linking it (after removing, just in case)
-echo "INFO: Linking ${npmbase}/${gitbranch}/node_modules to ${gitdir}/node_modules"
-ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
-
 # Install general stuff only if there is a package.json file
 if [[ -f ${gitdir}/package.json ]]; then
+
+    # Linking it (after removing, just in case)
+    echo "INFO: Linking ${npmbase}/${gitbranch}/node_modules to ${gitdir}/node_modules"
+    ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
+
     echo "INFO: Installing npm stuff following package/shrinkwrap details"
+
+    # Always run npm install to keep our npm packages correct
+    ${npmcmd} --no-color install
 
     # Verify there is a grunt executable available, installing if missing
     gruntcmd="$(${npmcmd} bin)"/grunt
@@ -60,10 +64,9 @@ if [[ -f ${gitdir}/package.json ]]; then
         echo "WARN: grunt-cli executable not found. Installing everything"
         ${npmcmd} install --no-color grunt-cli
     fi
-
-    # Always run npm install to keep our npm packages correct
-    ${npmcmd} --no-color install
 else
+
+    cd ${npmbase}/${gitbranch}
 
     # Install shifter version if there is not package.json
     # (this is required for branches < 29_STABLE)

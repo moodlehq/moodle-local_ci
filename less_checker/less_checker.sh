@@ -6,13 +6,13 @@
 # $gitcmd: Path to the git executable (global)
 # $npmcmd: Path to the npm executable (global)
 # $recessbase: Base directory where we'll store multiple recess versions (can be different by branch)
-# $recessversion: Version of recess to be used by this job
+# $recessversion: (optional) Version of recess to be used by this job
 
 # Let's be strict. Any problem leads to failure.
 set -e
 
 # Verify everything is set
-required="WORKSPACE gitdir gitbranch extrapath gitcmd npmcmd recessbase recessversion"
+required="WORKSPACE gitdir gitbranch extrapath gitcmd npmcmd recessbase"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -36,37 +36,20 @@ cd ${gitdir} && ${gitcmd} reset --hard ${gitbranch}
 rm -fr config.php
 rm -fr ${outputfile}
 
-# Verify we have the recessbase dir, creating if needed
-if [[ ! -d ${recessbase} ]]; then
-    echo "WARN: recessbase dir (${recessbase}) not found. Creating it"
-    mkdir -p ${recessbase}
-    echo "NOTE: recessbase dir (${recessbase}) created"
-else
-    echo "OK: recessbase dir (${recessbase}) found"
-fi
-
-# Verify we have already the recessversion dir, creating if needed
-if [[ ! -d ${recessbase}/${recessversion} ]]; then
-    echo "WARN: recessversion dir (${recessversion}) not found. Creating it"
-    mkdir -p ${recessbase}/${recessversion}
-    echo "NOTE: recessversion dir (${recessversion}) created"
-else
-    echo "OK: recessversion dir (${recessversion}) found"
-fi
-
-# Verify there is a recess executable available, installing id neeed
-if [[ ! -f ${recessbase}/${recessversion}/node_modules/recess/bin/recess ]]; then
-    echo "WARN: recess executable (${recessversion}) not found. Installing it"
-    cd ${recessbase}/${recessversion}
-    ${npmcmd} install recess@${recessversion}
-    echo "NOTE: recess executable (${recessversion}) installed"
-else
-    echo "OK: recess executable (${recessversion}) found"
-fi
+# Prepare all the npm stuff if needed
+export npmbase=${recessbase}
+${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 
 # Iterate over all themes
 exitstatus=0
 echo "Processing ${gitdir}/theme" | tee "${outputfile}"
+
+recesscmd="$(cd ${recessbase}/${gitbranch}/node_modules && ${npmcmd} bin)"/recess
+if [ ! -x $recesscmd ]; then
+    echo "Error: recess executable not found" | tee -a "${outputfile}"
+    exit 1
+fi
+
 for themepath in $(ls ${gitdir}/theme); do
     # Skip non directories.
     if [[ ! -d "${gitdir}/theme/${themepath}" ]]; then
@@ -100,11 +83,10 @@ for themepath in $(ls ${gitdir}/theme); do
         # Compile the .less file to verify it's basically correct
         echo "      - Compiling .less file: ${gitdir}/theme/${themepath}/less/${builtinlessfile}" | tee -a "${outputfile}"
         set +e
-        ${recessbase}/${recessversion}/node_modules/recess/bin/recess --compile --compress \
-                "${gitdir}/theme/${themepath}/less/${builtinlessfile}" > /dev/null
+        ${recesscmd} --compile --compress "${gitdir}/theme/${themepath}/less/${builtinlessfile}" > /dev/null
         compilestatus=${PIPESTATUS[0]}
         set -e
-        if [ $exitstatus -ne 0 ]; then
+        if [ $compilestatus -ne 0 ]; then
             echo "        - ERROR: Problems compiling (recess) the file" | tee -a "${outputfile}"
             exitstatus=1
         else
@@ -146,11 +128,10 @@ for themepath in $(ls ${gitdir}/theme); do
         # Compile the .less file replacing current .css
         echo "    - Compiling .less file: ${lessfile}" | tee -a "${outputfile}"
         set +e
-        ${recessbase}/${recessversion}/node_modules/recess/bin/recess --compile --compress \
-                "${lessfile}" > "${cssfile}"
+        ${recesscmd} --compile --compress "${lessfile}" > "${cssfile}"
         compilestatus=${PIPESTATUS[0]}
         set -e
-        if [ $exitstatus -ne 0 ]; then
+        if [ $compilestatus -ne 0 ]; then
             echo "      - ERROR: Problems compiling (recess) the file" | tee -a "${outputfile}"
             exitstatus=1
         else
