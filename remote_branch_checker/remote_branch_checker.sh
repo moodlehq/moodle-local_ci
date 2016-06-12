@@ -265,9 +265,11 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
 sed '/^$/d' ${WORKSPACE}/work/patchset.files > ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
-# Add .jshint & .csslintrc to patchset files to avoid it being deleted for use later..
+# Add linting config files to patchset files to avoid it being deleted for use later..
 echo '.jshint' >> ${WORKSPACE}/work/patchset.files
 echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
+echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
+echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 
 # List of excluded paths
 export gitdir="${WORKSPACE}"
@@ -379,15 +381,26 @@ find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \
 
 # ########## ########## ########## ##########
 
+# Now run all the checks that only need the patchset affected files
+
+if [ -f $WORKSPACE/.eslintrc ]; then
+    eslintcmd="$(${npmcmd} bin)"/eslint
+    if [ -x $eslintcmd ]; then
+        "$(${npmcmd} bin)"/grunt ignorefiles
+        $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
+    else
+        echo "Error: .eslintrc file found, but eslint executable not found" | tee -a ${errorfile}
+        exit 1
+    fi
+fi
+
+# Don't need node stuff anymore, avoid it being analysed by any of the next tools.
+rm ${gitdir}/node_modules
+
 # Disable exit-on-error for the rest of the script, it will
 # advance no matter of any check returning error. At the end
 # we will decide based on gathered information
 set +e
-
-# Now run all the checks that only need the patchset affected files
-
-# Don't need node stuff anymore, avoid it being analysed by any of the next tools.
-rm ${gitdir}/node_modules
 
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)
@@ -413,9 +426,11 @@ ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
 # Exclude build directories from the results (e.g. lib/yui/build, lib/amd/build/)
 find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jshintignore
 
-# Run the JSHINT (using the checked out .jshint file)
-${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
-    --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
+# Run jshint if we haven't got eslint results
+if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
+    ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
+        --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
+fi
 
 # Run CSSLINT
 if [ ! -f ${WORKSPACE}/.csslintrc ]; then
