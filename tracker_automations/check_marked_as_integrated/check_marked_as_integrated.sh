@@ -59,6 +59,11 @@ errors=()
 
 # Move to the repo.
 cd $gitdir
+
+# Let's verify if a git gc is required.
+${mydir}/../../git_garbage_collector/git_garbage_collector.sh
+
+# Fetch stuff.
 ${gitcmd} fetch ${gitremotename}
 
 # Iterate over found issues and check that their commits are integrated in the

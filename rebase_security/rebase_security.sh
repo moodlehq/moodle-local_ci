@@ -152,6 +152,9 @@ info "Cleaning worktree"
 $gitcmd clean -dfx
 $gitcmd reset --hard
 
+# Let's verify if a git gc is required.
+${mydir}/../git_garbage_collector/git_garbage_collector.sh
+
 # Set our local wd to current state of security repo.
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 $gitcmd checkout -B $securitybranch security/$securitybranch
