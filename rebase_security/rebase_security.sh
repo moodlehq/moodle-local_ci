@@ -127,6 +127,11 @@ if ! $($gitcmd remote -v | grep '^integration[[:space:]]]*' | grep -q $integrati
     $gitcmd remote add integration $integrationremote
 fi
 
+# Cancel possible rebases in progress if last run finished with an uncontrolled error.
+if [ -d ".git/rebase-merge" ]; then
+    $gitcmd rebase --abort
+fi
+
 git fetch integration
 git fetch security
 
@@ -159,9 +164,16 @@ $gitcmd checkout -B $securitybranch security/$securitybranch
 info "Rebasing security branch:"
 if ! ($gitcmd rebase --onto integration/$gitbranch security/$referencebranch)
 then
+    # Prevent infinite loops.
+    maxloops=100
+    loops=0
     fix_conflict
     until $gitcmd rebase --continue; do
         fix_conflict
+        if [ $loops -ge $maxloops ]; then
+            exit_with_error "Stopping to prevent infinite loops. Check the script output."
+        fi
+        let loops=loops+1
     done
 fi
 
