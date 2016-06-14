@@ -12,9 +12,6 @@ set -e
 # Calculate some variables.
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Ensure (gruntcmd or (recesscmd and shiftercmd)) are available (depends on $gitbranch)
-. ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
-
 moodlecssfile="theme/bootstrapbase/style/moodle.css"
 editorcssfile="theme/bootstrapbase/style/editor.css"
 jsbuild="/yui/build/"
@@ -153,6 +150,9 @@ $gitcmd reset --hard
 # Set our local wd to current state of security repo.
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 $gitcmd checkout -B $securitybranch security/$securitybranch
+
+# Ensure (gruntcmd or (recesscmd and shiftercmd)) are available (depends on $gitbranch)
+. ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 
 # Do the magic!
 # ABRACADABRA!!🌟
