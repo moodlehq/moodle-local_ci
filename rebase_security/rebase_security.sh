@@ -36,7 +36,7 @@ function compile_less() {
 
     # Grunt is available since Moodle 2.9, fallback to recess.
     if grunt_available; then
-        $gruntcmd "css"
+        $gruntcmd --no-color "css"
     else
         $recesscmd --compile --compress theme/bootstrapbase/less/moodle.less > "$moodlecssfile"
         $recesscmd --compile --compress theme/bootstrapbase/less/editor.less > "$editorcssfile"
@@ -50,7 +50,7 @@ function compile_js() {
 
     # Grunt is available since Moodle 2.9, fallback to shifter (only YUI modules before).
     if grunt_available; then
-        $gruntcmd "js"
+        $gruntcmd --no-color "js"
     else
         $shiftercmd --walk --recursive
     fi
