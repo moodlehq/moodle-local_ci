@@ -14,8 +14,6 @@
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 # $extrapath: Extra paths to be available (global)
-# $gcinterval: Number of runs before performing a manual gc of the repo. Defaults to 25. 0 means disabled.
-# $gcaggressiveinterval: Number of runs before performing an aggressive gc of the repo. Defaults to 900. 0 means disabled.
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 
@@ -35,8 +33,10 @@ maxcommitswarn=${maxcommitswarn:-10}
 maxcommitserror=${maxcommitserror:-100}
 rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
-gcinterval=${gcinterval:-25}
-gcaggressiveinterval=${gcaggressiveinterval:-900}
+
+# And reconvert some variables
+export gitdir="${WORKSPACE}"
+export gitbranch="${integrateto}"
 
 # Verify everything is set
 required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmcmd npmbase"
@@ -72,19 +72,7 @@ ${gitcmd} clean -dfx
 ${gitcmd} reset --hard
 
 # Let's verify if a git gc is required.
-
-random=${RANDOM}
-if [[ -n "${BUILD_TAG}" ]]; then # Running jenkins, use build number.
-    random=${BUILD_NUMBER}
-fi
-
-if [[ ${gcaggressiveinterval} -gt 0 ]] && [[ $((${random} % ${gcaggressiveinterval})) -eq 0 ]]; then
-    echo "Executing git gc --aggressive"
-    ${gitcmd} gc --aggressive --quiet
-elif [[ ${gcinterval} -gt 0 ]] && [[ $((${random} % ${gcinterval})) -eq 0 ]]; then
-    echo "Executing git gc"
-    ${gitcmd} gc --quiet
-fi
+${mydir}/../git_garbage_collector/git_garbage_collector.sh
 
 # Set the build display name using jenkins-cli
 # Based on issue + integrateto, decide the display name to be used
@@ -272,8 +260,6 @@ echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 
 # List of excluded paths
-export gitdir="${WORKSPACE}"
-export gitbranch="${integrateto}"
 . ${mydir}/../define_excluded/define_excluded.sh
 
 echo "List of excluded paths"
