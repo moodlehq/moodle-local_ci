@@ -128,7 +128,7 @@ if ! $($gitcmd remote -v | grep '^integration[[:space:]]]*' | grep -q $integrati
 fi
 
 # Cancel possible rebases in progress if last run finished with an uncontrolled error.
-if [ -d ".git/rebase-merge" ]; then
+if [ -d ".git/rebase-merge" ] || [ -d ".git/rebase-apply" ]; then
     $gitcmd rebase --abort
 fi
 
