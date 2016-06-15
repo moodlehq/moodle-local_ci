@@ -1,0 +1,26 @@
+From ca0ff741dab36b760e20a37418fcdb139885eb79 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 23:06:36 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 fixture: unbuilt js change for grunt
+
+This should be applied on top of v3.1.0
+---
+ lib/amd/src/url.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/amd/src/url.js b/lib/amd/src/url.js
+index b3263ee..b6348de 100644
+--- a/lib/amd/src/url.js
++++ b/lib/amd/src/url.js
+@@ -61,7 +61,7 @@ define(['core/config'], function(config) {
+         relativeUrl: function(relativePath) {
+ 
+             if (relativePath.indexOf('http:') === 0 || relativePath.indexOf('https:') === 0 || relativePath.indexOf('://') >= 0) {
+-                throw new Error('relativeUrl function does not accept absolute urls');
++                throw new Error('relativeUrl function does not accept absolute urls. danp woz ere!');
+             }
+ 
+             // Fix non-relative paths;
+-- 
+2.8.1
+

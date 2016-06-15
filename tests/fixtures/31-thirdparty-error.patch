@@ -1,0 +1,31 @@
+From 096f3a432dcc478a7277889dee49f46f833c39b5 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 23:21:24 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 fixture: for thirdparty check
+
+This should be applied on top of v3.1.0
+---
+ lib/amd/src/mustache.js | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/lib/amd/src/mustache.js b/lib/amd/src/mustache.js
+index a3ce19e..1075fad 100644
+--- a/lib/amd/src/mustache.js
++++ b/lib/amd/src/mustache.js
+@@ -25,13 +25,6 @@
+ //
+ 
+ // Description of import into Moodle:
+-// Checkout from https://github.com/moodle/custom-mustache.js
+-// Rebase onto latest release tag from https://github.com/janl/mustache.js
+-// Copy mustache.js into lib/amd/src/ in Moodle folder.
+-// Add the license as a comment to the file and these instructions.
+-// Add jshint tags so this file is not linted.
+-// Remove the "global define:" comment (hint for linter)
+-// Make sure that you have not removed the custom code for '$' and '<'.
+ 
+ /*!
+  * mustache.js - Logic-less {{mustache}} templates with JavaScript
+-- 
+2.8.1
+

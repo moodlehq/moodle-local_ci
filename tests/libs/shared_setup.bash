@@ -22,18 +22,24 @@ fi
 
 export WORKSPACE=$BATS_TMPDIR/workspace
 mkdir -p $WORKSPACE
-export gitcmd=`which git`
-export npmcmd=`which npm`
+export gitcmd=git
+export phpcmd=php
+export npmcmd=npm
 export npmbase=$LOCAL_CI_TESTS_CACHEDIR/npmbase
 mkdir -p $npmbase
 export gitdir=$LOCAL_CI_TESTS_GITDIR
 
 create_git_branch () {
+    branch=$1
+    resetto=$2
+
     cd $gitdir
     $gitcmd checkout . -q
     $gitcmd clean -fd -q
-    $gitcmd checkout -B $gitbranch -q
-    $gitcmd reset --hard origin/$gitbranch
+    $gitcmd checkout -B $branch -q
+    $gitcmd reset --hard $resetto -q
+
+    export gitbranch=$branch
     cd $BATS_TEST_DIRNAME
 }
 
