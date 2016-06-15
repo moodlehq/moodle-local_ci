@@ -1,0 +1,15 @@
+language: php
+php:
+    - '7.0'
+sudo: false
+cache:
+  directories:
+      - $HOME/cachedir
+install: git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
+before_script:
+  - 'git config --global user.email "travis@localhost" && git config --global user.name "Travis CI"'
+  - "export LOCAL_CI_TESTS_CACHEDIR=$HOME/cachedir && mkdir -p $LOCAL_CI_TESTS_CACHEDIR"
+  - "export LOCAL_CI_TESTS_GITDIR=$HOME/gitdir && git clone git://github.com/moodle/moodle $LOCAL_CI_TESTS_GITDIR"
+script:
+  - $HOME/bats/bin/bats tests
+
