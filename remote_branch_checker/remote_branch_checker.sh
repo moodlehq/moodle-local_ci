@@ -372,7 +372,6 @@ find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \
 if [ -f $WORKSPACE/.eslintrc ]; then
     eslintcmd="$(${npmcmd} bin)"/eslint
     if [ -x $eslintcmd ]; then
-        "$(${npmcmd} bin)"/grunt ignorefiles
         $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
     else
         echo "Error: .eslintrc file found, but eslint executable not found" | tee -a ${errorfile}
