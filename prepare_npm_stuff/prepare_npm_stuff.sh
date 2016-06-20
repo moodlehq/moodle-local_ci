@@ -3,6 +3,7 @@
 # $gitbranch: Branch we are going to install the DB
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
+# $nodecmd: Optional, path to the node executable (global)
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
 # $recessversion: Optional, defaults to 1.1.9 (Important! it's the only legacy version working. Older ones
 #    lead to empty results). Not installed if there is a package.json file (present in 29 and up)
@@ -24,6 +25,14 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Apply some defaults.
 shifterversion=${shifterversion:-0.4.6}
 recessversion=${recessversion:-1.1.9}
+
+# Print nodejs and npm versions for informative purposes
+if [[ -x ${nodecmd} ]]; then
+    echo "INFO: node version: $(${nodecmd} --version)"
+fi
+if [[ -x ${npmcmd} ]]; then
+    echo "INFO: npm  version: $(${npmcmd} --version)"
+fi
 
 # Move to base directory
 cd ${gitdir}
