@@ -318,26 +318,30 @@ export GIT_COMMIT=${finalcommit}
 # Run the commit checker (verify_commit_messages)
 # We skip this if the requested build is $isplugin
 if [[ -z "${isplugin}" ]]; then
+    echo "Checking commit messages..."
     ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
     cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
 fi
 
 # Run the php linter (php_lint)
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
+echo "Running php lint..."
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=phplint > "${WORKSPACE}/work/phplint.xml"
 
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
+echo "Checking thirdparty changes..."
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
 # Run the grunt checker if Gruntfile exists. node stuff has been already installed.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
-    echo "Running grunt.."
+    echo "Running grunt..."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
     cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
     cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 fi
 
 if [[ -z "${isplugin}" ]]; then
+    echo "Checking integrated issues fixfor versions and branches..."
     ${phpcmd} ${mydir}/../travis/check_branch_status.php --repository=$remote --branch=$branch > "${WORKSPACE}/work/travis.txt"
     cat "${WORKSPACE}/work/travis.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=travis > "${WORKSPACE}/work/travis.xml"
 fi
@@ -348,6 +352,7 @@ fi
 # Now we can proceed to delete all the files not being part of the
 # patchset and also the excluded paths, because all the remaining checks
 # are perfomed against the code introduced by the patchset
+echo "Deleting excluded and unrelated files..."
 
 # Remove all the excluded (but .git and work)
 set -e
@@ -367,9 +372,15 @@ find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \
 
 # ########## ########## ########## ##########
 
+# Disable exit-on-error for the rest of the script, it will
+# advance no matter of any check returning error. At the end
+# we will decide based on gathered information
+set +e
+
 # Now run all the checks that only need the patchset affected files
 
-if [ -f $WORKSPACE/.eslintrc_disabled_til_fixed ]; then
+if [ -f $WORKSPACE/.eslintrc ]; then
+    echo "Running eslint..."
     eslintcmd="$(${npmcmd} bin)"/eslint
     if [ -x $eslintcmd ]; then
         $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
@@ -382,13 +393,9 @@ fi
 # Don't need node stuff anymore, avoid it being analysed by any of the next tools.
 rm ${gitdir}/node_modules
 
-# Disable exit-on-error for the rest of the script, it will
-# advance no matter of any check returning error. At the end
-# we will decide based on gathered information
-set +e
-
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)
+echo "Checking upgrade savepoints..."
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
 ${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php > "${WORKSPACE}/work/savepoints.txt"
 cat "${WORKSPACE}/work/savepoints.txt" | ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
@@ -399,12 +406,14 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 #    ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
 
 # Run the PHPCS
+echo "Running codesniffer..."
 ${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
 
 # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
 # (we pass to it the list of valid components that was built before deleting files)
+echo "Running phpdocs checker..."
 ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
     --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 
@@ -413,11 +422,13 @@ find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jsh
 
 # Run jshint if we haven't got eslint results
 if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
+    echo "Running jshint..."
     ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
         --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 fi
 
 # Run CSSLINT
+echo "Running csslint..."
 if [ ! -f ${WORKSPACE}/.csslintrc ]; then
     echo "csslintrc file not found, defaulting to error checking only"
     echo '--errors=errors' > ${WORKSPACE}/.csslintrc
