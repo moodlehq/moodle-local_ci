@@ -369,7 +369,7 @@ find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \
 
 # Now run all the checks that only need the patchset affected files
 
-if [ -f $WORKSPACE/.eslintrc ]; then
+if [ -f $WORKSPACE/.eslintrc_disabled_til_fixed ]; then
     eslintcmd="$(${npmcmd} bin)"/eslint
     if [ -x $eslintcmd ]; then
         $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
