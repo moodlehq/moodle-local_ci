@@ -324,8 +324,8 @@ if [[ -z "${isplugin}" ]]; then
 fi
 
 # Run the php linter (php_lint)
-${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 echo "Running php lint..."
+${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=phplint > "${WORKSPACE}/work/phplint.xml"
 
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
@@ -360,12 +360,12 @@ for todelete in ${excluded}; do
     if [[ ${todelete} =~ ".git" || ${todelete} =~ "work" ]]; then
         continue
     fi
-    rm -fr ${WORKSPACE}/${todelete}
+    rm -fr "${WORKSPACE}/${todelete}"
 done
 
 # Remove all the files, but the patchset ones and .git and work
 find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" \) | \
-    grep -vf ${WORKSPACE}/work/patchset.files | xargs rm
+    grep -vf ${WORKSPACE}/work/patchset.files | xargs -I{} rm {}
 
 # Remove all the empty dirs remaining, but .git and work
 find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \) -delete
