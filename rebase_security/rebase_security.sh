@@ -61,7 +61,7 @@ function compile_yui() {
 
 function compile_amd() {
     # No AMD modules before Moodle 2.9.
-    $gruntcmd "amd"
+    $gruntcmd --no-color "amd"
     $gitcmd add "*$amdbuild*"
 }
 
