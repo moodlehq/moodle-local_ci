@@ -133,6 +133,7 @@ class diff_changes_extractor {
         $clineint = array(); // Current line interval being modfied
         $inchunk = false; // To determine if we are in a chunk or no
         $deletefile = false; // To detect delete operation and skip those files
+        $binaryfile = false; // To detect binary files and handle them specially
 
         // Skip always these lines
         $skiplines = array('diff', 'inde', '--- ');
@@ -158,8 +159,13 @@ class diff_changes_extractor {
                     continue;
                 }
 
+                // If it's one Binary file, we mark it
+                if ($lineheader === 'Bina') {
+                    $binaryfile = true;
+                }
+
                 // Detect if we are changing of file
-                if ($lineheader === '+++ ') {
+                if ($lineheader === '+++ ' || $binaryfile) {
 
                     $clineinfile = 0;
                     $inchunk = false;
@@ -176,17 +182,26 @@ class diff_changes_extractor {
                         $cfile = '';
                     }
 
-                    // Skip new file if deleting
+                    // Skip new file and clean all flags if deleting
                     if ($deletefile) {
                         $deletefile = false;
+                        $binaryfile = false;
                         continue;
                     }
 
-                    // Reset variables for new file
-                    if (!preg_match('/^\+\+\+ (b\/)?([^\s]*)/', $line, $match)) {
-                        print_error('Error: Something went wrong matching file. Line: ' . $line);
+                    // Calculate new file being processed.
+                    if ($binaryfile) {
+                        if (!preg_match('/^Binary files .* and (b\/)?(.*?)\s*differ$/', $line, $match)) {
+                            print_error('Error: Something went wrong matching file. Line: ' . $line);
+                        }
+                        $binaryfile = false;
+                    } else {
+                        if (!preg_match('/^\+\+\+ (b\/)?(.*?)\s*$/', $line, $match)) {
+                            print_error('Error: Something went wrong matching file. Line: ' . $line);
+                        }
                     }
                     $cfile = $match[2];
+
                     // Output file begin
                     $this->output_file_begin($cfile);
                     continue;
