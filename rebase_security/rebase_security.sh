@@ -14,7 +14,8 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 moodlecssfile="theme/bootstrapbase/style/moodle.css"
 editorcssfile="theme/bootstrapbase/style/editor.css"
-jsbuild="/yui/build/"
+yuibuild="/yui/build/"
+amdbuild="/amd/build/"
 
 function exit_with_error() {
     echo "ERROR: $1"
@@ -46,21 +47,28 @@ function compile_less() {
     $gitcmd add "$editorcssfile"
 }
 
-function compile_js() {
+function compile_yui() {
 
     # Grunt is available since Moodle 2.9, fallback to shifter (only YUI modules before).
     if grunt_available; then
-        $gruntcmd --no-color "js"
+        $gruntcmd --no-color "shifter"
     else
         $shiftercmd --walk --recursive
     fi
 
-    $gitcmd add "*$jsbuild*"
+    $gitcmd add "*$yuibuild*"
+}
+
+function compile_amd() {
+    # No AMD modules before Moodle 2.9.
+    $gruntcmd "amd"
+    $gitcmd add "*$amdbuild*"
 }
 
 function fix_conflict() {
 
-    local jscompiled=""
+    local yuicompiled=""
+    local amdcompiled=""
     local lesscompiled=""
 
     # We might have multiple conflicts in the same commit.
@@ -78,11 +86,18 @@ function fix_conflict() {
             compile_less
             lesscompiled=1
 
-        elif [[ "$conflict" =~ "$jsbuild" ]] && [ -z "$jscompiled" ]
+        elif [[ "$conflict" =~ "$yuibuild" ]] && [ -z "$yuicompiled" ]
         then
-            echo "JS build conflict in $conflict"
-            compile_js
-            jscompiled=1
+            echo "YUI build conflict in $conflict"
+            compile_yui
+            yuicompiled=1
+
+        elif [[ "$conflict" =~ "$amdbuild" ]] && [ -z "$amdcompiled" ]
+        then
+            echo "AMD build conflict in $conflict"
+            compile_amd
+            amdcompiled=1
+
         else
             # Rebase failed, abort and exit.
             $gitcmd rebase --abort
