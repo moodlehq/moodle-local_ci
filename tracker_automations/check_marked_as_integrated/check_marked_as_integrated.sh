@@ -144,7 +144,7 @@ done <<< "${issueslist}"
 
 # Hacky 'join' from bash array into extended grep syntax string i.e.(MDL-3333|MDL-4444|MDL-12345)
 allissues=${issues[*]}
-grepsearch="(${allissues// /|}|^Automatically generated|^weekly.*release|^Moodle release|^on\-demand|^NOBUG\:)"
+grepsearch="(${allissues// /|}|^Automatically generated|^weekly.*release|^Moodle release|^on\-demand|^NOBUG\:|This reverts commit|)"
 
 # Loop through the active branches looking for commits without issues in integration
 for branch in "${activebranches[@]}"
