@@ -66,11 +66,19 @@ ${mydir}/../../git_garbage_collector/git_garbage_collector.sh
 # Fetch stuff.
 ${gitcmd} fetch ${gitremotename}
 
-# Iterate over found issues and check that their commits are integrated in the
+# While looking at all the issues in integration, capture some variables to use
+# for unowned commits check later.
+activebranches=(master) # The active branches which we have commits on.
+issues=() # The list of issues in current integration.
+
+####
+# Iterate over issues in integration and check their commits are integrated in the
 # specified branches.
+####
 issueslist=$( cat "${resultfile}" )
 while read -r line; do
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
+    issues+=($issue)
 
     if [[ -z ${issue} ]]; then
         # No issue found...
@@ -101,7 +109,13 @@ while read -r line; do
             branch=$gitremotename'/master'
             masterfound=1
         else
-            branch=$gitremotename'/MOODLE_'$majorversion'_STABLE'
+            branchname="MOODLE_${majorversion}_STABLE"
+            branch="${gitremotename}/${branchname}"
+
+            # Capture this as an active branch if not already added to the array.
+            if ! [[ "${activebranches[@]}" =~ "${branchname}" ]]; then
+                activebranches+=($branchname)
+            fi
         fi
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
@@ -124,7 +138,39 @@ while read -r line; do
 
 done <<< "${issueslist}"
 
+####
+# Now for any commits which are not found in current integration..
+####
+
+# Hacky 'join' from bash array into extended grep syntax string i.e.(MDL-3333|MDL-4444|MDL-12345)
+allissues=${issues[*]}
+grepsearch="(${allissues// /|}|^Automatically generated|^weekly.*release|^Moodle release|^on\-demand|^NOBUG\:|This reverts commit|)"
+
+# Loop through the active branches looking for commits without issues in integration
+for branch in "${activebranches[@]}"
+do
+    echo "Looking for unowned commits in $branch"
+    # Fetch the equivalent moodle.git branch
+    $gitcmd fetch -q git://git.moodle.org/moodle.git $branch
+    # Find unowned commits since moodle.git
+    unownedcommits=$($gitcmd log origin/${branch}...FETCH_HEAD \
+        --pretty=format:"  %h %s (%an)" --no-merges \
+        --invert-grep --extended-regexp \
+        --grep="$grepsearch")
+
+    # If we find unowned commits report them.
+    if [[ $unownedcommits ]]; then
+        errors+=("$branch commits found without issue in integration:" "$unownedcommits")
+    fi
+done
+
+echo
+
+####
+# Report errors if necessary
+####
 if [ ! -z "$errors" ]; then
+    echo "Errors found:"
     printf '%s\n' "${errors[@]}"
     exit 1
 fi
