@@ -81,7 +81,7 @@ class remote_branch_reporter {
             'title' => 'PHP coding style problems',
             'abbr' => 'phpcs',
             'description' => 'This section shows the coding style problems detected in the code by phpcs',
-            'url' => 'http://docs.moodle.org/dev/Coding_style',
+            'url' => 'https://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
             'warningweight' => 1);
@@ -148,7 +148,7 @@ class remote_branch_reporter {
             'title' => 'PHPDocs style problems',
             'abbr' => 'phpdoc',
             'description' => 'This section shows the phpdocs problems detected in the code by local_moodlecheck',
-            'url' => 'http://docs.moodle.org/dev/Coding_style',
+            'url' => 'https://docs.moodle.org/dev/Coding_style',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 3,
             'warningweight' => 1);
@@ -180,7 +180,7 @@ class remote_branch_reporter {
             'title' => 'Update savepoints problems',
             'abbr' => 'savepoint',
             'description' => 'This section shows problems detected with the handling of upgrade savepoints',
-            'url' => 'http://docs.moodle.org/dev/Upgrade_API',
+            'url' => 'https://docs.moodle.org/dev/Upgrade_API',
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 50,
             'warningweight' => 10);
