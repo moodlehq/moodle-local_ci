@@ -125,6 +125,8 @@ else
     fi
 fi
 
+# Move back to base directory.
+cd ${gitdir}
 
 # Output information about installed binaries.
 echo "INFO: Installation ended"
