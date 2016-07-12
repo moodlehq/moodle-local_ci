@@ -50,8 +50,16 @@ rm -fr $(find . -path '*/amd/build' -type d)
 # The echo here works around a problem where shifter is sending colours (MDL-52591).
 gruntcmd="$(${npmcmd} bin)"/grunt
 if [ -x $gruntcmd ]; then
+    # Run the default task (same as specifying no arguments)
+    tasks="default"
+
+    if [ -e .eslintignore ]; then
+        # In 3.2 and later run ignorefiles task
+        tasks="$tasks ignorefiles"
+    fi
+
     set +e
-    $gruntcmd --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
+    $gruntcmd $tasks --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
     exitstatus=$?
     set -e
 else
