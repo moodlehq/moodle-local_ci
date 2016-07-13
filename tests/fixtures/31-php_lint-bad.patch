@@ -1,0 +1,22 @@
+From 7fd18b3698c14916bdfa83f502544ddd0eb65b20 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 22:54:14 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 fixture: for php_lint tests
+
+This should be applied on top of v3.1.0
+---
+ lib/moodlelib.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/moodlelib.php b/lib/moodlelib.php
+index 8160f89..f6c0fd7 100644
+--- a/lib/moodlelib.php
++++ b/lib/moodlelib.php
+@@ -9768,3 +9768,4 @@ class lang_string {
+         return array('forcedstring', 'string', 'lang');
+     }
+ }
++die('oh this is gonna be a problem!
+-- 
+2.8.1
+

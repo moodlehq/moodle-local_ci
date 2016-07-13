@@ -1,0 +1,26 @@
+From 793df60c6b5d4733191ef7d2c2b19b940803c066 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 22:35:27 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 fixture: for less tests
+
+This should be applied on top of v2.7.14
+---
+ theme/bootstrapbase/less/moodle/reports.less | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/theme/bootstrapbase/less/moodle/reports.less b/theme/bootstrapbase/less/moodle/reports.less
+index 6c90a80..211c709 100644
+--- a/theme/bootstrapbase/less/moodle/reports.less
++++ b/theme/bootstrapbase/less/moodle/reports.less
+@@ -15,4 +15,6 @@
+ 
+ #page-report-participation-index.dir-rtl .participationselectform div label[for=menuinstanceid] {
+     margin-right: 0px; // No right margin for RTL.
+-}
+\ No newline at end of file
++}
++
++.integrationcsschange{display:none;}
+-- 
+2.8.1
+

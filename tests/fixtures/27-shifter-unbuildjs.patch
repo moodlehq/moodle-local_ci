@@ -1,0 +1,26 @@
+From f2e278d056561d0d6fbce54be6d187a514640553 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 22:20:00 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 fixture: for shifter tests
+
+This should be applied on top of v2.7.14
+---
+ lib/editor/atto/yui/src/editor/js/editor.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/editor/atto/yui/src/editor/js/editor.js b/lib/editor/atto/yui/src/editor/js/editor.js
+index ca6ca55..5260475 100644
+--- a/lib/editor/atto/yui/src/editor/js/editor.js
++++ b/lib/editor/atto/yui/src/editor/js/editor.js
+@@ -363,7 +363,7 @@ Y.extend(Editor, Y.Base, {
+     },
+ 
+     _setPluginState: function(enable, plugin) {
+-        var target = 'disableButtons';
++        var target = 'disableButtons-dan-woz-ere';
+         if (enable) {
+             target = 'enableButtons';
+         }
+-- 
+2.8.1
+

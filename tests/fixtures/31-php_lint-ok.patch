@@ -1,0 +1,26 @@
+From c6385705362f492fab3dc90cf5317e372fef60c8 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 15 Jun 2016 22:51:00 +0100
+Subject: [PATCH 1/1] MDLSITE-4211 OK fixture: for php_lint tests
+
+This should be applied on top of v3.1.0
+---
+ lib/moodlelib.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/moodlelib.php b/lib/moodlelib.php
+index 8160f89..c7cadf2 100644
+--- a/lib/moodlelib.php
++++ b/lib/moodlelib.php
+@@ -9321,7 +9321,7 @@ function object_array_unique($array, $keepkeyassoc = true) {
+  * @return boolean
+  */
+ function is_primary_admin($userid) {
+-    $primaryadmin =  get_admin();
++    $primaryadmin = get_admin();
+ 
+     if ($userid == $primaryadmin->id) {
+         return true;
+-- 
+2.8.1
+
