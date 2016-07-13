@@ -1,0 +1,26 @@
+From e85a153c0a41fdf85c1a8f2a4467647eabfc87d6 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 13 Jul 2016 17:25:47 +0100
+Subject: [PATCH 1/1] MDLSITE-4685 whitespace: intoduce error
+
+Should be applied on top of v3.1.1
+---
+ config-dist.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config-dist.php b/config-dist.php
+index 30d8c15..7be9f53 100644
+--- a/config-dist.php
++++ b/config-dist.php
+@@ -28,7 +28,7 @@
+ //                                                                       //
+ ///////////////////////////////////////////////////////////////////////////
+ unset($CFG);  // Ignore this line
+-global $CFG;  // This is necessary here for PHPUnit execution
++global $CFG;  // This is necessary here for PHPUnit execution 
+ $CFG = new stdClass();
+ 
+ //=========================================================================
+-- 
+2.9.0
+
