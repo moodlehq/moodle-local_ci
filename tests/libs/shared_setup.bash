@@ -43,3 +43,11 @@ create_git_branch () {
     cd $BATS_TEST_DIRNAME
 }
 
+clean_workspace_directory() {
+    # A safe version of rm..
+    cd $WORKSPACE && rm -rf *
+}
+
+# Clean up any $WORKSPACE state (only necessary in case of
+# previously half finished runs)
+clean_workspace_directory
