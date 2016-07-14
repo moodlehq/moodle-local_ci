@@ -29,7 +29,7 @@ export npmbase=$LOCAL_CI_TESTS_CACHEDIR/npmbase
 mkdir -p $npmbase
 export gitdir=$LOCAL_CI_TESTS_GITDIR
 
-create_git_branch () {
+create_git_branch() {
     branch=$1
     resetto=$2
 
@@ -40,12 +40,30 @@ create_git_branch () {
     $gitcmd reset --hard $resetto -q
 
     export gitbranch=$branch
-    cd $BATS_TEST_DIRNAME
+    cd $OLDPWD # Return to where we were.
+}
+
+git_apply_fixture() {
+    patchname=$1
+    patch=$BATS_TEST_DIRNAME/fixtures/$patchname
+
+    if [ ! -f $patch ];
+    then
+        echo "Fixture named $patchname does not exist in fixtures directory" 1>&2
+        exit 1
+    fi
+
+    cd $gitdir
+    export FIXTURE_HASH_BEFORE=$($gitcmd rev-parse HEAD)
+    $gitcmd am $patch
+    export FIXTURE_HASH_AFTER=$($gitcmd rev-parse HEAD)
+    cd $OLDPWD # Return to where we were.
 }
 
 clean_workspace_directory() {
     # A safe version of rm..
     cd $WORKSPACE && rm -rf *
+    cd $OLDPWD # Return to where we were.
 }
 
 # Clean up any $WORKSPACE state (only necessary in case of

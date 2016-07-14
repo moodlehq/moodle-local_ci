@@ -11,6 +11,7 @@ setup () {
     if [ -d $statedir ]; then
         cp -R $statedir/. $WORKSPACE
     fi
+    cd $BATS_TEST_DIRNAME/../detect_conflicts/
 }
 
 teardown () {
@@ -23,7 +24,6 @@ teardown () {
     # Ensure initial state is clean.
     clean_workspace_directory
 
-    cd $BATS_TEST_DIRNAME/../detect_conflicts/
     # On first run, there are no results to compare to so should always
     # pass.
     run ./detect_conflicts.sh
@@ -36,7 +36,6 @@ teardown () {
 }
 
 @test "detect_conflicts: normal state OK" {
-    cd $BATS_TEST_DIRNAME/../detect_conflicts/
     # On second run, should still pass with same results
     run ./detect_conflicts.sh
     assert_success
@@ -47,11 +46,8 @@ teardown () {
 }
 
 @test "detect_conflicts: merge conflict FAIL" {
-    # Lets introduce a merge conflict and ensure it fails
-    cd $gitdir
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/31-merge-conflict.patch
+    git_apply_fixture 31-merge-conflict.patch
 
-    cd $BATS_TEST_DIRNAME/../detect_conflicts/
     run ./detect_conflicts.sh
     assert_failure
     assert_output --partial "current count: 3"

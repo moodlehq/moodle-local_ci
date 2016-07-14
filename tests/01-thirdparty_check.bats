@@ -6,15 +6,14 @@ setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
 
     export extrapath=.
+    cd $BATS_TEST_DIRNAME/../thirdparty_check/
 }
 
 @test "thirdparty_check: thirdpartyfile modified OK" {
-    cd $gitdir
-    export initialcommit=$($gitcmd rev-parse HEAD)
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/31-thirdparty-ok.patch
-    export finalcommit=$($gitcmd rev-parse HEAD)
+    git_apply_fixture 31-thirdparty-ok.patch
+    export initialcommit=$FIXTURE_HASH_BEFORE
+    export finalcommit=$FIXTURE_HASH_AFTER
 
-    cd $BATS_TEST_DIRNAME/../thirdparty_check/
     run ./thirdparty_check.sh
     assert_success
     assert_output --partial "INFO: Checking for third party modifications from $initialcommit to $finalcommit"
@@ -24,12 +23,10 @@ setup () {
 }
 
 @test "thirdparty_check: thirdpartyfile modified without update" {
-    cd $gitdir
-    export initialcommit=$($gitcmd rev-parse HEAD)
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/31-thirdparty-error.patch
-    export finalcommit=$($gitcmd rev-parse HEAD)
+    git_apply_fixture 31-thirdparty-error.patch
+    export initialcommit=$FIXTURE_HASH_BEFORE
+    export finalcommit=$FIXTURE_HASH_AFTER
 
-    cd $BATS_TEST_DIRNAME/../thirdparty_check/
     run ./thirdparty_check.sh
     assert_success # TODO, this should be fixed!
     assert_output --partial "INFO: Checking for third party modifications from $initialcommit to $finalcommit"

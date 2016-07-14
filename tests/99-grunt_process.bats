@@ -7,10 +7,10 @@ setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
 
     export extrapath=.
+    cd $BATS_TEST_DIRNAME/../grunt_process/
 }
 
 @test "grunt_process: normal" {
-    cd $BATS_TEST_DIRNAME/../grunt_process/
     run ./grunt_process.sh
     assert_success
     assert_output --partial "Done, without errors."
@@ -18,12 +18,10 @@ setup () {
 }
 
 @test "grunt_process: Uncommited .less change" {
-    # Create css change.
-    cd $gitdir
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/31-grunt-less-unbuilt.patch
+    # Create less change
+    git_apply_fixture 31-grunt-less-unbuilt.patch
 
     # Run test
-    cd $BATS_TEST_DIRNAME/../grunt_process/
     run ./grunt_process.sh
 
     # Assert result
@@ -35,11 +33,9 @@ setup () {
 
 @test "grunt_process: Uncommited .js change" {
     # Create js change.
-    cd $gitdir
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/31-grunt-js-unbuilt.patch
+    git_apply_fixture 31-grunt-js-unbuilt.patch
 
     # Run test
-    cd $BATS_TEST_DIRNAME/../grunt_process/
     run ./grunt_process.sh
 
     # Assert result
@@ -55,11 +51,9 @@ setup () {
 
     # Testing on in-dev 3.2dev
     create_git_branch 32-dev 5a1728df39116fc701cc907e85a638aa7674f416
-    cd $gitdir
-    $gitcmd am $BATS_TEST_DIRNAME/fixtures/32-thirdparty-lib-added.patch
+    git_apply_fixture 32-thirdparty-lib-added.patch
 
     # Run test
-    cd $BATS_TEST_DIRNAME/../grunt_process/
     run ./grunt_process.sh
 
     # Assert result
