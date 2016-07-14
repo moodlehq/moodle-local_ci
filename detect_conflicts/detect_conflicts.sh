@@ -2,6 +2,16 @@
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
 
+set -e
+
+required="WORKSPACE gitdir gitbranch"
+for var in ${required}; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
+
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
@@ -21,15 +31,14 @@ cd $gitdir && git reset --hard $gitbranch
 
 # Search and send to $lastfile
 echo -n > "$lastfile"
-for i in `find . -type f`
+find . -type f | while read i
 do
     if [[ $i =~ $exclude ]]
     then
         continue
     fi
     # note cannot look for ={7} because it matches legit txt/markdown titles.
-    content=`grep -PIn '^(<{7}|\|{7}|>{7}) ' $i`
-    if [ ! -z "$content" ]
+    if content=`grep -PIn '^(<{7}|\|{7}|>{7}) ' "$i"`
     then
         echo "## $i ##" >> "$lastfile"
         echo "$content" >> "$lastfile"
