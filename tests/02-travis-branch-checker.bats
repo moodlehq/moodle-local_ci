@@ -18,12 +18,12 @@ setup () {
     assert_failure
 }
 
-@test "travis/check_branch_status.php: branch OK" {
-
-    run php check_branch_status.php --repository=https://github.com/moodlehq/moodle-local_ci --branch=master
-    assert_success
-    assert_output --regexp '^OK: Build status was passed, see '
-}
+#@test "travis/check_branch_status.php: branch OK" {
+#
+#    run php check_branch_status.php --repository=https://github.com/moodlehq/moodle-local_ci --branch=master
+#    assert_success
+#    assert_output --regexp '^OK: Build status was passed, see '
+#}
 
 @test "travis/check_branch_status.php: no travis setup" {
     # Use a moodlehq github repo which is unlikely to ever have travis integration.
