@@ -295,10 +295,6 @@ set +e
 
 # First, we execute all the checks requiring complete site codebase
 
-# Run the PHPCPD (commented out 20120823 Eloy)
-#${phpcmd} ${mydir}/../copy_paste_detector/copy_paste_detector.php \
-#    ${excluded_list} --quiet --log-pmd "${WORKSPACE}/work/cpd.xml" ${WORKSPACE}
-
 # Set some variables used by various scripts.
 export issuecode=${issue}
 export maxcommitswarn=${maxcommitswarn}
@@ -400,10 +396,6 @@ cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE
 ${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php > "${WORKSPACE}/work/savepoints.txt"
 cat "${WORKSPACE}/work/savepoints.txt" | ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
 rm ${WORKSPACE}/check_upgrade_savepoints.php
-
-# Run the PHPPMD (commented out 20120823 Eloy)
-#${phpcmd} ${mydir}/../project_mess_detector/project_mess_detector.php \
-#    ${WORKSPACE} xml codesize,unusedcode,design --exclude work --reportfile "${WORKSPACE}/work/pmd.xml"
 
 # Run the PHPCS
 echo "Running codesniffer..."
