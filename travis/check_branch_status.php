@@ -22,11 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
-
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once($CFG->libdir.'/clilib.php');      // cli only functions
-require_once($CFG->libdir.'/filelib.php');      // cli only functions
+require_once(__DIR__.'/../phplib/clilib.php');
 
 list($options, $unrecognized) = cli_get_params(
     array('help' => false, 'repository' => '', 'branch' => ''),
@@ -64,18 +60,14 @@ $username = $matches[2];
 $reponame = $matches[3];
 $branchname = $options['branch'];
 
-$curl = new curl();
-$curl->setHeader('Accept: application/vnd.travis-ci.2+json');
-
-$info = json_decode($curl->get('https://api.travis-ci.org/repos/'.$username.'/'.$reponame));
+$info = travis_api_request('/repos/'.$username.'/'.$reponame);
 
 if (!isset($info->repo->active) || !$info->repo->active) {
     echo "WARNING: Travis integration not setup. See https://docs.moodle.org/dev/Travis_Integration\n";
     exit(0);
 }
 
-$response = $curl->get('https://api.travis-ci.org/repos/'.$username.'/'.$reponame.'/branches/'.$branchname);
-$json = json_decode($response);
+$json = travis_api_request('/repos/'.$username.'/'.$reponame.'/branches/'.$branchname);
 
 if (isset($json->branch->state)) {
     $buildurl = 'https://travis-ci.org/'.$username.'/'.$reponame.'/builds/'.$json->branch->id;
@@ -95,3 +87,19 @@ if (isset($json->branch->state)) {
     echo "OK: Unknown state of $username/$reponame/$branchname\n";
 }
 exit(0);
+
+/**
+ * Does a GET request to travis api.
+ *
+ * @param string $path the api path to call.
+ * @return json_decoded response from the api
+ */
+function travis_api_request($path) {
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Accept: application/vnd.travis-ci.2+json']);
+    curl_setopt($curl, CURLOPT_URL, 'https://api.travis-ci.org'.$path);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    return json_decode($result);
+}
