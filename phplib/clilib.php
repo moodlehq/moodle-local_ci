@@ -192,3 +192,24 @@ function cli_error($text, $errorcode=1) {
     cli_writeln($text.PHP_EOL, STDERR);
     die($errorcode);
 }
+
+/*
+ * Add quotes to HTML characters.
+ *
+ * Returns $var with HTML characters (like "<", ">", etc.) properly quoted.
+ * Related function {@link p()} simply prints the output of this function.
+ *
+ * @param string $var the string potentially containing HTML characters
+ * @return string
+ */
+function s($var) {
+
+    if ($var === false) {
+        return '0';
+    }
+
+    // When we move to PHP 5.4 as a minimum version, change ENT_QUOTES on the
+    // next line to ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE, and remove the
+    // 'UTF-8' argument. Both bring a speed-increase.
+    return preg_replace('/&amp;#(\d+|x[0-9a-f]+);/i', '&#$1;', htmlspecialchars($var, ENT_QUOTES, 'UTF-8'));
+}

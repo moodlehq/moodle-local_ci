@@ -1,0 +1,3 @@
+INFO: Checking for third party modifications from 0324fefaf6bccbb3443070af41d0f34ac3ed81ee to MOODLE_30_STABLE_precheck
+INFO: Detected third party modification in lib/adodb
+/var/lib/jenkins/git_repositories/prechecker/lib/adodb/drivers/adodb-oci8po.inc.php - WARN: modification to third party library (lib/adodb) without update to lib/thirdpartylibs.xml or lib/adodb/readme_moodle.txt

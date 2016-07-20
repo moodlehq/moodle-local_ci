@@ -1,0 +1,8 @@
+Running php syntax check from aeccf4bd944167f06e1cbe089af040174ef412f1 to master_precheck:
+/var/lib/jenkins/git_repositories/prechecker/lang/en/error.php - OK
+/var/lib/jenkins/git_repositories/prechecker/lang/en/moodle.php - OK
+/var/lib/jenkins/git_repositories/prechecker/lib/outputrequirementslib.php - OK
+/var/lib/jenkins/git_repositories/prechecker/repository/lib.php - ERROR: PHP Parse error: syntax error, unexpected '{' in /repository/lib.php on line 892
+/var/lib/jenkins/git_repositories/prechecker/repository/repository_ajax.php - ERROR: PHP Parse error: syntax error, unexpected '{' in /repository/repository_ajax.php on line 287
+/var/lib/jenkins/git_repositories/prechecker/repository/upload/lib.php - ERROR: PHP Parse error: syntax error, unexpected '{' in /repository/upload/lib.php on line 195
+PHP syntax errors found.

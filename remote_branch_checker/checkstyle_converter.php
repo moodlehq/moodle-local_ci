@@ -28,11 +28,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
-define('NO_OUTPUT_BUFFERING', true);
-
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once($CFG->libdir.'/clilib.php');      // cli only functions
+require_once(__DIR__.'/../phplib/clilib.php');
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(
@@ -41,7 +37,8 @@ list($options, $unrecognized) = cli_get_params(
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
-    cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
+    cli_error("Unrecognised options:\n{$Unrecognised}\n Please use --help option.");
+
 }
 
 $validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis');

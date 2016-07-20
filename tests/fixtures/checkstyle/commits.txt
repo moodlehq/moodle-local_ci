@@ -1,0 +1,3 @@
+6733d12*error*The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space.
+6733d12*error*The commit message does not contain the expected issue code MDL-55061 and a space.
+ee73cbd*warning*The commit message does not define a code area ending with a colon and a space after the issue code.
