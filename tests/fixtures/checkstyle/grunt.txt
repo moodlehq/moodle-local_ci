@@ -1,0 +1,38 @@
+Running "startup" task
+
+Running "less:bootstrapbase" (less) task
+>> 2 stylesheets created.
+
+Running "eslint:amd" (eslint) task
+
+Running "uglify:amd" (uglify) task
+>> 90 files created.
+
+Running "eslint:yui" (eslint) task
+
+Running "shifter" task
+>> Running shifter on /var/lib/jenkins/git_repositories/prechecker
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] woohoo, found a config here: /var/lib/jenkins/git_repositories/prechecker/.shifter.json
+shifter [info] override config found for coverage
+shifter [info] override config found for lint
+shifter [info] override config found for clean
+shifter [info] revving up
+shifter [info] racing the directories
+shifter [info] found 105 modules to race, let's do this
+shifter [warn] this will be quiet, only status will be emitted for speed. failed builds will print after
+.........................................................................................................
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 37.059 seconds, pretty fast huh?
+>> Shifter build complete.
+
+Running "ignorefiles" task
+
+Done.
+
+ERROR: Some modules are not properly processed by grunt. Changes detected:
+
+GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/lib/editor/atto/yui/build/editor/js/autosave.min.js
+GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/lib/yui/build/event/js/event.min.js
+GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/lib/yui/build/formchangechecker/js/formchangechecker.min.js
+GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/mod/assign/amd/build/grading_panel.min.js

@@ -1,0 +1,4 @@
+  - /var/lib/jenkins/git_repositories/prechecker/lib/db/upgrade.php: 
+    + found 201 matching 'if' blocks and 'savepoint' calls
+    + versions in upgrade blocks properly ordered
+    + ERROR: version 2015082001.00 has wrong savepoint call with version 2015082001.01

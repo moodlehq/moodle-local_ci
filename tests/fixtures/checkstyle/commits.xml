@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+  <file name="6733d12">
+    <error line="0" column="0" severity="error" message="The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space. "/>
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-55061 and a space. "/>
+  </file>
+  <file name="ee73cbd">
+    <error line="0" column="0" severity="warning" message="The commit message does not define a code area ending with a colon and a space after the issue code. "/>
+  </file>
+</checkstyle>
