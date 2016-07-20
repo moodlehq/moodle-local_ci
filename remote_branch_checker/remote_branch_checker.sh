@@ -16,6 +16,7 @@
 # $extrapath: Extra paths to be available (global)
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
+# $pushremote: Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -39,7 +40,7 @@ export gitdir="${WORKSPACE}"
 export gitbranch="${integrateto}"
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmcmd npmbase"
+required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmcmd npmbase issue"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -218,6 +219,12 @@ if [[ ${exitstatus} -ne 0 ]]; then
     exit ${exitstatus}
 fi
 set -e
+
+# The merge succeded, now push our precheck branch for inspection:
+if [ ! -z ${pushremote} ]; then
+    pushbranchname=${issue}-${integrateto}-$(git rev-parse --short HEAD)
+    $gitcmd push $pushremote ${integrateto}_precheck:${pushbranchname}
+fi
 
 # Verify the number of commits. Now this is handled by the verify_commit_messages check.
 
