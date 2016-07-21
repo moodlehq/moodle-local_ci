@@ -32,10 +32,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
-define('NO_OUTPUT_BUFFERING', true);
-
-require_once('clilib.php');      // cli only functions
+require_once(__DIR__.'/../phplib/clilib.php');
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
@@ -49,7 +46,7 @@ list($options, $unrecognized) = cli_get_params(array(
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
-    cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
+    cli_error("Unrecognised options:\n{$unrecognized}\n Please use --help option.");
 }
 
 if ($options['help']) {
