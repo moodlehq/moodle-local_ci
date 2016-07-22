@@ -38,3 +38,17 @@ setup () {
     assert_output --partial "lib/moodlelib.php - ERROR:"
     assert_output --regexp "PHP syntax errors found."
 }
+
+@test "php_lint: shows the php version being used" {
+    # Set up.
+    git_apply_fixture 31-php_lint-ok.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    run ./php_lint.sh
+
+    # Assert result
+    assert_success
+    assert_output --regexp "^Using PHP [0-9]+\.[0-9]+\.[0-9]+"
+    assert_output --partial "Running php syntax check from $GIT_PREVIOUS_COMMIT to $GIT_COMMIT"
+}

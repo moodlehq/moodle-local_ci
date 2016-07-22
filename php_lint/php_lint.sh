@@ -22,6 +22,8 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 fulllint=0
 
+echo "Using $($phpcmd -v | grep '^PHP')"
+
 if [[ -z "${GIT_PREVIOUS_COMMIT}" ]] || [[ -z "${GIT_COMMIT}" ]] ; then
     # No git diff information. Lint all php files.
     fulllint=1
