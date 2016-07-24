@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<diffchanges version="20120120">
+  <file name=".stylelintrc">
+    <lines from="1" to="93"/>
+  </file>
+  <file name="Gruntfile.js">
+    <lines from="160" to="160"/>
+    <lines from="172" to="192"/>
+    <lines from="319" to="319"/>
+    <lines from="333" to="333"/>
+    <lines from="343" to="343"/>
+  </file>
+  <file name="npm-shrinkwrap.json">
+    <lines from="5" to="5"/>
+    <lines from="7" to="7"/>
+    <lines from="45" to="47"/>
+    <lines from="51" to="51"/>
+    <lines from="54" to="63"/>
+    <lines from="96" to="96"/>
+    <lines from="99" to="103"/>
+    <lines from="115" to="117"/>
+    <lines from="122" to="122"/>
+    <lines from="134" to="137"/>
+    <lines from="147" to="147"/>
+    <lines from="149" to="149"/>
+    <lines from="156" to="160"/>
+    <lines from="182" to="182"/>
+    <lines from="184" to="184"/>
+    <lines from="187" to="187"/>
+    <lines from="189" to="194"/>
+    <lines from="207" to="209"/>
+    <lines from="241" to="253"/>
+    <lines from="265" to="281"/>
+    <lines from="305" to="305"/>
+    <lines from="322" to="333"/>
+    <lines from="361" to="387"/>
+    <lines from="398" to="402"/>
+    <lines from="431" to="433"/>
+    <lines from="436" to="436"/>
+    <lines from="438" to="438"/>
+    <lines from="469" to="480"/>
+    <lines from="498" to="498"/>
+    <lines from="503" to="503"/>
+    <lines from="508" to="508"/>
+    <lines from="511" to="532"/>
+    <lines from="535" to="535"/>
+    <lines from="544" to="546"/>
+    <lines from="559" to="561"/>
+    <lines from="571" to="571"/>
+    <lines from="579" to="581"/>
+    <lines from="589" to="589"/>
+    <lines from="591" to="591"/>
+    <lines from="596" to="596"/>
+    <lines from="598" to="602"/>
+    <lines from="604" to="606"/>
+    <lines from="610" to="614"/>
+    <lines from="617" to="618"/>
+    <lines from="626" to="628"/>
+    <lines from="643" to="645"/>
+    <lines from="662" to="666"/>
+    <lines from="698" to="700"/>
+    <lines from="710" to="729"/>
+    <lines from="732" to="732"/>
+    <lines from="734" to="734"/>
+    <lines from="751" to="756"/>
+    <lines from="765" to="765"/>
+    <lines from="773" to="777"/>
+    <lines from="810" to="814"/>
+    <lines from="820" to="829"/>
+    <lines from="857" to="866"/>
+    <lines from="907" to="909"/>
+    <lines from="919" to="924"/>
+    <lines from="939" to="941"/>
+    <lines from="958" to="961"/>
+    <lines from="963" to="966"/>
+    <lines from="973" to="973"/>
+    <lines from="978" to="978"/>
+    <lines from="983" to="990"/>
+    <lines from="1005" to="1012"/>
+    <lines from="1038" to="1042"/>
+    <lines from="1073" to="1073"/>
+    <lines from="1080" to="1084"/>
+    <lines from="1101" to="1101"/>
+    <lines from="1103" to="1108"/>
+    <lines from="1111" to="1113"/>
+    <lines from="1150" to="1154"/>
+    <lines from="1168" to="1173"/>
+    <lines from="1225" to="1229"/>
+    <lines from="1235" to="1239"/>
+    <lines from="1251" to="1253"/>
+    <lines from="1275" to="1279"/>
+    <lines from="1295" to="1299"/>
+    <lines from="1309" to="1318"/>
+    <lines from="1327" to="1331"/>
+    <lines from="1333" to="1335"/>
+    <lines from="1342" to="1363"/>
+    <lines from="1378" to="1382"/>
+    <lines from="1401" to="1412"/>
+    <lines from="1418" to="1422"/>
+    <lines from="1428" to="1432"/>
+    <lines from="1446" to="1453"/>
+    <lines from="1460" to="1464"/>
+    <lines from="1468" to="1468"/>
+    <lines from="1485" to="1488"/>
+    <lines from="1493" to="1500"/>
+    <lines from="1508" to="1508"/>
+    <lines from="1510" to="1510"/>
+    <lines from="1524" to="1524"/>
+    <lines from="1534" to="1534"/>
+    <lines from="1560" to="1562"/>
+    <lines from="1579" to="1583"/>
+    <lines from="1595" to="1597"/>
+    <lines from="1604" to="1618"/>
+    <lines from="1630" to="1630"/>
+    <lines from="1632" to="1632"/>
+    <lines from="1644" to="1648"/>
+    <lines from="1657" to="1657"/>
+    <lines from="1660" to="1662"/>
+    <lines from="1666" to="1670"/>
+    <lines from="1714" to="1714"/>
+    <lines from="1722" to="1722"/>
+    <lines from="1724" to="1724"/>
+    <lines from="1727" to="1727"/>
+    <lines from="1729" to="1739"/>
+    <lines from="1746" to="1787"/>
+    <lines from="1799" to="1799"/>
+    <lines from="1801" to="1801"/>
+    <lines from="1804" to="1806"/>
+    <lines from="1819" to="1821"/>
+    <lines from="1835" to="1839"/>
+    <lines from="1843" to="1843"/>
+    <lines from="1856" to="1858"/>
+    <lines from="1876" to="1876"/>
+    <lines from="1878" to="1878"/>
+    <lines from="1881" to="1881"/>
+    <lines from="1883" to="1888"/>
+    <lines from="1896" to="1898"/>
+    <lines from="1916" to="1918"/>
+    <lines from="1936" to="1936"/>
+    <lines from="1938" to="1938"/>
+    <lines from="1941" to="1943"/>
+    <lines from="1950" to="1953"/>
+    <lines from="1963" to="1965"/>
+    <lines from="1978" to="1980"/>
+    <lines from="1988" to="1988"/>
+    <lines from="1990" to="1990"/>
+    <lines from="1998" to="1998"/>
+    <lines from="2000" to="2010"/>
+    <lines from="2034" to="2038"/>
+    <lines from="2044" to="2048"/>
+    <lines from="2050" to="2050"/>
+    <lines from="2052" to="2052"/>
+    <lines from="2077" to="2079"/>
+    <lines from="2091" to="2124"/>
+    <lines from="2130" to="2139"/>
+    <lines from="2143" to="2143"/>
+    <lines from="2155" to="2171"/>
+    <lines from="2216" to="2216"/>
+    <lines from="2227" to="2227"/>
+    <lines from="2251" to="2255"/>
+    <lines from="2261" to="2265"/>
+    <lines from="2317" to="2319"/>
+    <lines from="2327" to="2329"/>
+    <lines from="2341" to="2345"/>
+    <lines from="2353" to="2353"/>
+    <lines from="2358" to="2358"/>
+  </file>
+  <file name="package.json">
+    <lines from="13" to="13"/>
+  </file>
+  <file name="theme/bootstrapbase/less/editor.less">
+    <lines from="20" to="20"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle.less">
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/admin.less">
+    <lines from="23" to="23"/>
+    <lines from="32" to="32"/>
+    <lines from="35" to="35"/>
+    <lines from="267" to="267"/>
+    <lines from="363" to="363"/>
+    <lines from="529" to="529"/>
+    <lines from="564" to="565"/>
+    <lines from="574" to="575"/>
+    <lines from="601" to="601"/>
+    <lines from="632" to="633"/>
+    <lines from="649" to="650"/>
+    <lines from="663" to="664"/>
+    <lines from="704" to="705"/>
+    <lines from="736" to="737"/>
+    <lines from="743" to="744"/>
+    <lines from="759" to="760"/>
+    <lines from="774" to="775"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/backup-restore.less">
+    <lines from="39" to="39"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/blocks.less">
+    <lines from="17" to="17"/>
+    <lines from="199" to="199"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/bootstrapoverride.less">
+    <lines from="15" to="53"/>
+    <lines from="66" to="68"/>
+    <lines from="73" to="73"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/calendar.less">
+    <lines from="27" to="28"/>
+    <lines from="148" to="149"/>
+    <lines from="255" to="256"/>
+    <lines from="312" to="313"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/chat.less">
+    <lines from="75" to="75"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/core.less">
+    <lines from="9" to="9"/>
+    <lines from="16" to="16"/>
+    <lines from="280" to="281"/>
+    <lines from="287" to="298"/>
+    <lines from="302" to="303"/>
+    <lines from="330" to="331"/>
+    <lines from="335" to="336"/>
+    <lines from="543" to="543"/>
+    <lines from="604" to="604"/>
+    <lines from="695" to="695"/>
+    <lines from="697" to="697"/>
+    <lines from="700" to="700"/>
+    <lines from="703" to="703"/>
+    <lines from="733" to="734"/>
+    <lines from="737" to="737"/>
+    <lines from="740" to="740"/>
+    <lines from="742" to="743"/>
+    <lines from="745" to="746"/>
+    <lines from="988" to="988"/>
+    <lines from="991" to="991"/>
+    <lines from="994" to="994"/>
+    <lines from="997" to="997"/>
+    <lines from="1016" to="1016"/>
+    <lines from="1104" to="1104"/>
+    <lines from="1148" to="1148"/>
+    <lines from="1261" to="1264"/>
+    <lines from="1267" to="1267"/>
+    <lines from="1274" to="1274"/>
+    <lines from="1325" to="1326"/>
+    <lines from="1348" to="1348"/>
+    <lines from="1351" to="1351"/>
+    <lines from="1360" to="1360"/>
+    <lines from="1363" to="1363"/>
+    <lines from="1436" to="1436"/>
+    <lines from="1460" to="1461"/>
+    <lines from="1491" to="1492"/>
+    <lines from="1618" to="1618"/>
+    <lines from="1656" to="1656"/>
+    <lines from="1968" to="1968"/>
+    <lines from="2044" to="2044"/>
+    <lines from="2131" to="2131"/>
+    <lines from="2264" to="2264"/>
+    <lines from="2298" to="2299"/>
+    <lines from="2318" to="2318"/>
+    <lines from="2324" to="2324"/>
+    <lines from="2329" to="2329"/>
+    <lines from="2336" to="2336"/>
+    <lines from="2349" to="2349"/>
+    <lines from="2360" to="2360"/>
+    <lines from="2364" to="2380"/>
+    <lines from="2382" to="2400"/>
+    <lines from="2402" to="2422"/>
+    <lines from="2424" to="2445"/>
+    <lines from="2458" to="2458"/>
+    <lines from="2473" to="2491"/>
+    <lines from="2493" to="2511"/>
+    <lines from="2513" to="2531"/>
+    <lines from="2533" to="2551"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/course.less">
+    <lines from="3" to="3"/>
+    <lines from="283" to="283"/>
+    <lines from="343" to="344"/>
+    <lines from="401" to="401"/>
+    <lines from="524" to="524"/>
+    <lines from="599" to="599"/>
+    <lines from="637" to="639"/>
+    <lines from="642" to="643"/>
+    <lines from="646" to="647"/>
+    <lines from="651" to="651"/>
+    <lines from="654" to="654"/>
+    <lines from="658" to="658"/>
+    <lines from="662" to="663"/>
+    <lines from="666" to="666"/>
+    <lines from="670" to="671"/>
+    <lines from="679" to="680"/>
+    <lines from="684" to="684"/>
+    <lines from="688" to="689"/>
+    <lines from="696" to="697"/>
+    <lines from="701" to="701"/>
+    <lines from="705" to="705"/>
+    <lines from="708" to="709"/>
+    <lines from="713" to="713"/>
+    <lines from="716" to="716"/>
+    <lines from="739" to="740"/>
+    <lines from="746" to="748"/>
+    <lines from="751" to="752"/>
+    <lines from="755" to="756"/>
+    <lines from="758" to="760"/>
+    <lines from="763" to="764"/>
+    <lines from="767" to="767"/>
+    <lines from="770" to="771"/>
+    <lines from="774" to="774"/>
+    <lines from="776" to="777"/>
+    <lines from="780" to="780"/>
+    <lines from="782" to="785"/>
+    <lines from="788" to="791"/>
+    <lines from="794" to="794"/>
+    <lines from="798" to="799"/>
+    <lines from="804" to="806"/>
+    <lines from="811" to="811"/>
+    <lines from="819" to="819"/>
+    <lines from="854" to="855"/>
+    <lines from="890" to="890"/>
+    <lines from="895" to="896"/>
+    <lines from="901" to="901"/>
+    <lines from="905" to="905"/>
+    <lines from="907" to="907"/>
+    <lines from="911" to="912"/>
+    <lines from="915" to="916"/>
+    <lines from="919" to="919"/>
+    <lines from="938" to="940"/>
+    <lines from="943" to="943"/>
+    <lines from="946" to="946"/>
+    <lines from="949" to="951"/>
+    <lines from="953" to="954"/>
+    <lines from="956" to="956"/>
+    <lines from="963" to="963"/>
+    <lines from="969" to="969"/>
+    <lines from="971" to="971"/>
+    <lines from="975" to="975"/>
+    <lines from="983" to="984"/>
+    <lines from="996" to="1026"/>
+    <lines from="1030" to="1032"/>
+    <lines from="1036" to="1036"/>
+    <lines from="1046" to="1046"/>
+    <lines from="1057" to="1057"/>
+    <lines from="1060" to="1061"/>
+    <lines from="1065" to="1065"/>
+    <lines from="1068" to="1068"/>
+    <lines from="1075" to="1076"/>
+    <lines from="1088" to="1088"/>
+    <lines from="1091" to="1091"/>
+    <lines from="1109" to="1111"/>
+    <lines from="1114" to="1114"/>
+    <lines from="1117" to="1117"/>
+    <lines from="1125" to="1125"/>
+    <lines from="1135" to="1138"/>
+    <lines from="1145" to="1146"/>
+    <lines from="1155" to="1158"/>
+    <lines from="1160" to="1161"/>
+    <lines from="1169" to="1169"/>
+    <lines from="1173" to="1173"/>
+    <lines from="1178" to="1179"/>
+    <lines from="1181" to="1182"/>
+    <lines from="1185" to="1185"/>
+    <lines from="1189" to="1189"/>
+    <lines from="1193" to="1193"/>
+    <lines from="1199" to="1200"/>
+    <lines from="1205" to="1205"/>
+    <lines from="1208" to="1210"/>
+    <lines from="1217" to="1217"/>
+    <lines from="1220" to="1220"/>
+    <lines from="1233" to="1233"/>
+    <lines from="1235" to="1235"/>
+    <lines from="1248" to="1248"/>
+    <lines from="1251" to="1252"/>
+    <lines from="1262" to="1292"/>
+    <lines from="1297" to="1297"/>
+    <lines from="1300" to="1300"/>
+    <lines from="1305" to="1305"/>
+    <lines from="1309" to="1309"/>
+    <lines from="1325" to="1326"/>
+    <lines from="1329" to="1331"/>
+    <lines from="1337" to="1337"/>
+    <lines from="1341" to="1342"/>
+    <lines from="1352" to="1352"/>
+    <lines from="1364" to="1364"/>
+    <lines from="1366" to="1367"/>
+    <lines from="1370" to="1372"/>
+    <lines from="1374" to="1374"/>
+    <lines from="1376" to="1376"/>
+    <lines from="1388" to="1389"/>
+    <lines from="1392" to="1392"/>
+    <lines from="1398" to="1398"/>
+    <lines from="1401" to="1402"/>
+    <lines from="1409" to="1409"/>
+    <lines from="1427" to="1427"/>
+    <lines from="1431" to="1431"/>
+    <lines from="1439" to="1440"/>
+    <lines from="1450" to="1450"/>
+    <lines from="1454" to="1455"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/dock.less">
+    <lines from="54" to="54"/>
+    <lines from="111" to="111"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/expendable.less">
+    <lines from="37" to="39"/>
+    <lines from="50" to="52"/>
+    <lines from="94" to="94"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/filemanager.less">
+    <lines from="107" to="107"/>
+    <lines from="111" to="111"/>
+    <lines from="116" to="116"/>
+    <lines from="120" to="120"/>
+    <lines from="272" to="272"/>
+    <lines from="276" to="276"/>
+    <lines from="282" to="282"/>
+    <lines from="616" to="616"/>
+    <lines from="767" to="767"/>
+    <lines from="770" to="770"/>
+    <lines from="807" to="807"/>
+    <lines from="816" to="816"/>
+    <lines from="836" to="836"/>
+    <lines from="846" to="846"/>
+    <lines from="851" to="851"/>
+    <lines from="861" to="861"/>
+    <lines from="890" to="890"/>
+    <lines from="945" to="948"/>
+    <lines from="951" to="951"/>
+    <lines from="955" to="955"/>
+    <lines from="958" to="958"/>
+    <lines from="1197" to="1197"/>
+    <lines from="1223" to="1223"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/forms.less">
+    <lines from="21" to="21"/>
+    <lines from="158" to="158"/>
+    <lines from="332" to="332"/>
+    <lines from="375" to="375"/>
+    <lines from="383" to="383"/>
+    <lines from="442" to="442"/>
+    <lines from="492" to="493"/>
+    <lines from="496" to="496"/>
+    <lines from="511" to="511"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/grade.less">
+    <lines from="75" to="76"/>
+    <lines from="187" to="188"/>
+    <lines from="219" to="219"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/message.less">
+    <lines from="161" to="161"/>
+    <lines from="166" to="166"/>
+    <lines from="227" to="227"/>
+    <lines from="230" to="230"/>
+    <lines from="233" to="233"/>
+    <lines from="319" to="319"/>
+    <lines from="326" to="327"/>
+    <lines from="366" to="366"/>
+    <lines from="371" to="371"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/modules.less">
+    <lines from="48" to="48"/>
+    <lines from="56" to="58"/>
+    <lines from="153" to="154"/>
+    <lines from="305" to="313"/>
+    <lines from="315" to="320"/>
+    <lines from="400" to="400"/>
+    <lines from="579" to="580"/>
+    <lines from="589" to="590"/>
+    <lines from="693" to="693"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/question.less">
+    <lines from="77" to="79"/>
+    <lines from="91" to="92"/>
+    <lines from="247" to="247"/>
+    <lines from="301" to="301"/>
+    <lines from="393" to="393"/>
+    <lines from="396" to="396"/>
+    <lines from="421" to="422"/>
+    <lines from="510" to="511"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/responsive.less">
+    <lines from="6" to="8"/>
+    <lines from="23" to="23"/>
+    <lines from="326" to="326"/>
+    <lines from="347" to="347"/>
+    <lines from="355" to="356"/>
+    <lines from="372" to="372"/>
+    <lines from="405" to="405"/>
+    <lines from="415" to="416"/>
+    <lines from="420" to="421"/>
+    <lines from="425" to="425"/>
+    <lines from="436" to="437"/>
+    <lines from="457" to="457"/>
+    <lines from="486" to="488"/>
+    <lines from="774" to="774"/>
+    <lines from="805" to="805"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/templates.less">
+    <lines from="3" to="4"/>
+    <lines from="25" to="26"/>
+    <lines from="33" to="33"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/user.less">
+    <lines from="58" to="58"/>
+    <lines from="67" to="67"/>
+    <lines from="241" to="242"/>
+  </file>
+</diffchanges>

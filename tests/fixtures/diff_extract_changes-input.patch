@@ -1,0 +1,4894 @@
+diff --git a/.stylelintrc b/.stylelintrc
+new file mode 100644
+index 0000000..b2cbf8b
+--- /dev/null
++++ b/.stylelintrc
+@@ -0,0 +1,93 @@
++{
++    "rules": {
++        "at-rule-empty-line-before": [ "always",
++          {"except": [ "blockless-group", "first-nested" ], ignore: ["after-comment"]}
++        ],
++        "at-rule-name-case": "lower",
++        "at-rule-name-space-after": "always-single-line",
++        "at-rule-no-unknown": true,
++        "at-rule-semicolon-newline-after": "always",
++        "block-closing-brace-newline-after": "always",
++        "block-closing-brace-newline-before": "always-multi-line",
++        "block-closing-brace-space-before": "always-single-line",
++        "block-no-empty": true,
++        "block-no-single-line": true,
++        "block-opening-brace-newline-after": "always-multi-line",
++        "block-opening-brace-space-after": "always-single-line",
++        "block-opening-brace-space-before": "always",
++        "color-hex-case": ["lower", { "severity": "warning" }],
++        "color-hex-length": ["short", { "severity": "warning" }],
++        "color-no-invalid-hex": true,
++        "declaration-bang-space-after": "never",
++        "declaration-bang-space-before": "always",
++        "declaration-block-no-duplicate-properties": true,
++        "declaration-block-no-ignored-properties": true,
++        "declaration-block-no-shorthand-property-overrides": true,
++        "declaration-block-semicolon-newline-after": "always-multi-line",
++        "declaration-block-semicolon-space-after": "always-single-line",
++        "declaration-block-semicolon-space-before": "never",
++        "declaration-block-single-line-max-declarations": 1,
++        "declaration-block-trailing-semicolon": "always",
++        "declaration-colon-newline-after": "always-multi-line",
++        "declaration-colon-space-after": "always-single-line",
++        "declaration-colon-space-before": "never",
++        "function-calc-no-unspaced-operator": true,
++        "function-comma-newline-after": "always-multi-line",
++        "function-comma-space-after": "always-single-line",
++        "function-comma-space-before": "never",
++        "function-linear-gradient-no-nonstandard-direction": true,
++        "function-max-empty-lines": 0,
++        "function-name-case": "lower",
++        "function-parentheses-newline-inside": "always-multi-line",
++        "function-parentheses-space-inside": "never-single-line",
++        "function-url-data-uris": never,
++        "function-whitespace-after": "always",
++        "indentation": 4,
++        "keyframe-declaration-no-important": true,
++        "length-zero-no-unit": [true, { "severity": "warning" }],
++        "max-empty-lines": 2,
++        "max-line-length": 132,
++        "media-feature-colon-space-after": "always",
++        "media-feature-colon-space-before": "never",
++        "media-feature-no-missing-punctuation": true,
++        "media-feature-range-operator-space-after": "always",
++        "media-feature-range-operator-space-before": "always",
++        "media-query-list-comma-newline-after": "always-multi-line",
++        "media-query-list-comma-space-after": "always-single-line",
++        "media-query-list-comma-space-before": "never",
++        "media-query-parentheses-space-inside": "never",
++        "no-browser-hacks": [true, { "severity": "warning" }],
++        "no-empty-source": true,
++        "no-eol-whitespace": true,
++        "no-extra-semicolons": [true, { "severity": "warning" }],
++        "no-invalid-double-slash-comments": true,
++        "no-unknown-animations": true,
++        "property-case": "lower",
++        "selector-attribute-brackets-space-inside": "never",
++        "selector-attribute-operator-space-after": "never",
++        "selector-attribute-operator-space-before": "never",
++        "selector-combinator-space-after": "always",
++        "selector-combinator-space-before": "always",
++        "selector-list-comma-newline-after": "always",
++        "selector-list-comma-space-before": "never",
++        "selector-max-empty-lines": 0,
++        "selector-pseudo-class-case": "lower",
++        "selector-pseudo-class-no-unknown": true,
++        "selector-pseudo-class-parentheses-space-inside": "never",
++        "selector-pseudo-element-case": "lower",
++        "selector-pseudo-element-no-unknown": true,
++        "selector-root-no-composition": true,
++        "selector-type-case": "lower",
++        "selector-type-no-unknown": true,
++        "shorthand-property-no-redundant-values": [null, { "severity": "warning" }],
++        "string-no-newline": true,
++        "time-no-imperceptible": true,
++        "unit-blacklist": ["pt", "rem"],
++        "unit-case": "lower",
++        "unit-no-unknown": true,
++        "value-keyword-case": ["lower", {"ignoreKeywords": ["/@/"]}],
++        "value-list-comma-newline-after": "always-multi-line",
++        "value-list-comma-space-after": "always-single-line",
++        "value-list-comma-space-before": "never",
++  }
++}
+diff --git a/Gruntfile.js b/Gruntfile.js
+index 467f13b..4d9a81d 100644
+--- a/Gruntfile.js
++++ b/Gruntfile.js
+@@ -157,7 +157,7 @@ module.exports = function(grunt) {
+             },
+             bootstrapbase: {
+                 files: ["theme/bootstrapbase/less/**/*.less"],
+-                tasks: ["less:bootstrapbase"]
++                tasks: ["css"]
+             },
+             yui: {
+                 files: ['**/yui/src/**/*.js'],
+@@ -169,6 +169,27 @@ module.exports = function(grunt) {
+                 recursive: true,
+                 paths: [cwd]
+             }
++        },
++        stylelint: {
++            less: {
++                options: {
++                    syntax: 'less',
++                    configOverrides: {
++                        rules: {
++                            // TODO: MDL-55165 -Enable these rules once we make output-changing changes to less.
++                            "declaration-block-no-ignored-properties": null,
++                            "value-keyword-case": null,
++                            "declaration-block-no-duplicate-properties": null,
++                            "declaration-block-no-shorthand-property-overrides": null,
++                            "selector-type-no-unknown": null,
++                            "length-zero-no-unit": null,
++                            "color-hex-case": null,
++                            "color-hex-length": null
++                        }
++                    }
++                },
++                src: ['theme/**/*.less', '!theme/bootstrapbase/less/bootstrap/*'],
++            }
+         }
+     });
+ 
+@@ -295,6 +316,7 @@ module.exports = function(grunt) {
+           grunt.config('eslint.yui.src', files);
+           grunt.config('uglify.amd.files', [{ expand: true, src: files, rename: uglifyRename }]);
+           grunt.config('shifter.options.paths', files);
++          grunt.config('stylelint.less.src', files);
+           changedFiles = Object.create(null);
+     }, 200);
+ 
+@@ -308,6 +330,7 @@ module.exports = function(grunt) {
+     grunt.loadNpmTasks('grunt-contrib-less');
+     grunt.loadNpmTasks('grunt-contrib-watch');
+     grunt.loadNpmTasks('grunt-eslint');
++    grunt.loadNpmTasks('grunt-stylelint');
+ 
+     // Register JS tasks.
+     grunt.registerTask('shifter', 'Run Shifter against the current directory', tasks.shifter);
+@@ -317,7 +340,7 @@ module.exports = function(grunt) {
+     grunt.registerTask('js', ['amd', 'yui']);
+ 
+     // Register CSS taks.
+-    grunt.registerTask('css', ['less:bootstrapbase']);
++    grunt.registerTask('css', ['stylelint:less', 'less:bootstrapbase']);
+ 
+     // Register the startup task.
+     grunt.registerTask('startup', 'Run the correct tasks for the current directory', tasks.startup);
+diff --git a/npm-shrinkwrap.json b/npm-shrinkwrap.json
+index 8da4417..dc87272 100644
+--- a/npm-shrinkwrap.json
++++ b/npm-shrinkwrap.json
+@@ -2,9 +2,9 @@
+   "name": "Moodle",
+   "dependencies": {
+     "abbrev": {
+-      "version": "1.0.7",
++      "version": "1.0.9",
+       "from": "abbrev@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.0.7.tgz"
++      "resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
+     },
+     "acorn": {
+       "version": "3.2.0",
+@@ -42,15 +42,25 @@
+       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-2.0.0.tgz"
+     },
+     "ansi-styles": {
+-      "version": "2.1.0",
+-      "from": "ansi-styles@>=2.1.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-2.1.0.tgz"
++      "version": "2.2.1",
++      "from": "ansi-styles@>=2.2.1 <3.0.0",
++      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-2.2.1.tgz"
+     },
+     "argparse": {
+       "version": "1.0.7",
+-      "from": "argparse@>=1.0.2 <2.0.0",
++      "from": "argparse@>=1.0.7 <2.0.0",
+       "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.7.tgz"
+     },
++    "array-differ": {
++      "version": "1.0.0",
++      "from": "array-differ@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/array-differ/-/array-differ-1.0.0.tgz"
++    },
++    "array-find-index": {
++      "version": "1.0.1",
++      "from": "array-find-index@>=1.0.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/array-find-index/-/array-find-index-1.0.1.tgz"
++    },
+     "array-union": {
+       "version": "1.0.2",
+       "from": "array-union@>=1.0.1 <2.0.0",
+@@ -83,9 +93,14 @@
+     },
+     "async": {
+       "version": "1.5.2",
+-      "from": "async@*",
++      "from": "async@1.5.2",
+       "resolved": "https://registry.npmjs.org/async/-/async-1.5.2.tgz"
+     },
++    "autoprefixer": {
++      "version": "6.3.7",
++      "from": "autoprefixer@>=6.0.0 <7.0.0",
++      "resolved": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-6.3.7.tgz"
++    },
+     "aws-sign2": {
+       "version": "0.6.0",
+       "from": "aws-sign2@>=0.6.0 <0.7.0",
+@@ -97,26 +112,14 @@
+       "resolved": "https://registry.npmjs.org/aws4/-/aws4-1.4.1.tgz"
+     },
+     "balanced-match": {
+-      "version": "0.3.0",
+-      "from": "balanced-match@>=0.3.0 <0.4.0",
+-      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-0.3.0.tgz"
++      "version": "0.4.1",
++      "from": "balanced-match@>=0.4.1 <0.5.0",
++      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-0.4.1.tgz"
+     },
+     "bl": {
+       "version": "1.1.2",
+       "from": "bl@>=1.1.2 <1.2.0",
+-      "resolved": "https://registry.npmjs.org/bl/-/bl-1.1.2.tgz",
+-      "dependencies": {
+-        "isarray": {
+-          "version": "1.0.0",
+-          "from": "isarray@>=1.0.0 <1.1.0",
+-          "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+-        },
+-        "readable-stream": {
+-          "version": "2.0.6",
+-          "from": "readable-stream@>=2.0.5 <2.1.0",
+-          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.0.6.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/bl/-/bl-1.1.2.tgz"
+     },
+     "bluebird": {
+       "version": "3.4.1",
+@@ -128,10 +131,10 @@
+       "from": "body-parser@>=1.14.0 <1.15.0",
+       "resolved": "https://registry.npmjs.org/body-parser/-/body-parser-1.14.2.tgz",
+       "dependencies": {
+-        "debug": {
+-          "version": "2.2.0",
+-          "from": "debug@~2.2.0",
+-          "resolved": "https://registry.npmjs.org/debug/-/debug-2.2.0.tgz"
++        "qs": {
++          "version": "5.2.0",
++          "from": "qs@5.2.0",
++          "resolved": "https://registry.npmjs.org/qs/-/qs-5.2.0.tgz"
+         }
+       }
+     },
+@@ -141,15 +144,20 @@
+       "resolved": "https://registry.npmjs.org/boom/-/boom-2.10.1.tgz"
+     },
+     "brace-expansion": {
+-      "version": "1.1.2",
++      "version": "1.1.5",
+       "from": "brace-expansion@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.2.tgz"
++      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.5.tgz"
+     },
+     "browserify-zlib": {
+       "version": "0.1.4",
+       "from": "browserify-zlib@>=0.1.4 <0.2.0",
+       "resolved": "https://registry.npmjs.org/browserify-zlib/-/browserify-zlib-0.1.4.tgz"
+     },
++    "browserslist": {
++      "version": "1.3.5",
++      "from": "browserslist@>=1.3.4 <1.4.0",
++      "resolved": "https://registry.npmjs.org/browserslist/-/browserslist-1.3.5.tgz"
++    },
+     "builtin-modules": {
+       "version": "1.1.1",
+       "from": "builtin-modules@>=1.0.0 <2.0.0",
+@@ -171,14 +179,19 @@
+       "resolved": "https://registry.npmjs.org/callsites/-/callsites-0.2.0.tgz"
+     },
+     "camelcase": {
+-      "version": "2.0.1",
++      "version": "2.1.1",
+       "from": "camelcase@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/camelcase/-/camelcase-2.0.1.tgz"
++      "resolved": "https://registry.npmjs.org/camelcase/-/camelcase-2.1.1.tgz"
+     },
+     "camelcase-keys": {
+-      "version": "2.0.0",
++      "version": "2.1.0",
+       "from": "camelcase-keys@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/camelcase-keys/-/camelcase-keys-2.0.0.tgz"
++      "resolved": "https://registry.npmjs.org/camelcase-keys/-/camelcase-keys-2.1.0.tgz"
++    },
++    "caniuse-db": {
++      "version": "1.0.30000506",
++      "from": "caniuse-db@>=1.0.30000488 <2.0.0",
++      "resolved": "https://registry.npmjs.org/caniuse-db/-/caniuse-db-1.0.30000506.tgz"
+     },
+     "caseless": {
+       "version": "0.11.0",
+@@ -191,9 +204,9 @@
+       "resolved": "https://registry.npmjs.org/center-align/-/center-align-0.1.3.tgz"
+     },
+     "chalk": {
+-      "version": "1.1.1",
+-      "from": "chalk@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/chalk/-/chalk-1.1.1.tgz"
++      "version": "1.1.3",
++      "from": "chalk@>=1.1.3 <2.0.0",
++      "resolved": "https://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
+     },
+     "cli": {
+       "version": "0.6.6",
+@@ -225,7 +238,19 @@
+     "cliui": {
+       "version": "2.1.0",
+       "from": "cliui@>=2.1.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/cliui/-/cliui-2.1.0.tgz"
++      "resolved": "https://registry.npmjs.org/cliui/-/cliui-2.1.0.tgz",
++      "dependencies": {
++        "wordwrap": {
++          "version": "0.0.2",
++          "from": "wordwrap@0.0.2",
++          "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz"
++        }
++      }
++    },
++    "clone-regexp": {
++      "version": "1.0.0",
++      "from": "clone-regexp@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/clone-regexp/-/clone-regexp-1.0.0.tgz"
+     },
+     "code-point-at": {
+       "version": "1.0.0",
+@@ -237,6 +262,23 @@
+       "from": "coffee-script@>=1.10.0 <1.11.0",
+       "resolved": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.10.0.tgz"
+     },
++    "color-diff": {
++      "version": "0.1.7",
++      "from": "color-diff@>=0.1.3 <0.2.0",
++      "resolved": "https://registry.npmjs.org/color-diff/-/color-diff-0.1.7.tgz"
++    },
++    "colorguard": {
++      "version": "1.2.0",
++      "from": "colorguard@>=1.2.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/colorguard/-/colorguard-1.2.0.tgz",
++      "dependencies": {
++        "yargs": {
++          "version": "1.3.3",
++          "from": "yargs@>=1.2.6 <2.0.0",
++          "resolved": "https://registry.npmjs.org/yargs/-/yargs-1.3.3.tgz"
++        }
++      }
++    },
+     "colors": {
+       "version": "1.1.2",
+       "from": "colors@>=1.1.2 <1.2.0",
+@@ -260,14 +302,7 @@
+     "concat-stream": {
+       "version": "1.5.1",
+       "from": "concat-stream@>=1.4.6 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.5.1.tgz",
+-      "dependencies": {
+-        "readable-stream": {
+-          "version": "2.0.5",
+-          "from": "readable-stream@>=2.0.0 <2.1.0",
+-          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.0.5.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.5.1.tgz"
+     },
+     "console-browserify": {
+       "version": "1.1.0",
+@@ -284,6 +319,18 @@
+       "from": "core-util-is@>=1.0.0 <1.1.0",
+       "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
+     },
++    "cosmiconfig": {
++      "version": "1.1.0",
++      "from": "cosmiconfig@>=1.1.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/cosmiconfig/-/cosmiconfig-1.1.0.tgz",
++      "dependencies": {
++        "minimist": {
++          "version": "1.2.0",
++          "from": "minimist@>=1.2.0 <2.0.0",
++          "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
++        }
++      }
++    },
+     "cpr": {
+       "version": "0.0.6",
+       "from": "cpr@>=0.0.6 <0.1.0",
+@@ -311,6 +358,33 @@
+       "from": "cryptiles@>=2.0.0 <3.0.0",
+       "resolved": "https://registry.npmjs.org/cryptiles/-/cryptiles-2.0.5.tgz"
+     },
++    "css-color-names": {
++      "version": "0.0.3",
++      "from": "css-color-names@0.0.3",
++      "resolved": "https://registry.npmjs.org/css-color-names/-/css-color-names-0.0.3.tgz"
++    },
++    "css-rule-stream": {
++      "version": "1.1.0",
++      "from": "css-rule-stream@>=1.1.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/css-rule-stream/-/css-rule-stream-1.1.0.tgz"
++    },
++    "css-tokenize": {
++      "version": "1.0.1",
++      "from": "css-tokenize@>=1.0.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/css-tokenize/-/css-tokenize-1.0.1.tgz",
++      "dependencies": {
++        "isarray": {
++          "version": "0.0.1",
++          "from": "isarray@0.0.1",
++          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++        },
++        "readable-stream": {
++          "version": "1.1.14",
++          "from": "readable-stream@>=1.0.33 <2.0.0",
++          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz"
++        }
++      }
++    },
+     "csslint": {
+       "version": "0.10.0",
+       "from": "csslint@>=0.10.0 <0.11.0",
+@@ -321,6 +395,11 @@
+       "from": "cssproc@>=0.0.1 <0.1.0",
+       "resolved": "https://registry.npmjs.org/cssproc/-/cssproc-0.0.7.tgz"
+     },
++    "currently-unhandled": {
++      "version": "0.4.1",
++      "from": "currently-unhandled@>=0.4.1 <0.5.0",
++      "resolved": "https://registry.npmjs.org/currently-unhandled/-/currently-unhandled-0.4.1.tgz"
++    },
+     "d": {
+       "version": "0.1.1",
+       "from": "d@>=0.1.1 <0.2.0",
+@@ -349,14 +428,14 @@
+       "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.12.tgz"
+     },
+     "debug": {
+-      "version": "0.7.4",
+-      "from": "debug@>=0.7.0 <0.8.0",
+-      "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz"
++      "version": "2.2.0",
++      "from": "debug@>=2.1.1 <3.0.0",
++      "resolved": "https://registry.npmjs.org/debug/-/debug-2.2.0.tgz"
+     },
+     "decamelize": {
+-      "version": "1.1.2",
++      "version": "1.2.0",
+       "from": "decamelize@>=1.1.2 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/decamelize/-/decamelize-1.1.2.tgz"
++      "resolved": "https://registry.npmjs.org/decamelize/-/decamelize-1.2.0.tgz"
+     },
+     "deep-is": {
+       "version": "0.1.3",
+@@ -387,11 +466,18 @@
+           "version": "1.1.6",
+           "from": "esutils@>=1.1.6 <2.0.0",
+           "resolved": "https://registry.npmjs.org/esutils/-/esutils-1.1.6.tgz"
+-        },
+-        "isarray": {
+-          "version": "1.0.0",
+-          "from": "isarray@>=1.0.0 <2.0.0",
+-          "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
++        }
++      }
++    },
++    "doiuse": {
++      "version": "2.4.1",
++      "from": "doiuse@>=2.3.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/doiuse/-/doiuse-2.4.1.tgz",
++      "dependencies": {
++        "source-map": {
++          "version": "0.4.4",
++          "from": "source-map@>=0.4.2 <0.5.0",
++          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.4.4.tgz"
+         }
+       }
+     },
+@@ -404,32 +490,49 @@
+           "version": "1.1.3",
+           "from": "domelementtype@>=1.1.1 <1.2.0",
+           "resolved": "https://registry.npmjs.org/domelementtype/-/domelementtype-1.1.3.tgz"
+-        },
+-        "entities": {
+-          "version": "1.1.1",
+-          "from": "entities@>=1.1.1 <1.2.0",
+-          "resolved": "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
+         }
+       }
+     },
+     "domelementtype": {
+       "version": "1.3.0",
+-      "from": "domelementtype@>=1.0.0 <2.0.0",
++      "from": "domelementtype@>=1.3.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
+     },
+     "domhandler": {
+       "version": "2.3.0",
+-      "from": "domhandler@>=2.3.0 <2.4.0",
++      "from": "domhandler@>=2.3.0 <3.0.0",
+       "resolved": "https://registry.npmjs.org/domhandler/-/domhandler-2.3.0.tgz"
+     },
+     "domutils": {
+       "version": "1.5.1",
+-      "from": "domutils@>=1.5.0 <1.6.0",
++      "from": "domutils@>=1.5.1 <2.0.0",
+       "resolved": "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
+     },
++    "duplexer": {
++      "version": "0.1.1",
++      "from": "duplexer@>=0.1.1 <0.2.0",
++      "resolved": "https://registry.npmjs.org/duplexer/-/duplexer-0.1.1.tgz"
++    },
++    "duplexer2": {
++      "version": "0.0.2",
++      "from": "duplexer2@0.0.2",
++      "resolved": "https://registry.npmjs.org/duplexer2/-/duplexer2-0.0.2.tgz",
++      "dependencies": {
++        "isarray": {
++          "version": "0.0.1",
++          "from": "isarray@0.0.1",
++          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++        },
++        "readable-stream": {
++          "version": "1.1.14",
++          "from": "readable-stream@>=1.1.9 <1.2.0",
++          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz"
++        }
++      }
++    },
+     "ecc-jsbn": {
+       "version": "0.1.1",
+-      "from": "ecc-jsbn@>=0.0.1 <1.0.0",
++      "from": "ecc-jsbn@>=0.1.1 <0.2.0",
+       "resolved": "https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz"
+     },
+     "ee-first": {
+@@ -438,9 +541,9 @@
+       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
+     },
+     "entities": {
+-      "version": "1.0.0",
+-      "from": "entities@>=1.0.0 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/entities/-/entities-1.0.0.tgz"
++      "version": "1.1.1",
++      "from": "entities@>=1.1.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
+     },
+     "errno": {
+       "version": "0.1.4",
+@@ -453,9 +556,9 @@
+       "resolved": "https://registry.npmjs.org/error-ex/-/error-ex-1.3.0.tgz"
+     },
+     "es5-ext": {
+-      "version": "0.10.11",
+-      "from": "es5-ext@>=0.10.8 <0.11.0",
+-      "resolved": "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.11.tgz"
++      "version": "0.10.12",
++      "from": "es5-ext@>=0.10.11 <0.11.0",
++      "resolved": "https://registry.npmjs.org/es5-ext/-/es5-ext-0.10.12.tgz"
+     },
+     "es6-iterator": {
+       "version": "2.0.0",
+@@ -465,14 +568,7 @@
+     "es6-map": {
+       "version": "0.1.4",
+       "from": "es6-map@>=0.1.3 <0.2.0",
+-      "resolved": "https://registry.npmjs.org/es6-map/-/es6-map-0.1.4.tgz",
+-      "dependencies": {
+-        "es6-symbol": {
+-          "version": "3.1.0",
+-          "from": "es6-symbol@>=3.1.0 <3.2.0",
+-          "resolved": "https://registry.npmjs.org/es6-symbol/-/es6-symbol-3.1.0.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/es6-map/-/es6-map-0.1.4.tgz"
+     },
+     "es6-set": {
+       "version": "0.1.4",
+@@ -480,9 +576,9 @@
+       "resolved": "https://registry.npmjs.org/es6-set/-/es6-set-0.1.4.tgz"
+     },
+     "es6-symbol": {
+-      "version": "3.0.2",
+-      "from": "es6-symbol@>=3.0.1 <3.1.0",
+-      "resolved": "https://registry.npmjs.org/es6-symbol/-/es6-symbol-3.0.2.tgz"
++      "version": "3.1.0",
++      "from": "es6-symbol@>=3.1.0 <3.2.0",
++      "resolved": "https://registry.npmjs.org/es6-symbol/-/es6-symbol-3.1.0.tgz"
+     },
+     "es6-weak-map": {
+       "version": "2.0.1",
+@@ -490,83 +586,36 @@
+       "resolved": "https://registry.npmjs.org/es6-weak-map/-/es6-weak-map-2.0.1.tgz"
+     },
+     "escape-string-regexp": {
+-      "version": "1.0.4",
++      "version": "1.0.5",
+       "from": "escape-string-regexp@>=1.0.2 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.4.tgz"
++      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
+     },
+     "escodegen": {
+       "version": "0.0.28",
+       "from": "escodegen@>=0.0.0 <0.1.0",
+-      "resolved": "https://registry.npmjs.org/escodegen/-/escodegen-0.0.28.tgz"
+-    },
+-    "escope": {
+-      "version": "3.6.0",
+-      "from": "escope@>=3.6.0 <4.0.0",
+-      "resolved": "https://registry.npmjs.org/escope/-/escope-3.6.0.tgz",
++      "resolved": "https://registry.npmjs.org/escodegen/-/escodegen-0.0.28.tgz",
+       "dependencies": {
++        "esprima": {
++          "version": "1.0.4",
++          "from": "esprima@>=1.0.2 <1.1.0",
++          "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
++        },
+         "estraverse": {
+-          "version": "4.2.0",
+-          "from": "estraverse@4.2.0",
+-          "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz"
++          "version": "1.3.2",
++          "from": "estraverse@>=1.3.0 <1.4.0",
++          "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-1.3.2.tgz"
+         }
+       }
+     },
++    "escope": {
++      "version": "3.6.0",
++      "from": "escope@>=3.6.0 <4.0.0",
++      "resolved": "https://registry.npmjs.org/escope/-/escope-3.6.0.tgz"
++    },
+     "eslint": {
+       "version": "3.0.1",
+-      "from": "eslint@3.0.1",
+-      "resolved": "https://registry.npmjs.org/eslint/-/eslint-3.0.1.tgz",
+-      "dependencies": {
+-        "ansi-styles": {
+-          "version": "2.2.1",
+-          "from": "ansi-styles@>=2.2.1 <3.0.0",
+-          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-2.2.1.tgz"
+-        },
+-        "chalk": {
+-          "version": "1.1.3",
+-          "from": "chalk@>=1.1.3 <2.0.0",
+-          "resolved": "https://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
+-        },
+-        "debug": {
+-          "version": "2.2.0",
+-          "from": "debug@>=2.1.1 <3.0.0",
+-          "resolved": "https://registry.npmjs.org/debug/-/debug-2.2.0.tgz"
+-        },
+-        "estraverse": {
+-          "version": "4.2.0",
+-          "from": "estraverse@>=4.2.0 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz"
+-        },
+-        "glob": {
+-          "version": "7.0.5",
+-          "from": "glob@>=7.0.3 <8.0.0",
+-          "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
+-        },
+-        "lodash": {
+-          "version": "4.13.1",
+-          "from": "lodash@>=4.0.0 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+-        },
+-        "minimatch": {
+-          "version": "3.0.2",
+-          "from": "minimatch@^3.0.2",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+-        },
+-        "progress": {
+-          "version": "1.1.8",
+-          "from": "progress@>=1.1.8 <2.0.0",
+-          "resolved": "https://registry.npmjs.org/progress/-/progress-1.1.8.tgz"
+-        },
+-        "shelljs": {
+-          "version": "0.6.0",
+-          "from": "shelljs@>=0.6.0 <0.7.0",
+-          "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.6.0.tgz"
+-        },
+-        "strip-bom": {
+-          "version": "3.0.0",
+-          "from": "strip-bom@>=3.0.0 <4.0.0",
+-          "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz"
+-        }
+-      }
++      "from": "eslint@>=3.0.1 <4.0.0",
++      "resolved": "https://registry.npmjs.org/eslint/-/eslint-3.0.1.tgz"
+     },
+     "espree": {
+       "version": "3.1.6",
+@@ -574,9 +623,9 @@
+       "resolved": "https://registry.npmjs.org/espree/-/espree-3.1.6.tgz"
+     },
+     "esprima": {
+-      "version": "1.0.4",
+-      "from": "esprima@>=1.0.2 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
++      "version": "2.7.2",
++      "from": "esprima@>=2.6.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/esprima/-/esprima-2.7.2.tgz"
+     },
+     "esrecurse": {
+       "version": "4.1.0",
+@@ -591,9 +640,9 @@
+       }
+     },
+     "estraverse": {
+-      "version": "1.3.2",
+-      "from": "estraverse@>=1.3.0 <1.4.0",
+-      "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-1.3.2.tgz"
++      "version": "4.2.0",
++      "from": "estraverse@>=4.2.0 <5.0.0",
++      "resolved": "https://registry.npmjs.org/estraverse/-/estraverse-4.2.0.tgz"
+     },
+     "esutils": {
+       "version": "2.0.2",
+@@ -610,6 +659,11 @@
+       "from": "eventemitter2@>=0.4.13 <0.5.0",
+       "resolved": "https://registry.npmjs.org/eventemitter2/-/eventemitter2-0.4.14.tgz"
+     },
++    "execall": {
++      "version": "1.0.0",
++      "from": "execall@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/execall/-/execall-1.0.0.tgz"
++    },
+     "exit": {
+       "version": "0.1.2",
+       "from": "exit@>=0.1.1 <0.2.0",
+@@ -641,9 +695,9 @@
+       "resolved": "https://registry.npmjs.org/faye-websocket/-/faye-websocket-0.10.0.tgz"
+     },
+     "figures": {
+-      "version": "1.4.0",
+-      "from": "figures@>=1.0.1 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/figures/-/figures-1.4.0.tgz"
++      "version": "1.7.0",
++      "from": "figures@>=1.3.5 <2.0.0",
++      "resolved": "https://registry.npmjs.org/figures/-/figures-1.7.0.tgz"
+     },
+     "file-entry-cache": {
+       "version": "1.2.4",
+@@ -653,12 +707,31 @@
+     "fileset": {
+       "version": "0.1.8",
+       "from": "fileset@>=0.1.0 <0.2.0",
+-      "resolved": "https://registry.npmjs.org/fileset/-/fileset-0.1.8.tgz"
++      "resolved": "https://registry.npmjs.org/fileset/-/fileset-0.1.8.tgz",
++      "dependencies": {
++        "glob": {
++          "version": "3.2.11",
++          "from": "glob@>=3.0.0 <4.0.0",
++          "resolved": "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz",
++          "dependencies": {
++            "minimatch": {
++              "version": "0.3.0",
++              "from": "minimatch@>=0.3.0 <0.4.0",
++              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
++            }
++          }
++        },
++        "minimatch": {
++          "version": "0.4.0",
++          "from": "minimatch@>=0.0.0 <1.0.0",
++          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.4.0.tgz"
++        }
++      }
+     },
+     "find-up": {
+-      "version": "1.1.0",
++      "version": "1.1.2",
+       "from": "find-up@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/find-up/-/find-up-1.1.0.tgz"
++      "resolved": "https://registry.npmjs.org/find-up/-/find-up-1.1.2.tgz"
+     },
+     "findup-sync": {
+       "version": "0.3.0",
+@@ -669,25 +742,18 @@
+           "version": "5.0.15",
+           "from": "glob@>=5.0.0 <5.1.0",
+           "resolved": "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
+-        },
+-        "minimatch": {
+-          "version": "3.0.2",
+-          "from": "minimatch@2 || 3",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+         }
+       }
+     },
+     "flat-cache": {
+       "version": "1.0.10",
+       "from": "flat-cache@>=1.0.9 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/flat-cache/-/flat-cache-1.0.10.tgz",
+-      "dependencies": {
+-        "graceful-fs": {
+-          "version": "4.1.4",
+-          "from": "graceful-fs@>=4.1.2 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.4.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/flat-cache/-/flat-cache-1.0.10.tgz"
++    },
++    "flatten": {
++      "version": "1.0.2",
++      "from": "flatten@>=1.0.2 <2.0.0",
++      "resolved": "https://registry.npmjs.org/flatten/-/flatten-1.0.2.tgz"
+     },
+     "forever-agent": {
+       "version": "0.6.1",
+@@ -696,7 +762,7 @@
+     },
+     "form-data": {
+       "version": "1.0.0-rc4",
+-      "from": "form-data@>=1.0.0-rc3 <1.1.0",
++      "from": "form-data@>=1.0.0-rc4 <1.1.0",
+       "resolved": "https://registry.npmjs.org/form-data/-/form-data-1.0.0-rc4.tgz"
+     },
+     "fs.realpath": {
+@@ -704,6 +770,11 @@
+       "from": "fs.realpath@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
+     },
++    "gather-stream": {
++      "version": "1.0.0",
++      "from": "gather-stream@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/gather-stream/-/gather-stream-1.0.0.tgz"
++    },
+     "gaze": {
+       "version": "1.1.0",
+       "from": "gaze@>=1.0.0 <2.0.0",
+@@ -736,11 +807,26 @@
+           "from": "async@>=0.2.0 <0.3.0",
+           "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
+         },
++        "entities": {
++          "version": "1.0.0",
++          "from": "entities@>=1.0.0 <1.1.0",
++          "resolved": "https://registry.npmjs.org/entities/-/entities-1.0.0.tgz"
++        },
+         "glob": {
+           "version": "3.2.11",
+           "from": "glob@>=3.2.0 <3.3.0",
+           "resolved": "https://registry.npmjs.org/glob/-/glob-3.2.11.tgz"
+         },
++        "htmlparser2": {
++          "version": "3.8.3",
++          "from": "htmlparser2@>=3.8.0 <3.9.0",
++          "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.8.3.tgz"
++        },
++        "isarray": {
++          "version": "0.0.1",
++          "from": "isarray@0.0.1",
++          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++        },
+         "jshint": {
+           "version": "2.5.11",
+           "from": "jshint@>=2.5.0 <2.6.0",
+@@ -768,15 +854,20 @@
+           "from": "minimatch@>=0.3.0 <0.4.0",
+           "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
+         },
++        "readable-stream": {
++          "version": "1.1.14",
++          "from": "readable-stream@>=1.1.0 <1.2.0",
++          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz"
++        },
++        "shelljs": {
++          "version": "0.3.0",
++          "from": "shelljs@>=0.3.0 <0.4.0",
++          "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.3.0.tgz"
++        },
+         "uglify-js": {
+           "version": "1.3.5",
+           "from": "uglify-js@>=1.3.0 <1.4.0",
+           "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-1.3.5.tgz"
+-        },
+-        "underscore": {
+-          "version": "1.6.0",
+-          "from": "underscore@>=1.6.0 <1.7.0",
+-          "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
+         }
+       }
+     },
+@@ -813,16 +904,9 @@
+       }
+     },
+     "glob": {
+-      "version": "3.1.21",
+-      "from": "glob@>=3.1.21 <3.2.0",
+-      "resolved": "https://registry.npmjs.org/glob/-/glob-3.1.21.tgz",
+-      "dependencies": {
+-        "inherits": {
+-          "version": "1.0.2",
+-          "from": "inherits@>=1.0.0 <2.0.0",
+-          "resolved": "https://registry.npmjs.org/inherits/-/inherits-1.0.2.tgz"
+-        }
+-      }
++      "version": "7.0.5",
++      "from": "glob@>=7.0.3 <8.0.0",
++      "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
+     },
+     "globals": {
+       "version": "9.9.0",
+@@ -832,46 +916,29 @@
+     "globby": {
+       "version": "5.0.0",
+       "from": "globby@>=5.0.0 <6.0.0",
+-      "resolved": "https://registry.npmjs.org/globby/-/globby-5.0.0.tgz",
+-      "dependencies": {
+-        "glob": {
+-          "version": "7.0.5",
+-          "from": "glob@^7.0.3",
+-          "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
+-        },
+-        "minimatch": {
+-          "version": "3.0.2",
+-          "from": "minimatch@>=3.0.2 <4.0.0",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/globby/-/globby-5.0.0.tgz"
++    },
++    "globjoin": {
++      "version": "0.1.4",
++      "from": "globjoin@>=0.1.2 <0.2.0",
++      "resolved": "https://registry.npmjs.org/globjoin/-/globjoin-0.1.4.tgz"
+     },
+     "globule": {
+       "version": "1.0.0",
+       "from": "globule@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/globule/-/globule-1.0.0.tgz",
+       "dependencies": {
+-        "glob": {
+-          "version": "7.0.5",
+-          "from": "glob@>=7.0.3 <7.1.0",
+-          "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
+-        },
+         "lodash": {
+           "version": "4.9.0",
+           "from": "lodash@>=4.9.0 <4.10.0",
+           "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.9.0.tgz"
+-        },
+-        "minimatch": {
+-          "version": "3.0.2",
+-          "from": "minimatch@>=3.0.0 <3.1.0",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+         }
+       }
+     },
+     "graceful-fs": {
+-      "version": "1.2.3",
+-      "from": "graceful-fs@>=1.2.0 <1.3.0",
+-      "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz"
++      "version": "4.1.4",
++      "from": "graceful-fs@>=4.1.2 <5.0.0",
++      "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.4.tgz"
+     },
+     "graceful-readlink": {
+       "version": "1.0.1",
+@@ -883,61 +950,44 @@
+       "from": "grunt@1.0.1",
+       "resolved": "https://registry.npmjs.org/grunt/-/grunt-1.0.1.tgz",
+       "dependencies": {
+-        "glob": {
+-          "version": "7.0.5",
+-          "from": "glob@>=7.0.0 <7.1.0",
+-          "resolved": "https://registry.npmjs.org/glob/-/glob-7.0.5.tgz"
+-        },
+         "grunt-cli": {
+           "version": "1.2.0",
+           "from": "grunt-cli@>=1.2.0 <1.3.0",
+           "resolved": "https://registry.npmjs.org/grunt-cli/-/grunt-cli-1.2.0.tgz"
+         },
+-        "minimatch": {
+-          "version": "3.0.2",
+-          "from": "minimatch@>=3.0.0 <3.1.0",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+-        },
+-        "nopt": {
+-          "version": "3.0.6",
+-          "from": "nopt@>=3.0.6 <3.1.0",
+-          "resolved": "https://registry.npmjs.org/nopt/-/nopt-3.0.6.tgz"
++        "js-yaml": {
++          "version": "3.5.5",
++          "from": "js-yaml@>=3.5.2 <3.6.0",
++          "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.5.5.tgz"
+         },
+-        "resolve": {
+-          "version": "1.1.7",
+-          "from": "resolve@>=1.1.0 <1.2.0",
+-          "resolved": "https://registry.npmjs.org/resolve/-/resolve-1.1.7.tgz"
++        "rimraf": {
++          "version": "2.2.8",
++          "from": "rimraf@>=2.2.8 <2.3.0",
++          "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz"
+         }
+       }
+     },
+     "grunt-contrib-less": {
+       "version": "1.3.0",
+       "from": "grunt-contrib-less@1.3.0",
+-      "resolved": "https://registry.npmjs.org/grunt-contrib-less/-/grunt-contrib-less-1.3.0.tgz",
+-      "dependencies": {
+-        "lodash": {
+-          "version": "4.13.1",
+-          "from": "lodash@>=4.8.2 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/grunt-contrib-less/-/grunt-contrib-less-1.3.0.tgz"
+     },
+     "grunt-contrib-uglify": {
+       "version": "1.0.1",
+       "from": "grunt-contrib-uglify@1.0.1",
+-      "resolved": "https://registry.npmjs.org/grunt-contrib-uglify/-/grunt-contrib-uglify-1.0.1.tgz",
+-      "dependencies": {
+-        "lodash": {
+-          "version": "4.13.1",
+-          "from": "lodash@>=4.0.1 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/grunt-contrib-uglify/-/grunt-contrib-uglify-1.0.1.tgz"
+     },
+     "grunt-contrib-watch": {
+       "version": "1.0.0",
+       "from": "grunt-contrib-watch@1.0.0",
+-      "resolved": "https://registry.npmjs.org/grunt-contrib-watch/-/grunt-contrib-watch-1.0.0.tgz"
++      "resolved": "https://registry.npmjs.org/grunt-contrib-watch/-/grunt-contrib-watch-1.0.0.tgz",
++      "dependencies": {
++        "lodash": {
++          "version": "3.10.1",
++          "from": "lodash@>=3.10.1 <4.0.0",
++          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
++        }
++      }
+     },
+     "grunt-eslint": {
+       "version": "19.0.0",
+@@ -952,7 +1002,14 @@
+     "grunt-legacy-log": {
+       "version": "1.0.0",
+       "from": "grunt-legacy-log@>=1.0.0 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/grunt-legacy-log/-/grunt-legacy-log-1.0.0.tgz"
++      "resolved": "https://registry.npmjs.org/grunt-legacy-log/-/grunt-legacy-log-1.0.0.tgz",
++      "dependencies": {
++        "lodash": {
++          "version": "3.10.1",
++          "from": "lodash@>=3.10.1 <3.11.0",
++          "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
++        }
++      }
+     },
+     "grunt-legacy-log-utils": {
+       "version": "1.0.0",
+@@ -975,14 +1032,14 @@
+           "version": "4.3.0",
+           "from": "lodash@>=4.3.0 <4.4.0",
+           "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.3.0.tgz"
+-        },
+-        "which": {
+-          "version": "1.2.10",
+-          "from": "which@>=1.2.1 <1.3.0",
+-          "resolved": "https://registry.npmjs.org/which/-/which-1.2.10.tgz"
+         }
+       }
+     },
++    "grunt-stylelint": {
++      "version": "0.5.0",
++      "from": "grunt-stylelint@>=0.5.0 <0.6.0",
++      "resolved": "https://registry.npmjs.org/grunt-stylelint/-/grunt-stylelint-0.5.0.tgz"
++    },
+     "gzip-size": {
+       "version": "1.0.0",
+       "from": "gzip-size@>=1.0.0 <2.0.0",
+@@ -1013,20 +1070,18 @@
+     "har-validator": {
+       "version": "2.0.6",
+       "from": "har-validator@>=2.0.6 <2.1.0",
+-      "resolved": "https://registry.npmjs.org/har-validator/-/har-validator-2.0.6.tgz",
+-      "dependencies": {
+-        "is-my-json-valid": {
+-          "version": "2.13.1",
+-          "from": "is-my-json-valid@>=2.12.4 <3.0.0",
+-          "resolved": "https://registry.npmjs.org/is-my-json-valid/-/is-my-json-valid-2.13.1.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/har-validator/-/har-validator-2.0.6.tgz"
+     },
+     "has-ansi": {
+       "version": "2.0.0",
+       "from": "has-ansi@>=2.0.0 <3.0.0",
+       "resolved": "https://registry.npmjs.org/has-ansi/-/has-ansi-2.0.0.tgz"
+     },
++    "has-flag": {
++      "version": "1.0.0",
++      "from": "has-flag@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/has-flag/-/has-flag-1.0.0.tgz"
++    },
+     "hawk": {
+       "version": "3.1.3",
+       "from": "hawk@>=3.1.3 <3.2.0",
+@@ -1043,14 +1098,19 @@
+       "resolved": "https://registry.npmjs.org/hooker/-/hooker-0.2.3.tgz"
+     },
+     "hosted-git-info": {
+-      "version": "2.1.4",
++      "version": "2.1.5",
+       "from": "hosted-git-info@>=2.1.4 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.1.4.tgz"
++      "resolved": "https://registry.npmjs.org/hosted-git-info/-/hosted-git-info-2.1.5.tgz"
++    },
++    "html-tags": {
++      "version": "1.1.1",
++      "from": "html-tags@>=1.1.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/html-tags/-/html-tags-1.1.1.tgz"
+     },
+     "htmlparser2": {
+-      "version": "3.8.3",
+-      "from": "htmlparser2@>=3.8.0 <3.9.0",
+-      "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.8.3.tgz"
++      "version": "3.9.1",
++      "from": "htmlparser2@>=3.9.0 <4.0.0",
++      "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.9.1.tgz"
+     },
+     "http-errors": {
+       "version": "1.3.1",
+@@ -1087,6 +1147,11 @@
+       "from": "indent-string@>=2.1.0 <3.0.0",
+       "resolved": "https://registry.npmjs.org/indent-string/-/indent-string-2.1.0.tgz"
+     },
++    "indexes-of": {
++      "version": "1.0.1",
++      "from": "indexes-of@>=1.0.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/indexes-of/-/indexes-of-1.0.1.tgz"
++    },
+     "inflight": {
+       "version": "1.0.5",
+       "from": "inflight@>=1.0.4 <2.0.0",
+@@ -1100,14 +1165,12 @@
+     "inquirer": {
+       "version": "0.12.0",
+       "from": "inquirer@>=0.12.0 <0.13.0",
+-      "resolved": "https://registry.npmjs.org/inquirer/-/inquirer-0.12.0.tgz",
+-      "dependencies": {
+-        "lodash": {
+-          "version": "4.13.1",
+-          "from": "lodash@4.13.1",
+-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/inquirer/-/inquirer-0.12.0.tgz"
++    },
++    "irregular-plurals": {
++      "version": "1.2.0",
++      "from": "irregular-plurals@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/irregular-plurals/-/irregular-plurals-1.2.0.tgz"
+     },
+     "is-arrayish": {
+       "version": "0.2.1",
+@@ -1159,11 +1222,21 @@
+       "from": "is-property@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/is-property/-/is-property-1.0.2.tgz"
+     },
++    "is-regexp": {
++      "version": "1.0.0",
++      "from": "is-regexp@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/is-regexp/-/is-regexp-1.0.0.tgz"
++    },
+     "is-resolvable": {
+       "version": "1.0.0",
+       "from": "is-resolvable@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/is-resolvable/-/is-resolvable-1.0.0.tgz"
+     },
++    "is-supported-regexp-flag": {
++      "version": "1.0.0",
++      "from": "is-supported-regexp-flag@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/is-supported-regexp-flag/-/is-supported-regexp-flag-1.0.0.tgz"
++    },
+     "is-typedarray": {
+       "version": "1.0.0",
+       "from": "is-typedarray@>=1.0.0 <1.1.0",
+@@ -1175,9 +1248,9 @@
+       "resolved": "https://registry.npmjs.org/is-utf8/-/is-utf8-0.2.1.tgz"
+     },
+     "isarray": {
+-      "version": "0.0.1",
+-      "from": "isarray@0.0.1",
+-      "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++      "version": "1.0.0",
++      "from": "isarray@>=1.0.0 <1.1.0",
++      "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+     },
+     "isexe": {
+       "version": "1.1.2",
+@@ -1199,6 +1272,11 @@
+           "from": "async@>=0.2.0 <0.3.0",
+           "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
+         },
++        "esprima": {
++          "version": "1.0.4",
++          "from": "esprima@>=1.0.0 <1.1.0",
++          "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
++        },
+         "handlebars": {
+           "version": "1.0.12",
+           "from": "handlebars@>=1.0.0 <1.1.0",
+@@ -1214,6 +1292,11 @@
+           "from": "nopt@>=2.1.0 <2.2.0",
+           "resolved": "https://registry.npmjs.org/nopt/-/nopt-2.1.2.tgz"
+         },
++        "resolve": {
++          "version": "0.4.3",
++          "from": "resolve@>=0.4.0 <0.5.0",
++          "resolved": "https://registry.npmjs.org/resolve/-/resolve-0.4.3.tgz"
++        },
+         "source-map": {
+           "version": "0.1.43",
+           "from": "source-map@>=0.1.7 <0.2.0",
+@@ -1223,6 +1306,16 @@
+           "version": "2.3.6",
+           "from": "uglify-js@>=2.3.0 <2.4.0",
+           "resolved": "https://registry.npmjs.org/uglify-js/-/uglify-js-2.3.6.tgz"
++        },
++        "which": {
++          "version": "1.0.9",
++          "from": "which@>=1.0.0 <1.1.0",
++          "resolved": "https://registry.npmjs.org/which/-/which-1.0.9.tgz"
++        },
++        "wordwrap": {
++          "version": "0.0.3",
++          "from": "wordwrap@>=0.0.0 <0.1.0",
++          "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.3.tgz"
+         }
+       }
+     },
+@@ -1231,23 +1324,43 @@
+       "from": "jodid25519@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz"
+     },
++    "js-base64": {
++      "version": "2.1.9",
++      "from": "js-base64@>=2.1.9 <3.0.0",
++      "resolved": "https://registry.npmjs.org/js-base64/-/js-base64-2.1.9.tgz"
++    },
+     "js-yaml": {
+-      "version": "3.5.5",
+-      "from": "js-yaml@>=3.5.2 <3.6.0",
+-      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.5.5.tgz",
+-      "dependencies": {
+-        "esprima": {
+-          "version": "2.7.2",
+-          "from": "esprima@>=2.6.0 <3.0.0",
+-          "resolved": "https://registry.npmjs.org/esprima/-/esprima-2.7.2.tgz"
+-        }
+-      }
++      "version": "3.6.1",
++      "from": "js-yaml@>=3.5.1 <4.0.0",
++      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.6.1.tgz"
+     },
+     "jsbn": {
+       "version": "0.1.0",
+       "from": "jsbn@>=0.1.0 <0.2.0",
+       "resolved": "https://registry.npmjs.org/jsbn/-/jsbn-0.1.0.tgz"
+     },
++    "jshint": {
++      "version": "0.9.1",
++      "from": "jshint@>=0.9.0 <0.10.0",
++      "resolved": "https://registry.npmjs.org/jshint/-/jshint-0.9.1.tgz",
++      "dependencies": {
++        "cli": {
++          "version": "0.4.3",
++          "from": "cli@0.4.3",
++          "resolved": "https://registry.npmjs.org/cli/-/cli-0.4.3.tgz"
++        },
++        "lru-cache": {
++          "version": "1.0.6",
++          "from": "lru-cache@>=1.0.2 <1.1.0",
++          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-1.0.6.tgz"
++        },
++        "minimatch": {
++          "version": "0.0.5",
++          "from": "minimatch@>=0.0.0 <0.1.0",
++          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.0.5.tgz"
++        }
++      }
++    },
+     "jslint": {
+       "version": "0.3.4",
+       "from": "jslint@>=0.3.0 <0.4.0",
+@@ -1262,6 +1375,11 @@
+           "version": "0.3.0",
+           "from": "minimatch@>=0.3.0 <0.4.0",
+           "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz"
++        },
++        "nopt": {
++          "version": "1.0.10",
++          "from": "nopt@>=1.0.0 <1.1.0",
++          "resolved": "https://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz"
+         }
+       }
+     },
+@@ -1280,16 +1398,38 @@
+       "from": "json-stringify-safe@>=5.0.1 <5.1.0",
+       "resolved": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz"
+     },
++    "jsonfilter": {
++      "version": "1.1.2",
++      "from": "jsonfilter@>=1.1.2 <2.0.0",
++      "resolved": "https://registry.npmjs.org/jsonfilter/-/jsonfilter-1.1.2.tgz",
++      "dependencies": {
++        "minimist": {
++          "version": "1.2.0",
++          "from": "minimist@>=1.1.0 <2.0.0",
++          "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
++        }
++      }
++    },
+     "jsonify": {
+       "version": "0.0.0",
+       "from": "jsonify@>=0.0.0 <0.1.0",
+       "resolved": "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz"
+     },
++    "jsonparse": {
++      "version": "0.0.5",
++      "from": "jsonparse@0.0.5",
++      "resolved": "https://registry.npmjs.org/jsonparse/-/jsonparse-0.0.5.tgz"
++    },
+     "jsonpointer": {
+       "version": "2.0.0",
+       "from": "jsonpointer@2.0.0",
+       "resolved": "https://registry.npmjs.org/jsonpointer/-/jsonpointer-2.0.0.tgz"
+     },
++    "JSONStream": {
++      "version": "0.8.4",
++      "from": "JSONStream@>=0.8.4 <0.9.0",
++      "resolved": "https://registry.npmjs.org/JSONStream/-/JSONStream-0.8.4.tgz"
++    },
+     "jsprim": {
+       "version": "1.3.0",
+       "from": "jsprim@>=1.2.2 <2.0.0",
+@@ -1303,29 +1443,29 @@
+     "knox": {
+       "version": "0.8.10",
+       "from": "knox@>=0.8.0 <0.9.0",
+-      "resolved": "https://registry.npmjs.org/knox/-/knox-0.8.10.tgz"
++      "resolved": "https://registry.npmjs.org/knox/-/knox-0.8.10.tgz",
++      "dependencies": {
++        "debug": {
++          "version": "0.7.4",
++          "from": "debug@>=0.7.0 <0.8.0",
++          "resolved": "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz"
++        }
++      }
+     },
+     "lazy-cache": {
+       "version": "1.0.4",
+       "from": "lazy-cache@>=1.0.3 <2.0.0",
+       "resolved": "https://registry.npmjs.org/lazy-cache/-/lazy-cache-1.0.4.tgz"
+     },
++    "ldjson-stream": {
++      "version": "1.2.1",
++      "from": "ldjson-stream@>=1.2.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/ldjson-stream/-/ldjson-stream-1.2.1.tgz"
++    },
+     "less": {
+       "version": "2.6.1",
+       "from": "less@>=2.6.0 <2.7.0",
+-      "resolved": "https://registry.npmjs.org/less/-/less-2.6.1.tgz",
+-      "dependencies": {
+-        "graceful-fs": {
+-          "version": "4.1.4",
+-          "from": "graceful-fs@>=4.1.2 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.4.tgz"
+-        },
+-        "source-map": {
+-          "version": "0.5.6",
+-          "from": "source-map@>=0.5.3 <0.6.0",
+-          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.6.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/less/-/less-2.6.1.tgz"
+     },
+     "levn": {
+       "version": "0.3.0",
+@@ -1342,17 +1482,22 @@
+       "from": "load-json-file@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/load-json-file/-/load-json-file-1.1.0.tgz",
+       "dependencies": {
+-        "graceful-fs": {
+-          "version": "4.1.2",
+-          "from": "graceful-fs@>=4.1.2 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.2.tgz"
++        "strip-bom": {
++          "version": "2.0.0",
++          "from": "strip-bom@>=2.0.0 <3.0.0",
++          "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-2.0.0.tgz"
+         }
+       }
+     },
+     "lodash": {
+-      "version": "3.10.1",
+-      "from": "lodash@>=3.10.1 <3.11.0",
+-      "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
++      "version": "4.13.1",
++      "from": "lodash@>=4.0.0 <5.0.0",
++      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
++    },
++    "log-symbols": {
++      "version": "1.0.2",
++      "from": "log-symbols@>=1.0.2 <2.0.0",
++      "resolved": "https://registry.npmjs.org/log-symbols/-/log-symbols-1.0.2.tgz"
+     },
+     "longest": {
+       "version": "1.0.1",
+@@ -1360,9 +1505,9 @@
+       "resolved": "https://registry.npmjs.org/longest/-/longest-1.0.1.tgz"
+     },
+     "loud-rejection": {
+-      "version": "1.2.0",
++      "version": "1.6.0",
+       "from": "loud-rejection@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/loud-rejection/-/loud-rejection-1.2.0.tgz"
++      "resolved": "https://registry.npmjs.org/loud-rejection/-/loud-rejection-1.6.0.tgz"
+     },
+     "lru-cache": {
+       "version": "2.7.3",
+@@ -1376,7 +1521,7 @@
+     },
+     "maxmin": {
+       "version": "1.1.0",
+-      "from": "maxmin@>=1.0.0 <2.0.0",
++      "from": "maxmin@>=1.1.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/maxmin/-/maxmin-1.1.0.tgz"
+     },
+     "media-typer": {
+@@ -1386,7 +1531,7 @@
+     },
+     "meow": {
+       "version": "3.7.0",
+-      "from": "meow@>=3.1.0 <4.0.0",
++      "from": "meow@>=3.3.0 <4.0.0",
+       "resolved": "https://registry.npmjs.org/meow/-/meow-3.7.0.tgz",
+       "dependencies": {
+         "minimist": {
+@@ -1412,9 +1557,9 @@
+       "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.11.tgz"
+     },
+     "minimatch": {
+-      "version": "0.2.14",
+-      "from": "minimatch@>=0.2.12 <0.3.0",
+-      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz"
++      "version": "3.0.2",
++      "from": "minimatch@>=3.0.2 <4.0.0",
++      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-3.0.2.tgz"
+     },
+     "minimist": {
+       "version": "0.0.8",
+@@ -1431,6 +1576,11 @@
+       "from": "ms@0.7.1",
+       "resolved": "https://registry.npmjs.org/ms/-/ms-0.7.1.tgz"
+     },
++    "multimatch": {
++      "version": "2.1.0",
++      "from": "multimatch@>=2.1.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/multimatch/-/multimatch-2.1.0.tgz"
++    },
+     "mute-stream": {
+       "version": "0.0.5",
+       "from": "mute-stream@0.0.5",
+@@ -1442,15 +1592,30 @@
+       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.7.tgz"
+     },
+     "nopt": {
+-      "version": "1.0.10",
+-      "from": "nopt@>=1.0.10 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz"
++      "version": "3.0.6",
++      "from": "nopt@>=3.0.6 <3.1.0",
++      "resolved": "https://registry.npmjs.org/nopt/-/nopt-3.0.6.tgz"
+     },
+     "normalize-package-data": {
+       "version": "2.3.5",
+       "from": "normalize-package-data@>=2.3.4 <3.0.0",
+       "resolved": "https://registry.npmjs.org/normalize-package-data/-/normalize-package-data-2.3.5.tgz"
+     },
++    "normalize-range": {
++      "version": "0.1.2",
++      "from": "normalize-range@>=0.1.2 <0.2.0",
++      "resolved": "https://registry.npmjs.org/normalize-range/-/normalize-range-0.1.2.tgz"
++    },
++    "normalize-selector": {
++      "version": "0.2.0",
++      "from": "normalize-selector@>=0.2.0 <0.3.0",
++      "resolved": "https://registry.npmjs.org/normalize-selector/-/normalize-selector-0.2.0.tgz"
++    },
++    "num2fraction": {
++      "version": "1.2.2",
++      "from": "num2fraction@>=1.2.2 <2.0.0",
++      "resolved": "https://registry.npmjs.org/num2fraction/-/num2fraction-1.2.2.tgz"
++    },
+     "number-is-nan": {
+       "version": "1.0.0",
+       "from": "number-is-nan@>=1.0.0 <2.0.0",
+@@ -1462,9 +1627,9 @@
+       "resolved": "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.8.2.tgz"
+     },
+     "object-assign": {
+-      "version": "4.0.1",
++      "version": "4.1.0",
+       "from": "object-assign@>=4.0.1 <5.0.0",
+-      "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.0.1.tgz"
++      "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
+     },
+     "on-finished": {
+       "version": "2.3.0",
+@@ -1476,6 +1641,11 @@
+       "from": "once@>=1.3.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/once/-/once-1.3.3.tgz"
+     },
++    "onecolor": {
++      "version": "3.0.4",
++      "from": "onecolor@>=3.0.4 <4.0.0",
++      "resolved": "https://registry.npmjs.org/onecolor/-/onecolor-3.0.4.tgz"
++    },
+     "onetime": {
+       "version": "1.1.0",
+       "from": "onetime@>=1.0.0 <2.0.0",
+@@ -1484,20 +1654,20 @@
+     "optimist": {
+       "version": "0.3.7",
+       "from": "optimist@>=0.3.0 <0.4.0",
+-      "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz"
+-    },
+-    "optionator": {
+-      "version": "0.8.1",
+-      "from": "optionator@>=0.8.1 <0.9.0",
+-      "resolved": "https://registry.npmjs.org/optionator/-/optionator-0.8.1.tgz",
++      "resolved": "https://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz",
+       "dependencies": {
+         "wordwrap": {
+-          "version": "1.0.0",
+-          "from": "wordwrap@>=1.0.0 <1.1.0",
+-          "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz"
++          "version": "0.0.3",
++          "from": "wordwrap@>=0.0.2 <0.1.0",
++          "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.3.tgz"
+         }
+       }
+     },
++    "optionator": {
++      "version": "0.8.1",
++      "from": "optionator@>=0.8.1 <0.9.0",
++      "resolved": "https://registry.npmjs.org/optionator/-/optionator-0.8.1.tgz"
++    },
+     "os-homedir": {
+       "version": "1.0.1",
+       "from": "os-homedir@>=1.0.0 <2.0.0",
+@@ -1541,14 +1711,7 @@
+     "path-type": {
+       "version": "1.1.0",
+       "from": "path-type@>=1.0.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/path-type/-/path-type-1.1.0.tgz",
+-      "dependencies": {
+-        "graceful-fs": {
+-          "version": "4.1.2",
+-          "from": "graceful-fs@>=4.1.2 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.2.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/path-type/-/path-type-1.1.0.tgz"
+     },
+     "pify": {
+       "version": "2.3.0",
+@@ -1556,20 +1719,72 @@
+       "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
+     },
+     "pinkie": {
+-      "version": "2.0.1",
++      "version": "2.0.4",
+       "from": "pinkie@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/pinkie/-/pinkie-2.0.1.tgz"
++      "resolved": "https://registry.npmjs.org/pinkie/-/pinkie-2.0.4.tgz"
+     },
+     "pinkie-promise": {
+-      "version": "2.0.0",
++      "version": "2.0.1",
+       "from": "pinkie-promise@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.0.tgz"
++      "resolved": "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.1.tgz"
++    },
++    "pipetteur": {
++      "version": "2.0.3",
++      "from": "pipetteur@>=2.0.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/pipetteur/-/pipetteur-2.0.3.tgz"
++    },
++    "plur": {
++      "version": "2.1.2",
++      "from": "plur@>=2.0.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/plur/-/plur-2.1.2.tgz"
+     },
+     "pluralize": {
+       "version": "1.2.1",
+       "from": "pluralize@>=1.2.1 <2.0.0",
+       "resolved": "https://registry.npmjs.org/pluralize/-/pluralize-1.2.1.tgz"
+     },
++    "postcss": {
++      "version": "5.1.0",
++      "from": "postcss@>=5.0.20 <6.0.0",
++      "resolved": "https://registry.npmjs.org/postcss/-/postcss-5.1.0.tgz",
++      "dependencies": {
++        "supports-color": {
++          "version": "3.1.2",
++          "from": "supports-color@>=3.1.2 <4.0.0",
++          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-3.1.2.tgz"
++        }
++      }
++    },
++    "postcss-less": {
++      "version": "0.14.0",
++      "from": "postcss-less@>=0.14.0 <0.15.0",
++      "resolved": "https://registry.npmjs.org/postcss-less/-/postcss-less-0.14.0.tgz"
++    },
++    "postcss-reporter": {
++      "version": "1.4.1",
++      "from": "postcss-reporter@>=1.3.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/postcss-reporter/-/postcss-reporter-1.4.1.tgz"
++    },
++    "postcss-resolve-nested-selector": {
++      "version": "0.1.1",
++      "from": "postcss-resolve-nested-selector@>=0.1.1 <0.2.0",
++      "resolved": "https://registry.npmjs.org/postcss-resolve-nested-selector/-/postcss-resolve-nested-selector-0.1.1.tgz"
++    },
++    "postcss-scss": {
++      "version": "0.1.8",
++      "from": "postcss-scss@>=0.1.3 <0.2.0",
++      "resolved": "https://registry.npmjs.org/postcss-scss/-/postcss-scss-0.1.8.tgz"
++    },
++    "postcss-selector-parser": {
++      "version": "2.1.1",
++      "from": "postcss-selector-parser@>=2.0.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-2.1.1.tgz"
++    },
++    "postcss-value-parser": {
++      "version": "3.3.0",
++      "from": "postcss-value-parser@>=3.1.1 <4.0.0",
++      "resolved": "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-3.3.0.tgz"
++    },
+     "prelude-ls": {
+       "version": "1.1.2",
+       "from": "prelude-ls@>=1.1.2 <1.2.0",
+@@ -1581,14 +1796,14 @@
+       "resolved": "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-1.0.4.tgz"
+     },
+     "process-nextick-args": {
+-      "version": "1.0.6",
++      "version": "1.0.7",
+       "from": "process-nextick-args@>=1.0.6 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.6.tgz"
++      "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.7.tgz"
+     },
+     "progress": {
+-      "version": "0.1.0",
+-      "from": "progress@>=0.1.0 <0.2.0",
+-      "resolved": "https://registry.npmjs.org/progress/-/progress-0.1.0.tgz"
++      "version": "1.1.8",
++      "from": "progress@>=1.1.8 <2.0.0",
++      "resolved": "https://registry.npmjs.org/progress/-/progress-1.1.8.tgz"
+     },
+     "promise": {
+       "version": "7.1.1",
+@@ -1601,9 +1816,9 @@
+       "resolved": "https://registry.npmjs.org/prr/-/prr-0.0.0.tgz"
+     },
+     "qs": {
+-      "version": "5.2.0",
+-      "from": "qs@>=5.2.0 <5.3.0",
+-      "resolved": "https://registry.npmjs.org/qs/-/qs-5.2.0.tgz"
++      "version": "6.2.0",
++      "from": "qs@>=6.2.0 <6.3.0",
++      "resolved": "https://registry.npmjs.org/qs/-/qs-6.2.0.tgz"
+     },
+     "raw-body": {
+       "version": "2.1.7",
+@@ -1617,17 +1832,15 @@
+         }
+       }
+     },
++    "read-file-stdin": {
++      "version": "0.2.1",
++      "from": "read-file-stdin@>=0.2.1 <0.3.0",
++      "resolved": "https://registry.npmjs.org/read-file-stdin/-/read-file-stdin-0.2.1.tgz"
++    },
+     "read-json-sync": {
+       "version": "1.1.1",
+       "from": "read-json-sync@>=1.1.0 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/read-json-sync/-/read-json-sync-1.1.1.tgz",
+-      "dependencies": {
+-        "graceful-fs": {
+-          "version": "4.1.4",
+-          "from": "graceful-fs@4.1.4",
+-          "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.4.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/read-json-sync/-/read-json-sync-1.1.1.tgz"
+     },
+     "read-pkg": {
+       "version": "1.1.0",
+@@ -1640,9 +1853,9 @@
+       "resolved": "https://registry.npmjs.org/read-pkg-up/-/read-pkg-up-1.0.1.tgz"
+     },
+     "readable-stream": {
+-      "version": "1.1.13",
+-      "from": "readable-stream@>=1.1.0 <1.2.0",
+-      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.13.tgz"
++      "version": "2.0.6",
++      "from": "readable-stream@>=2.0.0 <2.1.0",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.0.6.tgz"
+     },
+     "readline2": {
+       "version": "1.0.1",
+@@ -1660,21 +1873,19 @@
+       "resolved": "https://registry.npmjs.org/repeat-string/-/repeat-string-1.5.4.tgz"
+     },
+     "repeating": {
+-      "version": "2.0.0",
++      "version": "2.0.1",
+       "from": "repeating@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/repeating/-/repeating-2.0.0.tgz"
++      "resolved": "https://registry.npmjs.org/repeating/-/repeating-2.0.1.tgz"
+     },
+     "request": {
+-      "version": "2.72.0",
++      "version": "2.73.0",
+       "from": "request@>=2.51.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/request/-/request-2.72.0.tgz",
+-      "dependencies": {
+-        "qs": {
+-          "version": "6.1.0",
+-          "from": "qs@>=6.1.0 <6.2.0",
+-          "resolved": "https://registry.npmjs.org/qs/-/qs-6.1.0.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/request/-/request-2.73.0.tgz"
++    },
++    "require-from-string": {
++      "version": "1.2.0",
++      "from": "require-from-string@>=1.1.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-1.2.0.tgz"
+     },
+     "require-uncached": {
+       "version": "1.0.2",
+@@ -1682,9 +1893,9 @@
+       "resolved": "https://registry.npmjs.org/require-uncached/-/require-uncached-1.0.2.tgz"
+     },
+     "resolve": {
+-      "version": "0.4.3",
+-      "from": "resolve@>=0.4.0 <0.5.0",
+-      "resolved": "https://registry.npmjs.org/resolve/-/resolve-0.4.3.tgz"
++      "version": "1.1.7",
++      "from": "resolve@>=1.1.0 <1.2.0",
++      "resolved": "https://registry.npmjs.org/resolve/-/resolve-1.1.7.tgz"
+     },
+     "resolve-from": {
+       "version": "1.0.1",
+@@ -1702,9 +1913,9 @@
+       "resolved": "https://registry.npmjs.org/right-align/-/right-align-0.1.3.tgz"
+     },
+     "rimraf": {
+-      "version": "2.2.8",
+-      "from": "rimraf@>=2.2.8 <2.3.0",
+-      "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz"
++      "version": "2.5.3",
++      "from": "rimraf@>=2.2.8 <3.0.0",
++      "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-2.5.3.tgz"
+     },
+     "run-async": {
+       "version": "0.1.0",
+@@ -1722,39 +1933,24 @@
+       "resolved": "https://registry.npmjs.org/sax/-/sax-0.5.8.tgz"
+     },
+     "semver": {
+-      "version": "5.1.0",
++      "version": "5.2.0",
+       "from": "semver@>=2.0.0 <3.0.0||>=3.0.0 <4.0.0||>=4.0.0 <5.0.0||>=5.0.0 <6.0.0",
+-      "resolved": "https://registry.npmjs.org/semver/-/semver-5.1.0.tgz"
++      "resolved": "https://registry.npmjs.org/semver/-/semver-5.2.0.tgz"
+     },
+     "shelljs": {
+-      "version": "0.3.0",
+-      "from": "shelljs@>=0.3.0 <0.4.0",
+-      "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.3.0.tgz"
++      "version": "0.6.0",
++      "from": "shelljs@>=0.6.0 <0.7.0",
++      "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.6.0.tgz"
+     },
+     "shifter": {
+       "version": "0.5.0",
+       "from": "shifter@0.5.0",
+       "resolved": "https://registry.npmjs.org/shifter/-/shifter-0.5.0.tgz",
+       "dependencies": {
+-        "cli": {
+-          "version": "0.4.3",
+-          "from": "cli@0.4.3",
+-          "resolved": "https://registry.npmjs.org/cli/-/cli-0.4.3.tgz"
+-        },
+-        "jshint": {
+-          "version": "0.9.1",
+-          "from": "jshint@>=0.9.0 <0.10.0",
+-          "resolved": "https://registry.npmjs.org/jshint/-/jshint-0.9.1.tgz"
+-        },
+-        "lru-cache": {
+-          "version": "1.0.6",
+-          "from": "lru-cache@>=1.0.2 <1.1.0",
+-          "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-1.0.6.tgz"
+-        },
+-        "minimatch": {
+-          "version": "0.0.5",
+-          "from": "minimatch@>=0.0.0 <0.1.0",
+-          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.0.5.tgz"
++        "progress": {
++          "version": "0.1.0",
++          "from": "progress@>=0.1.0 <0.2.0",
++          "resolved": "https://registry.npmjs.org/progress/-/progress-0.1.0.tgz"
+         }
+       }
+     },
+@@ -1764,9 +1960,9 @@
+       "resolved": "https://registry.npmjs.org/sigmund/-/sigmund-1.0.1.tgz"
+     },
+     "signal-exit": {
+-      "version": "2.1.2",
+-      "from": "signal-exit@>=2.1.2 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/signal-exit/-/signal-exit-2.1.2.tgz"
++      "version": "3.0.0",
++      "from": "signal-exit@>=3.0.0 <4.0.0",
++      "resolved": "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.0.tgz"
+     },
+     "slice-ansi": {
+       "version": "0.0.4",
+@@ -1779,9 +1975,9 @@
+       "resolved": "https://registry.npmjs.org/sntp/-/sntp-1.0.9.tgz"
+     },
+     "source-map": {
+-      "version": "0.4.4",
+-      "from": "source-map@>=0.4.2 <0.5.0",
+-      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.4.4.tgz"
++      "version": "0.5.6",
++      "from": "source-map@>=0.5.3 <0.6.0",
++      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.6.tgz"
+     },
+     "spdx-correct": {
+       "version": "1.0.2",
+@@ -1789,9 +1985,9 @@
+       "resolved": "https://registry.npmjs.org/spdx-correct/-/spdx-correct-1.0.2.tgz"
+     },
+     "spdx-exceptions": {
+-      "version": "1.0.4",
++      "version": "1.0.5",
+       "from": "spdx-exceptions@>=1.0.4 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/spdx-exceptions/-/spdx-exceptions-1.0.4.tgz"
++      "resolved": "https://registry.npmjs.org/spdx-exceptions/-/spdx-exceptions-1.0.5.tgz"
+     },
+     "spdx-expression-parse": {
+       "version": "1.0.2",
+@@ -1799,9 +1995,19 @@
+       "resolved": "https://registry.npmjs.org/spdx-expression-parse/-/spdx-expression-parse-1.0.2.tgz"
+     },
+     "spdx-license-ids": {
+-      "version": "1.2.0",
++      "version": "1.2.1",
+       "from": "spdx-license-ids@>=1.0.2 <2.0.0",
+-      "resolved": "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-1.2.0.tgz"
++      "resolved": "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-1.2.1.tgz"
++    },
++    "specificity": {
++      "version": "0.2.1",
++      "from": "specificity@>=0.2.1 <0.3.0",
++      "resolved": "https://registry.npmjs.org/specificity/-/specificity-0.2.1.tgz"
++    },
++    "split2": {
++      "version": "0.2.1",
++      "from": "split2@>=0.2.1 <0.3.0",
++      "resolved": "https://registry.npmjs.org/split2/-/split2-0.2.1.tgz"
+     },
+     "sprintf-js": {
+       "version": "1.0.3",
+@@ -1825,15 +2031,25 @@
+       "from": "statuses@>=1.0.0 <2.0.0",
+       "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.3.0.tgz"
+     },
++    "stream-combiner": {
++      "version": "0.2.2",
++      "from": "stream-combiner@>=0.2.1 <0.3.0",
++      "resolved": "https://registry.npmjs.org/stream-combiner/-/stream-combiner-0.2.2.tgz"
++    },
+     "stream-counter": {
+       "version": "0.1.0",
+       "from": "stream-counter@>=0.1.0 <0.2.0",
+       "resolved": "https://registry.npmjs.org/stream-counter/-/stream-counter-0.1.0.tgz",
+       "dependencies": {
++        "isarray": {
++          "version": "0.0.1",
++          "from": "isarray@0.0.1",
++          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++        },
+         "readable-stream": {
+-          "version": "1.0.33",
++          "version": "1.0.34",
+           "from": "readable-stream@>=1.0.2 <1.1.0",
+-          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.33.tgz"
++          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
+         }
+       }
+     },
+@@ -1858,9 +2074,9 @@
+       "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-3.0.1.tgz"
+     },
+     "strip-bom": {
+-      "version": "2.0.0",
+-      "from": "strip-bom@>=2.0.0 <3.0.0",
+-      "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-2.0.0.tgz"
++      "version": "3.0.0",
++      "from": "strip-bom@>=3.0.0 <4.0.0",
++      "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz"
+     },
+     "strip-indent": {
+       "version": "1.0.1",
+@@ -1872,22 +2088,59 @@
+       "from": "strip-json-comments@>=1.0.1 <1.1.0",
+       "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz"
+     },
++    "stylehacks": {
++      "version": "2.3.1",
++      "from": "stylehacks@>=2.3.0 <3.0.0",
++      "resolved": "https://registry.npmjs.org/stylehacks/-/stylehacks-2.3.1.tgz",
++      "dependencies": {
++        "minimist": {
++          "version": "1.2.0",
++          "from": "minimist@>=1.2.0 <2.0.0",
++          "resolved": "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
++        }
++      }
++    },
++    "stylelint": {
++      "version": "6.9.0",
++      "from": "stylelint@>=6.8.0 <7.0.0",
++      "resolved": "https://registry.npmjs.org/stylelint/-/stylelint-6.9.0.tgz",
++      "dependencies": {
++        "get-stdin": {
++          "version": "5.0.1",
++          "from": "get-stdin@>=5.0.0 <6.0.0",
++          "resolved": "https://registry.npmjs.org/get-stdin/-/get-stdin-5.0.1.tgz"
++        },
++        "resolve-from": {
++          "version": "2.0.0",
++          "from": "resolve-from@>=2.0.0 <3.0.0",
++          "resolved": "https://registry.npmjs.org/resolve-from/-/resolve-from-2.0.0.tgz"
++        }
++      }
++    },
++    "sugarss": {
++      "version": "0.1.4",
++      "from": "sugarss@>=0.1.2 <0.2.0",
++      "resolved": "https://registry.npmjs.org/sugarss/-/sugarss-0.1.4.tgz"
++    },
+     "supports-color": {
+       "version": "2.0.0",
+       "from": "supports-color@>=2.0.0 <3.0.0",
+       "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz"
+     },
++    "svg-tags": {
++      "version": "1.0.0",
++      "from": "svg-tags@>=1.0.0 <2.0.0",
++      "resolved": "https://registry.npmjs.org/svg-tags/-/svg-tags-1.0.0.tgz"
++    },
++    "synesthesia": {
++      "version": "1.0.1",
++      "from": "synesthesia@>=1.0.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/synesthesia/-/synesthesia-1.0.1.tgz"
++    },
+     "table": {
+       "version": "3.7.8",
+       "from": "table@>=3.7.8 <4.0.0",
+-      "resolved": "https://registry.npmjs.org/table/-/table-3.7.8.tgz",
+-      "dependencies": {
+-        "lodash": {
+-          "version": "4.13.1",
+-          "from": "lodash@>=4.0.0 <5.0.0",
+-          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/table/-/table-3.7.8.tgz"
+     },
+     "text-table": {
+       "version": "0.2.0",
+@@ -1899,6 +2152,23 @@
+       "from": "through@>=2.3.6 <3.0.0",
+       "resolved": "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
+     },
++    "through2": {
++      "version": "0.6.5",
++      "from": "through2@>=0.6.3 <0.7.0",
++      "resolved": "https://registry.npmjs.org/through2/-/through2-0.6.5.tgz",
++      "dependencies": {
++        "isarray": {
++          "version": "0.0.1",
++          "from": "isarray@0.0.1",
++          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
++        },
++        "readable-stream": {
++          "version": "1.0.34",
++          "from": "readable-stream@>=1.0.33-1 <1.1.0-0",
++          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
++        }
++      }
++    },
+     "timethat": {
+       "version": "0.0.3",
+       "from": "timethat@>=0.0.1 <0.1.0",
+@@ -1909,11 +2179,6 @@
+       "from": "tiny-lr@>=0.2.1 <0.3.0",
+       "resolved": "https://registry.npmjs.org/tiny-lr/-/tiny-lr-0.2.1.tgz",
+       "dependencies": {
+-        "debug": {
+-          "version": "2.2.0",
+-          "from": "debug@>=2.2.0 <2.3.0",
+-          "resolved": "https://registry.npmjs.org/debug/-/debug-2.2.0.tgz"
+-        },
+         "qs": {
+           "version": "5.1.0",
+           "from": "qs@>=5.1.0 <5.2.0",
+@@ -1948,7 +2213,7 @@
+     },
+     "tweetnacl": {
+       "version": "0.13.3",
+-      "from": "tweetnacl@>=0.13.0 <1.0.0",
++      "from": "tweetnacl@>=0.13.0 <0.14.0",
+       "resolved": "https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.13.3.tgz"
+     },
+     "type-check": {
+@@ -1959,19 +2224,7 @@
+     "type-is": {
+       "version": "1.6.13",
+       "from": "type-is@>=1.6.10 <1.7.0",
+-      "resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.13.tgz",
+-      "dependencies": {
+-        "mime-db": {
+-          "version": "1.23.0",
+-          "from": "mime-db@>=1.23.0 <1.24.0",
+-          "resolved": "https://registry.npmjs.org/mime-db/-/mime-db-1.23.0.tgz"
+-        },
+-        "mime-types": {
+-          "version": "2.1.11",
+-          "from": "mime-types@>=2.1.11 <2.2.0",
+-          "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.11.tgz"
+-        }
+-      }
++      "resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.13.tgz"
+     },
+     "typedarray": {
+       "version": "0.0.6",
+@@ -1987,11 +2240,6 @@
+           "version": "0.2.10",
+           "from": "async@>=0.2.6 <0.3.0",
+           "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
+-        },
+-        "source-map": {
+-          "version": "0.5.6",
+-          "from": "source-map@>=0.5.1 <0.6.0",
+-          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.6.tgz"
+         }
+       }
+     },
+@@ -2000,11 +2248,21 @@
+       "from": "uglify-to-browserify@>=1.0.0 <1.1.0",
+       "resolved": "https://registry.npmjs.org/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz"
+     },
++    "underscore": {
++      "version": "1.6.0",
++      "from": "underscore@>=1.6.0 <1.7.0",
++      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.6.0.tgz"
++    },
+     "underscore.string": {
+       "version": "3.2.3",
+       "from": "underscore.string@>=3.2.3 <3.3.0",
+       "resolved": "https://registry.npmjs.org/underscore.string/-/underscore.string-3.2.3.tgz"
+     },
++    "uniq": {
++      "version": "1.0.1",
++      "from": "uniq@>=1.0.1 <2.0.0",
++      "resolved": "https://registry.npmjs.org/uniq/-/uniq-1.0.1.tgz"
++    },
+     "unpipe": {
+       "version": "1.0.0",
+       "from": "unpipe@1.0.0",
+@@ -2056,9 +2314,9 @@
+       "resolved": "https://registry.npmjs.org/websocket-extensions/-/websocket-extensions-0.1.1.tgz"
+     },
+     "which": {
+-      "version": "1.0.9",
+-      "from": "which@>=1.0.5 <1.1.0",
+-      "resolved": "https://registry.npmjs.org/which/-/which-1.0.9.tgz"
++      "version": "1.2.10",
++      "from": "which@>=1.2.1 <1.3.0",
++      "resolved": "https://registry.npmjs.org/which/-/which-1.2.10.tgz"
+     },
+     "window-size": {
+       "version": "0.1.0",
+@@ -2066,9 +2324,9 @@
+       "resolved": "https://registry.npmjs.org/window-size/-/window-size-0.1.0.tgz"
+     },
+     "wordwrap": {
+-      "version": "0.0.2",
+-      "from": "wordwrap@0.0.2",
+-      "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz"
++      "version": "1.0.0",
++      "from": "wordwrap@>=1.0.0 <1.1.0",
++      "resolved": "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz"
+     },
+     "wrappy": {
+       "version": "1.0.2",
+@@ -2080,6 +2338,11 @@
+       "from": "write@>=0.2.1 <0.3.0",
+       "resolved": "https://registry.npmjs.org/write/-/write-0.2.1.tgz"
+     },
++    "write-file-stdout": {
++      "version": "0.0.2",
++      "from": "write-file-stdout@0.0.2",
++      "resolved": "https://registry.npmjs.org/write-file-stdout/-/write-file-stdout-0.0.2.tgz"
++    },
+     "xml2js": {
+       "version": "0.2.8",
+       "from": "xml2js@>=0.2.0 <0.3.0",
+@@ -2087,12 +2350,12 @@
+     },
+     "xmldom": {
+       "version": "0.1.22",
+-      "from": "xmldom@latest",
++      "from": "xmldom@0.1.22",
+       "resolved": "https://registry.npmjs.org/xmldom/-/xmldom-0.1.22.tgz"
+     },
+     "xpath": {
+       "version": "0.0.23",
+-      "from": "xpath@latest",
++      "from": "xpath@0.0.23",
+       "resolved": "https://registry.npmjs.org/xpath/-/xpath-0.0.23.tgz"
+     },
+     "xregexp": {
+diff --git a/package.json b/package.json
+index 3105866..3cd3d74 100644
+--- a/package.json
++++ b/package.json
+@@ -10,6 +10,7 @@
+     "grunt-contrib-uglify": "1.0.1",
+     "grunt-contrib-watch": "1.0.0",
+     "grunt-eslint": "19.0.0",
++    "grunt-stylelint": "^0.5.0",
+     "shifter": "0.5.0",
+     "xmldom": "0.1.22",
+     "xpath": "0.0.23"
+diff --git a/theme/bootstrapbase/less/editor.less b/theme/bootstrapbase/less/editor.less
+index c66aebd..8306c2d 100644
+--- a/theme/bootstrapbase/less/editor.less
++++ b/theme/bootstrapbase/less/editor.less
+@@ -17,6 +17,7 @@
+ @import "bootstrap/sprites.less";
+ @iconSpritePath:          ~"[[pix:theme|glyphicons-halflings]]";
+ @iconWhiteSpritePath:     ~"[[pix:theme|glyphicons-halflings-white]]";
++
+ @import "bootstrap/wells.less";
+ 
+ // Components: Buttons & Alerts.
+diff --git a/theme/bootstrapbase/less/moodle.less b/theme/bootstrapbase/less/moodle.less
+index 2556c38..a331d86 100644
+--- a/theme/bootstrapbase/less/moodle.less
++++ b/theme/bootstrapbase/less/moodle.less
+@@ -76,6 +76,5 @@ body {
+ @import "bootstrap/responsive-767px-max.less";
+ @import "bootstrap/responsive-navbar.less";
+ @import "moodle/responsive";
+-
+ @import "moodle/debug";
+ @import "moodle/expendable";
+diff --git a/theme/bootstrapbase/less/moodle/admin.less b/theme/bootstrapbase/less/moodle/admin.less
+index 1f2aad0..d141363 100644
+--- a/theme/bootstrapbase/less/moodle/admin.less
++++ b/theme/bootstrapbase/less/moodle/admin.less
+@@ -20,7 +20,7 @@
+ 
+ .environmenttable {
+     p.warn {
+-        background-color : @warningBackground;
++        background-color: @warningBackground;
+         color: @warningText;
+     }
+     .error,
+@@ -29,10 +29,10 @@
+         .label;
+     }
+     .error {
+-        background-color : @errorText;
++        background-color: @errorText;
+     }
+     span.warn {
+-        background-color : @orange;
++        background-color: @orange;
+     }
+     .ok {
+         background-color: @successText;
+@@ -264,7 +264,7 @@ img.iconsmall {
+ 
+ .path-admin .roleassigntable td {
+     vertical-align: top;
+-    padding: 0.2em 0.3em
++    padding: 0.2em 0.3em;
+ }
+ 
+ .path-admin .roleassigntable p {
+@@ -360,7 +360,7 @@ img.iconsmall {
+ 
+ .dir-rtl .environmenttable img.iconhelp {
+     padding-left: .3em;
+-    padding-right: 0
++    padding-right: 0;
+ }
+ 
+ #trustedhosts .generaltable {
+@@ -526,7 +526,7 @@ img.iconsmall {
+ .dir-rtl .form-item  .form-label,
+ .dir-rtl .form-item .form-description,
+ .dir-rtl.path-admin .roleassigntable p {
+-    text-align: right
++    text-align: right;
+ }
+ 
+ #page-admin-index #notice .checkforupdates {
+@@ -561,7 +561,8 @@ img.iconsmall {
+         .singlebutton {
+             margin: 5px 0;
+             padding: 0;
+-            div, input {
++            div,
++            input {
+                 margin: 0 3px 0 0;
+             }
+         }
+@@ -570,7 +571,8 @@ img.iconsmall {
+     .updateavailableinstallall {
+         margin: 5px 0;
+         padding: 0;
+-        div, input {
++        div,
++        input {
+             margin: 0 3px 5px 0;
+         }
+     }
+@@ -595,13 +597,8 @@ img.iconsmall {
+                 font-size: @fontSizeSmall;
+                 .muted;
+             }
+-            .release {
+-            }
+-        }
+-        .availability {
+-        }
+-        .settings {
+         }
++
+         .uninstall {
+             a {
+                 color: @errorText;
+@@ -632,7 +629,8 @@ img.iconsmall {
+         .singlebutton {
+             margin: 5px 0;
+             padding: 0;
+-            div, input {
++            div,
++            input {
+                 margin: 0 3px 0 0;
+             }
+         }
+@@ -648,7 +646,8 @@ img.iconsmall {
+             .singlebutton {
+                 margin: 5px 0;
+                 padding: 0;
+-                div, input {
++                div,
++                input {
+                     margin: 0 3px 0 0;
+                 }
+             }
+@@ -661,7 +660,8 @@ img.iconsmall {
+             .muted;
+         }
+ 
+-        .status-missing, .status-downgrade {
++        .status-missing,
++        .status-downgrade {
+             td {
+                 background-color: @errorBackground;
+             }
+@@ -701,7 +701,8 @@ img.iconsmall {
+         .singlebutton {
+             margin: 5px 0;
+             padding: 0;
+-            div, input {
++            div,
++            input {
+                 margin: 0 3px 0 0;
+             }
+         }
+@@ -732,13 +733,15 @@ img.iconsmall {
+ 
+ // Available plugin update notification.
+ 
+-#plugins-check-page, #plugins-control-panel {
++#plugins-check-page,
++#plugins-control-panel {
+     .pluginupdateinfo {
+         background-color: @infoBackground;
+         &.maturity50 {
+             background-color: @errorBackground;
+         }
+-        &.maturity100, &.maturity150 {
++        &.maturity100,
++        &.maturity150 {
+             background-color: @warningBackground;
+         }
+         padding: 5px;
+@@ -753,7 +756,8 @@ img.iconsmall {
+         .singlebutton {
+             margin: 5px 0;
+             padding: 0;
+-            div, input {
++            div,
++            input {
+                 margin: 0 3px 0 0;
+             }
+         }
+@@ -767,7 +771,8 @@ img.iconsmall {
+     }
+     .continue {
+         padding: 0;
+-        div, input {
++        div,
++        input {
+             margin: 0;
+         }
+     }
+diff --git a/theme/bootstrapbase/less/moodle/backup-restore.less b/theme/bootstrapbase/less/moodle/backup-restore.less
+index 6fd03f1..53f4578 100644
+--- a/theme/bootstrapbase/less/moodle/backup-restore.less
++++ b/theme/bootstrapbase/less/moodle/backup-restore.less
+@@ -36,8 +36,7 @@
+     font-weight: bold;
+     color: inherit;
+ }
+-.path-backup .backup_progress .backup_stage.backup_stage_next {
+-}
++
+ .path-backup .backup_progress span.backup_stage.backup_stage_complete {
+     color: inherit;
+ }
+diff --git a/theme/bootstrapbase/less/moodle/blocks.less b/theme/bootstrapbase/less/moodle/blocks.less
+index 7dc05dd..fbf8673 100644
+--- a/theme/bootstrapbase/less/moodle/blocks.less
++++ b/theme/bootstrapbase/less/moodle/blocks.less
+@@ -14,7 +14,7 @@
+             padding: 3px 15px;
+             float: right;
+             > * {
+-                margin-left:3px;
++                margin-left: 3px;
+             }
+             .block-hider-show,
+             .block-hider-hide {
+@@ -196,7 +196,7 @@
+         padding-bottom: 10px;
+     }
+     ul li {
+-        border-top: 1px rgba(0,0,0,0.05) solid;
++        border-top: 1px rgba(0, 0, 0, 0.05) solid;
+         padding: 2px;
+         display: table;
+         width: 100%;
+diff --git a/theme/bootstrapbase/less/moodle/bootstrapoverride.less b/theme/bootstrapbase/less/moodle/bootstrapoverride.less
+index f353aa6..c6f0760 100644
+--- a/theme/bootstrapbase/less/moodle/bootstrapoverride.less
++++ b/theme/bootstrapbase/less/moodle/bootstrapoverride.less
+@@ -12,17 +12,45 @@
+ @warningText:    #8a6d3b;
+ 
+ // Headings.
+-h1 { font-size: round(@baseFontSize * 2.30); } // ~32px
+-h2 { font-size: round(@baseFontSize * 2.00); } // ~28px
+-h3 { font-size: round(@baseFontSize * 1.70); } // ~24px
+-h4 { font-size: round(@baseFontSize * 1.40); } // ~20px
+-h5 { font-size: round(@baseFontSize * 1.15); } // ~16px
+-h6 { font-size: round(@baseFontSize * 0.85); } // ~12px
+-
+-h1 small { font-size: round(@baseFontSize * 1.70); } // ~24px
+-h2 small { font-size: round(@baseFontSize * 1.40); } // ~20px
+-h3 small { font-size: round(@baseFontSize * 1.15); } // ~16px
+-h4 small { font-size: round(@baseFontSize * 0.85); } // ~12px
++h1 {
++    font-size: round(@baseFontSize * 2.30); // ~32px
++}
++
++h2 {
++    font-size: round(@baseFontSize * 2.00); // ~28px
++}
++
++h3 {
++    font-size: round(@baseFontSize * 1.70); // ~24px
++}
++
++h4 {
++    font-size: round(@baseFontSize * 1.40); // ~20px
++}
++
++h5 {
++    font-size: round(@baseFontSize * 1.15); // ~16px
++}
++
++h6 {
++    font-size: round(@baseFontSize * 0.85); // ~12px
++}
++
++h1 small {
++    font-size: round(@baseFontSize * 1.70); // ~24px
++}
++
++h2 small {
++    font-size: round(@baseFontSize * 1.40); // ~20px
++}
++
++h3 small {
++    font-size: round(@baseFontSize * 1.15); // ~16px
++}
++
++h4 small {
++    font-size: round(@baseFontSize * 0.85); // ~12px
++}
+ 
+ // Printing.
+ @media print {
+@@ -35,10 +63,14 @@ h4 small { font-size: round(@baseFontSize * 0.85); } // ~12px
+ .fluid-span (@columns) {
+     .fluid-span-full(@columns, @fluidGridColumnWidth, @fluidGridGutterWidth);
+ }
++
++// TODO: MDL-55142 remove browser these brwoser hacks:
++/* stylelint-disable declaration-block-no-duplicate-properties, no-browser-hacks */
+ .fluid-span-full (@columns, @columnWidth, @gutterWidth) {
+     width: (@columnWidth * @columns) + (@gutterWidth * (@columns - 1));
+     *width: (@columnWidth * @columns) + (@gutterWidth * (@columns - 1)) - (.5 / @gridRowWidth * 100 * 1%);
+ }
++/* stylelint-enable */
+ 
+ /**
+  * Implement missing variables, or faulty ones, in Bootstrap rules.
+diff --git a/theme/bootstrapbase/less/moodle/calendar.less b/theme/bootstrapbase/less/moodle/calendar.less
+index e38f9ec..076be0e 100644
+--- a/theme/bootstrapbase/less/moodle/calendar.less
++++ b/theme/bootstrapbase/less/moodle/calendar.less
+@@ -24,7 +24,8 @@
+ .path-calendar {
+     .calendartable {
+         width: 100%;
+-        th, td {
++        th,
++        td {
+             width: 14%;
+             vertical-align: top;
+             text-align: center;
+@@ -144,7 +145,8 @@
+             }
+         }
+         .calendartable {
+-            td, li {
++            td,
++            li {
+                 padding: 5px;
+             }
+             li {
+@@ -250,7 +252,8 @@
+             }
+         }
+         .calendartable {
+-            td, li {
++            td,
++            li {
+                 text-align: right;
+             }
+             li {
+@@ -306,7 +309,8 @@
+         max-width: 280px;
+         margin: 0 auto;
+         width: 100%;
+-        th, td {
++        th,
++        td {
+             padding: 2px;
+             font-size: 0.8em;
+             text-align: center;
+diff --git a/theme/bootstrapbase/less/moodle/chat.less b/theme/bootstrapbase/less/moodle/chat.less
+index e87a860..ba292b8 100644
+--- a/theme/bootstrapbase/less/moodle/chat.less
++++ b/theme/bootstrapbase/less/moodle/chat.less
+@@ -72,7 +72,7 @@
+             }
+         }
+         .mdl-chat-my-entry .chat-message.course-theme {
+-            background-color:#f6f6f6;
++            background-color: #f6f6f6;
+             .user {
+                 font-weight: bold;
+             }
+diff --git a/theme/bootstrapbase/less/moodle/core.less b/theme/bootstrapbase/less/moodle/core.less
+index 8905025..fcaa3ef 100644
+--- a/theme/bootstrapbase/less/moodle/core.less
++++ b/theme/bootstrapbase/less/moodle/core.less
+@@ -6,14 +6,14 @@
+ .layout-option-nofooter #page-footer,
+ .layout-option-nocourseheader .course-content-header,
+ .layout-option-nocoursefooter .course-content-footer {
+-    display:none;
++    display: none;
+ }
+ 
+ .empty-region-side-pre #block-region-side-pre, // Pre region is empty.
+ .empty-region-side-post #block-region-side-post, // Post region is empty.
+ .jsenabled.docked-region-side-post #block-region-side-post, // All post blocks are docked.
+ .jsenabled.docked-region-side-pre #block-region-side-pre { // All pre blocks are docked.
+-    display:none;
++    display: none;
+ }
+ 
+ /** Start Legacy styles. Deprecated since Moodle 2.9. See MDL-48160 for further information. **/
+@@ -277,22 +277,30 @@ img.iconsmall {
+     vertical-align: middle;
+     width: 12px;
+ }
+-img.iconhelp, .helplink img {
++img.iconhelp,
++.helplink img {
+     height: 16px;
+     padding-left: 3px;
+     vertical-align: text-bottom;
+     width: 16px;
+ }
+-h1 img.iconhelp, h1 img.icon,
+-h2 img.iconhelp, h2 img.icon,
+-h3 img.iconhelp, h3 img.icon,
+-h4 img.iconhelp, h4 img.icon,
+-h5 img.iconhelp, h5 img.icon,
+-h6 img.iconhelp, h6 img.icon {
++h1 img.iconhelp,
++h1 img.icon,
++h2 img.iconhelp,
++h2 img.icon,
++h3 img.iconhelp,
++h3 img.icon,
++h4 img.iconhelp,
++h4 img.icon,
++h5 img.iconhelp,
++h5 img.icon,
++h6 img.iconhelp,
++h6 img.icon {
+     vertical-align: middle;
+     padding: 4px;
+ }
+-.dir-rtl img.iconhelp, .dir-rtl .helplink img {
++.dir-rtl img.iconhelp,
++.dir-rtl .helplink img {
+     padding-right: 3px;
+     padding-left: 0;
+ }
+@@ -319,11 +327,13 @@ img.iconkbhelp {
+     height: 17px;
+     width: 49px;
+ }
+-img.icon-pre, .dir-rtl img.icon-post {
++img.icon-pre,
++.dir-rtl img.icon-post {
+     padding-right: 3px;
+     padding-left: 0;
+ }
+-img.icon-post, .dir-rtl img.icon-pre {
++img.icon-post,
++.dir-rtl img.icon-pre {
+     padding-left: 3px;
+     padding-right: 0;
+ }
+@@ -530,7 +540,7 @@ a.skip:active {
+     margin: 0;
+     padding: 0;
+     margin-bottom: 5px;
+-    margin-top:15px;
++    margin-top: 15px;
+ }
+ .loginbox .signuppanel .subcontent {
+     text-align: left;
+@@ -591,7 +601,7 @@ a.skip:active {
+ .dir-rtl {
+     .loginbox.twocolumns .loginpanel,
+     .loginbox.twocolumns .signuppanel {
+-        float:right;
++        float: right;
+     }
+ }
+ 
+@@ -682,15 +692,15 @@ table.mod_index {
+     position: relative;
+ }
+ .comment-list li.first {
+-    display: none
++    display: none;
+ }
+-.comment-paging{
++.comment-paging {
+     text-align: center;
+ }
+-.comment-paging .pageno{
++.comment-paging .pageno {
+     padding: 2px;
+ }
+-.comment-paging .curpage{
++.comment-paging .curpage {
+     border: 1px solid #CCC;
+ }
+ .comment-message .picture {
+@@ -720,20 +730,20 @@ table.mod_index {
+     right: auto;
+     margin: .3em;
+ }
+-.comment-report-selectall{
+-    display: none
++.comment-report-selectall {
++    display: none;
+ }
+ .comment-link {
+-    display: none
++    display: none;
+ }
+ .jsenabled .comment-link {
+-    display: block
++    display: block;
+ }
+-.jsenabled .showcommentsnonjs{
+-    display: none
++.jsenabled .showcommentsnonjs {
++    display: none;
+ }
+-.jsenabled .comment-report-selectall{
+-    display: inline
++.jsenabled .comment-report-selectall {
++    display: inline;
+ }
+ /**
+ * Completion progress report
+@@ -975,16 +985,16 @@ tr.flagged-tag a {
+     display: inline;
+ }
+ .tag_list.hideoverlimit .overlimit {
+-    display:none;
++    display: none;
+ }
+ .tag_list .tagmorelink {
+-    display:none;
++    display: none;
+ }
+ .tag_list.hideoverlimit .tagmorelink {
+-    display:inline;
++    display: inline;
+ }
+ .tag_list.hideoverlimit .taglesslink {
+-    display:none;
++    display: none;
+ }
+ 
+ /**
+@@ -1003,7 +1013,7 @@ tr.flagged-tag a {
+ .smartselect .smartselect_mask {
+     background-color: #fff;
+ }
+-.smartselect ul  {
++.smartselect ul {
+     padding: 0;
+     margin: 0;
+ }
+@@ -1091,7 +1101,7 @@ tr.flagged-tag a {
+     border-collapse: collapse;
+ }
+ .userenrolment tr {
+-    vertical-align:top;
++    vertical-align: top;
+ }
+ .userenrolment td {
+     padding: 0;
+@@ -1135,7 +1145,7 @@ tr.flagged-tag a {
+     padding: 3px;
+     margin: 3px;
+     > a:hover {
+-        border-bottom:1px solid #666;
++        border-bottom: 1px solid #666;
+     }
+ }
+ .userenrolment .col_role .addrole img,
+@@ -1248,18 +1258,20 @@ tr.flagged-tag a {
+             }
+         }
+         .user-enroller-panel .uep-search-results .user {
+-            .count, .picture, .details {
+-                float:right;
++            .count,
++            .picture,
++            .details {
++                float: right;
+             }
+             .options .enrol {
+-                float:left;
++                float: left;
+             }
+         }
+     }
+ }
+ 
+ #page-enrol-users .enrol-users-page-action input {
+-    margin-left: 0
++    margin-left: 0;
+ }
+ 
+ /**
+@@ -1310,8 +1322,8 @@ tr.flagged-tag a {
+     display: table-cell;
+ }
+ .label .mod-indent {
+-    float:left;
+-    padding-top:20px
++    float: left;
++    padding-top: 20px;
+ }
+ 
+ /* Creates a series of .mod-indent-# rule declarations based on indent size and number of indent levels. */
+@@ -1333,10 +1345,10 @@ tr.flagged-tag a {
+ /* Audio player size in 'block' mode (can only change width, height is hardcoded in JS) */
+ .resourcecontent .mediaplugin_mp3 object {
+     height: 25px;
+-    width: 600px
++    width: 600px;
+ }
+ .resourcecontent audio.mediaplugin_html5audio {
+-    width: 600px
++    width: 600px;
+ }
+ /** Large resource images should avoid hidden overflow **/
+ .resourceimage {
+@@ -1345,10 +1357,10 @@ tr.flagged-tag a {
+ /* Audio player size in 'inline' mode (can only change width, as above) */
+ .mediaplugin_mp3 object {
+     height: 15px;
+-    width: 300px
++    width: 300px;
+ }
+ audio.mediaplugin_html5audio {
+-    width: 300px
++    width: 300px;
+ }
+ /* TinyMCE moodle media preview frame should not have padding */
+ .core_media_preview.pagelayout-embedded #content {
+@@ -1421,7 +1433,7 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
+ }
+ .dir-rtl .ygtvlph,
+ .dir-rtl .ygtvlphh {
+-    background-position: 0 -3200px
++    background-position: 0 -3200px;
+ }
+ .dir-rtl .ygtvdepthcell {
+     background-position: 0 -8000px;
+@@ -1445,7 +1457,8 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
+     text-align: right;
+ }
+ /** Fix TinyMCE editor right to left **/
+-.dir-rtl .clearlooks2.ie9 .mceAlert .mceMiddle span,.dir-rtl .clearlooks2 .mceConfirm .mceMiddle span {
++.dir-rtl .clearlooks2.ie9 .mceAlert .mceMiddle span,
++.dir-rtl .clearlooks2 .mceConfirm .mceMiddle span {
+     top: 44px;
+ }
+ .dir-rtl .o2k7Skin table,
+@@ -1475,7 +1488,8 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
+     text-align: center;
+ }
+ .initialbar {
+-    a, strong {
++    a,
++    strong {
+         padding-left: 3px;
+         padding-right: 3px;
+     }
+@@ -1601,7 +1615,7 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
+     text-align: center;
+ }
+ .moodle-dialogue-exception .moodle-exception-message {
+-    text-align: center
++    text-align: center;
+ }
+ .moodle-dialogue-exception .moodle-exception-param label {
+     font-weight: bold;
+@@ -1639,7 +1653,7 @@ body#page-lib-editor-tinymce-plugins-moodlemedia-preview {
+     margin: 0.5em 1em;
+ }
+ .moodle-dialogue-confirm .confirmation-dialogue input {
+-    min-width: 80px
++    min-width: 80px;
+ }
+ .moodle-dialogue-exception .moodle-exception-message {
+     margin: 1em;
+@@ -1951,7 +1965,7 @@ table.collection .description {
+ .dir-rtl table.collection {
+     .name,
+     .criteria,
+-    .description  {
++    .description {
+         text-align: right;
+     }
+ }
+@@ -2027,7 +2041,7 @@ ul.badges {
+         top: 0px;
+         .opacity(85);
+         position: absolute;
+-        z-index:10;
++        z-index: 10;
+     }
+ 
+     .singlebutton {
+@@ -2114,7 +2128,7 @@ ul.badges {
+ .statusbox .activatebadge {
+     display: inline-block;
+ }
+-.statusbox .activatebadge input[type=submit]{
++.statusbox .activatebadge input[type=submit] {
+     margin: 3px;
+ }
+ .activatebadge {
+@@ -2247,7 +2261,7 @@ img#persona_signin {
+     .moodle-actionmenu[data-enhance] {
+         display: block;
+         .menu {
+-            display:none;
++            display: none;
+         }
+         .toggle-display {
+             display: inline; /** JS is enabled, we'll be using it so return display to normal **/
+@@ -2281,8 +2295,8 @@ img#persona_signin {
+         .toggle-display {
+             .opacity(100);
+         }
+-        .menu-action-text  {
+-            display:inline;
++        .menu-action-text {
++            display: inline;
+         }
+     }
+ 
+@@ -2301,25 +2315,25 @@ img#persona_signin {
+     }
+ }
+ 
+-.moodle-actionmenu[data-enhanced].show  {
++.moodle-actionmenu[data-enhanced].show {
+ 
+     position: relative;
+ 
+     .menu {
+ 
+-        display:block;
++        display: block;
+         position: absolute;
+         text-align: left;
+         background-color: @dropdownBackground;
+         border: 1px solid @dropdownBorder;
+-        z-index:1000;
++        z-index: 1000;
+         .border-radius(5px);
+         .box-shadow(5px 5px 20px 0 #666);
+ 
+         a {
+             display: block;
+             color: @dropdownLinkColor;
+-            padding:2px 1em 2px 28px;
++            padding: 2px 1em 2px 28px;
+             &:hover {
+                 color: @dropdownLinkColorHover;
+                 background-color: @dropdownLinkBackgroundHover;
+@@ -2332,7 +2346,7 @@ img#persona_signin {
+             }
+         }
+         a.hidden {
+-            display:none;
++            display: none;
+         }
+         img {
+             vertical-align: middle;
+@@ -2343,29 +2357,92 @@ img#persona_signin {
+             padding: 4px;
+         }
+         > li {
+-            display:block;
++            display: block;
+         }
+ 
+         /** bottom left of button **/
+-        &.align-tl-bl {top: 100%;left:0;margin-top: 4px;}
+-        &.align-tr-bl {top: 100%;right: 100%;}
+-        &.align-bl-bl {bottom: 100%;left:0;}
+-        &.align-br-bl {bottom: 100%;right: 100%;}
++        &.align-tl-bl {
++            top: 100%;
++            left: 0;
++            margin-top: 4px;
++        }
++        &.align-tr-bl {
++            top: 100%;
++            right: 100%;
++        }
++        &.align-bl-bl {
++            bottom: 100%;
++            left: 0;
++        }
++        &.align-br-bl {
++            bottom: 100%;
++            right: 100%;
++        }
+         /** bottom right of button **/
+-        &.align-tl-br {top: 100%;left:100%;}
+-        &.align-tr-br {top: 100%;right: 0;margin-top: 4px;}
+-        &.align-bl-br {bottom: 100%;left:100%;}
+-        &.align-br-br {bottom: 100%;right: 0;}
++        &.align-tl-br {
++            top: 100%;
++            left: 100%;
++        }
++        &.align-tr-br {
++            top: 100%;
++            right: 0;
++            margin-top: 4px;
++        }
++
++        &.align-bl-br {
++            bottom: 100%;
++            left: 100%;
++        }
++
++        &.align-br-br {
++            bottom: 100%;
++            right: 0;
++        }
+         /** top left of button **/
+-        &.align-tl-tl {top: 0;left:0;}
+-        &.align-tr-tl {top: 0;right: 100%;margin-right: 4px;}
+-        &.align-bl-tl {bottom: 100%;left:0;margin-bottom: 4px;}
+-        &.align-br-tl {bottom: 100%;right: 100%;}
++        &.align-tl-tl {
++            top: 0;
++            left: 0;
++        }
++
++        &.align-tr-tl {
++            top: 0;
++            right: 100%;
++            margin-right: 4px;
++        }
++
++        &.align-bl-tl {
++            bottom: 100%;
++            left: 0;
++            margin-bottom: 4px;
++        }
++
++        &.align-br-tl {
++            bottom: 100%;
++            right: 100%;
++        }
+         /** top right of button **/
+-        &.align-tl-tr {top: 0;left:100%;margin-left: 4px;}
+-        &.align-tr-tr {top: 0;right: 0;}
+-        &.align-bl-tr {bottom: 100%;left:100%;}
+-        &.align-br-tr {bottom: 100%;right: 0;margin-bottom: 4px;}
++        &.align-tl-tr {
++            top: 0;
++            left: 100%;
++            margin-left: 4px;
++        }
++
++        &.align-tr-tr {
++            top: 0;
++            right: 0;
++        }
++
++        &.align-bl-tr {
++            bottom: 100%;
++            left: 100%;
++        }
++
++        &.align-br-tr {
++            bottom: 100%;
++            right: 0;
++            margin-bottom: 4px;
++        }
++
+     }
+     /** no wrap is set - prevent menu items from wrapping **/
+     &.nowrap-items .menu > li {
+@@ -2378,7 +2455,7 @@ img#persona_signin {
+ }
+ 
+ .dir-rtl {
+-    .moodle-actionmenu[data-enhanced].show  {
++    .moodle-actionmenu[data-enhanced].show {
+         .menu {
+             text-align: right;
+             left: 0;
+@@ -2393,25 +2470,85 @@ img#persona_signin {
+             }
+ 
+             /** bottom left of button **/
+-            &.align-tl-bl {left: auto; right: 0;}
+-            &.align-tr-bl {right: auto; left: 100%;}
+-            &.align-bl-bl {left: auto; right: 0;}
+-            &.align-br-bl {right: auto; left: 100%;}
++            &.align-tl-bl {
++                left: auto;
++                right: 0;
++            }
++
++            &.align-tr-bl {
++                right: auto;
++                left: 100%;
++            }
++
++            &.align-bl-bl {
++                left: auto;
++                right: 0;
++            }
++
++            &.align-br-bl {
++                right: auto;
++                left: 100%;
++            }
+             /** bottom right of button **/
+-            &.align-tl-br {left: auto; right: 100%;}
+-            &.align-tr-br {right: auto; left: 0;}
+-            &.align-bl-br {left: auto; right: 100%;}
+-            &.align-br-br {right: auto; left: 0;}
++            &.align-tl-br {
++                left: auto;
++                right: 100%;
++            }
++
++            &.align-tr-br {
++                right: auto;
++                left: 0;
++            }
++
++            &.align-bl-br {
++                left: auto;
++                right: 100%;
++            }
++
++            &.align-br-br {
++                right: auto;
++                left: 0;
++            }
+             /** top left of button **/
+-            &.align-tl-tl {left: auto; right: 0;}
+-            &.align-tr-tl {right: auto; left: 100%;}
+-            &.align-bl-tl {left: auto; right: 0;}
+-            &.align-br-tl {right: auto; left: 100%;}
++            &.align-tl-tl {
++                left: auto;
++                right: 0;
++            }
++
++            &.align-tr-tl {
++                right: auto;
++                left: 100%;
++            }
++
++            &.align-bl-tl {
++                left: auto;
++                right: 0;
++            }
++
++            &.align-br-tl {
++                right: auto;
++                left: 100%;
++            }
+             /** top right of button **/
+-            &.align-tl-tr {left: auto; right: 100%;}
+-            &.align-tr-tr {right: auto; left: 0;}
+-            &.align-bl-tr {left: auto; right: 100%;}
+-            &.align-br-tr {right: auto; left: 0;}
++            &.align-tl-tr {
++                left: auto;
++                right: 100%;
++            }
++
++            &.align-tr-tr {
++                right: auto;
++                left: 0;
++            }
++
++            &.align-bl-tr {
++                left: auto;
++                right: 100%;
++            }
++
++            &.align-br-tr {
++                right: auto;
++                left: 0;
++            }
+         }
+     }
+     .block .moodle-actionmenu {
+diff --git a/theme/bootstrapbase/less/moodle/course.less b/theme/bootstrapbase/less/moodle/course.less
+index c990bb5..571e3d8 100644
+--- a/theme/bootstrapbase/less/moodle/course.less
++++ b/theme/bootstrapbase/less/moodle/course.less
+@@ -1,5 +1,6 @@
+ /* course.less */
+ /* COURSE CONTENT */
++/* stylelint-disable unit-blacklist */
+ .section_add_menus {
+     text-align: right;
+     clear: both;
+@@ -279,7 +280,7 @@
+     margin-top: 5px;
+     list-style: none;
+ }
+-.course-content .section-summary .section-title  {
++.course-content .section-summary .section-title {
+     margin: 2px 5px 10px 5px;
+ }
+ .course-content .section-summary .summarytext {
+@@ -339,7 +340,8 @@
+ }
+ .course-content ul li.section.hidden {
+     .sectionname > span,
+-    .content > div,  /* All the divs but the activities which are in a UL. */
++    .content > div,
++    /* All the divs but the activities which are in a UL. */
+     .activity .activityinstance {
+         opacity: .5;
+     }
+@@ -396,7 +398,7 @@
+ }
+ 
+ .path-course-view .completionprogress {
+-    margin-left: 25px
++    margin-left: 25px;
+ }
+ 
+ .path-course-view .completionprogress {
+@@ -519,7 +521,7 @@ span.editinstructions {
+ /* Course drag and drop upload styles */
+ #dndupload-status {
+     position: fixed;
+-    left:0;
++    left: 0;
+     width: 40%;
+     margin: 0 30%;
+     padding: 6px;
+@@ -594,7 +596,7 @@ span.editinstructions {
+ 
+ .coursebox > .info > .coursename a {
+     display: block;
+-    background-image:url([[pix:moodle|i/course]]);
++    background-image: url([[pix:moodle|i/course]]);
+     background-repeat: no-repeat;
+     padding-left: 21px;
+     background-position: left 0.2em;
+@@ -632,41 +634,41 @@ span.editinstructions {
+     padding: 0;
+ }
+ .coursebox .content .teachers li {
+-    list-style-type:none;
+-    padding:0;
+-    margin:0;
++    list-style-type: none;
++    padding: 0;
++    margin: 0;
+ }
+ .coursebox .enrolmenticons {
+-    padding:3px 0;
+-    float:right;
++    padding: 3px 0;
++    float: right;
+ }
+ .coursebox .moreinfo {
+-    padding:3px 0;
+-    float:right;
++    padding: 3px 0;
++    float: right;
+ }
+ .coursebox .enrolmenticons img,
+ .coursebox .moreinfo img {
+-    margin:0 .2em;
++    margin: 0 .2em;
+ }
+ .coursebox .content {
+-    clear:both;
++    clear: both;
+ }
+ .coursebox .content .summary,
+ .coursebox .content .coursecat {
+-    float:right;
++    float: right;
+     width: 55%;
+ }
+ .coursebox .content .coursecat {
+-    text-align:right;
+-    clear:right;
++    text-align: right;
++    clear: right;
+ }
+ .coursebox.remotecoursebox .remotecourseinfo {
+-    float:left;
++    float: left;
+     width: 40%;
+ }
+ .coursebox .content .courseimage img {
+-    max-width:100px;
+-    max-height:100px;
++    max-width: 100px;
++    max-height: 100px;
+ }
+ .coursebox .content .coursecat,
+ .coursebox .content .summary,
+@@ -674,44 +676,44 @@ span.editinstructions {
+ .coursebox .content .coursefile,
+ .coursebox .content .teachers,
+ .coursebox.remotecoursebox .remotecourseinfo {
+-    margin:3px 5px;
+-    padding:0;
++    margin: 3px 5px;
++    padding: 0;
+ }
+ 
+ .coursebox.remotehost > .info > .categoryname a {
+-    background-image:url([[pix:moodle|i/mnethost]]);
++    background-image: url([[pix:moodle|i/mnethost]]);
+ }
+ 
+ .dir-rtl .coursebox > .info > .categoryname a {
+-    padding-left:0;
+-    padding-right:21px;
++    padding-left: 0;
++    padding-right: 21px;
+     background-position: center right;
+ }
+ .dir-rtl .coursebox > .info > .categoryname,
+ .dir-rtl .coursebox .teachers,
+ .dir-rtl .coursebox .content .courseimage,
+ .dir-rtl .coursebox .content .coursefile {
+-    float:right;
+-    clear:right;
++    float: right;
++    clear: right;
+ }
+ .dir-rtl .coursebox .enrolmenticons,
+ .dir-rtl .coursebox .moreinfo {
+-    float:left;
++    float: left;
+ }
+ .dir-rtl .coursebox .summary,
+ .dir-rtl .coursebox .coursecat {
+-    float:left;
++    float: left;
+ }
+ .dir-rtl .coursebox .coursecat {
+-    text-align:left;
+-    clear:left;
++    text-align: left;
++    clear: left;
+ }
+ 
+ .coursebox.collapsed {
+-    margin-bottom:0;
++    margin-bottom: 0;
+ }
+ .coursebox.collapsed > .content {
+-    display:none;
++    display: none;
+ }
+ .courses .coursebox.collapsed {
+     border: 1px solid @tableBorder;
+@@ -734,79 +736,79 @@ span.editinstructions {
+     visibility: hidden;
+ }
+ .course_category_tree .controls div {
+-    display:inline;
+-    cursor:pointer;
++    display: inline;
++    cursor: pointer;
+ }
+ .jsenabled .course_category_tree .controls {
+     visibility: visible;
+ }
+ .course_category_tree .controls {
+-    margin-bottom:5px;
+-    text-align:right;
+-    float:right;
++    margin-bottom: 5px;
++    text-align: right;
++    float: right;
+ }
+ .course_category_tree .controls div {
+-    padding-right:2em;
+-    font-size:75%;
++    padding-right: 2em;
++    font-size: 75%;
+ }
+ 
+-.course_category_tree .category > .info > .categoryname{
+-    background-image:url([[pix:moodle|t/collapsed_empty]]);
++.course_category_tree .category > .info > .categoryname {
++    background-image: url([[pix:moodle|t/collapsed_empty]]);
+     background-repeat: no-repeat;
+-    padding:2px 18px;
+-    margin:3px;
+-    background-position:center left;
++    padding: 2px 18px;
++    margin: 3px;
++    background-position: center left;
+ }
+ .dir-rtl .course_category_tree .category > .info > .categoryname {
+-    background-image:url([[pix:moodle|t/collapsed_empty_rtl]]);
+-    background-position:center right;
++    background-image: url([[pix:moodle|t/collapsed_empty_rtl]]);
++    background-position: center right;
+ }
+ .course_category_tree .category.with_children > .info > .categoryname {
+-    background-image:url([[pix:moodle|t/expanded]]);
++    background-image: url([[pix:moodle|t/expanded]]);
+     cursor: pointer;
+ }
+-.course_category_tree .category.with_children.collapsed >.info > .categoryname {
+-    background-image:url([[pix:moodle|t/collapsed]]);
++.course_category_tree .category.with_children.collapsed > .info > .categoryname {
++    background-image: url([[pix:moodle|t/collapsed]]);
+ }
+ .dir-rtl .course_category_tree .category.with_children.collapsed > .info > .categoryname {
+-    background-image:url([[pix:moodle|t/collapsed_rtl]]);
++    background-image: url([[pix:moodle|t/collapsed_rtl]]);
+ }
+-.course_category_tree .category.collapsed>.content {
+-    display:none;
++.course_category_tree .category.collapsed > .content {
++    display: none;
+ }
+ 
+-.course_category_tree .category >.info {
++.course_category_tree .category > .info {
+     .well;
+-    min-height:0;
+-    padding:0;
+-    margin:3px 0;
+-    margin-bottom:3px;
++    min-height: 0;
++    padding: 0;
++    margin: 3px 0;
++    margin-bottom: 3px;
+     clear: both;
+ }
+-.course_category_tree.frontpage-category-names .category >.info {
+-    background:none;
+-    border:none;
+-    margin:0;
++.course_category_tree.frontpage-category-names .category > .info {
++    background: none;
++    border: none;
++    margin: 0;
+ }
+ .course_category_tree .category > .content {
+-    padding-left:16px;
++    padding-left: 16px;
+ }
+ 
+ .dir-rtl .course_category_tree .category > .content {
+-    padding-left:0;
+-    padding-right:16px;
++    padding-left: 0;
++    padding-right: 16px;
+ }
+ 
+ .course_category_tree .subcategories > .paging,
+ .courses > .paging {
+-    margin:0;
+-    padding:5px;
+-    text-align:center;
++    margin: 0;
++    padding: 5px;
++    text-align: center;
+ }
+ 
+ .courses > .paging.paging-morelink,
+ .course_category_tree .subcategories > .paging.paging-morelink {
+-    text-align:left;
++    text-align: left;
+ }
+ 
+ .course_category_tree .paging.paging-morelink a {
+@@ -814,7 +816,7 @@ span.editinstructions {
+ }
+ .dir-rtl .courses > .paging.paging-morelink,
+ .dir-rtl .course_category_tree .paging.paging-morelink {
+-    text-align:right;
++    text-align: right;
+ }
+ 
+ #page-course-index-category .generalbox.info {
+@@ -849,8 +851,8 @@ span.editinstructions {
+     .moodle-actionmenu {
+         .iconsmall {
+             max-width: none !important; /** reset sets 100% !important which breaks on IE8 without this !important */
+-            width:16px;
+-            height:16px;
++            width: 16px;
++            height: 16px;
+             padding: 4px;
+             vertical-align: text-bottom;
+         }
+@@ -885,36 +887,36 @@ span.editinstructions {
+  */
+ #course-category-listings {
+     background-color: @tableBackground;
+-    margin-bottom:200px;
++    margin-bottom: 200px;
+ 
+     /** Two column layout */
+     &.columns-2 {
+         > #course-listing > div {
+-            position:relative;
+-            left:-1px;
++            position: relative;
++            left: -1px;
+         }
+     }
+     /** Three column layout */
+     &.columns-3 > #course-listing > div {
+-        height:100%;
++        height: 100%;
+     }
+ 
+     > div > div {
+-        min-height:300px;
++        min-height: 300px;
+         > ul.ml > li:first-child > div {
+-            border-top:0;
++            border-top: 0;
+         }
+     }
+     h3 {
+-        margin:0;
+-        padding:0.4rem 0.6rem 0.3rem;
++        margin: 0;
++        padding: 0.4rem 0.6rem 0.3rem;
+     }
+     h4 {
+-        margin:1rem 0 0;
+-        padding:0.6rem 1rem 0.5rem;
++        margin: 1rem 0 0;
++        padding: 0.6rem 1rem 0.5rem;
+     }
+     .moodle-actionmenu {
+-        white-space:nowrap;
++        white-space: nowrap;
+     }
+ 
+     .moodle-actionmenu[data-enhance] {
+@@ -933,42 +935,44 @@ span.editinstructions {
+     }
+ 
+     .listing-actions {
+-        text-align:center;
+-        padding:0.4rem 0.3rem 0.3rem;
+-        line-height:2.2em;
++        text-align: center;
++        padding: 0.4rem 0.3rem 0.3rem;
++        line-height: 2.2em;
+         > a,
+         > .moodle-actionmenu {
+-            display:inline-block;
++            display: inline-block;
+         }
+         > .moodle-actionmenu .menu a {
+-            padding-left:1rem;
++            padding-left: 1rem;
+         }
+         .moodle-actionmenu:not([data-enhanced]) {
+-            li {line-height:normal;}
++            li {
++                line-height: normal;
++            }
+             > .menubar a {
+-                color:inherit;
+-                display:inline-block;
++                color: inherit;
++                display: inline-block;
+                 > img {
+-                    display:none;
++                    display: none;
+                 }
+                 .caret {
+                     display: none;
+                 }
+             }
+             > .menu .menu-action-text {
+-                display:inline-block;
++                display: inline-block;
+             }
+         }
+     }
+     ul.ml {
+         list-style: none;
+-        margin:1rem 0;
++        margin: 1rem 0;
+         ul.ml {
+-            margin:0;
++            margin: 0;
+         }
+     }
+     li {
+-        line-height:2.2em;
++        line-height: 2.2em;
+         > div {
+             &:hover {
+                 background-color: @tableBackgroundHover;
+@@ -976,8 +980,8 @@ span.editinstructions {
+         }
+         .tree-icon {
+             margin: 2px 6px 0 0;
+-            width:12px;
+-            vertical-align:inherit;
++            width: 12px;
++            vertical-align: inherit;
+         }
+         &[data-selected='1'] {
+             > div {
+@@ -989,24 +993,47 @@ span.editinstructions {
+         }
+ 
+         // Tree item indenting to represent depth.
+-        .tree-icon {margin-left:0;}
+-        li .tree-icon {margin-left:1em;}
+-        li li .tree-icon {margin-left:2em;}
+-        li li li .tree-icon {margin-left:3em;}
+-        li li li li .tree-icon {margin-left:4em;}
+-        li li li li li .tree-icon {margin-left:4.5em;}
+-        li li li li li li .tree-icon {margin-left:5em;}
+-        li li li li li li li .tree-icon {margin-left:5.5em;}
++        .tree-icon {
++            margin-left: 0;
++        }
++
++        li .tree-icon {
++            margin-left: 1em;
++        }
++
++        li li .tree-icon {
++            margin-left: 2em;
++        }
++
++        li li li .tree-icon {
++            margin-left: 3em;
++        }
++
++        li li li li .tree-icon {
++            margin-left: 4em;
++        }
++
++        li li li li li .tree-icon {
++            margin-left: 4.5em;
++        }
++
++        li li li li li li .tree-icon {
++            margin-left: 5em;
++        }
++
++        li li li li li li li .tree-icon {
++            margin-left: 5.5em;
++        }
+     }
+ 
+     .item-actions {
+-        margin-right:1em;
+-        display:inline-block;
+-        display:initial;
++        margin-right: 1em;
++        display: inline-block;
++        display: initial;
+         > a img,
+         .menubar img {
+             margin: 0 4px;
+-            height:12px;
++            height: 12px;
+             padding: 0;
+             vertical-align: inherit;
+         }
+@@ -1016,7 +1043,7 @@ span.editinstructions {
+             }
+             img {
+                 width: 12px;
+-                max-width:none;
++                max-width: none;
+             }
+         }
+         .menu-action-text {
+@@ -1027,26 +1054,26 @@ span.editinstructions {
+     .listitem {
+         > div {
+             > .float-left {
+-                float:left;
++                float: left;
+             }
+             > .float-right {
+-                float:right;
+-                text-align:right;
++                float: right;
++                text-align: right;
+             }
+             .item-actions {
+                 .action-show {
+-                    display:none;
++                    display: none;
+                 }
+                 .action-hide {
+-                    display:inline;
++                    display: inline;
+                 }
+             }
+             .without-actions {
+                 color: #333;
+             }
+             .idnumber {
+-                color:#a1a1a8;
+-                margin-right:2em;
++                color: #a1a1a8;
++                margin-right: 2em;
+             }
+         }
+         // The category or course is hidden.
+@@ -1058,10 +1085,10 @@ span.editinstructions {
+                 }
+                 .item-actions {
+                     .action-show {
+-                        display:inline;
++                        display: inline;
+                     }
+                     .action-hide {
+-                        display:none;
++                        display: none;
+                     }
+                 }
+             }
+@@ -1079,15 +1106,15 @@ span.editinstructions {
+     #course-listing {
+         .listitem {
+             .categoryname {
+-                display:inline-block;
+-                margin-left:1em;
+-                color:#a1a1a8;
++                display: inline-block;
++                margin-left: 1em;
++                color: #a1a1a8;
+             }
+             .coursename {
+-                display:inline-block;
++                display: inline-block;
+             }
+             > div {
+-                padding-left:1rem;
++                padding-left: 1rem;
+             }
+         }
+         > .firstpage .listitem:first-child > div .item-actions .action-moveup,
+@@ -1095,7 +1122,7 @@ span.editinstructions {
+             display: none;
+         }
+         .bulk-action-checkbox {
+-            margin:-2px 6px 0 0;
++            margin: -2px 6px 0 0;
+         }
+     }
+     #category-listing {
+@@ -1105,18 +1132,18 @@ span.editinstructions {
+         .listitem {
+             > div {
+                 > .ba-checkbox {
+-                    width:2.2em;
+-                    text-align:center;
+-                    margin:-1px 0.5em 0 0;
+-                    padding-top:2px;
++                    width: 2.2em;
++                    text-align: center;
++                    margin: -1px 0.5em 0 0;
++                    padding-top: 2px;
+                 }
+             }
+             &.highlight > div > .ba-checkbox {
+                 background-color: @tableBackgroundHover;
+             }
+             &[data-selected='1'] > div > .ba-checkbox {
+-                margin:0 0.5em 0 0;
+-                padding:0;
++                margin: 0 0.5em 0 0;
++                padding: 0;
+                 background-color: inherit;
+             }
+             &:first-child > div .item-actions .action-moveup,
+@@ -1125,13 +1152,13 @@ span.editinstructions {
+             }
+         }
+         .course-count {
+-            color:#a1a1a8;
+-            margin-right:2rem;
+-            min-width:3.5em;
+-            display:inline-block;
++            color: #a1a1a8;
++            margin-right: 2rem;
++            min-width: 3.5em;
++            display: inline-block;
+             .smallicon {
+-                width:12px;
+-                margin-left:4px;
++                width: 12px;
++                margin-left: 4px;
+                 vertical-align: inherit;
+             }
+         }
+@@ -1139,58 +1166,58 @@ span.editinstructions {
+             margin-right: -3px;
+         }
+         .category-listing > ul > .listitem:first-child {
+-            position:relative;
++            position: relative;
+         }
+         .category-bulk-actions {
+             margin: 0 0.5em 0.5em;
+-            position:relative;
++            position: relative;
+         }
+     }
+ 
+     .detail-pair {
+-        border-bottom:1px solid @tableBorder;
+-        margin:0 1rem;
++        border-bottom: 1px solid @tableBorder;
++        margin: 0 1rem;
+         > * {
+-            display:inline-block;
+-            line-height:2.2rem;
++            display: inline-block;
++            line-height: 2.2rem;
+         }
+         .pair-key {
+-            font-weight:bold;
++            font-weight: bold;
+             vertical-align: top;
+             span {
+                 margin-right: 1rem;
+-                display:block;
++                display: block;
+             }
+         }
+         .pair-value select {
+-            max-width:100%;
++            max-width: 100%;
+         }
+     }
+ 
+     .bulk-actions .detail-pair {
+         > * {
+-            display:block;
+-            width:100%;
++            display: block;
++            width: 100%;
+         }
+     }
+ 
+     .listing-pagination {
+-        text-align:center;
++        text-align: center;
+         .yui3-button {
+             background-color: @btnBackground;
+-            border:0;
+-            margin:0.4rem 0.2rem 0.45rem;
+-            font-size:10.4px;
++            border: 0;
++            margin: 0.4rem 0.2rem 0.45rem;
++            font-size: 10.4px;
+             &.active-page {
+                 background-color: @btnBackgroundHighlight;
+             }
+         }
+     }
+     .listing-pagination-totals {
+-        text-align:center;
++        text-align: center;
+         &.dimmed {
+             .muted;
+-            margin:0.4rem 1rem 0.45rem;
++            margin: 0.4rem 1rem 0.45rem;
+         }
+     }
+     .select-a-category .notifymessage,
+@@ -1203,9 +1230,9 @@ span.editinstructions {
+     display: none;
+ }
+ .jsenabled #course-category-listings #course-listing .listitem .drag-handle {
+-    display:inline-block;
++    display: inline-block;
+     margin: 0 6px 0 0;
+-    cursor:pointer;
++    cursor: pointer;
+ }
+ 
+ .dir-rtl #course-category-listings {
+@@ -1218,11 +1245,11 @@ span.editinstructions {
+     .listitem {
+         > div {
+             > .float-left {
+-                float:right;
++                float: right;
+             }
+             > .float-right {
+-                float:left;
+-                text-align:left;
++                float: left;
++                text-align: left;
+             }
+         }
+     }
+@@ -1232,31 +1259,54 @@ span.editinstructions {
+         }
+ 
+         // Tree item indenting to represent depth.
+-        .tree-icon {margin-right:0;}
+-        li .tree-icon {margin-right:1em;}
+-        li li .tree-icon {margin-right:2em;}
+-        li li li .tree-icon {margin-right:3em;}
+-        li li li li .tree-icon {margin-right:4em;}
+-        li li li li li .tree-icon {margin-right:4.5em;}
+-        li li li li li li .tree-icon {margin-right:5em;}
+-        li li li li li li li .tree-icon {margin-right:5.5em;}
++        .tree-icon {
++            margin-right: 0;
++        }
++
++        li .tree-icon {
++            margin-right: 1em;
++        }
++
++        li li .tree-icon {
++            margin-right: 2em;
++        }
++
++        li li li .tree-icon {
++            margin-right: 3em;
++        }
++
++        li li li li .tree-icon {
++            margin-right: 4em;
++        }
++
++        li li li li li .tree-icon {
++            margin-right: 4.5em;
++        }
++
++        li li li li li li .tree-icon {
++            margin-right: 5em;
++        }
++
++        li li li li li li li .tree-icon {
++            margin-right: 5.5em;
++        }
+     }
+     #category-listing {
+         .listitem {
+             > div {
+-                margin-right:0.5em;
++                margin-right: 0.5em;
+                 margin-left: 0;
+                 > .ba-checkbox {
+-                    margin:-1px 0 0 0.5em;
++                    margin: -1px 0 0 0.5em;
+                 }
+             }
+ 
+             &[data-selected='1'] > div > .ba-checkbox {
+-                margin:0 0 0 0.5em;
++                margin: 0 0 0 0.5em;
+             }
+         }
+         .course-count {
+-            margin-left:2rem;
++            margin-left: 2rem;
+ 
+             .smallicon {
+                 margin-left: 0px;
+@@ -1272,24 +1322,24 @@ span.editinstructions {
+         padding-right: 24px;
+         .listitem {
+             .idnumber {
+-                color:#a1a1a8;
+-                padding-right:2em;
++                color: #a1a1a8;
++                padding-right: 2em;
+             }
+             .categoryname {
+-                display:inline-block;
+-                margin-right:1em;
+-                margin-left:0;
++                display: inline-block;
++                margin-right: 1em;
++                margin-left: 0;
+             }
+             .drag-handle {
+                 margin: 0 6px 0 6px;
+             }
+             > div {
+-                padding-left:1rem;
++                padding-left: 1rem;
+             }
+         }
+         .bulk-action-checkbox {
+-            vertical-align:middle;
+-            margin:-2px 0 0 6px;
++            vertical-align: middle;
++            margin: -2px 0 0 6px;
+         }
+     }
+     .detail-pair {
+@@ -1299,7 +1349,7 @@ span.editinstructions {
+         }
+         .pair-key {
+             span {
+-                margin-right:0;
++                margin-right: 0;
+                 margin-left: 0;
+             }
+         }
+@@ -1311,19 +1361,19 @@ span.editinstructions {
+ 
+ /** Management header styling **/
+ .coursecat-management-header {
+-    vertical-align:middle;
++    vertical-align: middle;
+     h2 {
+-        display:inline-block;
+-        text-align:left;
++        display: inline-block;
++        text-align: left;
+     }
+     > div {
+-        display:inline-block;
+-        float:right;
+-        line-height:40px;
++        display: inline-block;
++        float: right;
++        line-height: 40px;
+         > div {
+-            margin-left:1em;
++            margin-left: 1em;
+             margin: 10px 0;
+-            display:inline-block;
++            display: inline-block;
+         }
+     }
+     select {
+@@ -1335,28 +1385,28 @@ span.editinstructions {
+     }
+     .view-mode-selector {
+         .moodle-actionmenu {
+-            white-space:nowrap;
+-            display:inline-block;
++            white-space: nowrap;
++            display: inline-block;
+         }
+         .moodle-actionmenu[data-enhanced].show .menu a {
+-            padding-left:1em;
++            padding-left: 1em;
+         }
+     }
+ }
+ .dir-rtl .coursecat-management-header {
+     h2 {
+-        text-align:right;
++        text-align: right;
+     }
+     > div {
+-        float:left;
+-        margin-right:1em;
++        float: left;
++        margin-right: 1em;
+         margin-left: 0;
+     }
+ }
+ .course-being-dragged-proxy {
+     border: 0;
+     color: @linkColor;
+-    vertical-align:middle;
++    vertical-align: middle;
+     padding: 0 0 0 4em;
+ }
+ .course-being-dragged {
+@@ -1374,11 +1424,11 @@ span.editinstructions {
+ @media (min-width: 1200px) and (max-width: 1600px) {
+     #course-category-listings.columns-3 {
+         background-color: @tableBackground;
+-        border:0;
++        border: 0;
+ 
+         #category-listing,
+         #course-listing {
+-            width:50%;
++            width: 50%;
+         }
+         #category-listing > div,
+         #course-listing > div,
+@@ -1386,8 +1436,8 @@ span.editinstructions {
+             background-color: @tableBackground;
+         }
+         #course-detail {
+-            width:100%;
+-            margin-top:1em;
++            width: 100%;
++            margin-top: 1em;
+         }
+     }
+ 
+@@ -1397,12 +1447,12 @@ span.editinstructions {
+     #course-category-listings.columns-2,
+     #course-category-listings.columns-3 {
+         background-color: @tableBackground;
+-        border:0;
++        border: 0;
+         #category-listing,
+         #course-listing,
+         #course-detail {
+-            width:100%;
+-            margin:0 0 1em;
++            width: 100%;
++            margin: 0 0 1em;
+         }
+         #category-listing > div,
+         #course-listing > div,
+diff --git a/theme/bootstrapbase/less/moodle/dock.less b/theme/bootstrapbase/less/moodle/dock.less
+index 29c4368..802a201 100644
+--- a/theme/bootstrapbase/less/moodle/dock.less
++++ b/theme/bootstrapbase/less/moodle/dock.less
+@@ -51,7 +51,7 @@ body.has_dock {
+         display: block;
+         width: @dockWidth;
+         margin: @dockTitleMargin;
+-        padding:0;
++        padding: 0;
+         cursor: pointer;
+         h2 {
+             .transform-test-heading;
+@@ -108,7 +108,7 @@ body.has_dock {
+         h2 {
+             .nav-header;
+             font-size: 1.1em;
+-            padding:0;
++            padding: 0;
+             margin: 0;
+         }
+         .commands {
+diff --git a/theme/bootstrapbase/less/moodle/expendable.less b/theme/bootstrapbase/less/moodle/expendable.less
+index c8a0aef..f476212 100644
+--- a/theme/bootstrapbase/less/moodle/expendable.less
++++ b/theme/bootstrapbase/less/moodle/expendable.less
+@@ -34,8 +34,9 @@ table {
+     table.flexible,
+     .generaltable,
+     .generaltable thead:first-child tr:first-child {
+-        td , th {
+-            text-align:right;
++        td,
++        th {
++            text-align: right;
+         }
+     }
+     table {
+@@ -46,8 +47,9 @@ table {
+ }
+ 
+ #page-admin-course-index.dir-rtl .editcourse {
+-    td , th {
+-        text-align:right;
++    td,
++    th {
++        text-align: right;
+     }
+ }
+ 
+@@ -89,7 +91,7 @@ div[id^="progress_pbar_"] {
+     float: left !important;
+     font-size: 12px !important;
+     text-align: center !important;
+-    text-shadow: 0 -1px 0 rgba(0,0,0,.25) !important;
++    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25) !important;
+     #gradient > .vertical(#149bdf, #0480be) !important;
+     .box-shadow(inset 0 -1px 0 rgba(0,0,0,.15)) !important;
+     .box-sizing(border-box) !important;
+diff --git a/theme/bootstrapbase/less/moodle/filemanager.less b/theme/bootstrapbase/less/moodle/filemanager.less
+index 38e4c76..468207f 100644
+--- a/theme/bootstrapbase/less/moodle/filemanager.less
++++ b/theme/bootstrapbase/less/moodle/filemanager.less
+@@ -104,20 +104,20 @@
+ .file-picker .fp-repo-items {
+     float: none;
+     width: auto;
+-    margin-left:181px;
++    margin-left: 181px;
+ }
+ .moodle-dialogue-fullscreen .file-picker .fp-repo-items {
+     margin-left: 0px;
+-    margin-right:0px;
++    margin-right: 0px;
+     float: left;
+ }
+ .dir-rtl .file-picker .fp-repo-items {
+     margin-left: 0px;
+-    margin-right:181px;
++    margin-right: 181px;
+ }
+ .dir-rtl .moodle-dialogue-fullscreen .file-picker .fp-repo-items {
+     margin-left: 0px;
+-    margin-right:0px;
++    margin-right: 0px;
+     float: right;
+ }
+ .file-picker .fp-navbar {
+@@ -269,17 +269,17 @@
+     height: 30px;
+     border-right: 1px solid #CCC;
+     display: block;
+-    float:left;
++    float: left;
+ }
+ .fp-viewbar a.checked:hover,
+ .fp-viewbar a:hover {
+-    background-image: radial-gradient(ellipse at center, #ffffff 60%,#dfdfdf 100%);
++    background-image: radial-gradient(ellipse at center, #ffffff 60%, #dfdfdf 100%);
+     background-color: #ebebeb;
+ }
+ 
+ .fp-viewbar a.checked,
+ .fp-viewbar a:active {
+-    background-image: radial-gradient(ellipse at center, #ffffff 40%,#dfdfdf 100%);
++    background-image: radial-gradient(ellipse at center, #ffffff 40%, #dfdfdf 100%);
+     background-color: #dfdfdf;
+ }
+ 
+@@ -613,7 +613,7 @@ a.ygtvspacer:hover {
+ .file-picker .fp-login-form .fp-login-input .input {
+     text-align: left;
+ }
+-.file-picker .fp-login-form input[type="checkbox"]{
++.file-picker .fp-login-form input[type="checkbox"] {
+     width: 15px;
+     height: 15px;
+ }
+@@ -764,10 +764,10 @@ a.ygtvspacer:hover {
+     display: none;
+ }
+ // File Manager
+-.filemanager-loading{
++.filemanager-loading {
+     display: none;
+ }
+-.jsenabled .filemanager-loading{
++.jsenabled .filemanager-loading {
+     display: block;
+     margin-top: 100px;
+ }
+@@ -804,7 +804,7 @@ a.ygtvspacer:hover {
+ }
+ // File Manager layout
+ .filemanager {
+-    .fp-restrictions{
++    .fp-restrictions {
+         text-align: right;
+     }
+ }
+@@ -813,7 +813,7 @@ a.ygtvspacer:hover {
+     border: 1px solid #BBBBBB;
+     border-bottom: none;
+ }
+-.filemanager-toolbar{
++.filemanager-toolbar {
+     padding: 4px;
+     overflow: hidden;
+ }
+@@ -833,8 +833,7 @@ a.ygtvspacer:hover {
+ .fp-toolbar .fp-tb-help,
+ .fp-toolbar .fp-tb-manage,
+ .fp-toolbar .fp-tb-logout,
+-.fp-toolbar .fp-tb-refresh
+- {
++.fp-toolbar .fp-tb-refresh {
+     border: 1px solid #CCC;
+     border-bottom: 1px solid #B3B3B3;
+     border-radius: 4px;
+@@ -844,12 +843,12 @@ a.ygtvspacer:hover {
+ }
+ 
+ .fp-toolbar a:hover {
+-    background-image: radial-gradient(ellipse at center, #ffffff 60%,#dfdfdf 100%);
++    background-image: radial-gradient(ellipse at center, #ffffff 60%, #dfdfdf 100%);
+     background-color: #ebebeb;
+ }
+ 
+ .fp-toolbar a:active {
+-    background-image: radial-gradient(ellipse at center, #ffffff 40%,#dfdfdf 100%);
++    background-image: radial-gradient(ellipse at center, #ffffff 40%, #dfdfdf 100%);
+     background-color: #dfdfdf;
+ }
+ 
+@@ -859,8 +858,7 @@ a.ygtvspacer:hover {
+ .fp-tb-help a,
+ .fp-tb-manage a,
+ .fp-tb-logout a,
+-.fp-tb-refresh a
+-{
++.fp-tb-refresh a {
+     display: block;
+     width: 30px;
+     height: 30px;
+@@ -889,7 +887,7 @@ a.ygtvspacer:hover {
+     min-height: 140px;
+     position: relative;
+ }
+-.filemanager .fp-content{
++.filemanager .fp-content {
+     overflow: auto;
+     max-height: 472px;
+     min-height: 157px;
+@@ -944,20 +942,20 @@ a.ygtvspacer:hover {
+     width: 100%;
+ }
+ .filemanager .yui3-datatable-header {
+-    background: #FFFFFF!important;
+-    border-bottom: 1px solid #CCCCCC!important;
+-    border-left: 0 solid #FFFFFF!important;
+-    color: #555555!important;
++    background: #FFFFFF !important;
++    border-bottom: 1px solid #CCCCCC !important;
++    border-left: 0 solid #FFFFFF !important;
++    color: #555555 !important;
+ }
+ .filemanager .yui3-datatable-odd .yui3-datatable-cell {
+-    background-color: #F6F6F6!important;
++    background-color: #F6F6F6 !important;
+     border-left: 0 solid #F6F6F6;
+ }
+ .filemanager .yui3-datatable-even .yui3-datatable-cell {
+-    background-color: #FFFFFF!important;
++    background-color: #FFFFFF !important;
+     border-left: 0 solid #FFFFFF;
+ }
+-.filemanager .fp-filename-icon.fp-hasreferences .fp-reficons1{
++.filemanager .fp-filename-icon.fp-hasreferences .fp-reficons1 {
+     background: url('[[pix:theme|fp/link_sm]]') no-repeat 0 0;
+     height: 100%;
+     width: 100%;
+@@ -1196,7 +1194,7 @@ a.ygtvspacer:hover {
+ // RTL Overrides
+ .dir-rtl {
+     .filemanager {
+-        .fp-restrictions{
++        .fp-restrictions {
+             text-align: left;
+         }
+     }
+@@ -1222,7 +1220,7 @@ a.ygtvspacer:hover {
+         }
+         div {
+             float: right;
+-            margin-left:4px;
++            margin-left: 4px;
+         }
+     }
+ }
+diff --git a/theme/bootstrapbase/less/moodle/forms.less b/theme/bootstrapbase/less/moodle/forms.less
+index fbf70e4..c82e2a2 100644
+--- a/theme/bootstrapbase/less/moodle/forms.less
++++ b/theme/bootstrapbase/less/moodle/forms.less
+@@ -18,7 +18,7 @@ form {
+     display: block;
+ }
+ .mform fieldset.group {
+-    margin-bottom: 0
++    margin-bottom: 0;
+ }
+ .mform fieldset.error {
+     border: 1px solid @errorText;
+@@ -155,7 +155,7 @@ input#id_externalurl {
+ .dir-rtl {
+     .form-item .form-label,
+     .mform .fitem div.fitemtitle {
+-        float:right;
++        float: right;
+         text-align: left;
+     }
+ }
+@@ -329,7 +329,7 @@ div.backup-section + form,
+     width: 100%;
+ }
+ #page-grade-edit-outcome-course .courseoutcomes td {
+-    text-align:center;
++    text-align: center;
+ }
+ /* Install Process' text fields Forms, should always be justified to the left */
+ #installform #id_wwwroot,
+@@ -372,7 +372,7 @@ input[type="checkbox"] {
+ .singleselect {
+     display: inline-block;
+     form,
+-    select{
++    select {
+         margin: 0;
+     }
+ }
+@@ -380,7 +380,7 @@ input[type="checkbox"] {
+     margin-bottom: 0;
+ }
+ .dir-rtl .form-item .form-label label {
+-    text-align:left;
++    text-align: left;
+ }
+ .felement.ffilepicker {
+     margin-top: 5px;
+@@ -439,7 +439,7 @@ fieldset.coursesearchbox label {
+                 width: auto;
+             }
+         }
+-        .fitem_fcheckbox{
++        .fitem_fcheckbox {
+             .fitemtitle,
+             .felement {
+                 display: inline-block;
+@@ -489,9 +489,11 @@ fieldset.coursesearchbox label {
+  * 1199px + (1199px * 23%)
+  * Where 23% is the width of span3
+  * Full calculation is:
+- *   @maxWidthForVerticalForms: 1199px * (unit(((@fluidGridColumnWidth1200 * 3) + (@fluidGridGutterWidth * (3 - 1)))) / 100) + 1199px;
++ *   @maxWidthForVerticalForms: 1199px * (unit(((@fluidGridColumnWidth1200 * 3) +
++ *    (@fluidGridGutterWidth * (3 - 1)))) / 100) + 1199px;
+  */
+ @maxWidthForVerticalForms: 1474px;
++
+ @media (max-width: @maxWidthForVerticalForms) {
+     .used-region-side-pre.used-region-side-post {
+         .makeFormsVertical;
+@@ -506,7 +508,7 @@ fieldset.coursesearchbox label {
+     }
+     select,
+     input[type=text] {
+-        position:relative;
++        position: relative;
+         top: 4px;
+     }
+     label {
+diff --git a/theme/bootstrapbase/less/moodle/grade.less b/theme/bootstrapbase/less/moodle/grade.less
+index ccd6b6c..c1ef3ce 100644
+--- a/theme/bootstrapbase/less/moodle/grade.less
++++ b/theme/bootstrapbase/less/moodle/grade.less
+@@ -72,7 +72,8 @@
+ }
+ 
+ .gradingform_rubric.editor {
+-    .addlevel, .addcriterion {
++    .addlevel,
++    .addcriterion {
+         input {
+             // Fallback for IE8: we use Bootstrap 2's button styles normally, but
+             // IE8 ignores background-image: linear-gradient rules.
+@@ -183,7 +184,8 @@
+                         // Should handle at least three chars with room to spare.
+                         float: none;
+                         width: 2em;
+-                        &.hiddenelement,&.pseudotablink {
++                        &.hiddenelement,
++                        &.pseudotablink {
+                             // Zero out the width if it's still in the block flow for some reason
+                             // when hidden
+                             width: 0;
+@@ -214,7 +216,7 @@
+                 background: transparent url([[pix:t/add]]) no-repeat 7px 8px;
+                 padding-left: 26px;
+             }
+-            margin-bottom:1em;
++            margin-bottom: 1em;
+         }
+         .options {
+             clear: both;
+diff --git a/theme/bootstrapbase/less/moodle/message.less b/theme/bootstrapbase/less/moodle/message.less
+index de18fd7..52a11cf 100644
+--- a/theme/bootstrapbase/less/moodle/message.less
++++ b/theme/bootstrapbase/less/moodle/message.less
+@@ -158,11 +158,12 @@ table.message .searchresults td {
+         }
+     }
+ }
+-.message .messagearea  {
++.message .messagearea {
+     @media screen and (min-width: 1000px) {
+         border-left: 1px solid @tableBorder;
+         padding: 0 8px;
+     }
++
+     @media screen and (max-width: 1000px) {
+         width: 100%;
+     }
+@@ -223,12 +224,13 @@ table.message .searchresults td {
+         margin: 0 3%;
+     }
+     .message .messagearea .messagehistory .user {
+-        width: 32%
++        width: 32%;
+     }
+ }
++
+ @media screen and (min-width: 1200px) {
+     .message .messagearea .messagehistory .user {
+-        width: 25%
++        width: 25%;
+     }
+ }
+ .message .messagearea .messagehistory .heading {
+@@ -314,14 +316,15 @@ table.message .searchresults td {
+ .message .messagearea .messagerecent .singlemessage .messagedate {
+     float: right;
+ }
+-.message .hiddenelement  {
++.message .hiddenelement {
+     display: none;
+ }
+ // not just using hidden as mform adds that class to its fieldset */
+ .message .visible {
+     display: inline;
+ }
+-.message #usergroupselector.fieldset, .message #viewing {
++.message #usergroupselector.fieldset,
++.message #viewing {
+     width: 100%;
+ }
+ .messagesearchresults {
+@@ -360,12 +363,12 @@ table.message .searchresults td {
+ }
+ /* Widen the plain text editor on the bulk message screen */
+ #page-user-action_redir #edit-messagebody {
+-    width:auto;
++    width: auto;
+ }
+ 
+ /** Messenger send message dialog */
+ .core_message-messenger-sendmessage-hidden {
+-    display:none;
++    display: none;
+ }
+ .core_message-messenger-sendmessage {
+     .message-actions {
+diff --git a/theme/bootstrapbase/less/moodle/modules.less b/theme/bootstrapbase/less/moodle/modules.less
+index 8acd263..faba707 100644
+--- a/theme/bootstrapbase/less/moodle/modules.less
++++ b/theme/bootstrapbase/less/moodle/modules.less
+@@ -45,7 +45,7 @@ select {
+             text-align: right;
+         }
+         thead .header th,
+-        tbody .discussion td{
++        tbody .discussion td {
+             &.discussionsubscription {
+                 width: 16px;
+                 padding-left: 0.5em;
+@@ -53,7 +53,9 @@ select {
+             }
+         }
+         .discussion {
+-            .author, .replies, .lastpost {
++            .author,
++            .replies,
++            .lastpost {
+                 white-space: normal;
+             }
+             .discussionsubscription,
+@@ -148,7 +150,8 @@ select {
+     border-top: 2px solid @tableBorder;
+ }
+ 
+-.maincalendar .calendarmonth td,.maincalendar .calendarmonth th {
++.maincalendar .calendarmonth td,
++.maincalendar .calendarmonth th {
+     border: 1px dotted @tableBorder;
+ }
+ 
+@@ -299,12 +302,22 @@ div#dock {
+ 
+ .path-mod-survey {
+     .surveytable {
+-        > tbody > tr:nth-of-type(odd) {background-color: @tableBackground;}
+-        > tbody > tr:nth-of-type(even) {background-color: @tableBackgroundAccent;}
+-        .rblock label {text-align: center;}
++        > tbody > tr:nth-of-type(odd) {
++            background-color: @tableBackground;
++        }
++        > tbody > tr:nth-of-type(even) {
++            background-color: @tableBackgroundAccent;
++        }
++        .rblock label {
++            text-align: center;
++        }
+     }
+-    .resultgraph, .reportsummary, .studentreport, .reportbuttons, .centerpara {
+-        text-align:center;
++    .resultgraph,
++    .reportsummary,
++    .studentreport,
++    .reportbuttons,
++    .centerpara {
++        text-align: center;
+     }
+ }
+ // rtl overrides
+@@ -384,7 +397,7 @@ div#dock {
+             .userbutton {
+                 height: 40px;
+                 line-height: 40px;
+-                .avatars{
++                .avatars {
+                     display: inline-block;
+                     height: 36px;
+                     width: 36px;
+@@ -563,8 +576,8 @@ div#dock {
+                     &:before {
+                         content: '';
+                         display: inline-block;
+-                        border-left:   7px solid transparent;
+-                        border-right:  7px solid transparent;
++                        border-left: 7px solid transparent;
++                        border-right: 7px solid transparent;
+                         border-bottom: 7px solid #ccc;
+                         border-bottom-color: @dropdownBorder;
+                         position: absolute;
+@@ -573,8 +586,8 @@ div#dock {
+                     &:after {
+                         content: '';
+                         display: inline-block;
+-                        border-left:   6px solid transparent;
+-                        border-right:  6px solid transparent;
++                        border-left: 6px solid transparent;
++                        border-right: 6px solid transparent;
+                         border-bottom: 6px solid @dropdownBackground;
+                         position: absolute;
+                         top: -6px;
+@@ -596,7 +609,6 @@ div#dock {
+                     }
+                     .box-shadow (0 5px 10px rgba(0, 0, 0, 0.2));
+                 }
+-                &:hover .toggle-display {}
+             }
+         }
+     }
+@@ -678,7 +690,7 @@ div#dock {
+             margin-bottom: -34px;
+             border: 1px solid #fff;
+             border-radius: 50%;
+-            box-shadow: -2px -2px 16px rgba(0,0,0,0.25);
++            box-shadow: -2px -2px 16px rgba(0, 0, 0, 0.25);
+         }
+         img {
+             width: inherit;
+diff --git a/theme/bootstrapbase/less/moodle/question.less b/theme/bootstrapbase/less/moodle/question.less
+index 55f7934..d012786 100644
+--- a/theme/bootstrapbase/less/moodle/question.less
++++ b/theme/bootstrapbase/less/moodle/question.less
+@@ -74,6 +74,9 @@
+     border-bottom: 1px solid #bbb;
+     padding: 0.24em 0;
+ }
++
++// TODO: MDL-55142 remove browser these brwoser hacks:
++/* stylelint-disable declaration-block-no-duplicate-properties, no-browser-hacks */
+ #chooseqtype .alloptions {
+     overflow-x: hidden;
+     overflow-y: auto;
+@@ -85,6 +88,8 @@
+     max-height: 60vh;
+     width: 60%;
+ }
++/* stylelint-enable */
++
+ #chooseqtype .qtypeoption {
+     margin-bottom: 0;
+     padding: 0.3em 0.3em 0.3em 1.6em;
+@@ -239,8 +244,7 @@ body.path-question-type .fitem_fgroup .accesshide {
+ .path-mod-quiz input[size] {
+     width: auto;
+ }
+-.que .outcome {
+-}
++
+ .que .comment {
+     .alert-success;
+ }
+@@ -294,7 +298,7 @@ body.path-question-type .fitem_fgroup .accesshide {
+     .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+     &:focus {
+         border-color: darken(@borderColor, 10%);
+-        @shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px lighten(@borderColor, 20%);
++        @shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px lighten(@borderColor, 20%);
+         .box-shadow(@shadow);
+     }
+ }
+@@ -386,10 +390,10 @@ body.path-question-type .fitem_fgroup .accesshide {
+ #page-mod-quiz-edit div.questionbank .categoryquestionscontainer {
+     background: transparent;
+ }
+-#page-mod-quiz-edit #categoryquestions>thead {
++#page-mod-quiz-edit #categoryquestions > thead {
+     background: #FFF;
+ }
+-#page-mod-quiz-edit #categoryquestions>tbody>tr:nth-of-type(even) {
++#page-mod-quiz-edit #categoryquestions > tbody > tr:nth-of-type(even) {
+     background: #e4e4e4;
+ }
+ 
+@@ -414,7 +418,8 @@ body.path-question-type .fitem_fgroup .accesshide {
+ 
+ #page-mod-quiz-edit .createnewquestion {
+     padding: 0.3em 0;
+-    div, input {
++    div,
++    input {
+         margin: 0;
+     }
+ }
+@@ -502,7 +507,8 @@ body.path-question-type .fitem_fgroup .accesshide {
+     strong {
+         display: block;
+     }
+-    hr, br {
++    hr,
++    br {
+         display: none;
+     }
+     strong {
+diff --git a/theme/bootstrapbase/less/moodle/responsive.less b/theme/bootstrapbase/less/moodle/responsive.less
+index 570b0f3..5f8fb00 100644
+--- a/theme/bootstrapbase/less/moodle/responsive.less
++++ b/theme/bootstrapbase/less/moodle/responsive.less
+@@ -3,6 +3,9 @@
+ // Should probably be moved to relevant .less files
+ // after 4095 selector issue is solved
+ 
++// TODO: MDL-55142 remove browser hacks in this file:
++/* stylelint-disable declaration-block-no-duplicate-properties, no-browser-hacks */
++
+ @media (min-width: 980px) {
+     .dir-rtl .navbar .nav.pull-right,
+     .dir-rtl .navbar .logininfo {
+@@ -17,7 +20,7 @@
+ 
+ }
+ 
+-@media (min-width: (@navbarCollapseDesktopWidth) ) {
++@media (min-width: (@navbarCollapseDesktopWidth)) {
+ 
+     a[id]:empty::before,
+     a[name]:empty::before {
+@@ -320,7 +323,7 @@
+     }
+     .jsenabled .choosercontainer #chooseform .instruction,
+     .jsenabled .choosercontainer #chooseform .typesummary {
+-        position:static;
++        position: static;
+     }
+     .que .info {
+         float: none;
+@@ -341,7 +344,7 @@
+ }
+ 
+ // Stuart's 2,1,3 layout
+-@media (min-width : 768px) {
++@media (min-width: 768px) {
+     .row-fluid .desktop-first-column {
+         margin-left: 0;
+     }
+@@ -349,7 +352,8 @@
+         display: inline;
+     }
+ }
+-@media (max-width : 767px) {
++
++@media (max-width: 767px) {
+     .row-fluid .desktop-first-column {
+         clear: both;
+     }
+@@ -365,7 +369,7 @@
+         padding-top: 0;
+         text-align: left;
+     }
+-    .form-item .form-label label{
++    .form-item .form-label label {
+         display: inline-block;
+         margin-right: .5em;
+     }
+@@ -398,7 +402,7 @@
+     }
+ }
+ // Shrink calender when short on space in block
+-@media (min-width : 768px) and (max-width: 979px) {
++@media (min-width: 768px) and (max-width: 979px) {
+     .block_calendar_month .content,
+     .block .minicalendar td {
+         padding-left: 0;
+@@ -408,17 +412,17 @@
+ 
+ .dir-rtl {
+     .dropdown-menu {
+-        right:0;
+-        left:auto;
++        right: 0;
++        left: auto;
+         margin-right: 0px;
+     }
+     .navbar .nav > li > .dropdown-menu:before {
+-        right:9px;
+-        left:auto;
++        right: 9px;
++        left: auto;
+     }
+     .navbar .nav > li > .dropdown-menu:after {
+         right: 10px;
+-        left:auto;
++        left: auto;
+     }
+     .dropdown-submenu > a:after {
+         margin-right: 0;
+@@ -429,8 +433,8 @@
+         border-width: 5px 5px 5px 0px;
+     }
+     .dropdown-submenu > .dropdown-menu {
+-        right:100%;
+-        left:auto;
++        right: 100%;
++        left: auto;
+     }
+ }
+ 
+@@ -450,8 +454,7 @@
+         .dropdown-menu > li > a:hover,
+         .dropdown-menu > li > a:focus,
+         .dropdown-submenu:hover > a,
+-        .dropdown-submenu:focus > a
+-        {
++        .dropdown-submenu:focus > a {
+             background-image: none;
+             color: @grayDark;
+         }
+@@ -480,7 +483,9 @@
+             font-size: round(@fontSizeSmall);
+         }
+         .discussion {
+-            .author, .replies, .lastpost {
++            .author,
++            .replies,
++            .lastpost {
+                 font-size: round(@fontSizeSmall);
+             }
+             .replies .unread a {
+@@ -766,7 +771,7 @@
+     // CSS for the course management pages.
+     #course-category-listings.columns-3 {
+         background-color: @tableBackground;
+-        border:0;
++        border: 0;
+ 
+         #category-listing,
+         #course-listing {
+@@ -797,7 +802,7 @@
+     // CSS for the course management pages.
+     #course-category-listings.columns-3 {
+         background-color: @tableBackground;
+-        border:0;
++        border: 0;
+         #category-listing,
+         #course-listing,
+         #course-detail {
+diff --git a/theme/bootstrapbase/less/moodle/templates.less b/theme/bootstrapbase/less/moodle/templates.less
+index 09a513b..f1ea4cf 100644
+--- a/theme/bootstrapbase/less/moodle/templates.less
++++ b/theme/bootstrapbase/less/moodle/templates.less
+@@ -1,5 +1,7 @@
+ /* Styling for mustache templates */
+ 
++// TODO: MDL-55142 remove browser these brwoser hacks:
++/* stylelint-disable declaration-block-no-duplicate-properties, no-browser-hacks */
+ // RTL styles for column templates.
+ #grid {
+     // A mixin to set styles for the fluid row when RTL language enabled.
+@@ -20,13 +22,15 @@
+         }
+     }
+ }
++/* stylelint-enable */
++
+ 
+ // Style for template 3 columns auto.
+ .columns-autoflow-1to1to1 {
+     .content-columns(3);
+ }
+ 
+-@media(max-width: 767px) {
++@media (max-width: 767px) {
+     // Change to a single column for smaller screens.
+     .columns-autoflow-1to1to1 {
+         .content-columns(1, 0);
+diff --git a/theme/bootstrapbase/less/moodle/user.less b/theme/bootstrapbase/less/moodle/user.less
+index c5c241b..4519d09 100644
+--- a/theme/bootstrapbase/less/moodle/user.less
++++ b/theme/bootstrapbase/less/moodle/user.less
+@@ -55,7 +55,7 @@
+ 
+ .dir-rtl {
+     .user-box {
+-        float:right;
++        float: right;
+     }
+     .userprofile .node_category {
+         .editprofile,
+@@ -64,7 +64,7 @@
+         }
+     }
+     .userprofile dl dd {
+-        margin-left:0;
++        margin-left: 0;
+         margin-right: 10px;
+     }
+ }
+@@ -238,7 +238,8 @@
+     > .singlebutton {
+         display: inline-block;
+         margin: 0 0 0 0.5em;
+-        div, input {
++        div,
++        input {
+             margin: 0;
+         }
+     }
