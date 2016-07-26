@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<diffchanges version="20120120">
+  <file name=".eslintignore">
+    <lines from="52" to="52"/>
+  </file>
+  <file name="lang/en/moodle.php">
+    <lines from="1683" to="1683"/>
+  </file>
+  <file name="lib/amd/build/chart_axis.min.js">
+  </file>
+  <file name="lib/amd/build/chart_bar.min.js">
+  </file>
+  <file name="lib/amd/build/chart_base.min.js">
+  </file>
+  <file name="lib/amd/build/chart_builder.min.js">
+  </file>
+  <file name="lib/amd/build/chart_line.min.js">
+  </file>
+  <file name="lib/amd/build/chart_output.min.js">
+  </file>
+  <file name="lib/amd/build/chart_output_base.min.js">
+  </file>
+  <file name="lib/amd/build/chart_output_chartjs.min.js">
+  </file>
+  <file name="lib/amd/build/chart_output_htmltable.min.js">
+  </file>
+  <file name="lib/amd/build/chart_pie.min.js">
+  </file>
+  <file name="lib/amd/build/chart_series.min.js">
+  </file>
+  <file name="lib/amd/build/chartjs-lazy.min.js">
+  </file>
+  <file name="lib/amd/build/chartjs.min.js">
+  </file>
+  <file name="lib/amd/src/chart_axis.js">
+    <lines from="1" to="299"/>
+  </file>
+  <file name="lib/amd/src/chart_bar.js">
+    <lines from="1" to="89"/>
+  </file>
+  <file name="lib/amd/src/chart_base.js">
+    <lines from="1" to="359"/>
+  </file>
+  <file name="lib/amd/src/chart_builder.js">
+    <lines from="1" to="53"/>
+  </file>
+  <file name="lib/amd/src/chart_line.js">
+    <lines from="1" to="80"/>
+  </file>
+  <file name="lib/amd/src/chart_output.js">
+    <lines from="1" to="35"/>
+  </file>
+  <file name="lib/amd/src/chart_output_base.js">
+    <lines from="1" to="66"/>
+  </file>
+  <file name="lib/amd/src/chart_output_chartjs.js">
+    <lines from="1" to="312"/>
+  </file>
+  <file name="lib/amd/src/chart_output_htmltable.js">
+    <lines from="1" to="122"/>
+  </file>
+  <file name="lib/amd/src/chart_pie.js">
+    <lines from="1" to="74"/>
+  </file>
+  <file name="lib/amd/src/chart_series.js">
+    <lines from="1" to="344"/>
+  </file>
+  <file name="lib/amd/src/chartjs-lazy.js">
+    <lines from="1" to="10253"/>
+  </file>
+  <file name="lib/amd/src/chartjs.js">
+    <lines from="1" to="25"/>
+  </file>
+  <file name="lib/classes/chart_axis.php">
+    <lines from="1" to="197"/>
+  </file>
+  <file name="lib/classes/chart_bar.php">
+    <lines from="1" to="77"/>
+  </file>
+  <file name="lib/classes/chart_base.php">
+    <lines from="1" to="278"/>
+  </file>
+  <file name="lib/classes/chart_line.php">
+    <lines from="1" to="68"/>
+  </file>
+  <file name="lib/classes/chart_pie.php">
+    <lines from="1" to="36"/>
+  </file>
+  <file name="lib/classes/chart_series.php">
+    <lines from="1" to="261"/>
+  </file>
+  <file name="lib/outputrenderers.php">
+    <lines from="4283" to="4328"/>
+  </file>
+  <file name="lib/templates/chart.mustache">
+    <lines from="1" to="61"/>
+  </file>
+  <file name="lib/thirdpartylibs.xml">
+    <lines from="264" to="269"/>
+  </file>
+  <file name="mod/choice/renderer.php">
+    <lines from="120" to="121"/>
+    <lines from="282" to="282"/>
+    <lines from="288" to="290"/>
+    <lines from="295" to="295"/>
+    <lines from="301" to="304"/>
+    <lines from="306" to="316"/>
+    <lines from="318" to="320"/>
+    <lines from="322" to="322"/>
+    <lines from="325" to="328"/>
+    <lines from="331" to="341"/>
+  </file>
+  <file name="mod/feedback/analysis.php">
+  </file>
+  <file name="mod/feedback/item/info/lib.php">
+    <lines from="155" to="155"/>
+    <lines from="174" to="174"/>
+  </file>
+  <file name="mod/feedback/item/multichoice/lib.php">
+    <lines from="210" to="210"/>
+    <lines from="218" to="218"/>
+    <lines from="220" to="221"/>
+    <lines from="228" to="234"/>
+    <lines from="236" to="243"/>
+  </file>
+  <file name="mod/feedback/item/multichoicerated/lib.php">
+    <lines from="181" to="181"/>
+    <lines from="189" to="189"/>
+    <lines from="192" to="193"/>
+    <lines from="197" to="198"/>
+    <lines from="200" to="200"/>
+    <lines from="202" to="202"/>
+    <lines from="204" to="208"/>
+    <lines from="210" to="217"/>
+  </file>
+  <file name="mod/feedback/item/numeric/lib.php">
+    <lines from="145" to="145"/>
+    <lines from="168" to="168"/>
+  </file>
+  <file name="mod/feedback/item/textarea/lib.php">
+    <lines from="136" to="136"/>
+    <lines from="152" to="152"/>
+  </file>
+  <file name="mod/feedback/item/textfield/lib.php">
+    <lines from="132" to="132"/>
+    <lines from="146" to="146"/>
+  </file>
+  <file name="mod/quiz/renderer.php">
+    <lines from="1237" to="1247"/>
+  </file>
+  <file name="mod/quiz/report/overview/overviewgraph.php">
+    <lines from="23" to="23"/>
+    <lines from="28" to="28"/>
+    <lines from="30" to="31"/>
+  </file>
+  <file name="mod/quiz/report/overview/report.php">
+    <lines from="235" to="237"/>
+    <lines from="241" to="245"/>
+    <lines from="250" to="251"/>
+    <lines from="253" to="253"/>
+    <lines from="570" to="635"/>
+  </file>
+  <file name="mod/quiz/report/overview/tests/report_test.php">
+    <lines from="129" to="156"/>
+  </file>
+  <file name="mod/quiz/report/statistics/report.php">
+    <lines from="268" to="268"/>
+    <lines from="513" to="515"/>
+    <lines from="517" to="591"/>
+    <lines from="595" to="595"/>
+  </file>
+  <file name="mod/quiz/report/statistics/statistics_graph.php">
+    <lines from="29" to="29"/>
+    <lines from="33" to="33"/>
+    <lines from="35" to="36"/>
+  </file>
+  <file name="mod/quiz/report/statistics/statisticslib.php">
+    <lines from="114" to="114"/>
+    <lines from="117" to="119"/>
+  </file>
+  <file name="mod/quiz/report/statistics/upgrade.txt">
+    <lines from="1" to="7"/>
+  </file>
+  <file name="mod/scorm/report/graphs/classes/report.php">
+    <lines from="27" to="32"/>
+    <lines from="42" to="126"/>
+    <lines from="128" to="128"/>
+    <lines from="134" to="134"/>
+    <lines from="139" to="140"/>
+    <lines from="142" to="160"/>
+    <lines from="166" to="179"/>
+  </file>
+  <file name="mod/scorm/report/graphs/graph.php">
+    <lines from="22" to="22"/>
+    <lines from="28" to="28"/>
+    <lines from="30" to="31"/>
+  </file>
+  <file name="report/courseoverview/index.php">
+    <lines from="29" to="29"/>
+    <lines from="34" to="34"/>
+    <lines from="37" to="37"/>
+    <lines from="118" to="121"/>
+  </file>
+  <file name="report/courseoverview/locallib.php">
+    <lines from="1" to="82"/>
+  </file>
+  <file name="report/courseoverview/reportsgraph.php">
+    <lines from="27" to="27"/>
+    <lines from="29" to="30"/>
+  </file>
+  <file name="report/log/graph.php">
+    <lines from="23" to="23"/>
+    <lines from="29" to="29"/>
+    <lines from="31" to="32"/>
+  </file>
+  <file name="report/log/locallib.php">
+    <lines from="40" to="42"/>
+    <lines from="46" to="52"/>
+    <lines from="65" to="77"/>
+    <lines from="79" to="93"/>
+    <lines from="534" to="623"/>
+  </file>
+  <file name="report/log/user.php">
+    <lines from="129" to="129"/>
+    <lines from="133" to="138"/>
+  </file>
+  <file name="report/stats/graph.php">
+    <lines from="27" to="27"/>
+    <lines from="29" to="30"/>
+  </file>
+  <file name="report/stats/locallib.php">
+    <lines from="209" to="209"/>
+    <lines from="211" to="211"/>
+    <lines from="315" to="426"/>
+  </file>
+  <file name="report/stats/user.php">
+    <lines from="140" to="140"/>
+  </file>
+  <file name="report/upgrade.txt">
+    <lines from="6" to="8"/>
+  </file>
+  <file name="theme/bootstrapbase/less/moodle/core.less">
+    <lines from="2538" to="2568"/>
+  </file>
+  <file name="theme/bootstrapbase/style/moodle.css">
+  </file>
+</diffchanges>

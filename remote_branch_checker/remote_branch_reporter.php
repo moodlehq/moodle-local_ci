@@ -32,12 +32,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
-define('NO_OUTPUT_BUFFERING', true);
-
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once($CFG->libdir.'/clilib.php');      // cli only functions
-require_once($CFG->dirroot.'/local/ci/remote_branch_checker/lib.php');
+ini_set('memory_limit', '256M');
+require_once(__DIR__.'/../phplib/clilib.php');
+require_once(__DIR__.'/lib.php');
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
@@ -91,7 +88,6 @@ if (empty($directory) or empty($format)) {
     cli_error('Error: Always specify both directory and format');
 }
 
-raise_memory_limit(MEMORY_EXTRA);
 
 $reporter = new remote_branch_reporter($directory);
 
