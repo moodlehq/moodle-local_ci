@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+<file name="/var/lib/jenkins/git_repositories/prechecker/lang/en/moodle.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_axis.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_bar.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_base.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_line.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_pie.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/classes/chart_series.php">
+  <error line="225" severity="error" message="Phpdocs for function chart_series::set_smooth has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/outputrenderers.php">
+  <error line="144" severity="error" message="Phpdocs for function renderer_base::render_from_template has incomplete parameters list" source="functionarguments" />
+  <error line="1236" severity="error" message="Phpdocs for function core_renderer::block_controls has incomplete parameters list" source="functionarguments" />
+  <error line="1354" severity="error" message="Phpdocs for function core_renderer::render_action_menu_filler has incomplete parameters list" source="functionarguments" />
+  <error line="1629" severity="error" message="Phpdocs for function core_renderer::action_link has incomplete parameters list" source="functionarguments" />
+  <error line="2332" severity="error" message="Phpdocs for function core_renderer::old_help_icon has incomplete parameters list" source="functionarguments" />
+  <error line="3893" severity="error" message="Phpdocs for function core_renderer::blocks has incomplete parameters list" source="functionarguments" />
+  <error line="3650" severity="warning" message="Not recommended phpdocs tag @staticvar used" source="phpdocsnotrecommendedtag" />
+  <error line="3691" severity="warning" message="Not recommended phpdocs tag @staticvar used" source="phpdocsnotrecommendedtag" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/courseoverview/index.php">
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/courseoverview/locallib.php">
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/courseoverview/reportsgraph.php">
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/log/graph.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/log/locallib.php">
+  <error line="253" severity="error" message="Found comment starting with three or more slashes" source="noinlinephpdocs" />
+  <error line="38" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+  <error line="204" severity="warning" message="Not recommended phpdocs tag @global used" source="phpdocsnotrecommendedtag" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/log/user.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/stats/graph.php">
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/stats/locallib.php">
+  <error line="31" severity="error" message="Function report_stats_mode_menu is not documented" source="functionsdocumented" />
+  <error line="54" severity="error" message="Function report_stats_timeoptions is not documented" source="functionsdocumented" />
+  <error line="79" severity="error" message="Function report_stats_report is not documented" source="functionsdocumented" />
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/report/stats/user.php">
+  <error line="20" severity="error" message="Package report is not valid" source="packagevalid" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/choice/renderer.php">
+  <error line="2" severity="warning" message="Empty line found after PHP open tag" source="noemptysecondline" />
+  <error line="28" severity="error" message="Class mod_choice_renderer is not documented" source="classesdocumented" />
+  <error line="32" severity="error" message="Phpdocs for function mod_choice_renderer::display_options has incomplete parameters list" source="functionarguments" />
+  <error line="127" severity="error" message="Phpdocs for function mod_choice_renderer::display_publish_name_vertical has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/info/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="20" severity="error" message="Class feedback_item_info is not documented" source="classesdocumented" />
+  <error line="33" severity="error" message="Function feedback_item_info::build_editform is not documented" source="functionsdocumented" />
+  <error line="81" severity="error" message="Function feedback_item_info::save_item is not documented" source="functionsdocumented" />
+  <error line="145" severity="error" message="Function feedback_item_info::get_printval is not documented" source="functionsdocumented" />
+  <error line="154" severity="error" message="Function feedback_item_info::print_analysed is not documented" source="functionsdocumented" />
+  <error line="177" severity="error" message="Function feedback_item_info::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="289" severity="error" message="Function feedback_item_info::can_switch_require is not documented" source="functionsdocumented" />
+  <error line="21" severity="error" message="Variable feedback_item_info::$type is not documented" source="variablesdocumented" />
+  <error line="20" severity="error" message="Package is not specified for class feedback_item_info. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/multichoice/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="26" severity="error" message="Class feedback_item_multichoice is not documented" source="classesdocumented" />
+  <error line="29" severity="error" message="Function feedback_item_multichoice::build_editform is not documented" source="functionsdocumented" />
+  <error line="71" severity="error" message="Function feedback_item_multichoice::save_item is not documented" source="functionsdocumented" />
+  <error line="168" severity="error" message="Function feedback_item_multichoice::get_printval is not documented" source="functionsdocumented" />
+  <error line="204" severity="error" message="Function feedback_item_multichoice::print_analysed is not documented" source="functionsdocumented" />
+  <error line="247" severity="error" message="Function feedback_item_multichoice::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="411" severity="error" message="Function feedback_item_multichoice::get_info is not documented" source="functionsdocumented" />
+  <error line="439" severity="error" message="Function feedback_item_multichoice::set_ignoreempty is not documented" source="functionsdocumented" />
+  <error line="446" severity="error" message="Function feedback_item_multichoice::ignoreempty is not documented" source="functionsdocumented" />
+  <error line="453" severity="error" message="Function feedback_item_multichoice::set_hidenoselect is not documented" source="functionsdocumented" />
+  <error line="460" severity="error" message="Function feedback_item_multichoice::hidenoselect is not documented" source="functionsdocumented" />
+  <error line="27" severity="error" message="Variable feedback_item_multichoice::$type is not documented" source="variablesdocumented" />
+  <error line="26" severity="error" message="Package is not specified for class feedback_item_multichoice. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/multichoicerated/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="31" severity="error" message="Class feedback_item_multichoicerated is not documented" source="classesdocumented" />
+  <error line="34" severity="error" message="Function feedback_item_multichoicerated::build_editform is not documented" source="functionsdocumented" />
+  <error line="76" severity="error" message="Function feedback_item_multichoicerated::save_item is not documented" source="functionsdocumented" />
+  <error line="155" severity="error" message="Function feedback_item_multichoicerated::get_printval is not documented" source="functionsdocumented" />
+  <error line="177" severity="error" message="Function feedback_item_multichoicerated::print_analysed is not documented" source="functionsdocumented" />
+  <error line="225" severity="error" message="Function feedback_item_multichoicerated::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="358" severity="error" message="Function feedback_item_multichoicerated::get_info is not documented" source="functionsdocumented" />
+  <error line="392" severity="error" message="Function feedback_item_multichoicerated::prepare_presentation_values is not documented" source="functionsdocumented" />
+  <error line="417" severity="error" message="Function feedback_item_multichoicerated::prepare_presentation_values_print is not documented" source="functionsdocumented" />
+  <error line="426" severity="error" message="Function feedback_item_multichoicerated::prepare_presentation_values_save is not documented" source="functionsdocumented" />
+  <error line="436" severity="error" message="Function feedback_item_multichoicerated::set_ignoreempty is not documented" source="functionsdocumented" />
+  <error line="443" severity="error" message="Function feedback_item_multichoicerated::ignoreempty is not documented" source="functionsdocumented" />
+  <error line="450" severity="error" message="Function feedback_item_multichoicerated::set_hidenoselect is not documented" source="functionsdocumented" />
+  <error line="457" severity="error" message="Function feedback_item_multichoicerated::hidenoselect is not documented" source="functionsdocumented" />
+  <error line="32" severity="error" message="Variable feedback_item_multichoicerated::$type is not documented" source="variablesdocumented" />
+  <error line="31" severity="error" message="Package is not specified for class feedback_item_multichoicerated. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/numeric/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="20" severity="error" message="Class feedback_item_numeric is not documented" source="classesdocumented" />
+  <error line="23" severity="error" message="Function feedback_item_numeric::build_editform is not documented" source="functionsdocumented" />
+  <error line="76" severity="error" message="Function feedback_item_numeric::save_item is not documented" source="functionsdocumented" />
+  <error line="132" severity="error" message="Function feedback_item_numeric::get_printval is not documented" source="functionsdocumented" />
+  <error line="140" severity="error" message="Function feedback_item_numeric::print_analysed is not documented" source="functionsdocumented" />
+  <error line="172" severity="error" message="Function feedback_item_numeric::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="298" severity="error" message="Function feedback_item_numeric::create_value is not documented" source="functionsdocumented" />
+  <error line="21" severity="error" message="Variable feedback_item_numeric::$type is not documented" source="variablesdocumented" />
+  <error line="20" severity="error" message="Package is not specified for class feedback_item_numeric. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/textarea/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="20" severity="error" message="Class feedback_item_textarea is not documented" source="classesdocumented" />
+  <error line="23" severity="error" message="Function feedback_item_textarea::build_editform is not documented" source="functionsdocumented" />
+  <error line="76" severity="error" message="Function feedback_item_textarea::save_item is not documented" source="functionsdocumented" />
+  <error line="124" severity="error" message="Function feedback_item_textarea::get_printval is not documented" source="functionsdocumented" />
+  <error line="133" severity="error" message="Function feedback_item_textarea::print_analysed is not documented" source="functionsdocumented" />
+  <error line="156" severity="error" message="Function feedback_item_textarea::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="195" severity="error" message="Function feedback_item_textarea::create_value is not documented" source="functionsdocumented" />
+  <error line="21" severity="error" message="Variable feedback_item_textarea::$type is not documented" source="variablesdocumented" />
+  <error line="20" severity="error" message="Package is not specified for class feedback_item_textarea. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/item/textfield/lib.php">
+  <error line="17" severity="error" message="File-level phpdocs block is not found" source="filephpdocpresent" />
+  <error line="20" severity="error" message="Class feedback_item_textfield is not documented" source="classesdocumented" />
+  <error line="23" severity="error" message="Function feedback_item_textfield::build_editform is not documented" source="functionsdocumented" />
+  <error line="73" severity="error" message="Function feedback_item_textfield::save_item is not documented" source="functionsdocumented" />
+  <error line="121" severity="error" message="Function feedback_item_textfield::get_printval is not documented" source="functionsdocumented" />
+  <error line="129" severity="error" message="Function feedback_item_textfield::print_analysed is not documented" source="functionsdocumented" />
+  <error line="150" severity="error" message="Function feedback_item_textfield::excelprint_item is not documented" source="functionsdocumented" />
+  <error line="21" severity="error" message="Variable feedback_item_textfield::$type is not documented" source="variablesdocumented" />
+  <error line="20" severity="error" message="Package is not specified for class feedback_item_textfield. It is also not specified in file-level phpdocs" source="packagespecified" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/feedback/analysis.php">
+  <error line="47" severity="error" message="Found comment starting with three or more slashes" source="noinlinephpdocs" />
+  <error line="54" severity="error" message="Found comment starting with three or more slashes" source="noinlinephpdocs" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/overview/tests/report_test.php">
+  <error line="146" severity="error" message="Phpdocs for function quiz_overview_report_testcase::test_get_bands_count_and_width has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/overview/overviewgraph.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/overview/report.php">
+  <error line="42" severity="error" message="Function quiz_overview_report::display is not documented" source="functionsdocumented" />
+  <error line="259" severity="error" message="Function quiz_overview_report::process_actions is not documented" source="functionsdocumented" />
+  <error line="561" severity="error" message="Phpdocs for function quiz_overview_report::update_overall_grades has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/statistics/report.php">
+  <error line="32" severity="error" message="No one-line description found in phpdocs for class quiz_statistics_report" source="phpdocsfistline" />
+  <error line="51" severity="error" message="Phpdocs for function quiz_statistics_report::display has incomplete parameters list" source="functionarguments" />
+  <error line="801" severity="error" message="Phpdocs for function quiz_statistics_report::clear_cached_data has incomplete parameters list" source="functionarguments" />
+  <error line="837" severity="error" message="Phpdocs for function quiz_statistics_report::output_all_question_response_analysis has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/statistics/statistics_graph.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/report/statistics/statisticslib.php">
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/quiz/renderer.php">
+  <error line="1276" severity="error" message="Class mod_quiz_links_to_other_attempts is not documented" source="classesdocumented" />
+  <error line="1285" severity="error" message="Class mod_quiz_view_object is not documented" source="classesdocumented" />
+  <error line="423" severity="error" message="Function mod_quiz_renderer::start_attempt_page is not documented" source="functionsdocumented" />
+  <error line="1349" severity="error" message="Function mod_quiz_view_object::__get is not documented" source="functionsdocumented" />
+  <error line="195" severity="error" message="Phpdocs for function mod_quiz_renderer::review_form has incomplete parameters list" source="functionarguments" />
+  <error line="279" severity="error" message="Phpdocs for function mod_quiz_renderer::countdown_timer has incomplete parameters list" source="functionarguments" />
+  <error line="306" severity="error" message="Phpdocs for function mod_quiz_renderer::restart_preview_button has incomplete parameters list" source="functionarguments" />
+  <error line="569" severity="error" message="Phpdocs for function mod_quiz_renderer::initialise_timer has incomplete parameters list" source="functionarguments" />
+  <error line="607" severity="error" message="Phpdocs for function mod_quiz_renderer::access_messages has incomplete parameters list" source="functionarguments" />
+  <error line="765" severity="error" message="Phpdocs for function mod_quiz_renderer::view_page has incomplete parameters list" source="functionarguments" />
+  <error line="863" severity="error" message="Phpdocs for function mod_quiz_renderer::no_questions_message has incomplete parameters list" source="functionarguments" />
+  <error line="1096" severity="error" message="Phpdocs for function mod_quiz_renderer::attempt_state has incomplete parameters list" source="functionarguments" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/scorm/report/graphs/classes/report.php">
+  <error line="41" severity="error" message="Class report is not documented" source="classesdocumented" />
+</file>
+<file name="/var/lib/jenkins/git_repositories/prechecker/mod/scorm/report/graphs/graph.php">
+</file>
+</checkstyle>

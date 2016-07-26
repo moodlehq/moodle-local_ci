@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<diffchanges version="20120120">
+  <file name="mod/assign/feedback/editpdf/yui/build/moodle-assignfeedback_editpdf-editor/moodle-assignfeedback_editpdf-editor-debug.js">
+  </file>
+  <file name="mod/assign/feedback/editpdf/yui/build/moodle-assignfeedback_editpdf-editor/moodle-assignfeedback_editpdf-editor-min.js">
+  </file>
+  <file name="mod/assign/feedback/editpdf/yui/build/moodle-assignfeedback_editpdf-editor/moodle-assignfeedback_editpdf-editor.js">
+  </file>
+  <file name="mod/assign/feedback/editpdf/yui/src/editor/js/comment.js">
+    <lines from="268" to="268"/>
+  </file>
+</diffchanges>

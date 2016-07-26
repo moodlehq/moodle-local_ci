@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="4.3">
+	<file name="/var/lib/jenkins/git_repositories/prechecker/mod/assign/feedback/editpdf/yui/src/editor/js/comment.js">
+		<error line="162" column="62" severity="warning" message="&apos;SELECTOR&apos; is not defined." source="jshint.W117" />
+		<error line="188" column="30" severity="warning" message="&apos;COMMENTCOLOUR&apos; is not defined." source="jshint.W117" />
+		<error line="189" column="20" severity="warning" message="&apos;COMMENTTEXTCOLOUR&apos; is not defined." source="jshint.W117" />
+		<error line="400" column="23" severity="warning" message="&apos;COMMENTCOLOUR&apos; is not defined." source="jshint.W117" />
+	</file>
+</checkstyle>

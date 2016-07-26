@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+  <file name="1869439">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="36bc221">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="5c9b725">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="d4377f8">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="c98ee28">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="ae34a98">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="b66c1c2">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="0deb268">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="6032c0d">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="fd44eb6">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="a01e8a5">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="ed3b416">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="37460a9">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="4046d00">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="ca3dd5d">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="3159a25">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="ee1532f">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="afe41b0">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="31d6894">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="5ef2e7b">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="7e4143f">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="2434303">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="638847c">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="743987d">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="1ca1ea7">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="244db67">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="6470f2f">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="af8ac4d">
+    <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
+  </file>
+  <file name="90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...master_precheck">
+    <error line="0" column="0" severity="warning" message="Too many commits (30 &gt; 5) found. Please consider reducing it for normal patches. "/>
+  </file>
+</checkstyle>
