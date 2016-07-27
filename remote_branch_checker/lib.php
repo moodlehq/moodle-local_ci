@@ -542,7 +542,7 @@ class remote_branch_reporter {
             return null;
         }
         // Verify $xslt exists
-        if (!is_readable('xslt/' . $xsltfile)) {
+        if (!is_readable(__DIR__ . '/xslt/' . $xsltfile)) {
             return null;
         }
 
@@ -570,7 +570,7 @@ class remote_branch_reporter {
 
         // Read $xslt.
         $xslt = new XSLTProcessor();
-        $xslcontents = file_get_contents('xslt/' . $xsltfile);
+        $xslcontents = file_get_contents(__DIR__ . '/xslt/' . $xsltfile);
         $xslt->importStylesheet(new SimpleXMLElement($xslcontents));
 
         // Set $params.
