@@ -2,16 +2,14 @@
 
 load libs/shared_setup
 
-
 setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
 
     export extrapath=.
-    cd $BATS_TEST_DIRNAME/../grunt_process/
 }
 
 @test "grunt_process: normal" {
-    run ./grunt_process.sh
+    ci_run grunt_process/grunt_process.sh
     assert_success
     assert_output --partial "Done, without errors."
     assert_output --partial "OK: All modules are perfectly processed by grunt"
@@ -22,7 +20,7 @@ setup () {
     git_apply_fixture 31-grunt-less-unbuilt.patch
 
     # Run test
-    run ./grunt_process.sh
+    ci_run grunt_process/grunt_process.sh
 
     # Assert result
     assert_failure
@@ -36,7 +34,7 @@ setup () {
     git_apply_fixture 31-grunt-js-unbuilt.patch
 
     # Run test
-    run ./grunt_process.sh
+    ci_run grunt_process/grunt_process.sh
 
     # Assert result
     assert_failure
@@ -54,11 +52,10 @@ setup () {
     git_apply_fixture 32-thirdparty-lib-added.patch
 
     # Run test
-    run ./grunt_process.sh
+    ci_run grunt_process/grunt_process.sh
 
     # Assert result
     assert_failure
     assert_output --partial "ERROR: Some modules are not properly processed by grunt. Changes detected:"
     assert_output --regexp "GRUNT-CHANGE: (.*)/.eslintignore"
 }
-

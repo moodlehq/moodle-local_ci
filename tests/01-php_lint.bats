@@ -6,7 +6,6 @@ setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
 
     export extrapath=.
-    cd $BATS_TEST_DIRNAME/../php_lint/
 }
 
 @test "php_lint: lib/moodlelib.php lint free" {
@@ -15,7 +14,7 @@ setup () {
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
-    run ./php_lint.sh
+    ci_run php_lint/php_lint.sh
 
     # Assert result
     assert_success
@@ -30,7 +29,7 @@ setup () {
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
-    run ./php_lint.sh
+    ci_run php_lint/php_lint.sh
 
     # Assert result
     assert_failure
@@ -45,7 +44,7 @@ setup () {
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
-    run ./php_lint.sh
+    ci_run php_lint/php_lint.sh
 
     # Assert result
     assert_success

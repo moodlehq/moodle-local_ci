@@ -2,10 +2,6 @@
 
 load libs/shared_setup
 
-setup () {
-    cd $BATS_TEST_DIRNAME/../remote_branch_checker/
-}
-
 tearDown() {
     clean_workspace_directory
 }
@@ -30,8 +26,10 @@ assert_remote_branch_reporter() {
 
     testresult=$WORKSPACE/remote_branch_reporter.out
 
-    php remote_branch_reporter.php --directory=$fixture --format=$format --patchset=patchset.xml --repository=$repo --githash=$hash > $testresult
-    diff -ruN $expected $testresult
+    ci_run_php "remote_branch_checker/remote_branch_reporter.php --directory=$fixture --format=$format --patchset=patchset.xml --repository=$repo --githash=$hash > $testresult"
+    assert_success
+    run diff -ruN $expected $testresult
+    assert_success
     assert_output ""
 }
 
