@@ -46,7 +46,7 @@ teardown () {
     assert_output --partial "continue in best results ever"
 }
 
-@test "illegal_whitespace: whitespace error FAIL" {
+@test "illegal_whitespace: failure reported when whitespace error detected" {
     # Lets introduce a whitespace error and ensure it fails
     git_apply_fixture 31-whitespace-error.patch
 

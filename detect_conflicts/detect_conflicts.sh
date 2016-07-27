@@ -52,8 +52,8 @@ then
     prevcount=`tail -1 "$countfile" | cut -s -f3`
 fi
 
-# Count and send to countfile
-count=`cat "$lastfile" | wc -l`
+# Count and send to countfile. The tr is to remove leading spaces on some platforms..
+count=`cat "$lastfile" | wc -l | tr -d '[[:space:]]'`
 echo "$BUILD_NUMBER	$BUILD_TIMESTAMP	$count" >> "$countfile"
 
 # Get best count ever or create it

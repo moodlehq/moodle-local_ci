@@ -44,7 +44,7 @@ teardown () {
     assert_output --partial "continue in best results ever"
 }
 
-@test "detect_conflicts: merge conflict FAIL" {
+@test "detect_conflicts: failure reported when merge conflict detected" {
     git_apply_fixture 31-merge-conflict.patch
 
     ci_run detect_conflicts/detect_conflicts.sh
