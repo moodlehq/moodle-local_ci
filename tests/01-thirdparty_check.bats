@@ -6,7 +6,6 @@ setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
 
     export extrapath=.
-    cd $BATS_TEST_DIRNAME/../thirdparty_check/
 }
 
 @test "thirdparty_check: thirdpartyfile modified OK" {
@@ -14,7 +13,7 @@ setup () {
     export initialcommit=$FIXTURE_HASH_BEFORE
     export finalcommit=$FIXTURE_HASH_AFTER
 
-    run ./thirdparty_check.sh
+    ci_run thirdparty_check/thirdparty_check.sh
     assert_success
     assert_output --partial "INFO: Checking for third party modifications from $initialcommit to $finalcommit"
     assert_output --partial "INFO: Detected third party modification in lib/amd/src/mustache.js"
@@ -27,7 +26,7 @@ setup () {
     export initialcommit=$FIXTURE_HASH_BEFORE
     export finalcommit=$FIXTURE_HASH_AFTER
 
-    run ./thirdparty_check.sh
+    ci_run thirdparty_check/thirdparty_check.sh
     assert_success # TODO, this should be fixed!
     assert_output --partial "INFO: Checking for third party modifications from $initialcommit to $finalcommit"
     assert_output --partial "INFO: Detected third party modification in lib/amd/src/mustache.js"

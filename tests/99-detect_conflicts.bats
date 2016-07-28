@@ -11,7 +11,6 @@ setup () {
     if [ -d $statedir ]; then
         cp -R $statedir/. $WORKSPACE
     fi
-    cd $BATS_TEST_DIRNAME/../detect_conflicts/
 }
 
 teardown () {
@@ -26,7 +25,7 @@ teardown () {
 
     # On first run, there are no results to compare to so should always
     # pass.
-    run ./detect_conflicts.sh
+    ci_run detect_conflicts/detect_conflicts.sh
     assert_success
     assert_output --partial "current count: 0"
     # The 'no previously recorded value' number is 999999
@@ -37,7 +36,7 @@ teardown () {
 
 @test "detect_conflicts: normal state OK" {
     # On second run, should still pass with same results
-    run ./detect_conflicts.sh
+    ci_run detect_conflicts/detect_conflicts.sh
     assert_success
     assert_output --partial "current count: 0"
     assert_output --partial "previous count: 0"
@@ -45,10 +44,10 @@ teardown () {
     assert_output --partial "continue in best results ever"
 }
 
-@test "detect_conflicts: merge conflict FAIL" {
+@test "detect_conflicts: failure reported when merge conflict detected" {
     git_apply_fixture 31-merge-conflict.patch
 
-    run ./detect_conflicts.sh
+    ci_run detect_conflicts/detect_conflicts.sh
     assert_failure
     assert_output --partial "current count: 3"
     assert_output --partial "previous count: 0"

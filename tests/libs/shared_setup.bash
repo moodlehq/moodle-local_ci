@@ -66,6 +66,18 @@ clean_workspace_directory() {
     cd $OLDPWD # Return to where we were.
 }
 
+# Some custom runners which allow use of relative path
+# NOTE: we use 'bash -c' to allow piping:
+#   -  see https://github.com/sstephenson/bats/issues/10#issuecomment-26627687
+ci_run() {
+    command="$BATS_TEST_DIRNAME/../$@"
+    run bash -c "$command"
+}
+ci_run_php() {
+    command="$BATS_TEST_DIRNAME/../$@"
+    run bash -c "php $command"
+}
+
 # Clean up any $WORKSPACE state (only necessary in case of
 # previously half finished runs)
 clean_workspace_directory

@@ -11,7 +11,6 @@ setup () {
     if [ -d $statedir ]; then
         cp -R $statedir/. $WORKSPACE
     fi
-    cd $BATS_TEST_DIRNAME/../illegal_whitespace/
 }
 
 teardown () {
@@ -26,7 +25,7 @@ teardown () {
 
     # On first run, there are no results to compare to so should always
     # pass.
-    run ./illegal_whitespace.sh
+    ci_run illegal_whitespace/illegal_whitespace.sh
 
     assert_success
     assert_output --partial "current count: 959"
@@ -38,7 +37,7 @@ teardown () {
 
 @test "illegal_whitespace: normal state OK" {
     # On second run, should still pass with same results
-    run ./illegal_whitespace.sh
+    ci_run illegal_whitespace/illegal_whitespace.sh
 
     assert_success
     assert_output --partial "current count: 959"
@@ -47,11 +46,11 @@ teardown () {
     assert_output --partial "continue in best results ever"
 }
 
-@test "illegal_whitespace: whitespace error FAIL" {
+@test "illegal_whitespace: failure reported when whitespace error detected" {
     # Lets introduce a whitespace error and ensure it fails
     git_apply_fixture 31-whitespace-error.patch
 
-    run ./illegal_whitespace.sh
+    ci_run illegal_whitespace/illegal_whitespace.sh
     assert_failure
     assert_output --partial "current count: 961"
     assert_output --partial "previous count: 959"

@@ -4,8 +4,6 @@ load libs/shared_setup
 
 setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
-
-    cd $BATS_TEST_DIRNAME/../list_valid_components/
 }
 
 @test "list_valid_components: 31 components" {
@@ -16,7 +14,7 @@ setup () {
     OUTPUT=$WORKSPACE/valid_components_out.txt
 
     # Run test
-    php list_valid_components.php --basedir=$gitdir > $OUTPUT
+    ci_run_php "list_valid_components/list_valid_components.php --basedir=$gitdir > $OUTPUT"
     assert_success
     diff -ruN $EXPECTED $OUTPUT
     assert_output ''

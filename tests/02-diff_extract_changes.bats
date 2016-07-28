@@ -2,10 +2,6 @@
 
 load libs/shared_setup
 
-setup () {
-    cd $BATS_TEST_DIRNAME/../
-}
-
 # Helper to assert diff_extract_changes output
 # usage: pssert_diff_extract_changes format fixturefilename expectedfilename
 assert_diff_extract_changes() {
@@ -15,7 +11,7 @@ assert_diff_extract_changes() {
 
     out=$BATS_TMPDIR/diff_extract_changes-out
 
-    php diff_extract_changes/diff_extract_changes.php --diff=$fixture --output=$format > $out
+    ci_run_php "diff_extract_changes/diff_extract_changes.php --diff=$fixture --output=$format > $out"
     assert_success
     diff -ruN $expected $out
     assert_output ''

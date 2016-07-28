@@ -2,10 +2,6 @@
 
 load libs/shared_setup
 
-setup () {
-    cd $BATS_TEST_DIRNAME/../
-}
-
 # Helper to assert checkstyle converts
 # usage: assert_checkstyle phpscript fixturefilename expectedfilename
 assert_checkstyle() {
@@ -15,7 +11,7 @@ assert_checkstyle() {
 
     xmlfile=$BATS_TMPDIR/out.xml
 
-    cat $fixture | php $phpscript > $xmlfile
+    ci_run_php "$phpscript < $fixture > $xmlfile"
     assert_success
     diff -ruN $expected $xmlfile
     assert_output ''
