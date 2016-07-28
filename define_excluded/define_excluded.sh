@@ -81,6 +81,9 @@ yui/build/
 *.png
 *.svg"
 
+# Normalize gitdir, we don't want trailing slashes there ever.
+gitdir=$(echo $gitdir | sed -n 's/\/*$//p')
+
 # Now, look for all the thirdpartylibs.xml in codebase, adding
 # all the found locations to the list of excluded.
 if [[ -n ${gitdir} ]]; then
@@ -99,7 +102,7 @@ if [[ -n ${gitdir} ]]; then
 fi
 
 # Sort and get rid of dupes, they (maybe) are legion.
-excluded=$(echo "${excluded}" | sort -u)
+excluded=$(LC_ALL=C; echo "${excluded}" | sort -u)
 
 # Some well-known exceptions... to be deleted once the branch
 # gets out from support
