@@ -1,6 +1,9 @@
 #!/bin/bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
+# $format: Optional, name of the format we want to output (defaults to none)
+#             can be one of excluded, excluded_grep, excluded_list, excluded_list_wildchars,
+#             excluded_comma, excluded_comma_wildchars
 
 # Define directories usually excluded by various CI tools
 excluded=".git/
@@ -151,3 +154,8 @@ do
 done
 excluded_comma_wildchars=${excluded_comma_wildchars#,}
 excluded_comma_wildchars=${excluded_comma_wildchars//\./\\.}
+
+# Finally, if requested, and the variable exists and is not empty, output it
+if [[ -n ${format} ]] && [[ -n ${!format} ]]; then
+    echo "${!format}"
+fi
