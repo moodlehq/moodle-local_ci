@@ -2,7 +2,7 @@
 
 load libs/shared_setup
 
-tearDown() {
+teardown() {
     clean_workspace_directory
 }
 
