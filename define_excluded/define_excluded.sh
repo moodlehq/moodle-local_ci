@@ -1,6 +1,9 @@
 #!/bin/bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
+# $format: Optional, name of the format we want to output (defaults to none)
+#             can be one of excluded, excluded_grep, excluded_list, excluded_list_wildchars,
+#             excluded_comma, excluded_comma_wildchars
 
 # Define directories usually excluded by various CI tools
 excluded=".git/
@@ -81,6 +84,9 @@ yui/build/
 *.png
 *.svg"
 
+# Normalize gitdir, we don't want trailing slashes there ever.
+gitdir=$(echo $gitdir | sed -n 's/\/*$//p')
+
 # Now, look for all the thirdpartylibs.xml in codebase, adding
 # all the found locations to the list of excluded.
 if [[ -n ${gitdir} ]]; then
@@ -99,7 +105,7 @@ if [[ -n ${gitdir} ]]; then
 fi
 
 # Sort and get rid of dupes, they (maybe) are legion.
-excluded=$(echo "${excluded}" | sort -u)
+excluded=$(LC_ALL=C; echo "${excluded}" | sort -u)
 
 # Some well-known exceptions... to be deleted once the branch
 # gets out from support
@@ -148,3 +154,8 @@ do
 done
 excluded_comma_wildchars=${excluded_comma_wildchars#,}
 excluded_comma_wildchars=${excluded_comma_wildchars//\./\\.}
+
+# Finally, if requested, and the variable exists and is not empty, output it
+if [[ -n ${format} ]] && [[ -n ${!format} ]]; then
+    echo "${!format}"
+fi
