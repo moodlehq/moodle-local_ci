@@ -83,7 +83,7 @@ for c in ${commits}; do
     numproblems=0
     message=$(${gitcmd} show -s --pretty=format:%B ${c})
     # detect if the commit is a merge
-    numparents=$(${gitcmd} cat-file -p ${c} | grep '^parent ' | wc -l)
+    numparents=$(${gitcmd} cat-file -p ${c} | grep '^parent ' | wc -l | tr -d '[[:space:]]')
     if [[ ${numparents} -gt 1 ]]; then
         ismerge=1
         mergecommits=$((mergecommits+1))
@@ -171,7 +171,7 @@ for c in ${commits}; do
                 fi
                 # verify the area in subject line is < 30 chars long. Warn.
                 if [[ ${codearea} ]]; then
-                    codearealen=$(echo "${codearea}" | wc -c)
+                    codearealen=$(echo "${codearea}" | wc -c | tr -d '[[:space:]]')
                     if [[ ${codearealen} -gt 30 ]];then
                         echo "${c}*warning*The commit message code area '${codearea}' is too long (${codearealen} > 30)"
                         numproblems=$((numproblems+1))
@@ -179,7 +179,7 @@ for c in ${commits}; do
                 fi
                 # verify there are no multiple : in the subject line. Error.
                 # verify subject line is <= 72 chars long. Error.
-                len=$(echo -n "${line}" | wc -c)
+                len=$(echo -n "${line}" | wc -c | tr -d '[[:space:]]')
                 if [[ ${len} -gt 72 ]]; then
                     echo "${c}*error*The first line has more than 72 characters (found: ${len})"
                     numproblems=$((numproblems+1))
@@ -194,7 +194,7 @@ for c in ${commits}; do
             # check rest of lines
             else
                 # verify 3rd and following lines are <= 132 chars long. Warn.
-                len=$(echo "${line}" | wc -c)
+                len=$(echo "${line}" | wc -c | tr -d '[[:space:]]')
                 if [[ ${len} -gt 132 ]]; then
                     echo "${c}*error*The line #${currentline} has more than 132 characters (found: ${len})"
                     numproblems=$((numproblems+1))

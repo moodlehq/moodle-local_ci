@@ -1,0 +1,24 @@
+From 6643890e938b8c6774a60d768e320ed6dcb60d6c Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Fri, 29 Jul 2016 12:54:22 +0100
+Subject: [PATCH 1/1] MDL-12345 commits: A really really long commit message
+ makes git tools cry doesn't it!
+
+https://docs.moodle.org/dev/index.php?title=Automated_code_review&redirect=no#The_git_commit_summary_limit_is_too_small
+---
+ README.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/README.txt b/README.txt
+index 729dbe4..af81703 100644
+--- a/README.txt
++++ b/README.txt
+@@ -26,3 +26,5 @@ Moodle is written in PHP and JavaScript and uses an SQL database for storing
+ the data.
+ 
+ See <https://docs.moodle.org> for details of Moodle's many features.
++
++a dummy commit!
+-- 
+2.9.0
+
