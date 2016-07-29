@@ -1,4 +1,4 @@
-#!/bin/bash -e +x
+#!/usr/bin/env bash -e +x
 # This script must be executed by the "jenkins" user
 # (manually or from jenkins) in order to get the initial
 # installation of Jenkins + Moodle ready.

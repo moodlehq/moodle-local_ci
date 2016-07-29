@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to check
 # $pearpath: Path where the pear executables are available

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $phpcmd: Path to the PHP CLI executable
 # $composercmd: Path to the composer (usually installed globally in the CI server) executable
 # $composerdirbase: Path to the directory where composer will be installed (--working-dir). branch name will be automatically added.

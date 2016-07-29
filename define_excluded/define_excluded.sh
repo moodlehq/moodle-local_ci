@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
 # $format: Optional, name of the format we want to output (defaults to none)

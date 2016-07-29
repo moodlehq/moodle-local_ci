@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $WORKSPACE
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo

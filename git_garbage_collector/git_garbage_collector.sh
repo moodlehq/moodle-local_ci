@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitcmd: Path to git executable.
 # $gitdir:  Directory containing git repo.
 # $gcinterval: Number of runs before performing a manual gc of the repo. Defaults to 25. 0 means disabled.

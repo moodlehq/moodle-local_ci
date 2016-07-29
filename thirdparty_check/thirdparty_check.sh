@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo

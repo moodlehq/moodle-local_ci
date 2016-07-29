@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # WORKSPACE: Path to the directory where previous compare results are stored
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo

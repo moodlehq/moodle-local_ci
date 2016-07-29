@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $phpcmd: Path to the PHP CLI executable
 # $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo
