@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
 # $npmcmd: Path to the npm executable (global)

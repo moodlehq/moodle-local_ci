@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $WORKSPACE: Directory where results/artifacts will be created
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB

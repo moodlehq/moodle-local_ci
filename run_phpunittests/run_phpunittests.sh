@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $phpcmd: Path to the PHP CLI executable
 # $psqlcmd: Path to the psql CLI executable
 # $mysqlcmd: Path to the mysql CLI executable

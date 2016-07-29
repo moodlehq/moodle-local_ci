@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Look all test-failed issues under current integration and move them out
 #jiraclicmd: fill execution path of the jira cli
 #jiraserver: jira server url we are going to connect to

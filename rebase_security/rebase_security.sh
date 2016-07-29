@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitcmd: Path to git executable.
 # $gitdir: Directory containing git repo (will be cloned to if .git doesn't exist)
 # $gitbranch: Branch we are rebasing onto

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Look for issues known to need their integration priority raised.
 #jiraclicmd: fill execution path of the jira cli
 #jiraserver: jira server url we are going to connect to

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 # $phpcmd: Path to php CLI exectuable

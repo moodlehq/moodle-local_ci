@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Look all issues awaiting integration and move them to current integration by:
 #   - clean the integrator field
 #   - clean the integration date

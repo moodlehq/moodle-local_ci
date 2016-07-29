@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
 # $jshintcmd: Path to jshint executable.
