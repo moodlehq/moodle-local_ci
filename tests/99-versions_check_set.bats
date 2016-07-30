@@ -37,7 +37,7 @@ setup () {
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
     run grep ERROR $WORKSPACE/versions_check_set.txt
-    assert_output --partial "ERROR: No correct version first 8 digits date (date: invalid date ‘20162223’)"
+    assert_output --partial "ERROR: No correct version first 8 digits date (date: invalid date"
 }
 
 @test "versions_check_set/versions_check_set.sh: invalid component" {
