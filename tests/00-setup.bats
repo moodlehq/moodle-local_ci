@@ -19,3 +19,16 @@ load libs/shared_setup
     echo 'test1' | sed -r 's/^test[0-9]$/replaced/'
     assert_success
 }
+
+@test "GNU wc installed" {
+    # Some scripts depend on wc -l having no padding..
+    run bash -c "echo '1' | wc -l"
+    assert_success
+    assert_output '1'
+}
+
+@test "GNU date installed" {
+    # Some scripts depend on date -I for iso date
+    run date -I
+    assert_success
+}
