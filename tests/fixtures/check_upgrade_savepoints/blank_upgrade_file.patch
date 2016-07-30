@@ -1,0 +1,23 @@
+From 5372cf1855d118c15710bc72e6b31c469d453260 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:34:13 +0100
+Subject: [PATCH 1/1] blank upgrade file
+
+---
+ admin/tool/messageinbound/db/upgrade.php | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 admin/tool/messageinbound/db/upgrade.php
+
+diff --git a/admin/tool/messageinbound/db/upgrade.php b/admin/tool/messageinbound/db/upgrade.php
+new file mode 100644
+index 0000000..c768782
+--- /dev/null
++++ b/admin/tool/messageinbound/db/upgrade.php
+@@ -0,0 +1,4 @@
++<?php
++defined('MOODLE_INTERNAL') || die();
++
++// This file intentionally left blank.
+-- 
+2.9.0
+

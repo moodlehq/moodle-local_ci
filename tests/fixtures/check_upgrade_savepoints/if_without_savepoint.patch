@@ -1,0 +1,25 @@
+From ea489d6722d370c233997d7f97bca49069c59ac6 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:54:30 +0100
+Subject: [PATCH 1/1] if without savepoint
+
+---
+ lib/db/upgrade.php | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/lib/db/upgrade.php b/lib/db/upgrade.php
+index ee468b6..1512804 100644
+--- a/lib/db/upgrade.php
++++ b/lib/db/upgrade.php
+@@ -2049,8 +2049,6 @@ function xmldb_main_upgrade($oldversion) {
+         // Add a default competency rating scale.
+         make_competence_scale();
+ 
+-        // Savepoint reached.
+-        upgrade_main_savepoint(true, 2016051300.00);
+     }
+ 
+     if ($oldversion < 2016051700.01) {
+-- 
+2.9.0
+

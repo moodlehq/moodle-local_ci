@@ -1,0 +1,24 @@
+From 9c2d7f3f29d70392b53d067d0397df4e6c6a4d31 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:31:14 +0100
+Subject: [PATCH 1/1] Repeated savepoint call
+
+---
+ lib/db/upgrade.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/db/upgrade.php b/lib/db/upgrade.php
+index ee468b6..a6ddf67 100644
+--- a/lib/db/upgrade.php
++++ b/lib/db/upgrade.php
+@@ -2067,6 +2067,7 @@ function xmldb_main_upgrade($oldversion) {
+         }
+         // Main savepoint reached.
+         upgrade_main_savepoint(true, 2016051700.01);
++        upgrade_main_savepoint(true, 2016051700.01);
+     }
+ 
+     // Moodle v3.1.0 release upgrade line.
+-- 
+2.9.0
+

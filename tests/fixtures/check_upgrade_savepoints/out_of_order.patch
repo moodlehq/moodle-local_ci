@@ -1,0 +1,49 @@
+From ff426281a36654a6b5b60dfe7726bed41bb77100 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:59:34 +0100
+Subject: [PATCH 1/1] Out of order savepoints
+
+---
+ mod/assign/db/upgrade.php | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/mod/assign/db/upgrade.php b/mod/assign/db/upgrade.php
+index c0935c5..921b0f6 100644
+--- a/mod/assign/db/upgrade.php
++++ b/mod/assign/db/upgrade.php
+@@ -34,15 +34,6 @@ function xmldb_assign_upgrade($oldversion) {
+ 
+     $dbman = $DB->get_manager();
+ 
+-    if ($oldversion < 2014051201) {
+-
+-        // Cleanup bad database records where assignid is missing.
+-
+-        $DB->delete_records('assign_user_mapping', array('assignment'=>0));
+-        // Assign savepoint reached.
+-        upgrade_mod_savepoint(true, 2014051201, 'assign');
+-    }
+-
+     if ($oldversion < 2014072400) {
+ 
+         // Add "latest" column to submissions table to mark the latest attempt.
+@@ -57,6 +48,16 @@ function xmldb_assign_upgrade($oldversion) {
+         // Assign savepoint reached.
+         upgrade_mod_savepoint(true, 2014072400, 'assign');
+     }
++
++    if ($oldversion < 2014051201) {
++
++        // Cleanup bad database records where assignid is missing.
++
++        $DB->delete_records('assign_user_mapping', array('assignment'=>0));
++        // Assign savepoint reached.
++        upgrade_mod_savepoint(true, 2014051201, 'assign');
++    }
++
+     if ($oldversion < 2014072401) {
+ 
+          // Define index latestattempt (not unique) to be added to assign_submission.
+-- 
+2.9.0
+
