@@ -55,7 +55,7 @@ git_apply_fixture() {
 
     cd $gitdir
     export FIXTURE_HASH_BEFORE=$($gitcmd rev-parse HEAD)
-    $gitcmd am $patch
+    $gitcmd am -q $patch
     export FIXTURE_HASH_AFTER=$($gitcmd rev-parse HEAD)
     cd $OLDPWD # Return to where we were.
 }
