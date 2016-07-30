@@ -1,0 +1,24 @@
+From d565a1d711167edcbdbfc03b14c70ae665037aa2 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 19:25:42 +0100
+Subject: [PATCH 1/1] No version set
+
+---
+ enrol/paypal/version.php | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/enrol/paypal/version.php b/enrol/paypal/version.php
+index ca3c3b9..edd3d9e 100644
+--- a/enrol/paypal/version.php
++++ b/enrol/paypal/version.php
+@@ -25,7 +25,6 @@
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+-$plugin->version   = 2016052300;        // The current plugin version (Date: YYYYMMDDXX)
+ $plugin->requires  = 2016051900;        // Requires this Moodle version
+ $plugin->component = 'enrol_paypal';    // Full name of the plugin (used for diagnostics)
+ $plugin->cron      = 60;
+-- 
+2.9.0
+

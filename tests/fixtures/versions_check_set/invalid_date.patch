@@ -1,0 +1,24 @@
+From 1a018f8239e433935461784f12584011bf4a5c1b Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 19:15:15 +0100
+Subject: [PATCH 1/1] mod_assign_invalid_date
+
+---
+ mod/assign/version.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mod/assign/version.php b/mod/assign/version.php
+index 455abac..9d9aea2 100644
+--- a/mod/assign/version.php
++++ b/mod/assign/version.php
+@@ -25,6 +25,6 @@
+ defined('MOODLE_INTERNAL') || die();
+ 
+ $plugin->component = 'mod_assign'; // Full name of the plugin (used for diagnostics).
+-$plugin->version  = 2016052300;    // The current module version (Date: YYYYMMDDXX).
++$plugin->version  = 2016222300;    // The current module version (Date: YYYYMMDDXX).
+ $plugin->requires = 2016051900;    // Requires this Moodle version.
+ $plugin->cron     = 60;
+-- 
+2.9.0
+

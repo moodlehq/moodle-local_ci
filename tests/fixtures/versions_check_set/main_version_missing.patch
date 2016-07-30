@@ -1,0 +1,22 @@
+From 9fdb081861d1387b289ba7fbb95fd7444c0b3e58 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 17:48:10 +0100
+Subject: [PATCH 1/1] misisngbranch
+
+---
+ version.php | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/version.php b/version.php
+index d5b946c..a1e005e 100644
+--- a/version.php
++++ b/version.php
+@@ -35,5 +35,4 @@ $version  = 2016052300.00;              // 20160523      = branching date YYYYMM
+ 
+ $release  = '3.1 (Build: 20160523)'; // Human-friendly version name
+ 
+-$branch   = '31';                       // This version's branch.
+ $maturity = MATURITY_STABLE;             // This version's maturity level.
+-- 
+2.9.0
+
