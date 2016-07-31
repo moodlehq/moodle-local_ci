@@ -1,0 +1,24 @@
+From 2e1a493cddbe211f9c9e56fd802ce3b977f285a6 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 19:32:56 +0100
+Subject: [PATCH 1/1] Non-full version number
+
+---
+ message/output/jabber/version.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/message/output/jabber/version.php b/message/output/jabber/version.php
+index 96ae502..5e988ae 100644
+--- a/message/output/jabber/version.php
++++ b/message/output/jabber/version.php
+@@ -24,6 +24,6 @@
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+-$plugin->version   = 2016052300;        // The current plugin version (Date: YYYYMMDDXX)
++$plugin->version   = 20;        // The current plugin version (Date: YYYYMMDDXX)
+ $plugin->requires  = 2016051900;        // Requires this Moodle version
+ $plugin->component = 'message_jabber';  // Full name of the plugin (used for diagnostics)
+-- 
+2.9.0
+

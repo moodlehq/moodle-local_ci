@@ -1,0 +1,25 @@
+From 0af3b549d8c44f93250b2a77476da1495118f98a Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 19:22:36 +0100
+Subject: [PATCH 1/1] no moodle internal
+
+---
+ blocks/lp/version.php | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/blocks/lp/version.php b/blocks/lp/version.php
+index 838f0aa..4e38d27 100644
+--- a/blocks/lp/version.php
++++ b/blocks/lp/version.php
+@@ -22,8 +22,6 @@
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
+ 
+-defined('MOODLE_INTERNAL') || die();
+-
+ $plugin->version   = 2016052300;
+ $plugin->requires  = 2016051900;
+ $plugin->component = 'block_lp';
+-- 
+2.9.0
+

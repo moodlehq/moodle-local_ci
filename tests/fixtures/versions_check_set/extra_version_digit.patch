@@ -1,0 +1,25 @@
+From 2b23ec51f4e63452a30a861c4bc60f8c1130b58e Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 19:02:03 +0100
+Subject: [PATCH 1/1] extra-version-digit
+
+---
+ admin/tool/phpunit/version.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/admin/tool/phpunit/version.php b/admin/tool/phpunit/version.php
+index 878297a..66c3b2e 100644
+--- a/admin/tool/phpunit/version.php
++++ b/admin/tool/phpunit/version.php
+@@ -24,7 +24,7 @@
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+-$plugin->version   = 2016052300; // The current plugin version (Date: YYYYMMDDXX)
++$plugin->version   = 20160523001; // The current plugin version (Date: YYYYMMDDXX)
+ $plugin->requires  = 2016051900; // Requires this Moodle version
+ $plugin->component = 'tool_phpunit'; // Full name of the plugin (used for diagnostics)
+ 
+-- 
+2.9.0
+
