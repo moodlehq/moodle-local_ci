@@ -1,0 +1,24 @@
+From 6015aacb1810c0066bbca35913d264919854b20e Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:50:55 +0100
+Subject: [PATCH 1/1] multiple return statements
+
+---
+ portfolio/googledocs/db/upgrade.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/portfolio/googledocs/db/upgrade.php b/portfolio/googledocs/db/upgrade.php
+index c02c769..93402d4 100644
+--- a/portfolio/googledocs/db/upgrade.php
++++ b/portfolio/googledocs/db/upgrade.php
+@@ -23,6 +23,7 @@ defined('MOODLE_INTERNAL') || die();
+ function xmldb_portfolio_googledocs_upgrade($oldversion) {
+     global $CFG;
+ 
++    return true;
+     // Moodle v2.8.0 release upgrade line.
+     // Put any upgrade step following this.
+ 
+-- 
+2.9.0
+

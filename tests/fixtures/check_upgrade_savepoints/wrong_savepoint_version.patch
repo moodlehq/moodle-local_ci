@@ -1,0 +1,25 @@
+From d2e570acddbf7d9270fb12f60df455e6d95e1f60 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Sat, 30 Jul 2016 20:56:34 +0100
+Subject: [PATCH 1/1] incorrect savepoint version
+
+---
+ mod/lesson/db/upgrade.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mod/lesson/db/upgrade.php b/mod/lesson/db/upgrade.php
+index ca0e48b..7342f5b 100644
+--- a/mod/lesson/db/upgrade.php
++++ b/mod/lesson/db/upgrade.php
+@@ -382,7 +382,7 @@ function xmldb_lesson_upgrade($oldversion) {
+         }
+ 
+         // Lesson savepoint reached.
+-        upgrade_mod_savepoint(true, 2016012800, 'lesson');
++        upgrade_mod_savepoint(true, 2016011800, 'lesson');
+     }
+     // Moodle v3.1.0 release upgrade line.
+     // Put any upgrade step following this.
+-- 
+2.9.0
+
