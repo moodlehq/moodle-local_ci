@@ -110,24 +110,10 @@ fi
 ${gitcmd} fetch origin
 ${gitcmd} fetch integration
 
-# Verify the ${integrateto} branch already exists locally.
-if [[ ! $(${gitcmd} rev-parse --quiet --verify ${integrateto}) ]]; then
-    echo "Info: The branch ${integrateto} does not exist locally" | tee -a ${errorfile}
-    # Verify the remote ${integrateto} branch exists and branch locally tracking it.
-    if [[ $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
-        echo "Info: Branch ${integrateto} found at origin. Branching locally tracking it" | tee -a ${errorfile}
-        ${gitcmd} branch ${integrateto} --track origin/${integrateto}
-    else
-        echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
-        exit 1
-    fi
+if [[ ! $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
+    echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
+    exit 1
 fi
-
-# Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-${gitcmd} checkout ${integrateto}
-# If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
-# if they are not, then it's ok to become affected by other changes that may have landed later.
-${gitcmd} reset --hard origin/${integrateto}
 
 # We are going to support both checks performed against moodle.git tip (default), and
 # integration.git ancestor if found. Will use this variable for that, ensuring
@@ -136,13 +122,9 @@ ${gitcmd} reset --hard origin/${integrateto}
 baserepository="origin"
 basecommit=$(${gitcmd} rev-parse --verify origin/${integrateto})
 
-# Create the precheck branch, checking if it exists, defaulting to moodle.git one.
-branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
-if [[ ${branchexists} -eq 0 ]]; then
-    ${gitcmd} checkout -b ${integrateto}_precheck
-else
-    ${gitcmd} checkout ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
-fi
+# Create the precheck branch
+# (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
+${gitcmd} checkout -B ${integrateto}_precheck origin/${integrateto}
 
 # Fetch the remote branch.
 set +e
