@@ -20,6 +20,7 @@ if [ -z $LOCAL_CI_TESTS_GITDIR ]; then
     exit 1;
 fi
 
+export LOCAL_CI_TESTS_RUNNING=1
 export WORKSPACE=$BATS_TMPDIR/workspace
 mkdir -p $WORKSPACE
 export gitcmd=git

@@ -16,7 +16,9 @@
 # $extrapath: Extra paths to be available (global)
 # $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
-# $pushremote: Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
+# $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
+# $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
+# $phpcsstandard: (optional) directory for coding standard path
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -120,6 +122,12 @@ fi
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
 baseref="origin/${integrateto}"
+
+if [[ -n "${resettocommit}" ]]; then
+    # If we are testing..
+    baseref=$resettocommit
+fi
+
 basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 
 # Create the precheck branch
@@ -389,15 +397,25 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPCS
 echo "Running codesniffer..."
-${phpcmd} ${mydir}/../coding_standards_detector/coding_standards_detector.php \
+if [[ ! -n "${phpcsstandard}" ]]; then
+    phpcsstandard="${mydir}/../../codechecker/moodle"
+fi
+${phpcmd} ${mydir}/../coding_standards_detector/phpcs.phar \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
-    --extensions=php --standard="${mydir}/../../codechecker/moodle" ${WORKSPACE}
+    --extensions=php --standard=${phpcsstandard} ${WORKSPACE}
 
-# Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
-# (we pass to it the list of valid components that was built before deleting files)
-echo "Running phpdocs checker..."
-${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
-    --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
+if [[ -n "${LOCAL_CI_TESTS_RUNNING}" ]]; then
+    # We don't run the moodlecheck tests in our testing environment because local_moodlecheck requires
+    # a fully install Moodle. We don't want to requite that.
+    # TODO: move to a more flexible way of excluding specific checks.
+    echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/docs.xml"
+else
+    # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
+    # (we pass to it the list of valid components that was built before deleting files)
+    echo "Running phpdocs checker..."
+    ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
+        --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
+fi
 
 # Exclude build directories from the results (e.g. lib/yui/build, lib/amd/build/)
 find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jshintignore
