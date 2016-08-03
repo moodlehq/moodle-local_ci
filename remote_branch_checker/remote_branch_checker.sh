@@ -119,12 +119,13 @@ fi
 # integration.git ancestor if found. Will use this variable for that, ensuring
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
-baserepository="origin"
-basecommit=$(${gitcmd} rev-parse --verify origin/${integrateto})
+baseref="origin/${integrateto}"
+basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 
 # Create the precheck branch
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
-${gitcmd} checkout -B ${integrateto}_precheck origin/${integrateto}
+${gitcmd} checkout -B ${integrateto}_precheck $baseref
+
 
 # Fetch the remote branch.
 set +e
@@ -138,7 +139,7 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 
 # Look for the common ancestor against moodle.git
-ancestor="$(${gitcmd} merge-base FETCH_HEAD origin/${integrateto})"
+ancestor="$(${gitcmd} merge-base FETCH_HEAD $baseref)"
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." | tee -a ${errorfile}
     exit 1
@@ -160,7 +161,7 @@ if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
     # so we set the basecommit to point to it.
     ancestor=${integrationancestor}
-    baserepository="integration"
+    baseref="integration/${integrateto}"
     basecommit=${integrationancestor}
     echo "Warn: the branch is based off integration.git" | tee -a ${errorfile}
     # If going to check against integration.git, we issue a warning because it's a non-ideal situation,
@@ -197,7 +198,7 @@ ancestor=
 ${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baserepository}/${integrateto}" | tee -a ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baseref}" | tee -a ${errorfile}
     exit ${exitstatus}
 fi
 set -e
