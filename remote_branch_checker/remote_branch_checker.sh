@@ -110,39 +110,22 @@ fi
 ${gitcmd} fetch origin
 ${gitcmd} fetch integration
 
-# Verify the ${integrateto} branch already exists locally.
-if [[ ! $(${gitcmd} rev-parse --quiet --verify ${integrateto}) ]]; then
-    echo "Info: The branch ${integrateto} does not exist locally" | tee -a ${errorfile}
-    # Verify the remote ${integrateto} branch exists and branch locally tracking it.
-    if [[ $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
-        echo "Info: Branch ${integrateto} found at origin. Branching locally tracking it" | tee -a ${errorfile}
-        ${gitcmd} branch ${integrateto} --track origin/${integrateto}
-    else
-        echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
-        exit 1
-    fi
+if [[ ! $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
+    echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
+    exit 1
 fi
-
-# Checkout pristine copy of the configured branch, defaulting to moodle.git (origin remote) one.
-${gitcmd} checkout ${integrateto}
-# If going to check against moodle.git we always do it from tip, coz it's expected people uses to rebase properly and,
-# if they are not, then it's ok to become affected by other changes that may have landed later.
-${gitcmd} reset --hard origin/${integrateto}
 
 # We are going to support both checks performed against moodle.git tip (default), and
 # integration.git ancestor if found. Will use this variable for that, ensuring
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
-baserepository="origin"
-basecommit=$(${gitcmd} rev-parse --verify origin/${integrateto})
+baseref="origin/${integrateto}"
+basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 
-# Create the precheck branch, checking if it exists, defaulting to moodle.git one.
-branchexists="$( ${gitcmd} branch | grep ${integrateto}_precheck | wc -l )"
-if [[ ${branchexists} -eq 0 ]]; then
-    ${gitcmd} checkout -b ${integrateto}_precheck
-else
-    ${gitcmd} checkout ${integrateto}_precheck && ${gitcmd} reset --hard origin/${integrateto}
-fi
+# Create the precheck branch
+# (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
+${gitcmd} checkout -B ${integrateto}_precheck $baseref
+
 
 # Fetch the remote branch.
 set +e
@@ -156,7 +139,7 @@ if [[ ${exitstatus} -ne 0 ]]; then
 fi
 
 # Look for the common ancestor against moodle.git
-ancestor="$(${gitcmd} merge-base FETCH_HEAD origin/${integrateto})"
+ancestor="$(${gitcmd} merge-base FETCH_HEAD $baseref)"
 if [[ ! ${ancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and moodle.git ${integrateto} do not have any common ancestor." | tee -a ${errorfile}
     exit 1
@@ -178,7 +161,7 @@ if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
     # so we set the basecommit to point to it.
     ancestor=${integrationancestor}
-    baserepository="integration"
+    baseref="integration/${integrateto}"
     basecommit=${integrationancestor}
     echo "Warn: the branch is based off integration.git" | tee -a ${errorfile}
     # If going to check against integration.git, we issue a warning because it's a non-ideal situation,
@@ -215,7 +198,7 @@ ancestor=
 ${gitcmd} merge --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baserepository}/${integrateto}" | tee -a ${errorfile}
+    echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baseref}" | tee -a ${errorfile}
     exit ${exitstatus}
 fi
 set -e
