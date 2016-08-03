@@ -63,3 +63,19 @@ load libs/shared_setup
     assert_output ""
 }
 
+@test "clean_workspace_directory() cleans all files" {
+    touch $WORKSPACE/foo
+    touch $WORKSPACE/.bar
+    mkdir $WORKSPACE/subdirectory
+    touch $WORKSPACE/subdirectory/foo
+    touch $WORKSPACE/subdirectory/.bar
+
+    run find $WORKSPACE -type f
+    assert_success
+    refute_output "" # there should be files here..
+
+    clean_workspace_directory
+
+    run find $WORKSPACE -type f
+    assert_output ""
+}

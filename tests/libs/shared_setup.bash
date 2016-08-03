@@ -61,9 +61,8 @@ git_apply_fixture() {
 }
 
 clean_workspace_directory() {
-    # A safe version of rm..
-    cd $WORKSPACE && rm -rf *
-    cd $OLDPWD # Return to where we were.
+    rm -rf $WORKSPACE
+    mkdir $WORKSPACE
 }
 
 # Some custom runners which allow use of relative path
