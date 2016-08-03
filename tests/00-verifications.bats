@@ -2,6 +2,16 @@
 
 load libs/shared_setup
 
+@test "first_test(): first reported correctly" {
+    run first_test
+    assert_success
+}
+
+@test "first_test(): !first reported correctly" {
+    run first_test
+    assert_failure
+}
+
 # This test is just used to verify there aren't #!/bin/bash uses in the shell scripts
 # (we should be using env bash for portability)
 @test "#!/bin/bash is not being used in code base" {
@@ -78,4 +88,45 @@ load libs/shared_setup
 
     run find $WORKSPACE -type f
     assert_output ""
+}
+
+@test "workspace cleaned between runs: setup" {
+    touch $WORKSPACE/workspace-dirty-$PPID
+    run [ -f $WORKSPACE/workspace-dirty-$PPID ]
+    assert_success
+}
+
+@test "workspace cleaned between runs: verify" {
+    run [ -f $WORKSPACE/workspace-dirty-$PPID ]
+    assert_failure
+}
+
+@test "store_workspace()" {
+    echo "Created by process: $PPID" > $WORKSPACE/storedfile
+    run [ -f $WORKSPACE/storedfile ]
+    assert_success
+    run store_workspace
+    assert_success
+}
+
+@test "restore_workspace()" {
+    run [ -f $WORKSPACE/storedfile ]
+    assert_failure
+
+    run restore_workspace
+    assert_success
+    run [ -f $WORKSPACE/storedfile ]
+    assert_success
+    run cat $WORKSPACE/storedfile
+    assert_output "Created by process: $PPID"
+}
+
+@test "last_test(): !last reported correctly" {
+    run last_test
+    assert_failure
+}
+
+@test "last_test(): final test reported correctly" {
+    run last_test
+    assert_success
 }

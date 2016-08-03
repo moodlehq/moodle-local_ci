@@ -72,11 +72,39 @@ ci_run() {
     command="$BATS_TEST_DIRNAME/../$@"
     run bash -c "$command"
 }
+
 ci_run_php() {
     command="$BATS_TEST_DIRNAME/../$@"
     run bash -c "php $command"
 }
 
-# Clean up any $WORKSPACE state (only necessary in case of
-# previously half finished runs)
+# Get a tmp directory - unique to each test file and run
+get_per_file_tmpdir_name() {
+    echo "$BATS_TMPDIR/$( echo $BATS_TEST_FILENAME $PPID | md5sum | awk '{ print $1 }' )"
+}
+
+# Store the current state of the $WORKSPACE directory for use by other tests in the same file
+store_workspace() {
+    dir=$(get_per_file_tmpdir_name)
+    mkdir -p $dir
+    cp -R $WORKSPACE/. $dir
+}
+
+restore_workspace() {
+    dir=$(get_per_file_tmpdir_name)
+    cp -R $dir/. $WORKSPACE
+}
+
+# Clever idea, borrowed from https://github.com/dgholz/detect_virtualenv/blob/master/t/begin_and_end.bash
+# Are we in the first test of a file?
+function first_test() {
+  [ "$BATS_TEST_NUMBER" = 1 ]
+}
+
+# Are we in the last test of a file?
+function last_test() {
+  [ "$BATS_TEST_NAME" = "${BATS_TEST_NAMES[@]:(-1)}" ]
+}
+
+# Clean up any $WORKSPACE state on every run.
 clean_workspace_directory

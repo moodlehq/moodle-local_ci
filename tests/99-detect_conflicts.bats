@@ -2,27 +2,18 @@
 
 load libs/shared_setup
 
-statedir=$LOCAL_CI_TESTS_CACHEDIR/detect_conflicts/
-
 setup () {
     create_git_branch MOODLE_31_STABLE v3.1.1
-
-    # Reset state between runs.
-    if [ -d $statedir ]; then
-        cp -R $statedir/. $WORKSPACE
-    fi
+    # Restore workspace if not first test.
+    first_test || restore_workspace
 }
 
 teardown () {
-    # Save state between individual runs
-    mkdir -p $statedir
-    cp -R $WORKSPACE/. $statedir
+    # Store workspace if not last test.
+    last_test || store_workspace
 }
 
 @test "detect_conflicts: first run OK" {
-    # Ensure initial state is clean.
-    clean_workspace_directory
-
     # On first run, there are no results to compare to so should always
     # pass.
     ci_run detect_conflicts/detect_conflicts.sh
@@ -53,10 +44,4 @@ teardown () {
     assert_output --partial "previous count: 0"
     assert_output --partial "best count: 0"
     assert_output --partial "worse results than previous counter"
-}
-
-@test "detect_conflicts: clean up state" {
-    # Not a real test, just allows us to avoid storing state after
-    # the rest of the test suite has run.
-    clean_workspace_directory
 }
