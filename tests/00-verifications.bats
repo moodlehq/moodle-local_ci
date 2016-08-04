@@ -121,11 +121,48 @@ load libs/shared_setup
     assert_output "Created by process: $PPID"
 }
 
+@test "assert_files_same(): empty file validations" {
+    touch $WORKSPACE/expected
+    touch $WORKSPACE/actual
+
+    # Should fail to operate on empty files
+    run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
+    assert_failure
+    assert_output "$WORKSPACE/expected is empty"
+
+    # Should fail because actual still empty.
+    echo 'no longer empty' > $WORKSPACE/expected
+    run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
+    assert_failure
+    assert_output "$WORKSPACE/actual is empty"
+
+    # Now we pass as files are the same
+    cp $WORKSPACE/expected $WORKSPACE/actual
+    run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
+    assert_success
+}
+
+@test "assert_files_same(): detects differences" {
+    echo "123" > $WORKSPACE/expected
+    echo "456" > $WORKSPACE/actual
+
+    # Should fail as there are differences
+    run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
+    assert_failure
+
+    # Make files the same
+    cp $WORKSPACE/expected $WORKSPACE/actual
+    # Now should pass..
+    run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
+    assert_success
+}
+
 @test "last_test(): !last reported correctly" {
     run last_test
     assert_failure
 }
 
+# Leave this test last in file!
 @test "last_test(): final test reported correctly" {
     run last_test
     assert_success

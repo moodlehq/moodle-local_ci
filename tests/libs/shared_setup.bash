@@ -78,6 +78,27 @@ ci_run_php() {
     run bash -c "php $command"
 }
 
+# Assert that files are the same.
+# Usage: assert_files_same file1 file2
+assert_files_same() {
+    expected=$1
+    actual=$2
+
+    if [ ! -s $expected ]; then
+        fail "$expected is empty"
+        return 1
+    fi
+
+    if [ ! -s $actual ]; then
+        fail "$actual is empty"
+        return 1
+    fi
+
+    run diff -ruN $expected $actual
+    assert_success
+    assert_output ''
+}
+
 # Get a tmp directory - unique to each test file and run
 get_per_file_tmpdir_name() {
     echo "$BATS_TMPDIR/$( echo $BATS_TEST_FILENAME $PPID | md5sum | awk '{ print $1 }' )"
