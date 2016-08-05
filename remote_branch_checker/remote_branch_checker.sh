@@ -58,7 +58,7 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [[ ! -d "$WORKSPACE/.git" ]]; then
     echo "Warn: git not found, proceeding to clone git://git.moodle.org/moodle.git"
     rm -fr "${WORKSPACE}/"
-    ${gitcmd} clone git://git.moodle.org/moodle.git "${WORKSPACE}"
+    ${gitcmd} clone -q git://git.moodle.org/moodle.git "${WORKSPACE}"
 fi
 
 cd "${WORKSPACE}"
@@ -70,9 +70,9 @@ if ! $(git remote -v | grep -q '^integration[[:space:]]]*git:.*integration.git')
 fi
 
 # Now, ensure the repository in completely clean.
-echo "Cleaning worktree"
-${gitcmd} clean -dfx
-${gitcmd} reset --hard
+echo "Info: Cleaning worktree"
+${gitcmd} clean -q -dfx
+${gitcmd} reset -q --hard
 
 # Let's verify if a git gc is required.
 ${mydir}/../git_garbage_collector/git_garbage_collector.sh
@@ -89,7 +89,7 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
             displayname="#${BUILD_NUMBER}:${issue}_${BASH_REMATCH[1]}"
         fi
     fi
-    echo "Setting build display name: ${displayname}"
+    echo "Info: Setting build display name: ${displayname}"
     java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s http://localhost:8080 \
         set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
 fi
@@ -109,8 +109,8 @@ if [[ ${issue} =~ ^PLUGIN-[0-9]+$ ]]; then
 fi
 
 # Fetch everything from remotes
-${gitcmd} fetch origin
-${gitcmd} fetch integration
+${gitcmd} fetch -q origin
+${gitcmd} fetch -q integration
 
 if [[ ! $(${gitcmd} rev-parse --quiet --verify origin/${integrateto}) ]]; then
     echo "Error: The ${integrateto} branch has not been found neither locally neither at origin." | tee -a ${errorfile}
@@ -132,12 +132,12 @@ basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 
 # Create the precheck branch
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
-${gitcmd} checkout -B ${integrateto}_precheck $baseref
+${gitcmd} checkout -q -B ${integrateto}_precheck $baseref
 
 
 # Fetch the remote branch.
 set +e
-${gitcmd} fetch ${remote} ${branch}
+${gitcmd} fetch -q ${remote} ${branch}
 # record FETCH_HEAD for later
 remotesha=$(git rev-parse --verify FETCH_HEAD)
 exitstatus=${PIPESTATUS[0]}
@@ -203,7 +203,7 @@ fi
 ancestor=
 
 # Try to merge the patchset (detecting conflicts) against the decided basecommit (already checkedout above).
-${gitcmd} merge --no-edit FETCH_HEAD
+${gitcmd} merge -q --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baseref}" | tee -a ${errorfile}
@@ -224,9 +224,9 @@ ${gitcmd} diff ${basecommit}..${integrateto}_precheck > ${WORKSPACE}/work/patchs
 
 # Generate the patches and store them
 mkdir ${WORKSPACE}/work/patches
-${gitcmd} format-patch -o ${WORKSPACE}/work/patches ${basecommit}
+${gitcmd} format-patch -q -o ${WORKSPACE}/work/patches ${basecommit}
 cd ${WORKSPACE}/work
-zip -r ${WORKSPACE}/work/patches.zip ./patches
+zip -q -r ${WORKSPACE}/work/patches.zip ./patches
 rm -fr ${WORKSPACE}/work/patches
 cd ${WORKSPACE}
 
@@ -261,12 +261,8 @@ echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
 # List of excluded paths
 . ${mydir}/../define_excluded/define_excluded.sh
 
-echo "List of excluded paths"
-echo "${excluded}"
-echo
-
 # Everything is ready, let's install all the required node stuff that some tools will use.
-${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh 2>&1 > "${WORKSPACE}/work/prepare_npm.txt"
 # And unset npmbase because we don't want those tools to handle node_modules themselves
 npmbase=
 
@@ -313,30 +309,30 @@ export GIT_COMMIT=${finalcommit}
 # Run the commit checker (verify_commit_messages)
 # We skip this if the requested build is $isplugin
 if [[ -z "${isplugin}" ]]; then
-    echo "Checking commit messages..."
+    echo "Info: Running commits..."
     ${mydir}/../verify_commit_messages/verify_commit_messages.sh > "${WORKSPACE}/work/commits.txt"
     cat "${WORKSPACE}/work/commits.txt" | ${phpcmd} ${mydir}/../verify_commit_messages/commits2checkstyle.php > "${WORKSPACE}/work/commits.xml"
 fi
 
 # Run the php linter (php_lint)
-echo "Running php lint..."
+echo "Info: Running phplint..."
 ${mydir}/../php_lint/php_lint.sh > "${WORKSPACE}/work/phplint.txt"
 cat "${WORKSPACE}/work/phplint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=phplint > "${WORKSPACE}/work/phplint.xml"
 
+echo "Info: Running thirdparty..."
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
-echo "Checking thirdparty changes..."
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
 # Run the grunt checker if Gruntfile exists. node stuff has been already installed.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
-    echo "Running grunt..."
+    echo "Info: Running grunt..."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
     cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
     cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 fi
 
 if [[ -z "${isplugin}" ]]; then
-    echo "Checking integrated issues fixfor versions and branches..."
+    echo "Info: Running travis..."
     ${phpcmd} ${mydir}/../travis/check_branch_status.php --repository=$remote --branch=$branch > "${WORKSPACE}/work/travis.txt"
     cat "${WORKSPACE}/work/travis.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=travis > "${WORKSPACE}/work/travis.xml"
 fi
@@ -347,7 +343,7 @@ fi
 # Now we can proceed to delete all the files not being part of the
 # patchset and also the excluded paths, because all the remaining checks
 # are perfomed against the code introduced by the patchset
-echo "Deleting excluded and unrelated files..."
+echo "Info: Deleting excluded and unrelated files..."
 
 # Remove all the excluded (but .git and work)
 set -e
@@ -375,7 +371,7 @@ set +e
 # Now run all the checks that only need the patchset affected files
 
 if [ -f $WORKSPACE/.eslintrc ]; then
-    echo "Running eslint..."
+    echo "Info: Running eslint..."
     eslintcmd="$(${npmcmd} bin)"/eslint
     if [ -x $eslintcmd ]; then
         $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
@@ -386,7 +382,7 @@ if [ -f $WORKSPACE/.eslintrc ]; then
 fi
 
 if [ -f $WORKSPACE/.stylelintrc ]; then
-    echo "Running stylelint..."
+    echo "Info: Running stylelint..."
     #FIXME: Won't be needed when MDL-55465 is implemented..
     echo "theme/bootstrapbase/style/" >> $WORKSPACE/.stylelintignore
     echo "theme/bootstrapbase/less/bootstrap/" >> $WORKSPACE/.stylelintignore
@@ -409,14 +405,14 @@ rm ${gitdir}/node_modules
 
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)
-echo "Checking upgrade savepoints..."
+echo "Info: Running savepoints..."
 cp ${mydir}/../check_upgrade_savepoints/check_upgrade_savepoints.php ${WORKSPACE}
 ${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php > "${WORKSPACE}/work/savepoints.txt"
 cat "${WORKSPACE}/work/savepoints.txt" | ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
 # Run the PHPCS
-echo "Running codesniffer..."
+echo "Info: Running phpcs..."
 if [[ ! -n "${phpcsstandard}" ]]; then
     phpcsstandard="${mydir}/../../codechecker/moodle"
 fi
@@ -432,7 +428,7 @@ if [[ -n "${LOCAL_CI_TESTS_RUNNING}" ]]; then
 else
     # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
     # (we pass to it the list of valid components that was built before deleting files)
-    echo "Running phpdocs checker..."
+    echo "Info: Running phpdocs..."
     ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
         --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 fi
@@ -442,14 +438,14 @@ find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jsh
 
 # Run jshint if we haven't got eslint results
 if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
-    echo "Running jshint..."
+    echo "Info: Running jshint..."
     ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
         --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 fi
 
 # Run csslint if we haven't got stylelint results
 if [ ! -f  "${WORKSPACE}/work/stylelint.xml" ]; then
-    echo "Running csslint..."
+    echo "Info: Running csslint..."
     if [ ! -f ${WORKSPACE}/.csslintrc ]; then
         echo "csslintrc file not found, defaulting to error checking only"
         echo '--errors=errors' > ${WORKSPACE}/.csslintrc
@@ -460,11 +456,11 @@ if [ ! -f  "${WORKSPACE}/work/stylelint.xml" ]; then
     # Unfortunately csslint doesn't give us decent error codes.. so we have to grep:
     if grep -q '<?xml' ${WORKSPACE}/work/csslint.out
     then
-        echo "csslint check completed."
+        echo "Info: csslint check completed."
         mv ${WORKSPACE}/work/csslint.out ${WORKSPACE}/work/csslint.xml
     elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
     then
-        echo "No checkable CSS files detected in patchset."
+        echo "Info: No checkable CSS files detected in patchset."
         echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
     else
         echo "Error: Unknown csslint error occured. See csslint.out" >> ${errorfile}
