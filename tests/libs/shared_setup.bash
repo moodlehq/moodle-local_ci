@@ -20,6 +20,13 @@ if [ -z $LOCAL_CI_TESTS_GITDIR ]; then
     exit 1;
 fi
 
+if [ -z $LOCAL_CI_TESTS_PHPCS_DIR ]; then
+    echo "Please ensure LOCAL_CI_TESTS_PHPCS_DIR is set to the path to the phpcs standard" >&2
+    exit 1
+fi
+
+
+export LOCAL_CI_TESTS_RUNNING=1
 export WORKSPACE=$BATS_TMPDIR/workspace
 mkdir -p $WORKSPACE
 export gitcmd=git
@@ -76,6 +83,27 @@ ci_run() {
 ci_run_php() {
     command="$BATS_TEST_DIRNAME/../$@"
     run bash -c "php $command"
+}
+
+# Assert that files are the same.
+# Usage: assert_files_same file1 file2
+assert_files_same() {
+    expected=$1
+    actual=$2
+
+    if [ ! -s $expected ]; then
+        fail "$expected is empty"
+        return 1
+    fi
+
+    if [ ! -s $actual ]; then
+        fail "$actual is empty"
+        return 1
+    fi
+
+    run diff -ruN $expected $actual
+    assert_success
+    assert_output ''
 }
 
 # Get a tmp directory - unique to each test file and run

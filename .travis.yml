@@ -9,11 +9,17 @@ sudo: false
 cache:
   directories:
       - $HOME/cachedir
-install: git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
+install:
+  - git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
+  - nvm install 4
+  - nvm use 4
+  - travis_retry composer install
 before_script:
   - 'git config --global user.email "travis@localhost" && git config --global user.name "Travis CI"'
   - "export LOCAL_CI_TESTS_CACHEDIR=$HOME/cachedir && mkdir -p $LOCAL_CI_TESTS_CACHEDIR"
   - "export LOCAL_CI_TESTS_GITDIR=$HOME/gitdir && git clone git://github.com/moodle/moodle $LOCAL_CI_TESTS_GITDIR"
+  - "git clone -q --depth 1 https://github.com/moodlehq/moodle-local_codechecker $HOME/moodle-local_codechecker"
+  - "export LOCAL_CI_TESTS_PHPCS_DIR=$HOME/moodle-local_codechecker/moodle/"
 script:
   - $HOME/bats/bin/bats tests
 

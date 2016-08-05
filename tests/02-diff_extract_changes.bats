@@ -13,8 +13,7 @@ assert_diff_extract_changes() {
 
     ci_run_php "diff_extract_changes/diff_extract_changes.php --diff=$fixture --output=$format > $out"
     assert_success
-    diff -ruN $expected $out
-    assert_output ''
+    assert_files_same $expected $out
     rm $out
 }
 

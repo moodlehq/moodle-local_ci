@@ -13,8 +13,7 @@ assert_checkstyle() {
 
     ci_run_php "$phpscript < $fixture > $xmlfile"
     assert_success
-    diff -ruN $expected $xmlfile
-    assert_output ''
+    assert_files_same $expected $xmlfile
     rm $xmlfile
 }
 

@@ -28,9 +28,7 @@ assert_remote_branch_reporter() {
 
     ci_run_php "remote_branch_checker/remote_branch_reporter.php --directory=$fixture --format=$format --patchset=patchset.xml --repository=$repo --githash=$hash > $testresult"
     assert_success
-    run diff -ruN $expected $testresult
-    assert_success
-    assert_output ""
+    assert_files_same $expected $testresult
 }
 
 # https://integration.moodle.org/job/Precheck%20remote%20branch/25738/

@@ -2,10 +2,24 @@
 
 load libs/shared_setup
 
-# This test is just used as some quick output because some tests are v.slow
 @test "Git is setup for tests." {
     [ -d "$gitdir/.git" ];
     assert_success
+}
+
+@test "phpcs standard path is properly set" {
+    run [ -f "$LOCAL_CI_TESTS_PHPCS_DIR/ruleset.xml" ];
+    assert_success
+}
+
+@test "phpcs is properly installed" {
+    phpcs=$BATS_TEST_DIRNAME/../vendor/bin/phpcs
+
+    run [ -x $phpcs ]
+    assert_success
+
+    run $phpcs --version
+    assert_output "PHP_CodeSniffer version 2.6.2 (stable) by Squiz (http://www.squiz.net)"
 }
 
 @test "GNU grep installed" {

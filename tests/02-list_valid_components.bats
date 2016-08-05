@@ -16,8 +16,7 @@ setup () {
     # Run test
     ci_run_php "list_valid_components/list_valid_components.php --basedir=$gitdir > $OUTPUT"
     assert_success
-    diff -ruN $EXPECTED $OUTPUT
-    assert_output ''
+    assert_files_same $EXPECTED $OUTPUT
 
     rm $EXPECTED $OUTPUT
 }
