@@ -400,7 +400,7 @@ echo "Running codesniffer..."
 if [[ ! -n "${phpcsstandard}" ]]; then
     phpcsstandard="${mydir}/../../codechecker/moodle"
 fi
-${phpcmd} ${mydir}/../coding_standards_detector/phpcs.phar \
+${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard=${phpcsstandard} ${WORKSPACE}
 

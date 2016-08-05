@@ -24,3 +24,7 @@ CVS
 /.buildpath
 /.cache
 phpunit.xml
+# Ignore composer bits.
+composer.phar
+composer.lock
+vendor/

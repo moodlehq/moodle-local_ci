@@ -23,7 +23,7 @@ load libs/shared_setup
 @test "repository file & dir permissions are correct" {
     # Define executable and non-executable extensions
     executables=('sh' 'bats')
-    nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'phar' 'php' 'template' 'txt' 'xml' 'xsl' 'yml')
+    nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml')
     # Other nonexecutable files, but looked by name, not by extension
     otherfiles=('.gitignore' '.htaccess')
 
@@ -68,7 +68,9 @@ load libs/shared_setup
     run find $BATS_TEST_DIRNAME/.. \
         -type f -regextype posix-extended \
         -not -regex ".*(${searchexpression})" \
-        -not -path "*/.git/*"
+        -not -path "*/.git/*" \
+        -not -path "*/vendor/*" \
+        -not -path "*/composer.*"
     assert_success
     assert_output ""
 }
