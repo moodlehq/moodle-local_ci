@@ -2,6 +2,7 @@
 
 load libs/shared_setup
 
+# TODO: we will get rid of these depencies soon.
 prepare_prechecker_npmbins () {
     npmglobals=$LOCAL_CI_TESTS_CACHEDIR/prechecker_npmglobals
 
@@ -20,20 +21,12 @@ prepare_prechecker_npmbins () {
     cd $OLDPWD
 }
 
-install_local_codechecker() {
-    dir="$LOCAL_CI_TESTS_CACHEDIR/local_codechecker"
-    if [ ! -d $dir ]; then
-        git clone -q --depth 1 https://github.com/moodlehq/moodle-local_codechecker $dir
-    fi
-    export phpcsstandard=$dir/moodle/
-}
-
 setup () {
     prepare_prechecker_npmbins
-    install_local_codechecker
 
     create_git_branch MOODLE_31_STABLE v3.1.1
     export WORKSPACE=$gitdir
+    export phpcsstandard=$LOCAL_CI_TESTS_PHPCS_DIR
 }
 
 # Assert prechecker results

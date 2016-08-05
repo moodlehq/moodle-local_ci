@@ -20,6 +20,12 @@ if [ -z $LOCAL_CI_TESTS_GITDIR ]; then
     exit 1;
 fi
 
+if [ -z $LOCAL_CI_TESTS_PHPCS_DIR ]; then
+    echo "Please ensure LOCAL_CI_TESTS_PHPCS_DIR is set to the path to the phpcs standard" >&2
+    exit 1
+fi
+
+
 export LOCAL_CI_TESTS_RUNNING=1
 export WORKSPACE=$BATS_TMPDIR/workspace
 mkdir -p $WORKSPACE
