@@ -125,19 +125,37 @@ class remote_branch_reporter {
             }
         }
 
-        // Process the csslint output, weighting errors with 5 and warnings with 1
-        $params = array(
-            'title' => 'CSS problems',
-            'abbr' => 'css',
-            'description' => 'This section shows CSS problems detected by csslint',
-            'url' => 'https://github.com/CSSLint/csslint/wiki/Rules', //TODO: MDLSITE-1796 Create CSS guidelines and link them here.
-            'codedir' => dirname($this->directory) . '/',
-            'errorweight' => 5,
-            'warningweight' => 1);
-        if ($node = $this->apply_xslt($params, $this->directory . '/csslint.xml', 'checkstyle2smurf.xsl')) {
-            if ($check = $node->getElementsByTagName('check')->item(0)) {
-                $snode = $doc->importNode($check, true);
-                $smurf->appendChild($snode);
+        if (file_exists($this->directory . '/stylelint.xml')) {
+            // Process the styleline output, weighting errors with 5 and warnings with 1
+            $params = array(
+                'title' => 'CSS problems',
+                'abbr' => 'css',
+                'description' => 'This section shows CSS problems detected by stylelint',
+                'url' => 'https://docs.moodle.org/dev/CSS_coding_style',
+                'codedir' => dirname($this->directory) . '/',
+                'errorweight' => 5,
+                'warningweight' => 1);
+            if ($node = $this->apply_xslt($params, $this->directory . '/stylelint.xml', 'checkstyle2smurf.xsl')) {
+                if ($check = $node->getElementsByTagName('check')->item(0)) {
+                    $snode = $doc->importNode($check, true);
+                    $smurf->appendChild($snode);
+                }
+            }
+        } else {
+            // Process the csslint output, weighting errors with 5 and warnings with 1
+            $params = array(
+                'title' => 'CSS problems',
+                'abbr' => 'css',
+                'description' => 'This section shows CSS problems detected by csslint',
+                'url' => 'https://github.com/CSSLint/csslint/wiki/Rules', //TODO: MDLSITE-1796 Create CSS guidelines and link them here.
+                'codedir' => dirname($this->directory) . '/',
+                'errorweight' => 5,
+                'warningweight' => 1);
+            if ($node = $this->apply_xslt($params, $this->directory . '/csslint.xml', 'checkstyle2smurf.xsl')) {
+                if ($check = $node->getElementsByTagName('check')->item(0)) {
+                    $snode = $doc->importNode($check, true);
+                    $smurf->appendChild($snode);
+                }
             }
         }
 

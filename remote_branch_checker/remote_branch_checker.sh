@@ -256,6 +256,7 @@ echo '.jshint' >> ${WORKSPACE}/work/patchset.files
 echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
+echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
 
 # List of excluded paths
 . ${mydir}/../define_excluded/define_excluded.sh
@@ -384,6 +385,25 @@ if [ -f $WORKSPACE/.eslintrc ]; then
     fi
 fi
 
+if [ -f $WORKSPACE/.stylelintrc ]; then
+    echo "Running stylelint..."
+    #FIXME: Won't be needed when MDL-55465 is implemented..
+    echo "theme/bootstrapbase/style/" >> $WORKSPACE/.stylelintignore
+    echo "theme/bootstrapbase/less/bootstrap/" >> $WORKSPACE/.stylelintignore
+    echo "vendor/" >> $WORKSPACE/.stylelintignore
+    echo "node_modules/" >> $WORKSPACE/.stylelintignore
+    echo "lib/yuilib/" >> $WORKSPACE/.stylelintignore
+    echo "lib/jquery/" >> $WORKSPACE/.stylelintignore
+
+    stylelintcmd="$(${npmcmd} bin)"/stylelint
+    if [ -x $stylelintcmd ]; then
+        $stylelintcmd --customFormatter 'node_modules/stylelint-checkstyle-formatter' "*/**/*.{css,less,scss}" > "${WORKSPACE}/work/stylelint.xml"
+    else
+        echo "Error: .stylelintrc file found, but stylelint executable not found" | tee -a ${errorfile}
+        exit 1
+    fi
+fi
+
 # Don't need node stuff anymore, avoid it being analysed by any of the next tools.
 rm ${gitdir}/node_modules
 
@@ -427,29 +447,31 @@ if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
         --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 fi
 
-# Run CSSLINT
-echo "Running csslint..."
-if [ ! -f ${WORKSPACE}/.csslintrc ]; then
-    echo "csslintrc file not found, defaulting to error checking only"
-    echo '--errors=errors' > ${WORKSPACE}/.csslintrc
-    echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
-fi
+# Run csslint if we haven't got stylelint results
+if [ ! -f  "${WORKSPACE}/work/stylelint.xml" ]; then
+    echo "Running csslint..."
+    if [ ! -f ${WORKSPACE}/.csslintrc ]; then
+        echo "csslintrc file not found, defaulting to error checking only"
+        echo '--errors=errors' > ${WORKSPACE}/.csslintrc
+        echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
+    fi
 
-${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.out"
-# Unfortunately csslint doesn't give us decent error codes.. so we have to grep:
-if grep -q '<?xml' ${WORKSPACE}/work/csslint.out
-then
-    echo "csslint check completed."
-    mv ${WORKSPACE}/work/csslint.out ${WORKSPACE}/work/csslint.xml
-elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
-then
-    echo "No checkable CSS files detected in patchset."
-    echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
-else
-    echo "Error: Unknown csslint error occured. See csslint.out" >> ${errorfile}
-    echo 'csslint exited with error:'
-    cat ${WORKSPACE}/work/csslint.out
-    exit 1
+    ${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.out"
+    # Unfortunately csslint doesn't give us decent error codes.. so we have to grep:
+    if grep -q '<?xml' ${WORKSPACE}/work/csslint.out
+    then
+        echo "csslint check completed."
+        mv ${WORKSPACE}/work/csslint.out ${WORKSPACE}/work/csslint.xml
+    elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
+    then
+        echo "No checkable CSS files detected in patchset."
+        echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
+    else
+        echo "Error: Unknown csslint error occured. See csslint.out" >> ${errorfile}
+        echo 'csslint exited with error:'
+        cat ${WORKSPACE}/work/csslint.out
+        exit 1
+    fi
 fi
 
 # ########## ########## ########## ##########
