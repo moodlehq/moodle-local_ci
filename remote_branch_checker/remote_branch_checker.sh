@@ -203,6 +203,7 @@ fi
 ancestor=
 
 # Try to merge the patchset (detecting conflicts) against the decided basecommit (already checkedout above).
+echo "Info: Attempting merge to ${baseref}"
 ${gitcmd} merge -q --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
@@ -213,6 +214,7 @@ set -e
 
 # The merge succeded, now push our precheck branch for inspection:
 if [ ! -z ${pushremote} ]; then
+    echo "Info: Pushing precheck branch to remote"
     pushbranchname=${issue}-${integrateto}-$(git rev-parse --short HEAD)
     $gitcmd push $pushremote ${integrateto}_precheck:${pushbranchname}
 fi
@@ -223,6 +225,7 @@ fi
 ${gitcmd} diff ${basecommit}..${integrateto}_precheck > ${WORKSPACE}/work/patchset.diff
 
 # Generate the patches and store them
+echo "Info: Generating patches"
 mkdir ${WORKSPACE}/work/patches
 ${gitcmd} format-patch -q -o ${WORKSPACE}/work/patches ${basecommit}
 cd ${WORKSPACE}/work
@@ -232,6 +235,7 @@ cd ${WORKSPACE}
 
 # Extract the changed files and lines from the patchset
 set +e
+echo "Info: Extracting diff changes"
 ${phpcmd} ${mydir}/../diff_extract_changes/diff_extract_changes.php \
     --diff=${WORKSPACE}/work/patchset.diff --output=xml > ${WORKSPACE}/work/patchset.xml
 exitstatus=${PIPESTATUS[0]}
@@ -258,9 +262,10 @@ echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
 
-# List of excluded paths
+echo "Info: Calculating excluded files"
 . ${mydir}/../define_excluded/define_excluded.sh
 
+echo "Info: Preparing npm"
 # Everything is ready, let's install all the required node stuff that some tools will use.
 ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh 2>&1 > "${WORKSPACE}/work/prepare_npm.txt"
 # And unset npmbase because we don't want those tools to handle node_modules themselves
