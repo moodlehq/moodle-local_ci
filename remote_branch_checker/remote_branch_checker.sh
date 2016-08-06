@@ -267,7 +267,7 @@ echo "Info: Calculating excluded files"
 
 echo "Info: Preparing npm"
 # Everything is ready, let's install all the required node stuff that some tools will use.
-${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh 2>&1 > "${WORKSPACE}/work/prepare_npm.txt"
+${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh >> "${WORKSPACE}/work/prepare_npm.txt" 2>&1
 # And unset npmbase because we don't want those tools to handle node_modules themselves
 npmbase=
 
