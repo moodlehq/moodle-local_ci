@@ -262,6 +262,7 @@ echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
+echo '.stylelintignore' >> ${WORKSPACE}/work/patchset.files
 
 echo "Info: Calculating excluded files"
 . ${mydir}/../define_excluded/define_excluded.sh
@@ -389,14 +390,6 @@ fi
 
 if [ -f $WORKSPACE/.stylelintrc ]; then
     echo "Info: Running stylelint..."
-    #FIXME: Won't be needed when MDL-55465 is implemented..
-    echo "theme/bootstrapbase/style/" >> $WORKSPACE/.stylelintignore
-    echo "theme/bootstrapbase/less/bootstrap/" >> $WORKSPACE/.stylelintignore
-    echo "vendor/" >> $WORKSPACE/.stylelintignore
-    echo "node_modules/" >> $WORKSPACE/.stylelintignore
-    echo "lib/yuilib/" >> $WORKSPACE/.stylelintignore
-    echo "lib/jquery/" >> $WORKSPACE/.stylelintignore
-
     stylelintcmd="$(${npmcmd} bin)"/stylelint
     if [ ! -x $stylelintcmd ]; then
         echo "Error: .stylelintrc file found, but stylelint executable not found" | tee -a ${errorfile}
