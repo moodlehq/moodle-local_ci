@@ -77,3 +77,10 @@ assert_prechecker () {
     assert_prechecker prechecker-fixture-stylelint MDL-12345 7752762674c1211e00c5d24045c065c41f5bc662 \
     "smurf,error,3,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: stylelint without cssfiles" {
+    # Ensure we always report css results, even if not css file - from
+    # https://integration.moodle.org/view/prechecker/job/Precheck%20remote%20branch/26281/console
+    assert_prechecker MDL-55445-master-66e47dd MDL-55445 7752762674c1211e00c5d24045c065c41f5bc662 \
+    "smurf,error,3,0:phplint,success,0,0;phpcs,error,3,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
+}
