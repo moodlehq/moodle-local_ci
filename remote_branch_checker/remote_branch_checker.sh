@@ -52,6 +52,7 @@ done
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+emptycheckstyle='<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>'
 
 # First of all, we need a clean clone of moodle.git in the repository,
 # verify if it's there or no.
@@ -397,11 +398,27 @@ if [ -f $WORKSPACE/.stylelintrc ]; then
     echo "lib/jquery/" >> $WORKSPACE/.stylelintignore
 
     stylelintcmd="$(${npmcmd} bin)"/stylelint
-    if [ -x $stylelintcmd ]; then
-        $stylelintcmd --customFormatter 'node_modules/stylelint-checkstyle-formatter' "*/**/*.{css,less,scss}" > "${WORKSPACE}/work/stylelint.xml"
-    else
+    if [ ! -x $stylelintcmd ]; then
         echo "Error: .stylelintrc file found, but stylelint executable not found" | tee -a ${errorfile}
         exit 1
+    fi
+
+    # Run stylelint
+    if $stylelintcmd --customFormatter 'node_modules/stylelint-checkstyle-formatter' "*/**/*.{css,less,scss}" > "${WORKSPACE}/work/stylelint.xml"
+    then
+        echo "Info: stylelint completed without errors."
+    else
+        # https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md#exit-codes
+        stylelintcode=$?
+        if [ $stylelintcode -eq 2 ]; then
+            echo "Info: stylelint found errors in patchset."
+        elif [ $stylelintcode -eq 80 ]; then
+            echo "Info: No checkable CSS files detected in patchset."
+            echo $emptycheckstyle > "${WORKSPACE}/work/stylelint.xml"
+        else
+            echo "Error: unexpected stylelint status '$stylelintcode'" | tee -a ${errorfile}
+            exit 1
+        fi
     fi
 fi
 
@@ -429,7 +446,7 @@ if [[ -n "${LOCAL_CI_TESTS_RUNNING}" ]]; then
     # We don't run the moodlecheck tests in our testing environment because local_moodlecheck requires
     # a fully install Moodle. We don't want to requite that.
     # TODO: move to a more flexible way of excluding specific checks.
-    echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/docs.xml"
+    echo $emptycheckstyle > "${WORKSPACE}/work/docs.xml"
 else
     # Run the PHPDOCS (it runs from the CI installation, requires one moodle site installed!)
     # (we pass to it the list of valid components that was built before deleting files)
@@ -466,7 +483,7 @@ if [ ! -f  "${WORKSPACE}/work/stylelint.xml" ]; then
     elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
     then
         echo "Info: No checkable CSS files detected in patchset."
-        echo '<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>' > "${WORKSPACE}/work/csslint.xml"
+        echo $emptycheckstyle > "${WORKSPACE}/work/csslint.xml"
     else
         echo "Error: Unknown csslint error occured. See csslint.out" >> ${errorfile}
         echo 'csslint exited with error:'
