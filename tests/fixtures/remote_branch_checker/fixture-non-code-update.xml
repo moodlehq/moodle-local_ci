@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="3" numwarnings="0">
-  <summary status="error" numerrors="3" numwarnings="0" condensedresult="smurf,error,3,0:phplint,success,0,0;phpcs,error,3,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0">
+<smurf version="0.9.1" numerrors="0" numwarnings="0">
+  <summary status="success" numerrors="0" numwarnings="0" condensedresult="smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="phpcs" status="error" numerrors="3" numwarnings="0"/>
+    <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
     <detail name="css" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
@@ -17,25 +17,9 @@
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess/>
   </check>
-  <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="3" numwarnings="0" allowfiltering="1">
+  <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by phpcs</description>
-    <mess>
-      <problem file="admin/settings/appearance.php" linefrom="55" lineto="55" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/66e47dd7f23a09f140e84c0fa561eb42c5498b40/admin/settings/appearance.php#L55" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
-        <message>Commas (,) must be followed by white space.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="admin/settings/appearance.php" linefrom="58" lineto="58" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/66e47dd7f23a09f140e84c0fa561eb42c5498b40/admin/settings/appearance.php#L58" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
-        <message>Commas (,) must be followed by white space.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/outputrenderers.php" linefrom="305" lineto="305" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/66e47dd7f23a09f140e84c0fa561eb42c5498b40/lib/outputrenderers.php#L305" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
-        <message>Commas (,) must be followed by white space.</message>
-        <description/>
-        <code/>
-      </problem>
-    </mess>
+    <mess/>
   </check>
   <check id="js" title="Javascript coding style problems" url="https://docs.moodle.org/dev/Javascript/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by eslint</description>
