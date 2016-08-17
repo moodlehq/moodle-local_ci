@@ -11,6 +11,7 @@ backup/bb/bb6_to_moodle.xsl
 backup/cc/schemas/
 backup/cc/schemas11/
 enrol/lti/ims-blti/
+enrol/lti/tests/fixtures/
 filter/algebra/AlgParser.pm
 filter/tex/mimetex.*
 lib/adodb/
