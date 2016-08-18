@@ -83,3 +83,10 @@ assert_prechecker () {
     assert_prechecker fixture-non-code-update MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
     "smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: thirdparty css modification" {
+    # Ensure stylelint doesn't complain about the third party css, but thirdpart does
+    # TODO: thirdparty check bug with reporting same file twice..
+    assert_prechecker fixture-thirdparty-css MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
+    "smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
+}
