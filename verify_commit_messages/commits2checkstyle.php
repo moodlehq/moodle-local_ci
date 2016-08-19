@@ -71,7 +71,7 @@ while ($line = trim(fgets(STDIN))) {
     if (trim($line) === '') {
         continue;
     }
-    if (preg_match('/^([0-9a-f]{7,16}|.*\.\.\..*)\*(error|warning)\*(.*)$/', $line, $matches) === 0) {
+    if (preg_match('/^([0-9a-f]{7,16}|.*\.\.\..*)\*(info|error|warning)\*(.*)$/', $line, $matches) === 0) {
         cli_error('Error: Unexpected format found: "' . $line . '"');
     }
     // Arrived here, we have a correct line.
