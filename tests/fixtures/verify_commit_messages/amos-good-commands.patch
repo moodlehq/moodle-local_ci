@@ -1,0 +1,26 @@
+From b21c515b84c888e9569520196b0a5cd8cd43ff73 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Fri, 19 Aug 2016 14:15:15 +0100
+Subject: [PATCH 1/1] MDL-12345 amos: good commit
+
+This should be correct AMOS syntax
+
+AMOS BEGIN
+  CPY [searchengine,admin],[type_search,plugin]
+AMOS END
+---
+ README.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/README.txt b/README.txt
+index 729dbe4..25226c4 100644
+--- a/README.txt
++++ b/README.txt
+@@ -25,4 +25,3 @@ License <https://docs.moodle.org/dev/License>.
+ Moodle is written in PHP and JavaScript and uses an SQL database for storing
+ the data.
+ 
+-See <https://docs.moodle.org> for details of Moodle's many features.
+-- 
+2.9.0
+
