@@ -276,7 +276,11 @@ while read issue; do
 
     # Add an information link to the bottom of the report
     echo "" >> "${resultfile}.${issue}.txt"
-    echo "~[More information about this report|http://docs.moodle.org/dev/Automated_code_review]~" >> "${resultfile}.${issue}.txt"
+    if [[ ${issueresult} == "success" ]]; then
+        echo "~[More information about this report|https://docs.moodle.org/dev/Automated_code_review]~" >> "${resultfile}.${issue}.txt"
+    else
+        echo "[Should these errors be fixed?|https://docs.moodle.org/dev/Automated_code_review#Should_coding_style_issues_in_existing_code_be_fixed.3F]" >> "${resultfile}.${issue}.txt"
+    fi
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
