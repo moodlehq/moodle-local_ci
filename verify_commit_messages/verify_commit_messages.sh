@@ -8,6 +8,7 @@
 # $maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 # $debug: to return results in human-readable format for debugging
 # $verifyissuecodeinmerge: to apply the issue code matching checks to merge commits.
+# $phpcmd: Path to the PHP CLI executable
 
 # Verify commit messages observe Moodle's rules (MDLSITE-1990):
 #   http://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages
@@ -24,7 +25,7 @@
 set +e
 
 # Verify everything is set
-required="gitcmd gitdir initialcommit finalcommit"
+required="gitcmd gitdir initialcommit finalcommit phpcmd"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -126,6 +127,11 @@ for c in ${commits}; do
         fi
     # normal commits
     else
+        # Run AMOS checks.
+        echo "$message" | $phpcmd $mydir/check_amos.php --commitid=${c}
+        # AMOS checks failed.
+        numproblems=$((numproblems+$?))
+
         # loop line by line, different checks will be performed
         currentline=1
         missingissuecode=""
