@@ -153,25 +153,25 @@ function compare_beautify($val) {
 }
 
 function compare_column_specs($tname, $cname, $specs1, $specs2) {
+
+    // Cached database_column_info elements.
+    static $validelements = null;
+    if (!isset($validelements)) {
+        // Use reflection to find all the magic properties of the object.
+        $reflection = new ReflectionClass($specs1);
+        $property = $reflection->getProperty('data');
+        $property->setAccessible(true);
+        $validelements = array_keys($property->getValue($specs1));
+    }
+
     $errors = array();
 
-    // Take out all the elements in the specs not defined in both sides
-    foreach ($specs1 as $key => $value) {
-        if (!array_key_exists($key, $specs2)) {
-            unset($specs1[$key]);
-        }
-    }
-    foreach ($specs2 as $key => $value) {
-        if (!array_key_exists($key, $specs1)) {
-            unset($specs2[$key]);
-        }
-    }
-    // Now strict compare the existing specs
-    foreach ($specs1 as $key => $value) {
-        if ($specs1[$key] !== $specs2[$key]) {
-            $val1 = compare_beautify($specs1[$key]);
-            $val2 = compare_beautify($specs2[$key]);
-            $errors[] = "Column {$cname} of table {$tname} difference found in {$key}: {$val1} !== {$val2}";
+    // Compare all the database_column_info specs.
+    foreach ($validelements as $element) {
+        if ($specs1->$element !== $specs2->$element) {
+            $val1 = compare_beautify($specs1->$element);
+            $val2 = compare_beautify($specs2->$element);
+            $errors[] = "Column {$cname} of table {$tname} difference found in {$element}: {$val1} !== {$val2}";
         }
     }
     return $errors;
@@ -196,7 +196,7 @@ function compare_columns($tname, $info1, $info2) {
 
     // For the remaining elements, compare specs
     foreach ($info1 as $cname => $cvalue) {
-        $errors = array_merge($errors, compare_column_specs($tname, $cname, (array)$cvalue, (array)$info2[$cname]));
+        $errors = array_merge($errors, compare_column_specs($tname, $cname, $info1[$cname], $info2[$cname]));
     }
     return $errors;
 }
