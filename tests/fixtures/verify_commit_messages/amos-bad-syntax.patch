@@ -1,7 +1,7 @@
-From f6ff79407e99ef795d86e0dc8d38931fda055eba Mon Sep 17 00:00:00 2001
+From 6ea35989f448ac416e1681ef224e829edc6ab4df Mon Sep 17 00:00:00 2001
 From: Dan Poltawski <dan@moodle.com>
 Date: Fri, 19 Aug 2016 13:00:18 +0100
-Subject: [PATCH 1/2] MDL-12345 amos: dummy commit
+Subject: [PATCH 1/1] MDL-12345 amos: dummy commit
 
 Here we are going to test the commit checker..
 
@@ -12,22 +12,21 @@ AMOS BEGIN
  MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]
 AMOS END
 ---
- README.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mod/data/lang/en/data.php | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/README.txt b/README.txt
-index 729dbe4..8c18c09 100644
---- a/README.txt
-+++ b/README.txt
-@@ -5,7 +5,7 @@
-   * | | | | | || |_| || |_| || |_| || || |___/
-     |_| |_| |_|\_____/\_____/\_____||_|\_____)
- 
--Moodle - the world's open source learning platform
-+Moodle - the world's open source learning platform.
- 
- Moodle <https://moodle.org> is a learning platform designed to provide
- educators, administrators and learners with a single robust, secure and
+diff --git a/mod/data/lang/en/data.php b/mod/data/lang/en/data.php
+index 0d01c13..e4bb55c 100644
+--- a/mod/data/lang/en/data.php
++++ b/mod/data/lang/en/data.php
+@@ -259,7 +259,6 @@ $string['namenumber'] = 'Number field';
+ $string['namepicture'] = 'Picture field';
+ $string['nameradiobutton'] = 'Radio button field';
+ $string['nametext'] = 'Text field';
+-$string['nametextarea'] = 'Textarea field';
+ $string['nameurl'] = 'URL field';
+ $string['newentry'] = 'New entry';
+ $string['newfield'] = 'Create a new field';
 -- 
 2.9.0
 

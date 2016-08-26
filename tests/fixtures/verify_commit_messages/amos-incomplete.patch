@@ -1,7 +1,7 @@
-From 7d9389621fe444eeb2ac22ed461162de52c12e85 Mon Sep 17 00:00:00 2001
+From 4194b17cdc46b5b76539cc134ac1bb2c3b9a8b17 Mon Sep 17 00:00:00 2001
 From: Dan Poltawski <dan@moodle.com>
 Date: Fri, 19 Aug 2016 13:03:07 +0100
-Subject: [PATCH 2/2] MDL-12345 amos: another problem AMOS commit
+Subject: [PATCH 1/1] MDL-12345 amos: another problem AMOS commit
 
 This one should fail because of a started command which
 is not complete..
@@ -11,19 +11,21 @@ AMOS BEGIN
  MOV [namecheckbox, mod_data],[fieldtypelabel, datafield_checkbox]
  MOV [namelatlong, mod_data],[fieldtypelabel, datafield_latlong]
 ---
- README.txt | 2 --
- 1 file changed, 2 deletions(-)
+ mod/data/lang/en/data.php | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/README.txt b/README.txt
-index 8c18c09..72d06a0 100644
---- a/README.txt
-+++ b/README.txt
-@@ -24,5 +24,3 @@ License <https://docs.moodle.org/dev/License>.
- 
- Moodle is written in PHP and JavaScript and uses an SQL database for storing
- the data.
--
--See <https://docs.moodle.org> for details of Moodle's many features.
+diff --git a/mod/data/lang/en/data.php b/mod/data/lang/en/data.php
+index 0d01c13..e4bb55c 100644
+--- a/mod/data/lang/en/data.php
++++ b/mod/data/lang/en/data.php
+@@ -259,7 +259,6 @@ $string['namenumber'] = 'Number field';
+ $string['namepicture'] = 'Picture field';
+ $string['nameradiobutton'] = 'Radio button field';
+ $string['nametext'] = 'Text field';
+-$string['nametextarea'] = 'Textarea field';
+ $string['nameurl'] = 'URL field';
+ $string['newentry'] = 'New entry';
+ $string['newfield'] = 'Create a new field';
 -- 
 2.9.0
 

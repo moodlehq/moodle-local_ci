@@ -90,7 +90,7 @@ commit_apply_fixture_and_run() {
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS incomplete commands" {
     commit_apply_fixture_and_run amos-incomplete.patch
     assert_failure
-    assert_output "${shorthash}*error*AMOS - No valid AMOS comamnds parsed, but 'AMOS BEGIN' in commit. Syntax is wrong."
+    assert_output "${shorthash}*error*AMOS - No valid commands parsed, but 'AMOS BEGIN' in commit. Syntax is wrong."
 }
 
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS good commands" {

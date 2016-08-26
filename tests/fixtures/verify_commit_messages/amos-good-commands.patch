@@ -1,4 +1,4 @@
-From b21c515b84c888e9569520196b0a5cd8cd43ff73 Mon Sep 17 00:00:00 2001
+From 4a862609d3dc3eaba942f1379cbfde73485e40d6 Mon Sep 17 00:00:00 2001
 From: Dan Poltawski <dan@moodle.com>
 Date: Fri, 19 Aug 2016 14:15:15 +0100
 Subject: [PATCH 1/1] MDL-12345 amos: good commit
@@ -9,18 +9,21 @@ AMOS BEGIN
   CPY [searchengine,admin],[type_search,plugin]
 AMOS END
 ---
- README.txt | 1 -
+ lang/en/admin.php | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/README.txt b/README.txt
-index 729dbe4..25226c4 100644
---- a/README.txt
-+++ b/README.txt
-@@ -25,4 +25,3 @@ License <https://docs.moodle.org/dev/License>.
- Moodle is written in PHP and JavaScript and uses an SQL database for storing
- the data.
- 
--See <https://docs.moodle.org> for details of Moodle's many features.
+diff --git a/lang/en/admin.php b/lang/en/admin.php
+index 1101ecf..2255a8c 100644
+--- a/lang/en/admin.php
++++ b/lang/en/admin.php
+@@ -935,7 +935,6 @@ $string['rssglobaldisabled'] = 'Disabled at server level';
+ $string['save'] = 'Save';
+ $string['savechanges'] = 'Save changes';
+ $string['search'] = 'Search';
+-$string['searchengine'] = 'Search engine';
+ $string['searchinsettings'] = 'Search in settings';
+ $string['searchresults'] = 'Search results';
+ $string['searchsetupinfo'] = 'Search setup';
 -- 
 2.9.0
 
