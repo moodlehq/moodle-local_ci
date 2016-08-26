@@ -98,3 +98,9 @@ commit_apply_fixture_and_run() {
     assert_success
     assert_output "${shorthash}*info*AMOS - String to be copied: searchengine/admin to type_search/plugin"
 }
+
+@test "verify_commit_messages/verify_commit_messages.sh: AMOS no modified lang files" {
+    commit_apply_fixture_and_run amos-no-modified-files.patch
+    assert_failure
+    assert_output "${shorthash}*error*AMOS - Commands parsed in commit message, but no lang file was modified."
+}
