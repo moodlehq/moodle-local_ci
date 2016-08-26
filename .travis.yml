@@ -20,6 +20,11 @@ before_script:
   - "export LOCAL_CI_TESTS_GITDIR=$HOME/gitdir && git clone git://github.com/moodle/moodle $LOCAL_CI_TESTS_GITDIR"
   - "git clone -q --depth 1 https://github.com/moodlehq/moodle-local_codechecker $HOME/moodle-local_codechecker"
   - "export LOCAL_CI_TESTS_PHPCS_DIR=$HOME/moodle-local_codechecker/moodle/"
+  - "export LOCAL_CI_TESTS_DBLIBRARY=native"
+  - "export LOCAL_CI_TESTS_DBTYPE=mysqli"
+  - "export LOCAL_CI_TESTS_DBHOST=localhost"
+  - "export LOCAL_CI_TESTS_DBUSER=travis"
+  - "export LOCAL_CI_TESTS_DBPASS="
 script:
   - $HOME/bats/bin/bats tests
 
