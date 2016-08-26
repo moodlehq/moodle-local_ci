@@ -18,8 +18,8 @@ require_once(__DIR__.'/../phplib/clilib.php');
 require_once(__DIR__.'/amoslib.php');
 
 list($options, $unrecognized) = cli_get_params(
-    array('help' => false, 'commitid' => ''),
-    array('h' => 'help', 'c' => 'commitid'));
+    array('help' => false, 'commitid' => '', 'filesmodified' => ''),
+    array('h' => 'help', 'c' => 'commitid', 'f' => 'filesmodified'));
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
@@ -33,6 +33,7 @@ if ($options['help']) {
 Options:
 -h, --help            Print out this help
 -c, --commitid      git commit hash
+-f, --filesmodified files modified by commit (comma seperated)
 ";
     echo $help;
     exit(0);
@@ -42,8 +43,12 @@ if (empty($options['commitid'])) {
     cli_error('--commitid missing. Use --help to get more info.');
 }
 
+if (empty($options['filesmodified'])) {
+    cli_error('--filesmodified missing. Use --help to get more info.');
+}
+
 $COMMIT = $options['commitid'];
 
-$input = file_get_contents("php://stdin");
-$returncode = amos_script_parser::validate_commit_message($input);
+$message = file_get_contents("php://stdin");
+$returncode = amos_script_parser::validate_commit_message($message, $options['filesmodified']);
 exit($returncode);

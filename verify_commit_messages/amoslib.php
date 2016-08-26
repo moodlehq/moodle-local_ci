@@ -44,19 +44,26 @@ class amos_script_parser {
     /**
      * Validate a commit message for amos comamnds.
      *
+     * @param string $text the commit message text
+     * @param string $filesmodified comma seperated list of files modified by the commit
      * @return int the number of problems found
      */
-    public static function validate_commit_message($text) {
+    public static function validate_commit_message($text, $filesmodified) {
         if (!preg_match('/(AMOS\s+(BEGIN|START)|AMOS\s+END)/', $text, $amosmatches)) {
             // No sign of amos command.
-            return self::STATUS_OK;
+            return 0;
         }
 
         $instructions = self::extract_script_from_text($text);
 
         if (empty($instructions)) {
-            self::print_error("No valid AMOS comamnds parsed, but '{$amosmatches[1]}' in commit. Syntax is wrong.");
-            return self::STATUS_WARN;
+            self::print_error("No valid commands parsed, but '{$amosmatches[1]}' in commit. Syntax is wrong.");
+            return 1; // 1 problem found.
+        }
+
+        if (!self::commit_would_be_detected_by_amos($filesmodified)) {
+            self::print_error("Commands parsed in commit message, but no lang file was modified.");
+            return 1; // 1 problem found.
         }
 
         $version = new mlang_version();
@@ -69,6 +76,24 @@ class amos_script_parser {
             }
         }
         return $problems;
+    }
+
+    /**
+     * Determines if a commit would be detected by AMOS based on the
+     * files modified in the commit.
+     *
+     * @param string $filesmodified comma seperated list of files
+     * @return bool true if the commit would be detected
+     */
+    public static function commit_would_be_detected_by_amos($filesmodified) {
+        // I'm sure I could do this more efficiently with a single regular
+        // expression, but I decided to KISS.
+        foreach (explode(',', $filesmodified) as $filepath) {
+            if (preg_match('|lang/en/\w*\.php|', $filepath)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function print_error($message) {

@@ -128,8 +128,9 @@ for c in ${commits}; do
     # normal commits
     else
         # Run AMOS checks.
-        echo "$message" | $phpcmd $mydir/check_amos.php --commitid=${c}
-        # AMOS checks failed.
+        modifiedfiles=$(git diff-tree --no-commit-id --name-only -r ${c} | tr '\n' ',')
+        echo "$message" | $phpcmd $mydir/check_amos.php --commitid=${c} --filesmodified=$modifiedfiles
+
         numproblems=$((numproblems+$?))
 
         # loop line by line, different checks will be performed
