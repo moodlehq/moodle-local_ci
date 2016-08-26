@@ -216,7 +216,7 @@ set -e
 # The merge succeded, now push our precheck branch for inspection:
 if [ ! -z ${pushremote} ]; then
     echo "Info: Pushing precheck branch to remote"
-    pushbranchname=${issue}-${integrateto}-$(git rev-parse --short HEAD)
+    pushbranchname=${issue}-${integrateto}-$(git rev-list -n1 --abbrev-commit HEAD)
     $gitcmd push $pushremote ${integrateto}_precheck:${pushbranchname}
 fi
 
