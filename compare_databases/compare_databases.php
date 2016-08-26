@@ -253,8 +253,8 @@ function compare_tables($db1, $db2) {
     $tocompare = array();
     $errors    = array();
 
-    $tables1 = $db1->get_tables();
-    $tables2 = $db2->get_tables();
+    $tables1 = $db1->get_tables(false);
+    $tables2 = $db2->get_tables(false);
 
     foreach ($tables1 as $tname => $tvalue) {
         if (isset($tables2[$tname])) {
@@ -272,9 +272,9 @@ function compare_tables($db1, $db2) {
     }
 
     foreach ($tocompare as $tname => $element) {
-        $element->columns1 = $db1->get_columns($tname);
+        $element->columns1 = $db1->get_columns($tname, false);
         $element->indexes1 = $db1->get_indexes($tname);
-        $element->columns2 = $db2->get_columns($tname);
+        $element->columns2 = $db2->get_columns($tname, false);
         $element->indexes2 = $db2->get_indexes($tname);
     }
     return array($tocompare, $errors);
