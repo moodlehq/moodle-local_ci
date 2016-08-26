@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+  <file name="b21c515">
+    <error line="0" column="0" severity="info" message="AMOS - String to be copied: searchengine/admin to type_search/plugin "/>
+  </file>
+</checkstyle>

@@ -1,0 +1,30 @@
+From 0a9f4ab624b0f88c377cbe19189102155d505e06 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Fri, 19 Aug 2016 14:15:15 +0100
+Subject: [PATCH 1/1] MDL-12345 amos: good syntax, no modified files
+
+This should be correct AMOS syntax, but not
+have any modified causing amos to parse it.
+
+AMOS BEGIN
+  CPY [searchengine,admin],[type_search,plugin]
+AMOS END
+---
+ index.php | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/index.php b/index.php
+index b500007..43a3c12 100644
+--- a/index.php
++++ b/index.php
+@@ -16,7 +16,6 @@
+ 
+ /**
+  * Moodle frontpage.
+- *
+  * @package    core
+  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+-- 
+2.9.0
+

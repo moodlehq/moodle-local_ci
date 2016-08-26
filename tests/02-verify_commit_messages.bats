@@ -80,3 +80,27 @@ commit_apply_fixture_and_run() {
     assert_failure
     assert_output "${shorthash}*error*The line #3 has more than 132 characters (found: 181)"
 }
+
+@test "verify_commit_messages/verify_commit_messages.sh: AMOS bad syntax" {
+    commit_apply_fixture_and_run amos-bad-syntax.patch
+    assert_failure
+    assert_output "${shorthash}*error*AMOS - Instruction not understood 'MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]'"
+}
+
+@test "verify_commit_messages/verify_commit_messages.sh: AMOS incomplete commands" {
+    commit_apply_fixture_and_run amos-incomplete.patch
+    assert_failure
+    assert_output "${shorthash}*error*AMOS - No valid commands parsed, but 'AMOS BEGIN' in commit. Syntax is wrong."
+}
+
+@test "verify_commit_messages/verify_commit_messages.sh: AMOS good commands" {
+    commit_apply_fixture_and_run amos-good-commands.patch
+    assert_success
+    assert_output "${shorthash}*info*AMOS - String to be copied: searchengine/admin to type_search/plugin"
+}
+
+@test "verify_commit_messages/verify_commit_messages.sh: AMOS no modified lang files" {
+    commit_apply_fixture_and_run amos-no-modified-files.patch
+    assert_failure
+    assert_output "${shorthash}*error*AMOS - Commands parsed in commit message, but no lang file was modified."
+}

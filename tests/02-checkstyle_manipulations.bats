@@ -25,6 +25,10 @@ assert_checkstyle() {
     assert_checkstyle verify_commit_messages/commits2checkstyle.php commits.txt commits.xml
 }
 
+@test "verify_commit_messages/commits2checkstyle.php info only " {
+    assert_checkstyle verify_commit_messages/commits2checkstyle.php commits-info.txt commits-info.xml
+}
+
 @test "remote_branch_checker/checkstyle_converter.php: phplint" {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=phplint' phplint.txt phplint.xml
 }

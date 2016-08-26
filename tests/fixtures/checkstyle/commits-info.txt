@@ -1,0 +1,1 @@
+b21c515*info*AMOS - String to be copied: searchengine/admin to type_search/plugin

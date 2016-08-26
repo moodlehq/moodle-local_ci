@@ -90,3 +90,13 @@ assert_prechecker () {
     assert_prechecker fixture-thirdparty-css MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
     "smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
+    assert_prechecker fixture-bad-amos-commands MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
+    "smurf,error,2,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,error,2,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: good amos commands" {
+    assert_prechecker fixture-good-amos-commit MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
+    "smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0"
+}
