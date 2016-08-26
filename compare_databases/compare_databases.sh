@@ -21,8 +21,11 @@ set +e
 required="WORKSPACE gitcmd phpcmd mysqlcmd gitdir gitbranchinstalled gitbranchupgraded dblibrary dbtype dbhost1 dbuser1 dbpass1"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
-        echo "Error: ${var} environment variable is not defined. See the script comments."
-        exit 1
+        # Only dbpass1 can be set and empty (because some facilities and devs like it to be empty)
+        if [ "$var" != "dbpass1" ] || [ -z "${!var+x}" ]; then
+            echo "Error: ${var} environment variable is not defined. See the script comments."
+            exit 1
+        fi
     fi
 done
 
@@ -64,8 +67,10 @@ fi
 # Do the moodle install of $installdb
 echo "Info: Installing Moodle $gitbranchinstalled into $installdb" | tee -a "${logfile}"
 cd $gitdir && $gitcmd checkout -q -B installbranch $gitbranchinstalled
+# Use HEAD hash as admin pseudorandom password for all Moodle sites (not used).
+moodleadminpass=$($gitcmd rev-list -n1 --abbrev-commit HEAD)
 rm -fr config.php
-${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost1 --dbname=$installdb --dbuser=$dbuser1 --dbpass=$dbpass1 --prefix=$dbprefixinstall --fullname=$installdb --shortname=$installdb --adminuser=$dbuser1 --adminpass=$dbpass1 2>&1 >> "${logfile}"
+${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost1 --dbname=$installdb --dbuser=$dbuser1 --dbpass=$dbpass1 --prefix=$dbprefixinstall --fullname=$installdb --shortname=$installdb --adminuser=$dbuser1 --adminpass=$moodleadminpass 2>&1 >> "${logfile}"
 # Error installing, we cannot continue. Exit
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
@@ -98,7 +103,7 @@ for upgrade in "${upgradedarr[@]}"; do
         echo "Info: Installing Moodle $upgrade into $upgradedb" | tee -a "${logfile}"
         cd $gitdir && $gitcmd checkout -q -B upgradebranch origin/$upgrade
         rm -fr config.php
-        ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost2 --dbname=$upgradedb --dbuser=$dbuser2 --dbpass=$dbpass2 --prefix=$dbprefixupgrade --fullname=$upgradedb --shortname=$upgradedb --adminuser=$dbuser2 --adminpass=$dbpass2 2>&1 >> "${logfile}"
+        ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost2 --dbname=$upgradedb --dbuser=$dbuser2 --dbpass=$dbpass2 --prefix=$dbprefixupgrade --fullname=$upgradedb --shortname=$upgradedb --adminuser=$dbuser2 --adminpass=$moodleadminpass 2>&1 >> "${logfile}"
         # Error installing, we cannot continue. Exit
         exitstatus=${PIPESTATUS[0]}
         if [ $exitstatus -ne 0 ]; then

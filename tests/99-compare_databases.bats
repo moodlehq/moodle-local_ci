@@ -7,7 +7,10 @@ setup () {
     required="LOCAL_CI_TESTS_DBLIBRARY LOCAL_CI_TESTS_DBTYPE LOCAL_CI_TESTS_DBHOST LOCAL_CI_TESTS_DBUSER LOCAL_CI_TESTS_DBPASS"
     for var in ${required}; do
         if [ -z "${!var}" ]; then
-            skip "some required variables are not defined"
+            # Only LOCAL_CI_TESTS_DBPASS can be set and empty (because some facilities and devs like it to be empty)
+            if [ "$var" != "LOCAL_CI_TESTS_DBPASS" ] || [ -z "${!var+x}" ]; then
+                skip "some required variables are not defined"
+            fi
         fi
     done
     # Only supported database is mysqli.
