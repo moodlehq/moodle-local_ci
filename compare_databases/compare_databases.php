@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,11 +30,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
-define('NO_OUTPUT_BUFFERING', true);
-
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once($CFG->libdir.'/clilib.php');      // cli only functions
+ini_set('memory_limit', '256M');
+require_once(__DIR__.'/../phplib/clilib.php');
 
 // now get cli options
 list($options, $unrecognized) = cli_get_params(array(
@@ -51,20 +47,33 @@ list($options, $unrecognized) = cli_get_params(array(
                                                    'dbname1'   => '',
                                                    'dbname2'   => '',
                                                    'dbprefix1' => 'mdl_',
-                                                   'dbprefix2' => ''),
+                                                   'dbprefix2' => '',
+                                                   'gitdir'    => ''),
                                                array(
                                                    'h' => 'help'));
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
-    cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
+    cli_error("Unrecognised options:\n{$unrecognized}\n Please use --help option.");
 }
 
 if (empty($options['dblibrary']) || empty($options['dbtype']) || empty($options['dbhost1']) ||
-    empty($options['dbuser1']) || empty($options['dbpass1']) || empty($options['dbname1']) ||
+    empty($options['dbuser1']) || !isset($options['dbpass1']) || empty($options['dbname1']) ||
     empty($options['dbprefix1'])) {
 
     cli_error('Missing dblibrary/dbtype/dbhost1/dbuser1/dbpass1/dbname1/dbprefix1 param. Please use --help option.');
+}
+
+// Try to guess gitdir from env if not passed explicitly.
+if (empty($options['gitdir'])) {
+    // Try to find it from env.
+    $gitdir = getenv('gitdir');
+    if (is_readable($gitdir . '/lib/dml/moodle_database.php')) {
+        $options['gitdir'] = $gitdir;
+    } else {
+        // Not found, exit. It must be passed.
+        cli_error('Unable to find a suitable Moodle code base. Please use the --gitdir param to specify it');
+    }
 }
 
 $options['dbhost2'] = empty($options['dbhost2']) ? $options['dbhost1'] : $options['dbhost2'];
@@ -87,6 +96,7 @@ Options:
 --dbpassX             Password to the database. 2nd defaults to 1st
 --dbnameX             Name of the database. 2nd defaults to 1st
 --dbprefixX           Prefix to apply to all DB objects. Defaults to mdl. 2nd defaults to 1st
+--gitdir              Base path of moodle installation. Needed to use moodle_database. Defaults to empty.
 
 Example:
 \$sudo -u www-data /usr/bin/php local/ci/compare_databases/compare_databases.php --dbuser1=stronk7 --dbpass1=mojitos --dbname1=dbone --dbname2=dbtwo
@@ -96,16 +106,11 @@ Example:
     exit(0);
 }
 
-// Always run the comparison in developer debug mode.
-$CFG->debug = DEBUG_DEVELOPER;
-error_reporting($CFG->debug);
-raise_memory_limit(MEMORY_EXTRA);
-
 // Let's connect to both ends
 $db1 = compare_connect($options['dblibrary'], $options['dbtype'], $options['dbhost1'], $options['dbuser1'],
-                       $options['dbpass1'], $options['dbname1'], $options['dbprefix1']);
+                       $options['dbpass1'], $options['dbname1'], $options['dbprefix1'], $options['gitdir']);
 $db2 = compare_connect($options['dblibrary'], $options['dbtype'], $options['dbhost2'], $options['dbuser2'],
-                       $options['dbpass2'], $options['dbname2'], $options['dbprefix2']);
+                       $options['dbpass2'], $options['dbname2'], $options['dbprefix2'], $options['gitdir']);
 
 list($tablesarr, $errorsarr) = compare_tables($db1, $db2);
 
@@ -248,8 +253,8 @@ function compare_tables($db1, $db2) {
     $tocompare = array();
     $errors    = array();
 
-    $tables1 = $db1->get_tables();
-    $tables2 = $db2->get_tables();
+    $tables1 = $db1->get_tables(false);
+    $tables2 = $db2->get_tables(false);
 
     foreach ($tables1 as $tname => $tvalue) {
         if (isset($tables2[$tname])) {
@@ -267,23 +272,36 @@ function compare_tables($db1, $db2) {
     }
 
     foreach ($tocompare as $tname => $element) {
-        $element->columns1 = $db1->get_columns($tname);
+        $element->columns1 = $db1->get_columns($tname, false);
         $element->indexes1 = $db1->get_indexes($tname);
-        $element->columns2 = $db2->get_columns($tname);
+        $element->columns2 = $db2->get_columns($tname, false);
         $element->indexes2 = $db2->get_indexes($tname);
     }
     return array($tocompare, $errors);
 }
 
 
-function compare_connect($library, $type, $host, $user, $pass, $name, $prefix) {
-    global $CFG;
+function compare_connect($library, $type, $host, $user, $pass, $name, $prefix, $gitdir) {
+
+    // Mini bootstrap to get access to moodle_database services.
+    // (note it's not perfect, exceptions and other stuff is not
+    // available but works for normal operations).
+    if (!defined('MOODLE_INTERNAL')) {
+        define('MOODLE_INTERNAL', 1);
+        unset($CFG);
+        global $CFG;
+        $CFG = new stdClass();
+        $CFG->dirroot = $gitdir;
+        $CFG->libdir = $CFG->dirroot . '/lib';
+        $CFG->admin = 'admin';
+    }
 
     $classname = "{$type}_{$library}_moodle_database";
-    if (!file_exists("$CFG->libdir/dml/$classname.php")) {
+    if (!file_exists("$gitdir/lib/dml/$classname.php")) {
         cli_error("Error connecting to DB: Driver {$classname} not available");
     }
-    require_once("$CFG->libdir/dml/$classname.php");
+    // Load the driver class.
+    require_once("$gitdir/lib/dml/$classname.php");
     $DB = new $classname();
     if (!$DB->driver_installed()) {
         cli_error("Error connecting to DB: PHP driver for {$classname} not installed");
