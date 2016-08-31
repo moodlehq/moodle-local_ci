@@ -37,7 +37,7 @@ setup () {
     assert_output --partial 'Error: dbtype environment variable is not defined. See the script comments.'
 }
 
-@test "compare_databases/compare_databases.sh: single branch runs work" {
+@test "compare_databases/compare_databases.sh: single actual (>= 31_STABLE) branch runs work" {
     export gitbranchinstalled=master
     export gitbranchupgraded=MOODLE_31_STABLE
 
@@ -54,6 +54,26 @@ setup () {
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
     run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
+    assert_success
+}
+
+@test "compare_databases/compare_databases.sh: single old (< 31_STABLE) branch runs work" {
+    export gitbranchinstalled=v3.0.5
+    export gitbranchupgraded=v3.0.1
+
+    ci_run compare_databases/compare_databases.sh
+    assert_success
+    assert_output --partial 'Info: Origin branches: (1) v3.0.1'
+    assert_output --partial 'Info: Target branch: v3.0.5'
+    assert_output --partial 'Info: Installing Moodle v3.0.5 into ci_installed_'
+    assert_output --partial 'Info: Comparing v3.0.5 and upgraded v3.0.1'
+    assert_output --partial 'Info: Installing Moodle v3.0.1 into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle v3.0.1 to v3.0.5 into ci_upgraded_'
+    assert_output --partial 'Info: Comparing databases ci_installed_'
+    assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
+    assert_output --partial 'Ok: Process ended without errors'
+    refute_output --partial 'Error: Process ended with'
+    run [ -f $WORKSPACE/compare_databases_v3.0.5_logfile.txt ]
     assert_success
 }
 

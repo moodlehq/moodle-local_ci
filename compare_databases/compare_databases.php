@@ -164,9 +164,15 @@ function compare_column_specs($tname, $cname, $specs1, $specs2) {
     if (!isset($validelements)) {
         // Use reflection to find all the magic properties of the object.
         $reflection = new ReflectionClass($specs1);
-        $property = $reflection->getProperty('data');
-        $property->setAccessible(true);
-        $validelements = array_keys($property->getValue($specs1));
+        if ($reflection->hasProperty('data')) {
+            // Moodle 3.1 and up, everything is handled magically within the data property).
+            $property = $reflection->getProperty('data');
+            $property->setAccessible(true);
+            $validelements = array_keys($property->getValue($specs1));
+        } else {
+            // Older versions, let's get individual public properties.
+            $validelements = array_keys(get_object_vars($specs1));
+        }
     }
 
     $errors = array();

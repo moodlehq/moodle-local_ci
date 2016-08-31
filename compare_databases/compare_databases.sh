@@ -64,9 +64,16 @@ if [ $exitstatus -ne 0 ]; then
     exit $exitstatus
 fi
 
+# Ensure we have all branches and tags at hand or some origin objects may not be available
+cd $gitdir && $gitcmd fetch --all && $gitcmd fetch --tags
+
 # Do the moodle install of $installdb
 echo "Info: Installing Moodle $gitbranchinstalled into $installdb" | tee -a "${logfile}"
-cd $gitdir && $gitcmd checkout -q -B installbranch $gitbranchinstalled
+# Calculate the proper hash so we branch on it, no matter it's branch, tag or hash
+githashinstalled=$(cd $gitdir && \
+                   $gitcmd rev-parse -q --verify origin/$gitbranchinstalled || \
+                   $gitcmd rev-parse -q --verify $gitbranchinstalled)
+cd $gitdir && $gitcmd checkout -q -B installbranch $githashinstalled
 # Use HEAD hash as admin pseudorandom password for all Moodle sites (not used).
 moodleadminpass=$($gitcmd rev-list -n1 --abbrev-commit HEAD)
 rm -fr config.php
@@ -101,7 +108,11 @@ for upgrade in "${upgradedarr[@]}"; do
     # only if we don't come from an erroneus previous situation
     if [ $exitstatus -eq 0 ]; then
         echo "Info: Installing Moodle $upgrade into $upgradedb" | tee -a "${logfile}"
-        cd $gitdir && $gitcmd checkout -q -B upgradebranch origin/$upgrade
+        # Calculate the proper hash so we branch on it, no matter it's branch, tag or hash
+        githashupgrade=$(cd $gitdir && \
+                           $gitcmd rev-parse -q --verify origin/$upgrade || \
+                           $gitcmd rev-parse -q --verify $upgrade)
+        cd $gitdir && $gitcmd checkout -q -B upgradebranch $githashupgrade
         rm -fr config.php
         ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost2 --dbname=$upgradedb --dbuser=$dbuser2 --dbpass=$dbpass2 --prefix=$dbprefixupgrade --fullname=$upgradedb --shortname=$upgradedb --adminuser=$dbuser2 --adminpass=$moodleadminpass 2>&1 >> "${logfile}"
         # Error installing, we cannot continue. Exit
