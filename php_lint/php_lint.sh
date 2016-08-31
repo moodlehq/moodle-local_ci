@@ -70,6 +70,20 @@ for mfile in ${mfiles} ; do
                 echo "$fullpath - ERROR: BOM character found"
                 errorfound=1
             fi
+
+            # (Hacky) MOODLE_INTERNAL check.
+            if [[ ${fulllint} -ne 1 ]]; then
+                # At the moment, we only do this in partial checks. Thats because
+                # we dont have a properly MOODLE_INTERNAL codebase.
+                if ! grep -q -E '(require.*config.php|MOODLE_INTERNAL)' $fullpath
+                then
+                    # The 'on line 1' part is imporant and means problems should only
+                    # be reported by the prechecker when the first line is modified (i.e.
+                    # new file is created).
+                    echo "$fullpath - ERROR: file missing MOODLE_INTERNAL or require config.php on line 1"
+                    errorfound=1
+                fi
+            fi
         else
             # This is a bit of a hack, we should really be using git to
             # get actual file contents from the latest commit to avoid
