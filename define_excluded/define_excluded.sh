@@ -80,6 +80,7 @@ webservice/amf/testclient/AMFTester.mxml
 webservice/amf/testclient/customValidators/JSONValidator.as
 work/
 yui/build/
+*.csv
 *.gif
 *.jpg
 *.png
