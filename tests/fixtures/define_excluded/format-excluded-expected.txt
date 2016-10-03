@@ -71,7 +71,6 @@ lib/spout/
 lib/swfobject/
 lib/tcpdf/
 lib/tests/fixtures/messageinbound/
-lib/tests/fixtures/tabfile.csv
 lib/tests/fixtures/timezonewindows.xml
 lib/typo3/
 lib/xhprof/
@@ -88,10 +87,10 @@ lib/zend/
 mod/assign/feedback/editpdf/fpdi/
 mod/lti/OAuthBody.php
 mod/wiki/tests/fixtures/
+node_modules/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
-search/
 theme/bootstrapbase/amd/src/bootstrap.js
 theme/bootstrapbase/javascript/html5shiv.js
 theme/bootstrapbase/less/bootstrap

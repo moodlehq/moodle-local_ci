@@ -46,7 +46,6 @@ lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
 lib/tests/fixtures/messageinbound/
-lib/tests/fixtures/tabfile.csv
 lib/tests/fixtures/timezonewindows.xml
 lib/typo3/
 lib/yui/2.9.0/
@@ -67,10 +66,10 @@ lib/xmlize.php
 mod/lti/OAuthBody.php
 mod/wiki/tests/fixtures/
 mod/assign/feedback/editpdf/fpdi/
+node_modules/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
-search/
 theme/bootstrapbase/less/bootstrap
 theme/mymobile/javascript/
 theme/mymobile/jquery/
@@ -119,41 +118,37 @@ fi
 
 # Exclude syntax for grep commands (egrep-like regexp)
 excluded_grep=""
-for i in ${excluded}
-do
+while read -r i; do
     excluded_grep="${excluded_grep}|/${i}"
-done
+done <<< "${excluded}"
 excluded_grep=${excluded_grep#|}
 excluded_grep=${excluded_grep//\./\\.}
+excluded_grep=${excluded_grep//\*/.\*}
 
 # Exclude syntax for phpcpd/phploc../phploc... (list of exclude parameters without trailing slash)
 excluded_list=""
-for i in ${excluded}
-do
+while read -r i; do
     excluded_list="${excluded_list} --exclude ${i%\/}"
-done
+done <<< "${excluded}"
 
 # Exclude syntax for apigen (list of exclude parameters with * wildcards)
 excluded_list_wildchars=""
-for i in ${excluded}
-do
+while read -r i; do
     excluded_list_wildchars="${excluded_list_wildchars} --exclude */${i}*"
-done
+done <<< "${excluded}"
 
 # Exclude syntax for phpmd (comma separated)
 excluded_comma=""
-for i in ${excluded}
-do
+while read -r i; do
     excluded_comma="${excluded_comma},${i}"
-done
+done <<< "${excluded}"
 excluded_comma=${excluded_comma#,}
 
 # Exclude syntax for phpcs (coma separated with * wildcards)
 excluded_comma_wildchars=""
-for i in ${excluded}
-do
+while read -r i; do
     excluded_comma_wildchars="${excluded_comma_wildchars},*/${i}*"
-done
+done <<< "${excluded}"
 excluded_comma_wildchars=${excluded_comma_wildchars#,}
 excluded_comma_wildchars=${excluded_comma_wildchars//\./\\.}
 
