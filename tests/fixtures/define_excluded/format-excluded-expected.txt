@@ -1,3 +1,4 @@
+*.csv
 *.gif
 *.jpg
 *.png
