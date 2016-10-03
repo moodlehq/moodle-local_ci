@@ -53,7 +53,8 @@ if [ -x $gruntcmd ]; then
     # Run the default task (same as specifying no arguments)
     tasks="default"
 
-    if [ -e .eslintignore ]; then
+    if grep -q ignorefiles Gruntfile.js
+    then
         # In 3.2 and later run ignorefiles task
         tasks="$tasks ignorefiles"
     fi
