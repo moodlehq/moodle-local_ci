@@ -46,7 +46,6 @@ lib/spikephpcoverage/
 lib/swfobject/
 lib/tcpdf/
 lib/tests/fixtures/messageinbound/
-lib/tests/fixtures/tabfile.csv
 lib/tests/fixtures/timezonewindows.xml
 lib/typo3/
 lib/yui/2.9.0/
@@ -67,10 +66,10 @@ lib/xmlize.php
 mod/lti/OAuthBody.php
 mod/wiki/tests/fixtures/
 mod/assign/feedback/editpdf/fpdi/
+node_modules/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
-search/
 theme/bootstrapbase/less/bootstrap
 theme/mymobile/javascript/
 theme/mymobile/jquery/
@@ -125,6 +124,7 @@ do
 done
 excluded_grep=${excluded_grep#|}
 excluded_grep=${excluded_grep//\./\\.}
+excluded_grep=${excluded_grep//\*/.\*}
 
 # Exclude syntax for phpcpd/phploc../phploc... (list of exclude parameters without trailing slash)
 excluded_list=""
