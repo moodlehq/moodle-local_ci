@@ -355,7 +355,7 @@ echo "Info: Deleting excluded and unrelated files..."
 # Remove all the excluded (but .git and work)
 set -e
 for todelete in ${excluded}; do
-    if [[ ${todelete} =~ ".git" || ${todelete} =~ "work" ]]; then
+    if [[ ${todelete} =~ ".git" || ${todelete} =~ "work" || ${todelete} =~ "node_modules" ]]; then
         continue
     fi
     rm -fr "${WORKSPACE}/${todelete}"
