@@ -64,9 +64,6 @@ if [ $exitstatus -ne 0 ]; then
     exit $exitstatus
 fi
 
-# Ensure we have all branches and tags at hand or some origin objects may not be available
-cd $gitdir && $gitcmd fetch --all && $gitcmd fetch --tags
-
 # Do the moodle install of $installdb
 echo "Info: Installing Moodle $gitbranchinstalled into $installdb" | tee -a "${logfile}"
 # Calculate the proper hash so we branch on it, no matter it's branch, tag or hash
