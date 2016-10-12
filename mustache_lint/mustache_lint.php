@@ -72,10 +72,7 @@ $mustache = new Mustache_Engine([
 
 $content = '';
 try {
-    if (!$example = extract_example_from_template($templatecontent)) {
-        print_problem('WARNING', 'Example context missing.');
-        $example = [];
-    }
+    $example = extract_example_from_template($templatecontent);
     $content = $mustache->render($templatecontent, $example);
 } catch (exception $e) {
     print_problem('ERROR', 'Mustache syntax exception: '.$e->getMessage());
@@ -84,7 +81,7 @@ try {
 
 if (empty($content)) {
     // This probably is related to a partial or so on. Best to avoid raising an error.
-    print_message('INFO', 'Template produced no content');
+    print_message('INFO', 'Template produced no content (linter does not resolve partials)');
 } else {
     check_html_validation($content);
 }
@@ -117,8 +114,14 @@ function extract_example_from_template($content) {
         }
     }
 
+    if (empty($docs)) {
+        print_problem('WARNING', 'Example context missing (@template section not found.)');
+        return [];
+    }
+
     if (!preg_match('/Example context \(json\):([\s\S]*)/', $docs, $matches)) {
-        return false;
+        print_problem('WARNING', 'Example context missing.');
+        return [];
     }
 
     $json = trim($matches[1]);
