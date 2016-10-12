@@ -41,7 +41,7 @@ if ($unrecognized) {
 
 }
 
-$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis');
+$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis', 'mustachelint');
 
 
     $help =
@@ -223,6 +223,34 @@ function process_travis($line) {
         $output.= '<file name="">'.PHP_EOL;
         $output.= '<error diffurl="'.$diffurl.'" line="0" column="0" severity="'.$severity.'" ';
         $output.= 'message="'.$message.'"/>' . PHP_EOL;
+        $output.= '</file>';
+    }
+
+    return $output;
+}
+
+/**
+ * Converts mustachelint output into checkstyle format
+ *
+ * Example input:
+ *  /path/to/linting.mustache - WARNING: HTML Validation error, line 2: End tag “p” seen, but there were open elements. (ello World</p></bo)"
+ *  /path/to/linting.mustache - ERROR: Mustache syntax exception: Example context JSON is unparsable, fails with: Syntax error"
+ *
+ * @param string $line the line of file
+ * @return string the xml fragment
+ */
+function process_mustachelint($line) {
+    $output = '';
+
+    if (preg_match('/^(\S+) \- (INFO|ERROR|WARNING): (.*)/', $line, $matches)) {
+        $filename = $matches[1];
+        $severity = strtolower($matches[2]);
+        $message = $matches[3];
+        $lineno = 1;
+
+        $output.= '<file name="' . $filename. '">'.PHP_EOL;
+        $output.= '<error line="'.$lineno.'" column="0" severity="'.$severity.'" ';
+        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
         $output.= '</file>';
     }
 

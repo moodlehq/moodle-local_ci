@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+<file name="/Users/danp/www/im/message/output/popup/templates/message_popover.mustache">
+<error line="1" column="0" severity="error" message="Mustache syntax exception: Nesting error: core/popover_region (on line 2) vs. classes (on line 3) "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_contacts.mustache">
+<error line="1" column="0" severity="warning" message="Example context missing. "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_contacts_area.mustache">
+<error line="1" column="0" severity="warning" message="Example context missing. "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_contacts_area.mustache">
+<error line="1" column="0" severity="warning" message="HTML Validation error, line 15: An element with “role=tab” must be contained in, or owned by, an element with “role=tablist”. (abs&quot;&gt;    &lt;div class=&quot;tab tabconversations selected&quot; data-action=&quot;conversations-view&quot; role=&quot;tab&quot; aria-controls=&quot;conversations-tab-panel&quot; aria-selected=&quot;true&quot; tabindex=&quot;0&quot;&gt;     ) "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_contacts_area.mustache">
+<error line="1" column="0" severity="warning" message="HTML Validation error, line 19: An element with “role=tab” must be contained in, or owned by, an element with “role=tablist”. (/div&gt;    &lt;div class=&quot;tab tabcontacts&quot; data-action=&quot;contacts-view&quot; role=&quot;tab&quot; aria-controls=&quot;contacts-tab-panel&quot; aria-selected=&quot;false&quot; tabindex=&quot;-1&quot;&gt;     ) "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_messages_area.mustache">
+<error line="1" column="0" severity="warning" message="Example context missing. "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_profile.mustache">
+<error line="1" column="0" severity="warning" message="Example context missing. "/>
+</file><file name="/Users/danp/www/im/message/templates/message_area_profile.mustache">
+<error line="1" column="0" severity="warning" message="HTML Validation error, line 9: Bad value “” for attribute “src” on element “img”: Must be non-empty. (&gt;        &lt;img class=&quot;profile-picture&quot; src=&quot;&quot; alt=&quot;&quot; /&gt;     ) "/>
+</file></checkstyle>
