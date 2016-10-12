@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <smurf version="0.9.1" numerrors="14" numwarnings="6">
-  <summary status="error" numerrors="14" numwarnings="6" condensedresult="smurf,error,14,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,5,0;shifter,success,0,0;travis,success,0,0">
+  <summary status="error" numerrors="14" numwarnings="6" condensedresult="smurf,error,14,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,5,0;shifter,success,0,0;travis,success,0,0;mustachelint,success,0,0">
     <detail name="phplint" status="error" numerrors="1" numwarnings="0"/>
     <detail name="phpcs" status="error" numerrors="2" numwarnings="2"/>
     <detail name="js" status="error" numerrors="2" numwarnings="1"/>
@@ -12,6 +12,7 @@
     <detail name="grunt" status="error" numerrors="5" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="mustachelint" status="success" numerrors="0" numwarnings="0"/>
   </summary>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="1" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
@@ -163,6 +164,10 @@
   </check>
   <check id="travis" title="Travis CI problems" url="https://docs.moodle.org/dev/Travis_Integration" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section reports issues detected by Travis CI.</description>
+    <mess/>
+  </check>
+  <check id="mustachelint" title="Mustache template problems" url="https://docs.moodle.org/dev/Templates" numerrors="0" numwarnings="0" allowfiltering="0">
+    <description>This section shows problems detected in mustache templates</description>
     <mess/>
   </check>
 </smurf>

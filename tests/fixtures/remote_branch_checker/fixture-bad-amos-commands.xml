@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <smurf version="0.9.1" numerrors="2" numwarnings="0">
-  <summary status="error" numerrors="2" numwarnings="0" condensedresult="smurf,error,2,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,error,2,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0">
+  <summary status="error" numerrors="2" numwarnings="0" condensedresult="smurf,error,2,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,error,2,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustachelint,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
@@ -12,6 +12,7 @@
     <detail name="grunt" status="success" numerrors="0" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="mustachelint" status="success" numerrors="0" numwarnings="0"/>
   </summary>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
@@ -71,6 +72,10 @@
   </check>
   <check id="travis" title="Travis CI problems" url="https://docs.moodle.org/dev/Travis_Integration" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section reports issues detected by Travis CI.</description>
+    <mess/>
+  </check>
+  <check id="mustachelint" title="Mustache template problems" url="https://docs.moodle.org/dev/Templates" numerrors="0" numwarnings="0" allowfiltering="0">
+    <description>This section shows problems detected in mustache templates</description>
     <mess/>
   </check>
 </smurf>

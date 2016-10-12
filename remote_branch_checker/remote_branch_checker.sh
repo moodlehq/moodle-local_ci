@@ -330,6 +330,10 @@ echo "Info: Running thirdparty..."
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
+echo "Info: Running mustache lint..."
+${mydir}/../mustache_lint/mustache_lint.sh > "${WORKSPACE}/work/mustachelint.txt"
+cat "${WORKSPACE}/work/mustachelint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=mustachelint > "${WORKSPACE}/work/mustachelint.xml"
+
 # Run the grunt checker if Gruntfile exists. node stuff has been already installed.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
     echo "Info: Running grunt..."
