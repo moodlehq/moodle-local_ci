@@ -278,7 +278,7 @@ class remote_branch_reporter {
         // Process the mustache output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'Mustache template problems',
-            'abbr' => 'mustachelint',
+            'abbr' => 'mustache',
             'description' => 'This section shows problems detected in mustache templates',
             'url' => 'https://docs.moodle.org/dev/Templates',
             'codedir' => dirname($this->directory) . '/',
