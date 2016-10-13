@@ -100,3 +100,8 @@ assert_prechecker () {
     assert_prechecker fixture-good-amos-commit MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87 \
     "smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: mustache lint" {
+    assert_prechecker fixture-mustache-lint MDL-12345 d9520bc04e4d47d8dedfbe6b07cbbe0cb14c7fcf \
+    "smurf,error,1,4:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,error,1,4"
+}
