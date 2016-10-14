@@ -27,8 +27,8 @@ require_once(__DIR__.'/../phplib/clilib.php');
 require_once(__DIR__.'/../vendor/autoload.php');
 
 list($options, $unrecognized) = cli_get_params(
-    ['help' => false, 'filename' => '', 'validator' => ''],
-    ['h' => 'help', 'f' => 'filename', 'v' => 'validator']);
+    ['help' => false, 'filename' => '', 'validator' => '', 'basename' => ''],
+    ['h' => 'help', 'f' => 'filename', 'v' => 'validator', 'b' => 'basename']);
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
@@ -43,13 +43,14 @@ Options:
 -h, --help            Print out this help
 -f, --filename        Path to file
 -v, --validator       Validator URL (e.g. https://html5.validator.nu/ or http://localhost:8080/)
+-b, --basename        Full path to the moodle base dir
 ";
     echo $help;
     exit(0);
 }
 
-if (empty($options['filename']) || empty($options['validator'])) {
-    cli_error('--filename or --validator missing. Use --help to get more info.');
+if (empty($options['filename']) || empty($options['validator']) || empty($options['basename'])) {
+    cli_error('--filename or --validator or --basename missing. Use --help to get more info.');
 }
 
 $VALIDATOR = $options['validator'];
@@ -61,6 +62,12 @@ if (!file_exists($FILENAME)) {
     exit(1);
 }
 
+if (!load_core_component_from_moodle($options['basename'])) {
+    echo "Could not load core_component from dirroot: {$options['basename']}\n";
+    exit(1);
+}
+require_once(__DIR__.'/simple_core_component_mustache_loader.php');
+
 $templatecontent = file_get_contents($FILENAME);
 $mustache = new Mustache_Engine([
     'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
@@ -68,6 +75,7 @@ $mustache = new Mustache_Engine([
         'str' => function($text) { return "[[$text]]"; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
     ],
+    'partials_loader' => new simple_core_component_mustache_loader(),
 ]);
 
 $content = '';
@@ -81,7 +89,7 @@ try {
 
 if (empty($content)) {
     // This probably is related to a partial or so on. Best to avoid raising an error.
-    print_message('INFO', 'Template produced no content (linter does not resolve partials)');
+    print_message('INFO', 'Template produced no content');
 } else {
     check_html_validation($content);
 }
