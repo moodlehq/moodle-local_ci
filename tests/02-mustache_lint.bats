@@ -81,3 +81,20 @@ setup () {
     assert_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: Unclosed element “span”. (<body><p><span>Hello )"
     assert_output --partial "Mustache lint problems found"
 }
+
+@test "mustache_lint: Partials are loaded" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-partials-loaded.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_success
+    # If the partial was not loaded we'd produce this info message:
+    refute_output --partial "test_partial_loading.mustache - INFO: Template produced no content"
+
+    assert_output --partial "blocks/lp/templates/test_partial_loading.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}
