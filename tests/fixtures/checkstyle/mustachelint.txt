@@ -1,0 +1,10 @@
+Running mustache lint from f54a16fc738153a0b1bf766e7440d3655321a821 to 6b5d0e976a85dfdc1d978ceb2800dc0cb3f9a58d:
+/Users/danp/www/im/message/output/popup/templates/message_popover.mustache - ERROR: Mustache syntax exception: Nesting error: core/popover_region (on line 2) vs. classes (on line 3)
+/Users/danp/www/im/message/templates/message_area_contacts.mustache - WARNING: Example context missing.
+/Users/danp/www/im/message/templates/message_area_contacts_area.mustache - WARNING: Example context missing.
+/Users/danp/www/im/message/templates/message_area_contacts_area.mustache - WARNING: HTML Validation error, line 15: An element with “role=tab” must be contained in, or owned by, an element with “role=tablist”. (abs">    <div class="tab tabconversations selected" data-action="conversations-view" role="tab" aria-controls="conversations-tab-panel" aria-selected="true" tabindex="0">     )
+/Users/danp/www/im/message/templates/message_area_contacts_area.mustache - WARNING: HTML Validation error, line 19: An element with “role=tab” must be contained in, or owned by, an element with “role=tablist”. (/div>    <div class="tab tabcontacts" data-action="contacts-view" role="tab" aria-controls="contacts-tab-panel" aria-selected="false" tabindex="-1">     )
+/Users/danp/www/im/message/templates/message_area_messages_area.mustache - WARNING: Example context missing.
+/Users/danp/www/im/message/templates/message_area_profile.mustache - WARNING: Example context missing.
+/Users/danp/www/im/message/templates/message_area_profile.mustache - WARNING: HTML Validation error, line 9: Bad value “” for attribute “src” on element “img”: Must be non-empty. (>        <img class="profile-picture" src="" alt="" />     )
+Mustache lint problems found

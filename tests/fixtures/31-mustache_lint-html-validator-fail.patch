@@ -1,0 +1,54 @@
+From 1ca6835c73a3e48bebc75fef1b97cf5122cc624a Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 12 Oct 2016 20:33:08 +0100
+Subject: [PATCH 1/1] MDLSITE-4770 test file mustache_linter
+
+---
+ lib/templates/linting.mustache | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 lib/templates/linting.mustache
+
+diff --git a/lib/templates/linting.mustache b/lib/templates/linting.mustache
+new file mode 100644
+index 0000000..70978a6
+--- /dev/null
++++ b/lib/templates/linting.mustache
+@@ -0,0 +1,35 @@
++{{!
++    This file is part of Moodle - http://moodle.org/
++
++    Moodle is free software: you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation, either version 3 of the License, or
++    (at your option) any later version.
++
++    Moodle is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++
++    You should have received a copy of the GNU General Public License
++    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
++}}
++{{!
++    @template core/linting
++
++    A test for for mustache linting tests.
++
++    Classes required for JS:
++    * none
++
++    Data attributes required for JS:
++    * none
++
++    Context variables required for this template:
++    * none
++
++    Example context (json):
++    {
++    }
++}}
++<p><span>Hello World</p>
+-- 
+2.10.0
+

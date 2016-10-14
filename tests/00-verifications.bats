@@ -35,21 +35,30 @@ load libs/shared_setup
 
     # Executables must have execution bits set
     for executable in "${executables[@]}"; do
-        run find $BATS_TEST_DIRNAME/.. -name "*.${executable}" -type f -not -perm -u+x,g+x,a+x -not -path "*/.git/*"
+        run find $BATS_TEST_DIRNAME/.. -name "*.${executable}" -type f -not -perm -u+x,g+x,a+x \
+            -not -path "*/.git/*" \
+            -not -path "*/vendor/*" \
+            -not -path "*/composer.*"
         assert_success
         assert_output ""
     done
 
     # Non executables must not have execution bits set
     for nonexecutable in "${nonexecutables[@]}"; do
-        run find $BATS_TEST_DIRNAME/.. -name "*.${nonexecutable}" -type f -perm -u+x,g+x,a+x -not -path "*/.git/*"
+        run find $BATS_TEST_DIRNAME/.. -name "*.${nonexecutable}" -type f -perm -u+x,g+x,a+x \
+            -not -path "*/.git/*" \
+            -not -path "*/vendor/*" \
+            -not -path "*/composer.*"
         assert_success
         assert_output ""
     done
 
     # Other files must not have execution bits set
     for otherfile in "${otherfiles[@]}"; do
-        run find $BATS_TEST_DIRNAME/.. -name "${otherfile}" -type f -perm -u+x,g+x,a+x -not -path "*/.git/*"
+        run find $BATS_TEST_DIRNAME/.. -name "${otherfile}" -type f -perm -u+x,g+x,a+x \
+            -not -path "*/.git/*" \
+            -not -path "*/vendor/*" \
+            -not -path "*/composer.*"
         assert_success
         assert_output ""
     done
