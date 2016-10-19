@@ -88,17 +88,7 @@ if (!is_bool($options['absolute'])) {
 
 // For Moodle 2.6 and upwards, we execute this specific code that does not require
 // the site to be installed (relying on new classes only available since then).
-if (file_exists($options['basedir'] . '/lib/classes/component.php')) {
-    define('IGNORE_COMPONENT_CACHE', 1);
-    define('MOODLE_INTERNAL', 1);
-    unset($CFG);
-    global $CFG;
-    $CFG = new stdClass();
-    $CFG->dirroot = $options['basedir'];
-    $CFG->libdir = $CFG->dirroot . '/lib';
-    $CFG->admin = 'admin';
-    require_once($CFG->dirroot . '/lib/classes/component.php');
-
+if (load_core_component_from_moodle($options['basedir'])) {
     // Get all the plugins and subplugin types.
     $types = core_component::get_plugin_types();
     // Sort types in reverse order, so we get subplugins earlier than plugins.

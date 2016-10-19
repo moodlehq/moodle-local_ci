@@ -213,3 +213,28 @@ function s($var) {
     // 'UTF-8' argument. Both bring a speed-increase.
     return preg_replace('/&amp;#(\d+|x[0-9a-f]+);/i', '&#$1;', htmlspecialchars($var, ENT_QUOTES, 'UTF-8'));
 }
+
+/**
+ * Load core_component from a Moodle (without needing a fully
+ * installed moodle isntance).
+ *
+ * @param string $moodledirroot The path to moodle's dirroot
+ * @return bool false if core_component wasn't able to be loaded.
+ */
+function load_core_component_from_moodle($moodledirroot) {
+    if (!file_exists($moodledirroot . '/lib/classes/component.php')) {
+        return false;
+    }
+
+    define('IGNORE_COMPONENT_CACHE', 1);
+    define('MOODLE_INTERNAL', 1);
+    unset($CFG);
+    global $CFG;
+    $CFG = new stdClass();
+    $CFG->dirroot = $moodledirroot;
+    $CFG->libdir = $CFG->dirroot . '/lib';
+    $CFG->admin = 'admin';
+    require_once($CFG->dirroot . '/lib/classes/component.php');
+
+    return true;
+}

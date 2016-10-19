@@ -40,7 +40,7 @@ for mfile in ${mfiles} ; do
         fullpath=$gitdir/$mfile
 
         if [ -e $fullpath ] ; then
-            if ! $phpcmd $mydir/mustache_lint.php --filename=$fullpath --validator=$validator
+            if ! $phpcmd $mydir/mustache_lint.php --filename=$fullpath --validator=$validator --basename=$gitdir
             then
                 errorfound=1
             fi
