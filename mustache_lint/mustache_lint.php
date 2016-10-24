@@ -173,7 +173,7 @@ function check_html_validation($content) {
     $response = validate_html($wrappedcontent);
 
     if (!$response || !isset($response->messages)) {
-        print_message('info', 'Problem calling HTML validator - not checked.');
+        print_problem('WARNING', 'Problem calling HTML validator - please report bug to integration team.');
         return;
     }
 
