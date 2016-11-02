@@ -1,0 +1,32 @@
+From 102f9eaa8ba06e42222291a0f7ab10d70d91e7db Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 2 Nov 2016 19:09:18 +0000
+Subject: [PATCH 1/1] MDL-12345: test quote helpers
+
+---
+ lib/templates/test_uniq_and_quote.mustache | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 lib/templates/test_uniq_and_quote.mustache
+
+diff --git a/lib/templates/test_uniq_and_quote.mustache b/lib/templates/test_uniq_and_quote.mustache
+new file mode 100644
+index 0000000..d157d8a
+--- /dev/null
++++ b/lib/templates/test_uniq_and_quote.mustache
+@@ -0,0 +1,13 @@
++{{!
++    @template core/test_uniq_and_quote
++
++    Example context (json):
++    {
++       "trickycontent": "Some content with \" in it"
++    }
++
++}}
++<form>
++<label for="{{uniqid}}">Label</label>
++<input id="{{uniqid}}" type="text" name="test" value={{#quote}}{{trickycontent}}{{/quote}}>
++</form>
+-- 
+2.10.0
+
