@@ -1,0 +1,38 @@
+From d7f48a533d3d1bf7bff0e48d5ad6930b4d0838e7 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 2 Nov 2016 10:41:20 +0000
+Subject: [PATCH 1/1] MDL-12345 mustache: fixture for full html
+
+---
+ lib/templates/full-html-page.mustache | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 lib/templates/full-html-page.mustache
+
+diff --git a/lib/templates/full-html-page.mustache b/lib/templates/full-html-page.mustache
+new file mode 100644
+index 0000000..386ffb0
+--- /dev/null
++++ b/lib/templates/full-html-page.mustache
+@@ -0,0 +1,19 @@
++{{!
++    @template core/full-html-page
++
++    Full HTML page test.
++
++    Example context (json):
++    {
++       "message": "Hello world!"
++    }
++}}
++<!DOCTYPE html>
++<html>
++<head>
++<title>Test page</title>
++</head>
++<body>
++<p>{{message}}</p>
++</body>
++</html>
+-- 
+2.10.0
+
