@@ -1,0 +1,41 @@
+From 05e34a539f00c89f9dc94bb695af4839b73b1f35 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Wed, 2 Nov 2016 12:17:41 +0000
+Subject: [PATCH 1/1] MDL-12345 mustache: fixture for theme loading
+
+---
+ .../bootstrapbase/templates/core_output/div-start.mustache  |  1 +
+ theme/bootstrapbase/templates/test-theme-loading.mustache   | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 theme/bootstrapbase/templates/core_output/div-start.mustache
+ create mode 100644 theme/bootstrapbase/templates/test-theme-loading.mustache
+
+diff --git a/theme/bootstrapbase/templates/core_output/div-start.mustache b/theme/bootstrapbase/templates/core_output/div-start.mustache
+new file mode 100644
+index 0000000..e54a273
+--- /dev/null
++++ b/theme/bootstrapbase/templates/core_output/div-start.mustache
+@@ -0,0 +1 @@
++<div>
+diff --git a/theme/bootstrapbase/templates/test-theme-loading.mustache b/theme/bootstrapbase/templates/test-theme-loading.mustache
+new file mode 100644
+index 0000000..57fd9f0
+--- /dev/null
++++ b/theme/bootstrapbase/templates/test-theme-loading.mustache
+@@ -0,0 +1,13 @@
++{{!
++    @template theme_bootstrapbase/test.mustache
++
++    A bit of a silly template to test that theme partials are being loaded.
++
++    The partial 'core_output/div-start' doesn't exist in at 3.1.2, so this template
++    will only validate when we load from theme_bootstrapbase.
++
++    Example context (json): {}
++}}
++{{> core_output/div-start}}
++Hello World!
++</div>
+-- 
+2.10.0
+

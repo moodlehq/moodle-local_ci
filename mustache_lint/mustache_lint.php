@@ -66,16 +66,23 @@ if (!load_core_component_from_moodle($options['basename'])) {
     echo "Could not load core_component from dirroot: {$options['basename']}\n";
     exit(1);
 }
+
+if (strpos($FILENAME, $CFG->dirroot) !== 0) {
+    echo "File path passed ($FILENAME) is not within basename ({$CFG->dirroot})\n";
+    exit(1);
+}
+
 require_once(__DIR__.'/simple_core_component_mustache_loader.php');
 
 $templatecontent = file_get_contents($FILENAME);
+$theme = get_theme_from_template_path($FILENAME);
 $mustache = new Mustache_Engine([
     'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
     'helpers' => [ // Emulate some helpers for html validation purposes.
         'str' => function($text) { return "[[$text]]"; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
     ],
-    'partials_loader' => new simple_core_component_mustache_loader(),
+    'partials_loader' => new simple_core_component_mustache_loader($theme),
 ]);
 
 $content = '';
@@ -215,6 +222,23 @@ function validate_html($content) {
     }
 
     return json_decode($response);
+}
+
+/**
+ * If the template path passed is part of a theme, returns the theme name.
+ *
+ * @param string $templatepath The path to the template.
+ * @return string|null theme name or null if template not part of theme.
+ */
+function get_theme_from_template_path($templatepath) {
+    global $CFG;
+
+    $regexp = '#'.preg_quote($CFG->dirroot, '#').'/theme/([^/]+)/.*#';
+    if (preg_match($regexp, $templatepath, $matches)) {
+        return $matches[1];
+    }
+
+    return null;
 }
 
 // TODO:
