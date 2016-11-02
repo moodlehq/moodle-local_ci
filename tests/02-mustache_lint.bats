@@ -115,3 +115,18 @@ setup () {
     assert_output --partial "lib/templates/full-html-page.mustache - OK: Mustache rendered html succesfully"
     assert_output --partial "No mustache problems found"
 }
+
+@test "mustache_lint: Theme templates load theme partials" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-theme_loading.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert that test-theme-loading.mustache validates succesfully.
+    assert_output --partial "theme/bootstrapbase/templates/test-theme-loading.mustache - OK: Mustache rendered html succesfully"
+
+    # But note that this run will fail because of an invalid partial (div-start.mustache) - MDL-56504
+    assert_failure
+}
