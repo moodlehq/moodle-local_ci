@@ -224,12 +224,21 @@ function check_html_validation($content) {
  */
 function print_eslint_problems($problems) {
     foreach ($problems as $problem) {
+        // Remove the leading indentation..
+        $problem->source = trim($problem->source);
+        if (preg_match('/Parsing error:/', $problem->message)) {
+            // Treat eslint parse errors specially, because they likely indicate
+            // invalid example context rather than a real 'error'.
+            print_problem('WARNING', "Missing example context? ESLint {$problem->message} ( {$problem->source} ), Line {$problem->line}");
+            continue;
+        }
+
         if ($problem->severity == 2) {
             $severity = 'ERROR';
         } else {
             $severity = 'WARNING';
         }
-        $message = "ESLint [{$problem->ruleId}]: {$problem->message} ({$problem->source})";
+        $message = "ESLint [{$problem->ruleId}]: {$problem->message} ( {$problem->source} ), Line: {$problem->line} Column: {$problem->column}";
         print_problem($severity, $message);
     }
 }
