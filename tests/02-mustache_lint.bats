@@ -130,3 +130,17 @@ setup () {
     # But note that this run will fail because of an invalid partial (div-start.mustache) - MDL-56504
     assert_failure
 }
+
+@test "mustache_lint: Test quote and uniq helpers are working" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-quote_and_uniq.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_success
+    assert_output --partial "lib/templates/test_uniq_and_quote.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}

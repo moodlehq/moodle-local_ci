@@ -81,6 +81,13 @@ $mustache = new Mustache_Engine([
     'helpers' => [ // Emulate some helpers for html validation purposes.
         'str' => function($text) { return "[[$text]]"; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
+        'uniqid' => function() { return "would-be-a-uniqid"; },
+        'quote' => function($text, $helper) {
+            $content = $helper->render(trim($text));
+            $content = str_replace('"', '\\"', $content);
+            $content = preg_replace('([{}]{2,3})', '{{=<% %>=}}${0}<%={{ }}=%>', $content);
+            return '"' . $content . '"';
+        }
     ],
     'partials_loader' => new simple_core_component_mustache_loader($theme),
 ]);
