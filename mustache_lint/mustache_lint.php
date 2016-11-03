@@ -73,9 +73,11 @@ if (strpos($FILENAME, $CFG->dirroot) !== 0) {
 }
 
 require_once(__DIR__.'/simple_core_component_mustache_loader.php');
+require_once(__DIR__.'/js_helper.php');
 
 $templatecontent = file_get_contents($FILENAME);
 $theme = get_theme_from_template_path($FILENAME);
+$jshelper = new js_helper($CFG->dirroot);
 $mustache = new Mustache_Engine([
     'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
     'helpers' => [ // Emulate some helpers for html validation purposes.
@@ -87,7 +89,8 @@ $mustache = new Mustache_Engine([
             $content = str_replace('"', '\\"', $content);
             $content = preg_replace('([{}]{2,3})', '{{=<% %>=}}${0}<%={{ }}=%>', $content);
             return '"' . $content . '"';
-        }
+        },
+        'js' => [$jshelper, 'add_js'],
     ],
     'partials_loader' => new simple_core_component_mustache_loader($theme),
 ]);
@@ -106,6 +109,15 @@ if (empty($content)) {
     print_message('INFO', 'Template produced no content');
 } else {
     check_html_validation($content);
+}
+
+$eslintproblems = $jshelper->run_eslint();
+if ($eslintproblems === false) {
+    // Not an error situation for now, because we might run in situations
+    // where npm dependencies including eslint are not installed.
+    print_message('INFO', 'ESLint did not run');
+} else {
+    print_eslint_problems($eslintproblems);
 }
 
 if (!$WARNINGS) {
@@ -207,6 +219,22 @@ function check_html_validation($content) {
 }
 
 /**
+ * Print out problems from eslint.
+ * @param array $problems from eslint
+ */
+function print_eslint_problems($problems) {
+    foreach ($problems as $problem) {
+        if ($problem->severity == 2) {
+            $severity = 'ERROR';
+        } else {
+            $severity = 'WARNING';
+        }
+        $message = "ESLint [{$problem->ruleId}]: {$problem->message} ({$problem->source})";
+        print_problem($severity, $message);
+    }
+}
+
+/**
  * Call the html validator with example content
  * @return mixed false if a problem occured or the response from validator
  */
@@ -247,6 +275,3 @@ function get_theme_from_template_path($templatepath) {
 
     return null;
 }
-
-// TODO:
-// - eslint the template js - maybe better with eslint plugin.
