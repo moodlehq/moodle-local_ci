@@ -1,0 +1,35 @@
+From 8fea79e251e80b79067c4caee9db54049409d266 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Fri, 4 Nov 2016 12:07:47 +0000
+Subject: [PATCH 1/1] MDL-12345 mustache: fixture for js problem detection
+
+---
+ lib/templates/js_test.mustache | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 lib/templates/js_test.mustache
+
+diff --git a/lib/templates/js_test.mustache b/lib/templates/js_test.mustache
+new file mode 100644
+index 0000000..4cc8914
+--- /dev/null
++++ b/lib/templates/js_test.mustache
+@@ -0,0 +1,16 @@
++{{!
++    @template core/js_test
++
++    Fixture for detecting eslint problems.
++
++    Example context (json):
++    {
++        "text": "World!"
++    }
++
++}}
++<p>Hello {{text}}</p>
++{{#js}}
++    var my_message = 'Hello {{text}}';
++    alert(my_message);
++{{/js}}
+-- 
+2.10.0
+

@@ -144,3 +144,37 @@ setup () {
     assert_output --partial "lib/templates/test_uniq_and_quote.mustache - OK: Mustache rendered html succesfully"
     assert_output --partial "No mustache problems found"
 }
+
+@test "mustache_lint: Test eslint doesn't run when not present" {
+
+    # Setup. We are on v3.1.1, which doesn't have eslint in package.json (or npm installed here)
+    git_apply_fixture 31-mustache_lint-js_test.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_success
+    assert_output --partial "lib/templates/js_test.mustache - INFO: ESLint did not run"
+    assert_output --partial "No mustache problems found"
+}
+
+@test "mustache_lint: Test eslint runs when npm installed" {
+
+    # a8c64d6 has eslint in package.json (switch to v3.1.3 when releaseD)
+    create_git_branch MOODLE_31_STABLE a8c64d6267fd0a2f12435ea75af88eb4de980d6f
+    git_apply_fixture 31-mustache_lint-js_test.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    # Install npm depends so we have eslint
+    ci_run prepare_npm_stuff/prepare_npm_stuff.sh
+    # Run with eslint.
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_failure
+    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint [camelcase]: Identifier 'my_message' is not in camel case"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint [no-alert]: Unexpected alert. ( alert(my_message); )"
+}
