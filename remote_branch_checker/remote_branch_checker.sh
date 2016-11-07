@@ -165,8 +165,10 @@ fi
 if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     echo -n "Info: moodle.git ancestor: "
     git log --pretty=format:'%h %s' -n1 $ancestor
+    echo ""
     echo -n "Info: integration.git ancestor: "
     git log --pretty=format:'%h %s' -n1 $integrationancestor
+    echo ""
     # If the moodle.git ancestor is different on the integration.git ancestor, it means the branch is based off integration.
     # so we set the basecommit to point to it.
     ancestor=${integrationancestor}
@@ -176,7 +178,7 @@ if [[ "${ancestor}" != "${integrationancestor}" ]]; then
     # If going to check against integration.git, we issue a warning because it's a non-ideal situation,
     # but given the dynamic nature of that repo, we perform the checks from ancestor and not from tip
     # to avoid being affected by other's ongoing work, already validated by integrators.
-    $gitcmd reset --hard ${basecommit}
+    $gitcmd reset -q --hard ${basecommit}
 else
     echo "Info: the branch is based off moodle.git" | tee -a ${errorfile}
 fi
