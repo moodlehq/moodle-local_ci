@@ -238,8 +238,8 @@ while read issue; do
                 curlstatus=${PIPESTATUS[0]}
                 set -e
                 # Look if the file contains some controlled error.
-                if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep "Error:") ]]; then
-                    # controlled errors, print them. (exclude info lines, see MDLSITE-4415)
+                if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep -P "(Error|Warn):") ]]; then
+                    # controlled errors/warnings, print them. (exclude info lines, see MDLSITE-4415)
                     perrors=$(echo "${errors}" | grep -v '^Info:' | sed 's/^/    -- /g')
                     echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
                 else
