@@ -231,21 +231,21 @@ while read issue; do
                 echo "    - (x) {color:red}${target}{color} [branch: ${branchlink} | [CI Job|${joburl}]]" >> "${resultfile}.${issue}.txt"
                 # Output for console:
                 echo "    - Checked ${branch} for ${target} exit status: ${status}"
+            fi
 
-                # Fetch the errors.txt file and add its contents to output
-                set +e
-                errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
-                curlstatus=${PIPESTATUS[0]}
-                set -e
-                # Look if the file contains some controlled error.
-                if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep "Error:") ]]; then
-                    # controlled errors, print them. (exclude info lines, see MDLSITE-4415)
-                    perrors=$(echo "${errors}" | grep -v '^Info:' | sed 's/^/    -- /g')
-                    echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
-                else
-                    # Failed prechecker and nothing reported via errors, generic error message
-                    echo "  -- CI Job exited with status ${status}. This usually means that you have found some bug in the automated prechecker. Please [report it in the Tracker|https://tracker.moodle.org/secure/CreateIssueDetails!init.jspa?pid=10020&issuetype=1&components=12431&summary=Problem%20with%20job%20XXX] or contact an integrator directly." | tee -a "${resultfile}.${issue}.txt"
-                fi
+            # Fetch the errors.txt file and add its contents to output
+            set +e
+            errors=$(curl --silent --fail "${joburl}/artifact/work/errors.txt")
+            curlstatus=${PIPESTATUS[0]}
+            set -e
+            # Look if the file contains some controlled error.
+            if [[ ${curlstatus} -eq 0 ]] && [[ -n $(echo "${errors}" | grep -P "(Error|Warn):") ]]; then
+                # controlled errors/warnings, print them. (exclude info lines, see MDLSITE-4415)
+                perrors=$(echo "${errors}" | grep -v '^Info:' | sed 's/^/    -- /g')
+                echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
+            elif [[ ${branchresult} == "error" ]]; then
+                # Failed prechecker and nothing reported via errors, generic error message
+                echo "  -- CI Job exited with status ${status}. This usually means that you have found some bug in the automated prechecker. Please [report it in the Tracker|https://tracker.moodle.org/secure/CreateIssueDetails!init.jspa?pid=10020&issuetype=1&components=12431&summary=Problem%20with%20job%20XXX] or contact an integrator directly." | tee -a "${resultfile}.${issue}.txt"
             fi
         fi
 
