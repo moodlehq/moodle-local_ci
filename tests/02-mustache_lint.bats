@@ -175,6 +175,6 @@ setup () {
 
     # Assert result
     assert_failure
-    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint [camelcase]: Identifier 'my_message' is not in camel case"
-    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint [no-alert]: Unexpected alert. ( alert(my_message); )"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [camelcase]: Identifier 'my_message' is not in camel case"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); )"
 }

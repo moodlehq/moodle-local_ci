@@ -62,12 +62,12 @@
     <description>This section shows problems detected in mustache templates</description>
     <mess>
       <problem file="lib/templates/js_test.mustache" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/5f64619e25738db4e4b88ed5c508e9e11ad699c8/lib/templates/js_test.mustache#L1" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Templates" type="warning" weight="1">
-        <message>ESLint [camelcase]: Identifier 'my_message' is not in camel case. ( var my_message = 'Hello World!'; ), Line: 2 Column: 9 </message>
+        <message>ESLint warning [camelcase]: Identifier 'my_message' is not in camel case. ( var my_message = 'Hello World!'; ), Line: 2 Column: 9 </message>
         <description/>
         <code/>
       </problem>
       <problem file="lib/templates/js_test.mustache" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/5f64619e25738db4e4b88ed5c508e9e11ad699c8/lib/templates/js_test.mustache#L1" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Templates" type="warning" weight="1">
-        <message>ESLint [no-alert]: Unexpected alert. ( alert(my_message); ), Line: 3 Column: 5 </message>
+        <message>ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); ), Line: 3 Column: 5 </message>
         <description/>
         <code/>
       </problem>

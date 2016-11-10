@@ -117,7 +117,10 @@ if ($eslintproblems === false) {
     // where npm dependencies including eslint are not installed.
     print_message('INFO', 'ESLint did not run');
 } else {
-    print_eslint_problems($eslintproblems);
+    // When we have no example context, parse errors are common because
+    // there are missing variables in the js, thus we ignore them.
+    $ignoreparseerrors = empty($example) ? true : false;
+    print_eslint_problems($eslintproblems, $ignoreparseerrors);
 }
 
 if (!$WARNINGS) {
@@ -221,25 +224,24 @@ function check_html_validation($content) {
 /**
  * Print out problems from eslint.
  * @param array $problems from eslint
+ * @param bool $ignoreparseerrors if true, we don't print parse errors
  */
-function print_eslint_problems($problems) {
+function print_eslint_problems($problems, $ignoreparseerrors) {
     foreach ($problems as $problem) {
         // Remove the leading indentation..
         $problem->source = trim($problem->source);
-        if (preg_match('/Parsing error:/', $problem->message)) {
-            // Treat eslint parse errors specially, because they likely indicate
-            // invalid example context rather than a real 'error'.
-            print_problem('WARNING', "Missing example context? ESLint {$problem->message} ( {$problem->source} ), Line {$problem->line}");
+        if ($ignoreparseerrors && preg_match('/Parsing error:/', $problem->message)) {
+            // We do this when no example context, so likely a false positive.
             continue;
         }
 
         if ($problem->severity == 2) {
-            $severity = 'ERROR';
+            $severity = 'error';
         } else {
-            $severity = 'WARNING';
+            $severity = 'warning';
         }
-        $message = "ESLint [{$problem->ruleId}]: {$problem->message} ( {$problem->source} ), Line: {$problem->line} Column: {$problem->column}";
-        print_problem($severity, $message);
+        $message = "ESLint {$severity} [{$problem->ruleId}]: {$problem->message} ( {$problem->source} ), Line: {$problem->line} Column: {$problem->column}";
+        print_problem('WARNING', $message);
     }
 }
 
