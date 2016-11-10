@@ -48,10 +48,9 @@ ${basereq} --action getIssueList \
                         'Problem during testing', \
                         'Tested' \
                  ) \
-                 AND 'Currently in integration' is not EMPTY \
-                 AND labels not in ('skip-ci-version-check')" \
+                 AND 'Currently in integration' is not EMPTY" \
            --outputFormat "999" \
-           --columns "Key,Fix Versions" \
+           --columns "Key,Fix Versions,Labels" \
            --file "${resultfile}"
 
 # To store the errors.
@@ -80,6 +79,12 @@ while read -r line; do
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
     issues+=($issue)
 
+    if [[ $line == *"skip-ci-version-check"* ]]
+    then
+        echo "Skipping ${issue} - is marked with skip-ci-version-check"
+        continue
+    fi
+
     if [[ -z ${issue} ]]; then
         # No issue found...
         continue
@@ -88,7 +93,7 @@ while read -r line; do
     echo "Processing ${issue}"
 
     fixversions=$( echo ${line} \
-                    | sed -n "s/^\"MDL-[0-9]*\",\"\(.*\)\"/\1/p" \
+                    | sed -n "s/^\"MDL-[0-9]*\",\"\([^\"]*\)\".*/\1/p" \
                     | grep -o '[0-9]\+\.[0-9]\+\.\?[0-9]*' \
                   || echo '')
 
