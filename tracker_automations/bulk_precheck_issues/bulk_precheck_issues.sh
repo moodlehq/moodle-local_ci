@@ -243,7 +243,7 @@ while read issue; do
                 # controlled errors/warnings, print them. (exclude info lines, see MDLSITE-4415)
                 perrors=$(echo "${errors}" | grep -v '^Info:' | sed 's/^/    -- /g')
                 echo "${perrors}" | tee -a "${resultfile}.${issue}.txt"
-            elif [[ ${branchresult} == "error" ]]; then
+            elif [[ ${status} -ne 0 ]]; then
                 # Failed prechecker and nothing reported via errors, generic error message
                 echo "  -- CI Job exited with status ${status}. This usually means that you have found some bug in the automated prechecker. Please [report it in the Tracker|https://tracker.moodle.org/secure/CreateIssueDetails!init.jspa?pid=10020&issuetype=1&components=12431&summary=Problem%20with%20job%20XXX] or contact an integrator directly." | tee -a "${resultfile}.${issue}.txt"
             fi
