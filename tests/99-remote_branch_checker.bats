@@ -105,3 +105,8 @@ assert_prechecker () {
     assert_prechecker fixture-mustache-lint MDL-12345 d9520bc04e4d47d8dedfbe6b07cbbe0cb14c7fcf \
     "smurf,error,1,4:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,error,1,4"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: mustache lint eslint problem" {
+    assert_prechecker fixture-mustache-lint-js MDL-12345 cad8adccc796f40ab11b1236cd637e9b987c17c8 \
+    "smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,warning,0,2"
+}
