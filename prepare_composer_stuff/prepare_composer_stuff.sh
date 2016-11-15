@@ -25,18 +25,17 @@ done
 composerdir=${composerdirbase}/${gitbranch}
 mkdir -p ${composerdir}
 
-# Copy composer.json file to composer directory.
+# Copy composer.json and composer.lock files to composer directory.
 cp ${gitdir}/composer.json ${composerdir}
-
-# If there is not any "vendor" directory there, proceeed by installing, else updating.
-if [[ -d ${composerdir}/vendor ]]; then
-    echo "Updating composer packages @ ${composerdir}"
-    ${composercmd} update --working-dir=${composerdir} --prefer-dist
-else
-    echo "Installing composer packages @ ${composerdir}"
-    ${composercmd} config --global github-oauth.github.com ${githuboauthtoken}
-    ${composercmd} install --working-dir=${composerdir} --prefer-dist
+if [[ -f ${gitdir}/composer.lock ]]; then
+    cp ${gitdir}/composer.lock ${composerdir}
 fi
+
+# Unconditionally run composer install (to observe 100% .lock versions)
+echo "Installing composer packages @ ${composerdir}"
+${composercmd} config --global github-oauth.github.com ${githuboauthtoken}
+${composercmd} install --working-dir=${composerdir} --prefer-dist
+
 # Optimize autoloader of installed stuff.
 echo "Optimizing composer autoload @ ${composerdir}"
 ${composercmd} dump-autoload --optimize --working-dir=${composerdir}
