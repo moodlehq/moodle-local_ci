@@ -96,6 +96,8 @@ exit(0);
  */
 function travis_api_request($path) {
     $curl = curl_init();
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($curl, CURLOPT_TIMEOUT, 10);
     curl_setopt($curl, CURLOPT_HTTPHEADER, ['Accept: application/vnd.travis-ci.2+json']);
     curl_setopt($curl, CURLOPT_URL, 'https://api.travis-ci.org'.$path);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
