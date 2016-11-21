@@ -110,3 +110,8 @@ assert_prechecker () {
     assert_prechecker fixture-mustache-lint-js MDL-12345 cad8adccc796f40ab11b1236cd637e9b987c17c8 \
     "smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,warning,0,2"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: grunt build failed" {
+    assert_prechecker fixture-grunt-build-failed MDL-12345 cd4a6b8b0bca159d3abb1468794ed5a074c5b701 \
+    "smurf,error,2,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,1,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+}
