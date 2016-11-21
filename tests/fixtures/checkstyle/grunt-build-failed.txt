@@ -1,0 +1,12 @@
+Running "startup" task
+
+Running "stylelint:scss" (stylelint) task
+>> Linted 117 files without errors
+
+Running "stylelint:less" (stylelint) task
+>> theme/bootstrapbase/less/moodle/modules.less
+>>  15:1  ✖  Expected indentation of 4 spaces   indentation
+Warning: Task "stylelint:less" failed. Use --force to continue.
+
+Aborted due to warnings.
+ERROR: Problems running grunt

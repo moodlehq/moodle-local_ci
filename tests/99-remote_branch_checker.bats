@@ -64,7 +64,7 @@ assert_prechecker () {
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
     # from https://integration.moodle.org/job/Precheck%20remote%20branch/26024/
     assert_prechecker MDL-53136-master-dc60e4f MDL-53136 d1a3ea62ef79f2d4d997e329a647535340ef15db \
-    "smurf,error,14,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,5,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,15,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,6,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {

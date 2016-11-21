@@ -110,6 +110,13 @@ function process_gruntdiff($line) {
         $output.= '<error line="0" column="0" severity="error" ';
         $output.= 'message="Uncommitted change detected."/>' . PHP_EOL;
         $output.= '</file>';
+    } else if (preg_match('/^ERROR: (.*)$/', $line, $matches)) {
+        $error = $matches[1];
+
+        $output.= '<file name="">' . PHP_EOL;
+        $output.= '<error line="0" column="0" severity="error" ';
+        $output.= 'message="'. s($error) .'"/>' . PHP_EOL;
+        $output.= '</file>';
     }
 
     return $output;
