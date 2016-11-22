@@ -58,7 +58,7 @@ assert_prechecker () {
 @test "remote_branch_checker/remote_branch_checker.sh: old branch failing" {
     # An extremely old branch running jshint..
     assert_prechecker local_ci_fixture_oldbranch MDLSITE-3899 b3f5865eabbbdd439ac7f2ec763046f2ac7f0b37 \
-    "smurf,error,3,6:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,4,7:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
@@ -75,7 +75,7 @@ assert_prechecker () {
 
 @test "remote_branch_checker/remote_branch_checker.sh: stylelint checks" {
     assert_prechecker prechecker-fixture-stylelint MDL-12345 7752762674c1211e00c5d24045c065c41f5bc662 \
-    "smurf,error,3,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,4,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {

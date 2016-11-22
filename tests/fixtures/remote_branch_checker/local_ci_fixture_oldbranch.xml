@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="3" numwarnings="6">
-  <summary status="error" numerrors="3" numwarnings="6" condensedresult="smurf,error,3,6:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
+<smurf version="0.9.1" numerrors="4" numwarnings="7">
+  <summary status="error" numerrors="4" numwarnings="7" condensedresult="smurf,error,4,7:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="warning" numerrors="0" numwarnings="6"/>
@@ -9,7 +9,7 @@
     <detail name="commit" status="error" numerrors="3" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="thirdparty" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="grunt" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="grunt" status="error" numerrors="1" numwarnings="1"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
     <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
@@ -93,9 +93,20 @@
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess/>
   </check>
-  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
-    <mess/>
+    <mess>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+        <message>Task "jshint:files" failed. Use --force to continue.</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+        <message>Problems running grunt</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
   </check>
   <check id="shifter" title="shifter problems" url="https://docs.moodle.org/dev/YUI/Shifter" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected by shifter</description>
