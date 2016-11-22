@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="14" numwarnings="6">
-  <summary status="error" numerrors="14" numwarnings="6" condensedresult="smurf,error,14,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,5,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
+<smurf version="0.9.1" numerrors="15" numwarnings="6">
+  <summary status="error" numerrors="15" numwarnings="6" condensedresult="smurf,error,15,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,6,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
     <detail name="phplint" status="error" numerrors="1" numwarnings="0"/>
     <detail name="phpcs" status="error" numerrors="2" numwarnings="2"/>
     <detail name="js" status="error" numerrors="2" numwarnings="1"/>
@@ -9,7 +9,7 @@
     <detail name="commit" status="error" numerrors="1" numwarnings="1"/>
     <detail name="savepoint" status="error" numerrors="2" numwarnings="0"/>
     <detail name="thirdparty" status="warning" numerrors="0" numwarnings="1"/>
-    <detail name="grunt" status="error" numerrors="5" numwarnings="0"/>
+    <detail name="grunt" status="error" numerrors="6" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
     <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
@@ -128,9 +128,14 @@
       </problem>
     </mess>
   </check>
-  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="5" numwarnings="0" allowfiltering="0">
+  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="6" numwarnings="0" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/dc60e4fd400937e7f7fd13dfabfb293c86dc7129/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+        <message>Some modules are not properly processed by grunt. Changes detected:</message>
+        <description/>
+        <code/>
+      </problem>
       <problem file="lib/yui/build/moodle-core-dock/moodle-core-dock-debug.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/dc60e4fd400937e7f7fd13dfabfb293c86dc7129/lib/yui/build/moodle-core-dock/moodle-core-dock-debug.js#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
         <message>Uncommitted change detected.</message>
         <description/>

@@ -41,6 +41,10 @@ assert_checkstyle() {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=gruntdiff' grunt.txt grunt.xml
 }
 
+@test "remote_branch_checker/checkstyle_converter.php: grunt build failed" {
+    assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=gruntdiff' grunt-build-failed.txt grunt-build-failed.xml
+}
+
 @test "remote_branch_checker/checkstyle_converter.php: shifter" {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=shifter' grunt-errors.txt shifter.xml
 }

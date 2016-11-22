@@ -58,13 +58,13 @@ assert_prechecker () {
 @test "remote_branch_checker/remote_branch_checker.sh: old branch failing" {
     # An extremely old branch running jshint..
     assert_prechecker local_ci_fixture_oldbranch MDLSITE-3899 b3f5865eabbbdd439ac7f2ec763046f2ac7f0b37 \
-    "smurf,error,3,6:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,4,7:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;css,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
     # from https://integration.moodle.org/job/Precheck%20remote%20branch/26024/
     assert_prechecker MDL-53136-master-dc60e4f MDL-53136 d1a3ea62ef79f2d4d997e329a647535340ef15db \
-    "smurf,error,14,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,5,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,15,6:phplint,error,1,0;phpcs,error,2,2;js,error,2,1;css,error,1,1;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,6,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {
@@ -75,7 +75,7 @@ assert_prechecker () {
 
 @test "remote_branch_checker/remote_branch_checker.sh: stylelint checks" {
     assert_prechecker prechecker-fixture-stylelint MDL-12345 7752762674c1211e00c5d24045c065c41f5bc662 \
-    "smurf,error,3,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
+    "smurf,error,4,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {
@@ -109,4 +109,9 @@ assert_prechecker () {
 @test "remote_branch_checker/remote_branch_checker.sh: mustache lint eslint problem" {
     assert_prechecker fixture-mustache-lint-js MDL-12345 cad8adccc796f40ab11b1236cd637e9b987c17c8 \
     "smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,warning,0,2"
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: grunt build failed" {
+    assert_prechecker fixture-grunt-build-failed MDL-12345 cd4a6b8b0bca159d3abb1468794ed5a074c5b701 \
+    "smurf,error,2,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,1,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0"
 }
