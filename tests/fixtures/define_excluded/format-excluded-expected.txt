@@ -24,6 +24,8 @@ lib/bennu/
 lib/cookies.js
 lib/csshover.htc
 lib/dragmath/
+lib/editor/atto/tests/fixtures/pretty-good-en.vtt
+lib/editor/atto/tests/fixtures/pretty-good-sv.vtt
 lib/editor/atto/yui/src/rangy/js
 lib/editor/atto/yui/src/rangy/js/*.*
 lib/editor/tinymce/plugins/moodleimage

@@ -19,6 +19,8 @@ lib/alfresco/
 lib/bennu/
 lib/dragmath/
 lib/editor/atto/yui/src/rangy/js
+lib/editor/atto/tests/fixtures/pretty-good-en.vtt
+lib/editor/atto/tests/fixtures/pretty-good-sv.vtt
 lib/editor/tinymce/tiny_mce/
 lib/editor/tinymce/plugins/moodleimage
 lib/editor/tinymce/plugins/pdw
