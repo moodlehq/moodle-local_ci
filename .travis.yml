@@ -5,6 +5,10 @@ addons:
             - bc
 php:
     - '7.0'
+env:
+    - TEST_SUITE="1-*"
+    - TEST_SUITE="2-*"
+
 sudo: false
 cache:
   directories:
@@ -26,5 +30,5 @@ before_script:
   - "export LOCAL_CI_TESTS_DBUSER=travis"
   - "export LOCAL_CI_TESTS_DBPASS="
 script:
-  - $HOME/bats/bin/bats tests
+  - $HOME/bats/bin/bats tests/$TEST_SUITE
 
