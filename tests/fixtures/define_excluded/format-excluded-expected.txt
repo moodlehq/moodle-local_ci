@@ -1,3 +1,4 @@
+# Each line contents must exist independently in results.
 *.csv
 *.gif
 *.jpg
