@@ -372,7 +372,7 @@ find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" \) 
     grep -vf ${WORKSPACE}/work/patchset.files | xargs -I{} rm {}
 
 # Remove all the empty dirs remaining, but .git and work
-find ${WORKSPACE} -type d -depth -empty -and -not \( -name .git -or -name work \) -delete
+find ${WORKSPACE} -depth -empty -type d -and -not \( -name .git -or -name work \) -delete
 
 # ########## ########## ########## ##########
 

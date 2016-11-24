@@ -96,7 +96,7 @@ if [[ -z ${changes} ]]; then
     exit 0
 else
     echo | tee -a "${outputfile}"
-    echo "ERROR: Some modules are not properly processed by grunt. Changes detected:" | tee -a "${outputfile}"
+    echo "WARN: Some modules are not properly processed by grunt. Changes detected:" | tee -a "${outputfile}"
     echo | tee -a "${outputfile}"
     for filename in ${changes} ; do
         fullpath=$gitdir/$filename

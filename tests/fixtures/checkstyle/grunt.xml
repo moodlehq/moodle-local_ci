@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="1.3.2">
-<file name="">
-<error line="0" column="0" severity="error" message="Some modules are not properly processed by grunt. Changes detected:"/>
-</file><file name="/var/lib/jenkins/git_repositories/prechecker/lib/editor/atto/yui/build/editor/js/autosave.min.js">
+<file name="/var/lib/jenkins/git_repositories/prechecker/lib/editor/atto/yui/build/editor/js/autosave.min.js">
 <error line="0" column="0" severity="error" message="Uncommitted change detected."/>
 </file><file name="/var/lib/jenkins/git_repositories/prechecker/lib/yui/build/event/js/event.min.js">
 <error line="0" column="0" severity="error" message="Uncommitted change detected."/>
