@@ -30,7 +30,7 @@ Running "ignorefiles" task
 
 Done.
 
-ERROR: Some modules are not properly processed by grunt. Changes detected:
+WARN: Some modules are not properly processed by grunt. Changes detected:
 
 GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/lib/editor/atto/yui/build/editor/js/autosave.min.js
 GRUNT-CHANGE: /var/lib/jenkins/git_repositories/prechecker/lib/yui/build/event/js/event.min.js

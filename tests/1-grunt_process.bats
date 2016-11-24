@@ -25,7 +25,7 @@ setup () {
     # Assert result
     assert_failure
     assert_output --partial "Done, without errors." # Grunt shouldn't have an issue here.
-    assert_output --partial "ERROR: Some modules are not properly processed by grunt. Changes detected:"
+    assert_output --partial "WARN: Some modules are not properly processed by grunt. Changes detected:"
     assert_output --regexp "GRUNT-CHANGE: (.*)/theme/bootstrapbase/style/moodle.css"
 }
 
@@ -39,7 +39,7 @@ setup () {
     # Assert result
     assert_failure
     assert_output --partial "Done, without errors." # Grunt shouldn't have an issue here.
-    assert_output --partial "ERROR: Some modules are not properly processed by grunt. Changes detected:"
+    assert_output --partial "WARN: Some modules are not properly processed by grunt. Changes detected:"
     assert_output --regexp "GRUNT-CHANGE: (.*)/lib/amd/build/url.min.js"
 }
 
@@ -56,6 +56,6 @@ setup () {
 
     # Assert result
     assert_failure
-    assert_output --partial "ERROR: Some modules are not properly processed by grunt. Changes detected:"
+    assert_output --partial "WARN: Some modules are not properly processed by grunt. Changes detected:"
     assert_output --regexp "GRUNT-CHANGE: (.*)/.eslintignore"
 }
