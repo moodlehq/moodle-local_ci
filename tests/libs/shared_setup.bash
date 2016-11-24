@@ -18,6 +18,9 @@ if [ -z $LOCAL_CI_TESTS_GITDIR ]; then
     echo "Please define LOCAL_CI_TESTS_GITDIR. It should be a git clone of moodle.git." >&2
     echo "IT WILL CAUSE DESTRUCTIVE CHANGES TO THE GIT REPO, DO NOT SHARE IT WITH YOUR CODE!" >&2
     exit 1;
+else
+    # Ensure $LOCAL_CI_TESTS_GITDIR does not have trailing slashes, it breaks various tests.
+    LOCAL_CI_TESTS_GITDIR=$(echo $LOCAL_CI_TESTS_GITDIR | sed -n 's/\/*$//p')
 fi
 
 if [ -z $LOCAL_CI_TESTS_PHPCS_DIR ]; then
