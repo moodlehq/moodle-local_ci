@@ -17,9 +17,11 @@ assert_define_excluded_format () {
     # Don't want full paths ever
     refute_output --partial "$(dirname $gitdir)"
 
-    run diff -ruN $expected <( echo "$output" )
-    assert_success
-    assert_output ""
+    # Verify all expectations in fixture are in results.
+    while read -r expectation; do
+        [[ "$expectation" =~ ^#.*$ ]] && continue # Skip comments.
+        assert_output --partial "$expectation"
+    done < "$expected"
 }
 
 @test "define_excluded: generates results correctly for all formats" {
