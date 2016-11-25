@@ -54,7 +54,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     if [[ -r "${lastfile}" ]]; then
         linefound=$(grep "${issue}" "${lastfile}" | tail -1)
         if [[ -n $linefound ]]; then
-            timefound="${linefound##* }"
+            timefound=$(echo "${linefound}" | cut -d' ' -f2)
             secondsago=$(($now - $timefound))
             echo "    - 'ci' label was removed $secondsago ago"
             if [[ $secondsago -le 3600 ]]; then
@@ -78,13 +78,15 @@ done
 # it will match the conditions above anymore.
 if [[ -r "${lastfile}" ]]; then
     lastline=$(tail -1 "${lastfile}")
-    lasttime="${lastline##* }"
-    secondsago=$(($now - $lasttime))
-    if [[ $secondsago -gt 3600 ]]; then
-        rm -fr "${lastfile}"
-        echo "Cleaning outdated latest results"
-    else
-        echo "Keeping meaningful latest results"
+    if [[ -n $lastline ]]; then
+        lasttime=$(echo "${lastline}" | cut -d' ' -f2)
+        secondsago=$(($now - $lasttime))
+        if [[ $secondsago -gt 3600 ]]; then
+            > "${lastfile}" # just reset it so it's always available for notifications from others.
+            echo "Cleaning outdated latest results"
+        else
+            echo "Keeping meaningful latest results"
+        fi
     fi
 fi
 
