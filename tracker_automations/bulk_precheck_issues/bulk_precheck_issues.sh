@@ -8,6 +8,7 @@
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
 #cf_testinginstructions: id for testing instructions custom field (customfield_10117)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
+#informtofiles: comma separated list of files where each MDL processed will be informed (format MDL-xxxx unixseconds)
 #$maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
 #$maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
@@ -287,4 +288,18 @@ while read issue; do
         echo "  - Sending results to the Tracker"
         . "${mydir}/criteria/${criteria}/postissue.sh"
     fi
+
+    # Inform to configured files about the processing of the MDL-xxxxx happenend
+    if [[ -n $informtofiles ]]; then
+        echo "  - Informing about the execution via files"
+        for informtofile in "${informtofiles//,/ }"; do
+            if [[ -w "${informtofile}" ]]; then
+                echo "    - ${informtofile} updated"
+                echo ${issue} $(date +%s) bulk_precheck_issues >> "${informtofile}"
+            else
+                echo "    - ${informtofile} NOT updated (not found/not writable)"
+            fi
+        done
+    fi
+
 done < "${resultfile}"
