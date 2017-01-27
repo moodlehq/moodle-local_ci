@@ -123,8 +123,7 @@ fi
 # This 'lastbased-master' branch, tracks what the tip of integration.git/master was
 # when we last succesfully rebased.
 referencebranch="lastbased-$gitbranch"
-# TODO: maybe we will switch to just $gitbranch in future for simplicity.
-securitybranch="security-$gitbranch"
+securitybranch="$gitbranch"
 
 # Note that this script does not attempt to automtically setup these branches, it should be done
 # manually once and once only. If the branches don't exist after then we have a problem.
@@ -158,7 +157,7 @@ $gitcmd ls-remote --exit-code --heads integration $gitbranch > /dev/null ||
 $gitcmd ls-remote --exit-code --heads security $referencebranch > /dev/null ||
     exit_with_error "Reference branch $referencebranch not found in security.git. Needs manual fix."
 
-# Verify that security-branch exists.
+# Verify that the security branch exists.
 $gitcmd ls-remote --exit-code --heads security $securitybranch > /dev/null ||
     exit_with_error "Security branch $securitybranch not found in security.git. Needs manual fix."
 
