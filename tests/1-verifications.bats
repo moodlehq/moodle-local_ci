@@ -23,7 +23,7 @@ load libs/shared_setup
 @test "repository file & dir permissions are correct" {
     # Define executable and non-executable extensions
     executables=('sh' 'bats')
-    nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml')
+    nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml' 'groovy')
     # Other nonexecutable files, but looked by name, not by extension
     otherfiles=('.gitignore' '.htaccess')
 
