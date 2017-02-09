@@ -416,6 +416,7 @@ fi
 count=`grep -P "ERROR:" "$resultfile" | wc -l`
 if (($count > 0))
 then
+    grep -P "ERROR:" "$resultfile"
     exit 1
 fi
 exit 0

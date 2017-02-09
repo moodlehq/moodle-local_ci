@@ -18,7 +18,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: Main version.php file is missing: \$branch = 'xx' line."
 }
 
@@ -27,7 +26,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: No correct version (10 digits + opt 2 more) found"
 }
 
@@ -36,7 +34,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: No correct version first 8 digits date (date: invalid date"
 }
 
@@ -45,7 +42,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: Component theme_morebeer not valid for that file"
 }
 
@@ -54,7 +50,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: File is missing: defined('MOODLE_INTERNAL') || die(); line."
 }
 
@@ -63,7 +58,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     #TODO: fix the \ in the script output..
     assert_output --partial "ERROR: File is missing: \\\$plugin->version = 'xxxxxx' line."
 }
@@ -73,7 +67,6 @@ setup () {
 
     ci_run versions_check_set/versions_check_set.sh
     assert_failure
-    run grep ERROR $WORKSPACE/versions_check_set.txt
     assert_output --partial "ERROR: No correct version (10 digits + opt 2 more) found"
 }
 
