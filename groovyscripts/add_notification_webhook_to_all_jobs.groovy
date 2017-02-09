@@ -8,16 +8,18 @@ import com.tikal.hudson.plugins.notification.Format
 
 
 Boolean DRYRUN = true
-String URL = "https://telegrambot.moodle.org/hubot/jenkinsnotify"
 
 for (item in Hudson.instance.items) {
-
     // Decide how many log lines to send in notifications, note that the
     // last 2 are always related to the failure (and stripped by notification
     // recieved), so this is really 3 lines by defualt.
     Integer loglines = 5;
+    String URL = "https://telegrambot.moodle.org/hubot/jenkinsnotify"
 
-    if (item.name.contains('phpunit')) {
+    if (item.name.contains('Precheck remote branch')) {
+        // No notifications here :)
+        continue;
+    } else if (item.name.contains('phpunit')) {
         // Usually useful info about failure, give
         // a bit more context:
         loglines = 10;
@@ -27,6 +29,10 @@ for (item in Hudson.instance.items) {
     } else if (item.name.contains('Check upgrade savepoints')) {
         // Doesn't provide a useful summary at the moment
         loglines = 0;
+    } else if (item.name.contains('Rebase security branch')) {
+        URL = "$URL?alwaysinform=1";
+    } else if (item.name.contains('Check marked as integrated')) {
+        URL = "$URL?alwaysinform=1";
     }
 
     // Remove existing notification configuration
