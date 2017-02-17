@@ -76,8 +76,8 @@ currentbranch=$(${gitcmd} rev-parse --abbrev-ref HEAD)
 if [[ ${currentbranch} =~ _precheck$ ]]; then
     echo "Info: Deleting ${currentbranch} branch from previous execution"
     basebranch=${currentbranch%_precheck}
-    ${gitcmd} reset --hard ${basebranch}
-    ${gitcmd} checkout ${basebranch}
+    ${gitcmd} reset --hard origin/${basebranch}
+    ${gitcmd} checkout -q -B ${basebranch} origin/${basebranch}
     ${gitcmd} branch -D ${currentbranch}
 fi
 
