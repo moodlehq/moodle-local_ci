@@ -70,6 +70,17 @@ if ! $(git remote -v | grep -q '^integration[[:space:]]]*git:.*integration.git')
     ${gitcmd} remote add integration git://git.moodle.org/integration.git
 fi
 
+# We are into a _precheck branch from previous run. We don't like any leftover
+# so let's delete it drastically. Will be recreated later if needed.
+currentbranch=$(${gitcmd} rev-parse --abbrev-ref HEAD)
+if [[ ${currentbranch} =~ _precheck$ ]]; then
+    echo "Info: Deleting ${currentbranch} branch from previous execution"
+    basebranch=${currentbranch%_precheck}
+    ${gitcmd} reset --hard ${basebranch}
+    ${gitcmd} checkout ${basebranch}
+    ${gitcmd} branch -D ${currentbranch}
+fi
+
 # Now, ensure the repository in completely clean.
 echo "Info: Cleaning worktree"
 ${gitcmd} clean -q -dfx
