@@ -153,16 +153,15 @@ remote=${remote//[[:blank:]]/}
 branch=${branch//[[:blank:]]/}
 
 # Fetch the remote branch.
-set +e
-${gitcmd} fetch -q ${remote} ${branch}
-# record FETCH_HEAD for later
-remotesha=$(git rev-parse --verify FETCH_HEAD)
-exitstatus=${PIPESTATUS[0]}
-if [[ ${exitstatus} -ne 0 ]]; then
+if ! ${gitcmd} fetch -q ${remote} ${branch}
+then
     echo "Error: Unable to fetch information from ${branch} branch at ${remote}." | tee -a ${errorfile}
-    exit ${exitstatus}
+    exit 1
 fi
 
+remotesha=$(git rev-parse --verify FETCH_HEAD)
+
+set +e
 # Look for the common ancestor against moodle.git
 ancestor="$(${gitcmd} merge-base FETCH_HEAD $baseref)"
 if [[ ! ${ancestor} ]]; then
