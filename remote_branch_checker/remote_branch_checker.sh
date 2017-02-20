@@ -146,6 +146,11 @@ basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 ${gitcmd} checkout -q -B ${integrateto}_precheck $baseref
 
+# Do some cleanup onto the passed details
+
+# Trim whitespace in branch/remote
+remote=${remote//[[:blank:]]/}
+branch=${branch//[[:blank:]]/}
 
 # Fetch the remote branch.
 set +e
