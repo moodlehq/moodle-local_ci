@@ -160,7 +160,7 @@ do
     # Find unowned commits since moodle.git
     unownedcommits=$($gitcmd log origin/${branch}...FETCH_HEAD \
         --pretty=format:"  %h %s (%an)" --no-merges \
-        --invert-grep --extended-regexp \
+        --invert-grep --extended-regexp --regexp-ignore-case \
         --grep="$grepsearch")
 
     # If we find unowned commits report them.
