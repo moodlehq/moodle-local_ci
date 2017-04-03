@@ -43,6 +43,7 @@ Options:
 -h, --help            Print out this help
 -f, --filename        Path to file
 -v, --validator       Validator URL (e.g. https://html5.validator.nu/ or http://localhost:8080/)
+                      or path to validator JAR file (e.g. /path/to/vnu.jar)
 -b, --basename        Full path to the moodle base dir
 ";
     echo $help;
@@ -252,6 +253,26 @@ function print_eslint_problems($problems, $ignoreparseerrors) {
 function validate_html($content) {
     global $VALIDATOR;
 
+    if (strpos($VALIDATOR, 'http') !== 0) {
+        $file = tempnam(sys_get_temp_dir(), 'mustache_lint');
+
+        if ($file === false) {
+            return false;
+        }
+        file_put_contents($file, $content);
+
+        // The "2>&1" part redirects stderr to stdout because the JSON is sent to stderr and PHP does not capture that.
+        $output = shell_exec(sprintf('java -jar %s --format json --exit-zero-always %s 2>&1', $VALIDATOR, $file));
+
+        unlink($file);
+
+        if ($output === null) {
+            return false;
+        }
+
+        return json_decode($output);
+    }
+    
     $ch = curl_init("$VALIDATOR?out=json");
     curl_setopt($ch, CURLOPT_USERAGENT, 'moodle/local_ci validator 0.1');
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-type: text/html; charset=utf-8']);
