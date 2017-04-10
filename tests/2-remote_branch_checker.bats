@@ -114,3 +114,20 @@ assert_prechecker () {
     assert_failure
     assert_output --partial "Unable to fetch information from a-branch-which-will-never-exist branch"
 }
+
+@test "remote_branch_checker/remote_branch_checker.sh: github branch rewritten" {
+    # With this test, we are only interested in checking the github url rewriting..
+    export remote=git://github.com/danpoltawski/moodle.git
+    export branch="https://github.com/danpoltawski/moodle/tree/a-branch-which-doesnt-exist"
+    export issue="MDL-12345"
+    export integrateto=master
+    export rebaseerror=9999
+    export extrapath=.
+
+    ci_run remote_branch_checker/remote_branch_checker.sh
+    assert_failure
+    # The main part of the test:
+    assert_output --partial "Warn: the branch https://github.com/danpoltawski/moodle/tree/a-branch-which-doesnt-exist should not be specified as a github url"
+    # This is just how it will fail because we don't want to run the entire testsuite..
+    assert_output --partial "Error: Unable to fetch information from a-branch-which-doesnt-exist branch at git://github.com/danpoltawski/moodle.git"
+}

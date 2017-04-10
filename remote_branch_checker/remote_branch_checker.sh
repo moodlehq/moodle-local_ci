@@ -152,17 +152,23 @@ ${gitcmd} checkout -q -B ${integrateto}_precheck $baseref
 remote=${remote//[[:blank:]]/}
 branch=${branch//[[:blank:]]/}
 
-# Fetch the remote branch.
-set +e
-${gitcmd} fetch -q ${remote} ${branch}
-# record FETCH_HEAD for later
-remotesha=$(git rev-parse --verify FETCH_HEAD)
-exitstatus=${PIPESTATUS[0]}
-if [[ ${exitstatus} -ne 0 ]]; then
-    echo "Error: Unable to fetch information from ${branch} branch at ${remote}." | tee -a ${errorfile}
-    exit ${exitstatus}
+# Convert github urls into raw branch (MDLSITE-3758).
+if [[ "$branch" =~ ^https://github.com/([^/]*)/([^/]*)/tree/(.*)$ ]]
+then
+    echo "Warn: the branch $branch should not be specified as a github url. Converting to '${BASH_REMATCH[3]}' for prechecker'" | tee -a ${errorfile}
+    branch=${BASH_REMATCH[3]}
 fi
 
+# Fetch the remote branch.
+if ! ${gitcmd} fetch -q ${remote} ${branch}
+then
+    echo "Error: Unable to fetch information from ${branch} branch at ${remote}." | tee -a ${errorfile}
+    exit 1
+fi
+
+remotesha=$(git rev-parse --verify FETCH_HEAD)
+
+set +e
 # Look for the common ancestor against moodle.git
 ancestor="$(${gitcmd} merge-base FETCH_HEAD $baseref)"
 if [[ ! ${ancestor} ]]; then
