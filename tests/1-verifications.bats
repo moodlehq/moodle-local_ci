@@ -25,7 +25,7 @@ load libs/shared_setup
     executables=('sh' 'bats')
     nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml' 'groovy')
     # Other nonexecutable files, but looked by name, not by extension
-    otherfiles=('.gitignore' '.htaccess')
+    otherfiles=('.gitignore' '.htaccess' 'package.json')
 
     # git does NOT track directory perms at all, so we comment aout this test. Just kept here for reference.
     # Directories must have execution bits set
@@ -38,6 +38,7 @@ load libs/shared_setup
         run find $BATS_TEST_DIRNAME/.. -name "*.${executable}" -type f -not -perm -u+x,g+x,a+x \
             -not -path "*/.git/*" \
             -not -path "*/vendor/*" \
+            -not -path "*/node_modules/*" \
             -not -path "*/composer.*"
         assert_success
         assert_output ""
@@ -48,6 +49,7 @@ load libs/shared_setup
         run find $BATS_TEST_DIRNAME/.. -name "*.${nonexecutable}" -type f -perm -u+x,g+x,a+x \
             -not -path "*/.git/*" \
             -not -path "*/vendor/*" \
+            -not -path "*/node_modules/*" \
             -not -path "*/composer.*"
         assert_success
         assert_output ""
@@ -58,6 +60,7 @@ load libs/shared_setup
         run find $BATS_TEST_DIRNAME/.. -name "${otherfile}" -type f -perm -u+x,g+x,a+x \
             -not -path "*/.git/*" \
             -not -path "*/vendor/*" \
+            -not -path "*/node_modules/*" \
             -not -path "*/composer.*"
         assert_success
         assert_output ""
@@ -79,6 +82,7 @@ load libs/shared_setup
         -not -regex ".*(${searchexpression})" \
         -not -path "*/.git/*" \
         -not -path "*/vendor/*" \
+        -not -path "*/node_modules/*" \
         -not -path "*/composer.*"
     assert_success
     assert_output ""
