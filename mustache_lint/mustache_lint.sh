@@ -9,7 +9,6 @@
 #
 set -e
 
-validator=${validator:-'https://html5.validator.nu/'}
 # Verify everything is set
 required="gitcmd gitdir phpcmd GIT_PREVIOUS_COMMIT GIT_COMMIT"
 for var in $required; do
@@ -21,6 +20,17 @@ done
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [ -f "$mydir/../node_modules/vnu-jar/build/dist/vnu.jar" ]
+then
+    echo "NPM installed validator found."
+    validator="$( cd $mydir/../node_modules/ && pwd)/vnu-jar/build/dist/vnu.jar"
+else
+    validator=${validator:-"https://html5.validator.nu"}
+fi
+
+echo "Validating using $validator"
+
 
 export initialcommit=${GIT_PREVIOUS_COMMIT}
 export finalcommit=${GIT_COMMIT}
