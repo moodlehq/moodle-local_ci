@@ -41,6 +41,7 @@ define('MATURITY_ALPHA',    50);    // internals can be tested using white box t
 define('MATURITY_BETA',     100);   // feature complete, ready for preview and testing
 define('MATURITY_RC',       150);   // tested, will be released unless there are fatal bugs
 define('MATURITY_STABLE',   200);   // ready for production deployment
+define('ANY_VERSION',       'any'); // special value that can be used in $plugin->dependencies in version.php files
 $plugin = new stdClass();
 $module = new stdClass();
 
