@@ -3,8 +3,6 @@ addons:
     apt:
         packages:
             - bc
-            - oracle-java8-installer
-            - oracle-java8-set-default
 php:
     - '7.0'
 env:
