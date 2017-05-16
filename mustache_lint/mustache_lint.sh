@@ -21,12 +21,22 @@ done
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+validator=${validator:-"https://html5.validator.nu"}
 if [ -f "$mydir/../node_modules/vnu-jar/build/dist/vnu.jar" ]
 then
-    echo "NPM installed validator found."
-    validator="$( cd $mydir/../node_modules/ && pwd)/vnu-jar/build/dist/vnu.jar"
-else
-    validator=${validator:-"https://html5.validator.nu"}
+    if java -version 2>&1 >/dev/null | grep -q "java version"
+    then
+        javaversion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+        if [[ "$javaversion" > "1.8" ]]
+        then
+            echo "NPM installed validator found."
+            validator="$( cd $mydir/../node_modules/ && pwd)/vnu-jar/build/dist/vnu.jar"
+        else
+            echo "NPM installed validator available, but java version too low: $javaversion"
+        fi
+    else
+        echo "NPM installed validator available, but java not found in path"
+    fi
 fi
 
 echo "Validating using $validator"
