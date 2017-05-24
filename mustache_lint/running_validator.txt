@@ -1,6 +1,5 @@
 Running a local instance of the validator for more reliability..
 
 
-1/ Download the latest release from https://github.com/validator/validator/releases
-2/ java -cp vnu.jar nu.validator.servlet.Main 8888
-3/ Set validatorurl to localhost:8888
+1/ npm install
+2/ The mustache_lint.sh script should use the npm-installed version of validator automatically.

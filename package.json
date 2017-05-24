@@ -1,0 +1,9 @@
+{
+  "name": "moodle-local_ci",
+  "version": "0.0.1",
+  "description": "Tools for CI with Moodle",
+  "private": true,
+  "dependencies": {
+    "vnu-jar": "^17.3.0"
+  }
+}
