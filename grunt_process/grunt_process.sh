@@ -3,7 +3,7 @@
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
 # $extrapath: Extra paths to be available (global)
-# $npmcmd: Path to the npm executable (global)
+# $npmcmd: Optional, path to the npm executable (global)
 # $npmbase: (optional) Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 
 # Let's be strict. Any problem leads to failure.
@@ -14,7 +14,7 @@ if [[ -n ${extrapath} ]]; then
     export PATH=${PATH}:${extrapath}
 fi
 
-required="WORKSPACE gitdir gitbranch extrapath npmcmd"
+required="WORKSPACE gitdir gitbranch extrapath"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -28,6 +28,8 @@ outputfile=${WORKSPACE}/grunt_process.txt
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Apply some defaults.
+npmcmd=${npmcmd:-npm}
 
 cd ${gitdir}
 rm -fr config.php

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
-# $npmcmd: Path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $nodecmd: Optional, path to the node executable (global)
+# $npmcmd: Optional, path to the npm executable (global)
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
 # $recessversion: Optional, defaults to 1.1.9 (Important! it's the only legacy version working. Older ones
 #    lead to empty results). Not installed if there is a package.json file (present in 29 and up)
@@ -11,7 +11,7 @@
 # Let's be strict. Any problem leads to failure.
 set -e
 
-required="gitdir gitbranch npmcmd npmbase"
+required="gitdir gitbranch npmbase"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "ERROR: ${var} environment variable is not defined. See the script comments."
@@ -25,12 +25,14 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Apply some defaults.
 shifterversion=${shifterversion:-0.4.6}
 recessversion=${recessversion:-1.1.9}
+nodecmd=${nodecmd:-node}
+npmcmd=${npmcmd:-npm}
 
 # Print nodejs and npm versions for informative purposes
-if [[ -x ${nodecmd} ]]; then
+if hash ${nodecmd} 2>/dev/null; then
     echo "INFO: node version: $(${nodecmd} --version)"
 fi
-if [[ -x ${npmcmd} ]]; then
+if hash ${npmcmd} 2>/dev/null; then
     echo "INFO: npm  version: $(${npmcmd} --version)"
 fi
 
@@ -71,7 +73,7 @@ if [[ -f ${gitdir}/package.json ]]; then
     gruntcmd="$(${npmcmd} bin)"/grunt
     if [[ ! -f ${gruntcmd} ]]; then
         echo "WARN: grunt-cli executable not found. Installing everything"
-        ${npmcmd} install --no-color grunt-cli
+        ${npmcmd} --no-color --no-save install grunt-cli
     fi
 else
 

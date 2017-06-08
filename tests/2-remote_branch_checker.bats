@@ -11,12 +11,12 @@ prepare_prechecker_npmbins () {
 
     export csslintcmd=$npmglobals/node_modules/.bin/csslint
     if [[ ! -f $csslintcmd ]]; then
-        $npmcmd --silent install csslint
+        npm --silent install csslint
     fi
 
     export jshintcmd=$npmglobals/node_modules/.bin/jshint
     if [[ ! -f $jshintcmd ]]; then
-        $npmcmd --silent install jshint
+        npm --silent install jshint
     fi
     cd $OLDPWD
 }

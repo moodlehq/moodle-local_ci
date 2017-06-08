@@ -4,7 +4,7 @@
 # $gitbranch: Branch we are going to verify
 # $extrapath: Extra paths to be available (global)
 # $gitcmd: Path to the git executable (global)
-# $npmcmd: Path to the npm executable (global)
+# $npmcmd: Optional, path to the npm executable (global)
 # $recessbase: Base directory where we'll store multiple recess versions (can be different by branch)
 # $recessversion: (optional) Version of recess to be used by this job
 
@@ -12,7 +12,7 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE gitdir gitbranch extrapath gitcmd npmcmd recessbase"
+required="WORKSPACE gitdir gitbranch extrapath gitcmd recessbase"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -30,6 +30,9 @@ outputfile=${WORKSPACE}/less_checker.txt
 
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Apply some defaults.
+npmcmd=${npmcmd:-npm}
 
 # Ensure git is ready
 cd ${gitdir} && ${gitcmd} reset --hard ${gitbranch}

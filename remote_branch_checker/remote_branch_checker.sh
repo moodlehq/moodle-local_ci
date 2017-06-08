@@ -14,7 +14,7 @@
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 # $extrapath: Extra paths to be available (global)
-# $npmcmd: Path to the npm executable (global)
+# $npmcmd: Optional, path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
 # $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
@@ -29,6 +29,15 @@ if [[ -n ${extrapath} ]]; then
     export PATH=${PATH}:${extrapath}
 fi
 
+# Verify everything is set
+required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmbase issue"
+for var in ${required}; do
+    if [ -z "${!var}" ]; then
+        echo "Error: ${var} environment variable is not defined. See the script comments."
+        exit 1
+    fi
+done
+
 # Apply some defaults
 filtering=${filtering:-true}
 format=${format:-html}
@@ -36,19 +45,11 @@ maxcommitswarn=${maxcommitswarn:-10}
 maxcommitserror=${maxcommitserror:-100}
 rebasewarn=${rebasewarn:-20}
 rebaseerror=${rebaseerror:-60}
+npmcmd=${npmcmd:-npm}
 
 # And reconvert some variables
 export gitdir="${WORKSPACE}"
 export gitbranch="${integrateto}"
-
-# Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmcmd npmbase issue"
-for var in ${required}; do
-    if [ -z "${!var}" ]; then
-        echo "Error: ${var} environment variable is not defined. See the script comments."
-        exit 1
-    fi
-done
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

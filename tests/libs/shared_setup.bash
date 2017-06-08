@@ -34,7 +34,6 @@ export WORKSPACE=$BATS_TMPDIR/workspace
 mkdir -p $WORKSPACE
 export gitcmd=git
 export phpcmd=php
-export npmcmd=npm
 export mysqlcmd=mysql
 export npmbase=$LOCAL_CI_TESTS_CACHEDIR/npmbase
 mkdir -p $npmbase

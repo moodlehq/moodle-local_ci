@@ -2,7 +2,7 @@
 # $gitcmd: Path to git executable.
 # $gitdir: Directory containing git repo (will be cloned to if .git doesn't exist)
 # $gitbranch: Branch we are rebasing onto
-# $npmcmd: Path to the npm executable (global)
+# $npmcmd: Optional, path to the npm executable (global)
 # $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $integrationremote: Remote where integration is being fetched from
 # $securityremote: Remote repo where security branches are being pushed to
@@ -107,12 +107,15 @@ function fix_conflict() {
 }
 
 # Verify everything is set.
-required="gitcmd gitdir gitbranch npmcmd npmbase integrationremote securityremote"
+required="gitcmd gitdir gitbranch npmbase integrationremote securityremote"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         exit_with_error "Error: ${var} environment variable is not defined. See the script comments."
     fi
 done
+
+# Apply some defaults.
+npmcmd=${npmcmd:-npm}
 
 if [[ ! -d "$gitdir/.git" ]]; then
     info "Doing initial clone of moodle.git, git repo not found"
