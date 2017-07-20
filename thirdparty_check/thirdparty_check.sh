@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
+# $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 # $initalcommit
 # $finalcommit
@@ -38,7 +39,7 @@ while read thirdpartyinfo; do
     # Get a search string to find modified files.
     search=`echo $directorylessinfo | cut -d, -f1`
 
-    if matches=$(grep "$search" ${WORKSPACE}/modified_files.txt)
+    if matches=$(grep "^$search\(/.*\)\?$" ${WORKSPACE}/modified_files.txt)
     then
         echo "INFO: Detected third party modification in $search"
         thirdpartyfile=`echo $directorylessinfo | cut -d, -f2`
