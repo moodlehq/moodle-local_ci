@@ -1,0 +1,24 @@
+From 195ecddb57a7d3ecdfade8eca852b188f8297e14 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Thu, 20 Jul 2017 12:57:30 +0100
+Subject: [PATCH 1/1] Test modification to non-thirdparty file
+
+---
+ lib/requirejs.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/requirejs.php b/lib/requirejs.php
+index 7cc8d0f64c..53e372cb20 100644
+--- a/lib/requirejs.php
++++ b/lib/requirejs.php
+@@ -21,6 +21,7 @@
+  * @copyright  2015 Damyon Wiese
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
++// Test modification to non-thirdparty file
+ 
+ // Disable moodle specific debug messages and any errors in output,
+ // comment out when debugging or better look into error log!
+-- 
+2.13.3
+

@@ -32,3 +32,15 @@ setup () {
     assert_output --partial "INFO: Detected third party modification in lib/amd/src/mustache.js"
     assert_output --partial "WARN: modification to third party library (lib/amd/src/mustache.js) without update to lib/thirdpartylibs.xml or lib/amd/src/readme_moodle.txt"
 }
+
+@test "thirdparty_check: lib/requirejs.php edgecase" {
+    # Test case for lib/requirejs.php which isn't in folder lib/requirejs/
+    git_apply_fixture 31-thirdparty-edgecase.patch
+    export initialcommit=$FIXTURE_HASH_BEFORE
+    export finalcommit=$FIXTURE_HASH_AFTER
+
+    ci_run thirdparty_check/thirdparty_check.sh
+    assert_success
+    refute_output --partial "WARN:"
+    assert_output "INFO: Checking for third party modifications from $initialcommit to $finalcommit"
+}
