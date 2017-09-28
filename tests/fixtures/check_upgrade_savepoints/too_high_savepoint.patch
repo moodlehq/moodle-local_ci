@@ -1,0 +1,30 @@
+From 759377f2f8e235ee37c71f8ac789a4a88444e0c0 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Fri, 29 Sep 2017 00:56:54 +0200
+Subject: [PATCH] Too high versions in savepoints
+
+---
+ mod/assign/db/upgrade.php | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/mod/assign/db/upgrade.php b/mod/assign/db/upgrade.php
+index c0935c5a21..72c5f823ba 100644
+--- a/mod/assign/db/upgrade.php
++++ b/mod/assign/db/upgrade.php
+@@ -200,5 +200,13 @@ function xmldb_assign_upgrade($oldversion) {
+     // Moodle v3.1.0 release upgrade line.
+     // Put any upgrade step following this.
+
++    if ($oldversion < 2017022300) {
++
++        // v3.1.1 is 2016052300, hardly can accept anything higher than that
++
++        // Assign savepoint reached.
++        upgrade_mod_savepoint(true, 2017022300, 'assign');
++    }
++
+     return true;
+ }
+--
+2.14.1
+

@@ -77,3 +77,12 @@ setup () {
     run grep ERROR $WORKSPACE/check_upgrade_savepoints_MOODLE_31_STABLE.txt
     assert_output --partial "ERROR: Wrong order in versions: 2014072400 and 2014051201"
 }
+
+@test "check_upgrade_savepoints/check_upgrade_savepoints.sh: savepoint higher than version.php" {
+    git_apply_fixture check_upgrade_savepoints/too_high_savepoint.patch
+
+    ci_run check_upgrade_savepoints/check_upgrade_savepoints.sh
+    assert_failure
+    run grep ERROR $WORKSPACE/check_upgrade_savepoints_MOODLE_31_STABLE.txt
+    assert_output --partial "ERROR: version 2017022300 is higher than that defined in"
+}
