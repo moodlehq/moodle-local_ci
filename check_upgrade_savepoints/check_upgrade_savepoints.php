@@ -161,6 +161,15 @@ foreach ($files as $file) {
         }
     }
 
+/// Let's ensure there are no duplicate calls to a save point with the same version.
+    if ($count_sp > 0) {
+        foreach (array_count_values($matches2[2]) as $version => $count) {
+            if ($count > 1) {
+                echo "    + ERROR: Detected multiple 'savepoint' calls for version $version".LINEFEED;
+            }
+        }
+    }
+
 /// Let's split them
     if (!preg_match_all('@(' . $if_regexp . '(\{(?>(?>[^{}]+)|(?3))*\}))@is', $contents, $matches)) {
         echo "    + NOTE: cannot find 'if' blocks within the upgrade function" . LINEFEED;
@@ -196,7 +205,7 @@ foreach ($files as $file) {
             echo "    + ERROR: version $version is missing corresponding savepoint call" . LINEFEED;
             $has_version_mismatch = true;
         } else if ($count_spv > 1) {
-            echo "    + WARN: version $version has more than one savepoint call" . LINEFEED;
+            echo "    + ERROR: version $version has more than one savepoint call" . LINEFEED;
             $has_version_mismatch = true;
         } else {
             if ($version !== $matches[2][0]) {

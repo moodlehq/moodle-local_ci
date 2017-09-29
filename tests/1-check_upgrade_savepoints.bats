@@ -27,9 +27,10 @@ setup () {
 
     ci_run check_upgrade_savepoints/check_upgrade_savepoints.sh
     assert_failure
-    run grep WARN $WORKSPACE/check_upgrade_savepoints_MOODLE_31_STABLE.txt
+    run grep -P 'ERROR|WARN' $WORKSPACE/check_upgrade_savepoints_MOODLE_31_STABLE.txt
     assert_output --partial "WARN: Detected less 'if' blocks (92) than 'savepoint' calls (93). Repeated savepoints?"
-    assert_output --partial "WARN: version 2016051700.01 has more than one savepoint call"
+    assert_output --partial "ERROR: Detected multiple 'savepoint' calls for version 2016051700.01"
+    assert_output --partial "ERROR: version 2016051700.01 has more than one savepoint call"
 }
 
 @test "check_upgrade_savepoints/check_upgrade_savepoints.sh: no return statement" {
