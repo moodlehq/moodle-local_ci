@@ -208,6 +208,18 @@ foreach ($files as $file) {
     if (!$has_version_mismatch) {
         echo "    + versions in savepoint calls properly matching upgrade blocks" . LINEFEED;
     }
+
+/// Ensure a plugin does not upgrade past its defined version.
+    $versionfile = dirname(dirname($file)).'/version.php';
+    if (file_exists($versionfile)) {
+        if (preg_match('/^\s*\$(module|plugin)->version\s*=\s*([\d.]+)/m', file_get_contents($versionfile), $versionmatches) === 1) {
+            foreach ($versions as $version) {
+                if (((float) $versionmatches[2] * 100) < ((float) $version * 100)) {
+                    echo "    + ERROR: version $version is higher than that defined in $versionfile file".LINEFEED;
+                }
+            }
+        }
+    }
 }
 
     /**
