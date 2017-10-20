@@ -176,9 +176,6 @@ ${mydir}/../git_garbage_collector/git_garbage_collector.sh
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 $gitcmd checkout -B $securitybranch security/$securitybranch
 
-# Ensure (gruntcmd or (recesscmd and shiftercmd)) are available (depends on $gitbranch)
-. ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
-
 # Do the magic!
 # ABRACADABRA!!🌟
 info "Rebasing security branch:"
@@ -187,6 +184,10 @@ then
     # Prevent infinite loops.
     maxloops=100
     loops=0
+
+    # Ensure (gruntcmd or (recesscmd and shiftercmd)) are available (depends on $gitbranch)
+    . ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+
     fix_conflict
     until $gitcmd rebase --continue; do
         fix_conflict
