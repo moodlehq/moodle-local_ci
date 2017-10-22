@@ -4,11 +4,6 @@ load libs/shared_setup
 
 setup () {
     create_git_branch MOODLE_27_STABLE v2.7.14
-
-    export extrapath=.
-    # setup shifter base.
-    export shifterbase=$LOCAL_CI_TESTS_CACHEDIR/shifter
-    mkdir -p $shifterbase
 }
 
 @test "shifter_walk: normal" {

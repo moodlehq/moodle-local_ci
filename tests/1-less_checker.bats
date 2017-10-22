@@ -4,11 +4,6 @@ load libs/shared_setup
 
 setup () {
     create_git_branch MOODLE_27_STABLE v2.7.14
-
-    export extrapath=.
-    # Setup recess base.
-    export recessbase=$LOCAL_CI_TESTS_CACHEDIR/recess
-    mkdir -p $recessbase
 }
 
 @test "less_checker: normal" {

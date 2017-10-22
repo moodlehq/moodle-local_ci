@@ -45,7 +45,6 @@ assert_prechecker () {
     export integrateto=master
     export rebaseerror=9999
     export remote=https://git.in.moodle.com/integration/prechecker.git
-    export extrapath=.
 
     ci_run remote_branch_checker/remote_branch_checker.sh
     assert_success
@@ -108,7 +107,6 @@ assert_prechecker () {
     export integrateto=master
     export rebaseerror=9999
     export remote=https://git.in.moodle.com/integration/prechecker.git
-    export extrapath=.
 
     ci_run remote_branch_checker/remote_branch_checker.sh
     assert_failure
@@ -122,7 +120,6 @@ assert_prechecker () {
     export issue="MDL-12345"
     export integrateto=master
     export rebaseerror=9999
-    export extrapath=.
 
     ci_run remote_branch_checker/remote_branch_checker.sh
     assert_failure

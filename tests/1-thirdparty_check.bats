@@ -4,8 +4,6 @@ load libs/shared_setup
 
 setup () {
     create_git_branch MOODLE_31_STABLE v3.1.0
-
-    export extrapath=.
 }
 
 @test "thirdparty_check: thirdpartyfile modified OK" {

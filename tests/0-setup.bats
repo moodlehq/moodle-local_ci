@@ -46,3 +46,10 @@ load libs/shared_setup
     run date -I
     assert_success
 }
+
+@test "moodle.git short sha length is expected one" {
+    # Some scripts depend on it being 10
+    run bash -c "cd $gitdir && git rev-list --all --abbrev=0 --abbrev-commit | wc -L"
+    assert_success
+    assert_output '10'
+}

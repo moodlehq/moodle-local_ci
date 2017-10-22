@@ -37,7 +37,7 @@
   <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
     <mess>
-      <problem file="c8c8470" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/c8c8470" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="info" weight="1">
+      <problem file="c8c8470b8c" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/c8c8470b8c" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="info" weight="1">
         <message>AMOS - String to be copied: searchengine/admin to type_search/plugin </message>
         <description/>
         <code/>
