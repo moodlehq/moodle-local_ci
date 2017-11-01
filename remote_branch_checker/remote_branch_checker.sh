@@ -13,9 +13,7 @@
 # $maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
-# $extrapath: Extra paths to be available (global)
 # $npmcmd: Optional, path to the npm executable (global)
-# $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
 # $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
 # $phpcsstandard: (optional) directory for coding standard path
@@ -24,13 +22,8 @@
 set +x
 set -e
 
-# Let add $extrapath to PATH (for node)
-if [[ -n ${extrapath} ]]; then
-    export PATH=${PATH}:${extrapath}
-fi
-
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto npmbase issue"
+required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto issue"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -295,8 +288,6 @@ echo "Info: Calculating excluded files"
 echo "Info: Preparing npm"
 # Everything is ready, let's install all the required node stuff that some tools will use.
 ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh >> "${WORKSPACE}/work/prepare_npm.txt" 2>&1
-# And unset npmbase because we don't want those tools to handle node_modules themselves
-npmbase=
 
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
@@ -390,12 +381,12 @@ for todelete in ${excluded}; do
     rm -fr "${WORKSPACE}/${todelete}"
 done
 
-# Remove all the files, but the patchset ones and .git and work
-find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" \) | \
+# Remove all the files, but the patchset ones and .git, work and node_modules
+find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" -or -path "*/node_modules/*" \) | \
     grep -vf ${WORKSPACE}/work/patchset.files | xargs -I{} rm {}
 
 # Remove all the empty dirs remaining, but .git and work
-find ${WORKSPACE} -depth -empty -type d -and -not \( -name .git -or -name work \) -delete
+find ${WORKSPACE} -depth -empty -type d -and -not \( -name .git -or -name work -or -name node_modules \) -delete
 
 # ########## ########## ########## ##########
 
@@ -445,7 +436,7 @@ if [ -f $WORKSPACE/.stylelintrc ]; then
 fi
 
 # Don't need node stuff anymore, avoid it being analysed by any of the next tools.
-rm ${gitdir}/node_modules
+rm -fr ${gitdir}/node_modules
 
 # Run the upgrade savepoints checker, converting it to checkstyle format
 # (it requires to be installed in the root of the dir being checked)

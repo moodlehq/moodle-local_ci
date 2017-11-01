@@ -68,17 +68,17 @@
   <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="3" numwarnings="0" allowfiltering="1">
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
     <mess>
-      <problem file="8b0f63d" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/8b0f63d" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="8b0f63da17" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/8b0f63da17" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space. </message>
         <description/>
         <code/>
       </problem>
-      <problem file="536542c" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/536542c" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="536542c7f0" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/536542c7f0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space. </message>
         <description/>
         <code/>
       </problem>
-      <problem file="a9d19ab" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/a9d19ab" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="a9d19ab512" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/a9d19ab512" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space. </message>
         <description/>
         <code/>

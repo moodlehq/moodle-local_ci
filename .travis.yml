@@ -8,6 +8,7 @@ addons:
 php:
     - '7.0'
 env:
+    - TEST_SUITE="0-*"
     - TEST_SUITE="1-*"
     - TEST_SUITE="2-*"
 

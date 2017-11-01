@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
-# $npmbase: Base directory where we'll store multiple npm packages versions (subdirectories per branch)
 # $nodecmd: Optional, path to the node executable (global)
 # $npmcmd: Optional, path to the npm executable (global)
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
@@ -11,7 +10,7 @@
 # Let's be strict. Any problem leads to failure.
 set -e
 
-required="gitdir gitbranch npmbase"
+required="gitdir gitbranch"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "ERROR: ${var} environment variable is not defined. See the script comments."
@@ -39,30 +38,12 @@ fi
 # Move to base directory
 cd ${gitdir}
 
-# Verify we have the npmbase dir, creating if needed
-if [[ ! -d ${npmbase} ]]; then
-    echo "WARN: npmbase dir (${npmbase}) not found. Creating it"
-    mkdir -p ${npmbase}
-    echo "INFO: npmbase dir (${npmbase}) created"
-else
-    echo "OK: npmbase dir (${npmbase}) found"
-fi
-
-# Verify we have already the gitbranch dir, creating if needed
-if [[ ! -d ${npmbase}/${gitbranch}/node_modules ]]; then
-    echo "WARN: npmbase for branch (${gitbranch}) not found. Creating it"
-    mkdir -p ${npmbase}/${gitbranch}/node_modules
-    echo "INFO: npmbase for branch (${gitbranch}) created"
-else
-    echo "OK: npmbase for branch (${gitbranch}) found"
-fi
+# Unconditionally remove any previous installed stuff.
+# We always install from scratch. In caches we trust.
+rm -fr ${gitdir}/node_modules
 
 # Install general stuff only if there is a package.json file
 if [[ -f ${gitdir}/package.json ]]; then
-
-    # Linking it (after removing, just in case)
-    echo "INFO: Linking ${npmbase}/${gitbranch}/node_modules to ${gitdir}/node_modules"
-    ln -nfs ${npmbase}/${gitbranch}/node_modules ${gitdir}/node_modules
 
     echo "INFO: Installing npm stuff following package/shrinkwrap details"
 
@@ -76,8 +57,6 @@ if [[ -f ${gitdir}/package.json ]]; then
         ${npmcmd} --no-color --no-save install grunt-cli
     fi
 else
-
-    cd ${npmbase}/${gitbranch}
 
     # Install shifter version if there is not package.json
     # (this is required for branches < 29_STABLE)
