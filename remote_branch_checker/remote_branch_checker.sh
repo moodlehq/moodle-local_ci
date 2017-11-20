@@ -83,11 +83,12 @@ ${gitcmd} reset -q --hard
 # Let's verify if a git gc is required.
 ${mydir}/../git_garbage_collector/git_garbage_collector.sh
 
-# Set the build display name using jenkins-cli
+# Set the build display name using jenkins-cli (if configured)
 # Based on issue + integrateto, decide the display name to be used
-# Do this optionally, only if we are running under Jenkins.
+# Do this optionally, only if we are running under Jenkins and decided
+# to connect to it using jenkins cli..
 displayname=""
-if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
+if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]] && [[ -n "${jenkinsserver}" ]]; then
     if [[ "${integrateto}" = "master" ]]; then
         displayname="#${BUILD_NUMBER}:${issue}"
     else
@@ -96,7 +97,7 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]]; then
         fi
     fi
     echo "Info: Setting build display name: ${displayname}"
-    java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s http://localhost:8080 \
+    java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s ${jenkinsserver} \
         set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
 fi
 
