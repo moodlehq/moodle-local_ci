@@ -22,9 +22,10 @@ prepare_prechecker_npmbins () {
 }
 
 setup () {
+
     prepare_prechecker_npmbins
 
-    create_git_branch MOODLE_31_STABLE v3.1.1
+    create_git_branch MOODLE_34_STABLE v3.4.0 # Must be always a .0 version coz we precheck it in master.
     export WORKSPACE=$gitdir
     export phpcsstandard=$LOCAL_CI_TESTS_PHPCS_DIR
 }
@@ -57,48 +58,48 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
-    # from https://integration.moodle.org/job/Precheck%20remote%20branch/26024/
-    assert_prechecker MDL-53136-master-dc60e4f MDL-53136 d1a3ea62ef79f2d4d997e329a647535340ef15db
+    # A branch with a good number of errors
+    assert_prechecker local_ci_fixture_manyproblems MDL-53136 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {
     # from https://integration.moodle.org/job/Precheck%20remote%20branch/25996/
-    assert_prechecker MDL-53572-master-8ce58c9 MDL-53572 d1a3ea62ef79f2d4d997e329a647535340ef15db
+    assert_prechecker MDL-53572-master-8ce58c9 MDL-53572 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: stylelint checks" {
-    assert_prechecker prechecker-fixture-stylelint MDL-12345 7752762674c1211e00c5d24045c065c41f5bc662
+    assert_prechecker prechecker-fixture-stylelint MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {
     # Ensure we always report each section, even if there are no php/css/js files to check
-    assert_prechecker fixture-non-code-update MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87
+    assert_prechecker fixture-non-code-update MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: thirdparty css modification" {
     # Ensure stylelint doesn't complain about the third party css, but thirdpart does
     # TODO: thirdparty check bug with reporting same file twice..
-    assert_prechecker fixture-thirdparty-css MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87
+    assert_prechecker fixture-thirdparty-css MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
-    assert_prechecker fixture-bad-amos-commands MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87
+    assert_prechecker fixture-bad-amos-commands MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: good amos commands" {
-    assert_prechecker fixture-good-amos-commit MDL-12345 6f302b17b97078059d4f02d747abf5822a064e87
+    assert_prechecker fixture-good-amos-commit MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: mustache lint" {
-    assert_prechecker fixture-mustache-lint MDL-12345 d9520bc04e4d47d8dedfbe6b07cbbe0cb14c7fcf
+    assert_prechecker fixture-mustache-lint MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: mustache lint eslint problem" {
-    assert_prechecker fixture-mustache-lint-js MDL-12345 cad8adccc796f40ab11b1236cd637e9b987c17c8
+    assert_prechecker fixture-mustache-lint-js MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: grunt build failed" {
-    assert_prechecker fixture-grunt-build-failed MDL-12345 cd4a6b8b0bca159d3abb1468794ed5a074c5b701
+    assert_prechecker fixture-grunt-build-failed MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: remote which doesnt exist" {

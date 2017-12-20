@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="2" numwarnings="1">
-  <summary status="error" numerrors="2" numwarnings="1" condensedresult="smurf,error,2,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,1,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
+<smurf version="0.9.1" numerrors="3" numwarnings="1">
+  <summary status="error" numerrors="3" numwarnings="1" condensedresult="smurf,error,3,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,2,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="css" status="error" numerrors="1" numwarnings="0"/>
+    <detail name="css" status="error" numerrors="2" numwarnings="0"/>
     <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
     <detail name="commit" status="success" numerrors="0" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
@@ -26,10 +26,15 @@
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess/>
   </check>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="1" numwarnings="0" allowfiltering="1">
+  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="2" numwarnings="0" allowfiltering="1">
     <description>This section shows CSS problems detected by stylelint</description>
     <mess>
-      <problem file="theme/boost/scss/moodle/icons.scss" linefrom="11" lineto="11" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/bd1e8a01cf920bc79e7ca80949f6a3f41db8c8e2/theme/boost/scss/moodle/icons.scss#L11" ruleset="stylelint" rule="rules.property-no-unknown" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+      <problem file="theme/boost/scss/moodle/icons.scss" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/theme/boost/scss/moodle/icons.scss#L20" ruleset="stylelint" rule="rules.csstree/validator" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Unknown property: some-unknown-css</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="theme/boost/scss/moodle/icons.scss" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/theme/boost/scss/moodle/icons.scss#L20" ruleset="stylelint" rule="rules.property-no-unknown" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
         <message>Unexpected unknown property "some-unknown-css" (property-no-unknown)</message>
         <description/>
         <code/>
@@ -55,12 +60,12 @@
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/bd1e8a01cf920bc79e7ca80949f6a3f41db8c8e2/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
         <message>Task "stylelint:scss" failed. Use --force to continue.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/bd1e8a01cf920bc79e7ca80949f6a3f41db8c8e2/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
         <message>Problems running grunt</message>
         <description/>
         <code/>

@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<smurf version="0.9.1" numerrors="11" numwarnings="6">
+  <summary status="error" numerrors="11" numwarnings="6" condensedresult="smurf,error,11,6:phplint,error,1,0;phpcs,error,2,2;js,error,1,1;css,error,3,0;phpdoc,success,0,0;commit,error,1,1;savepoint,error,2,0;thirdparty,warning,0,1;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
+    <detail name="phplint" status="error" numerrors="1" numwarnings="0"/>
+    <detail name="phpcs" status="error" numerrors="2" numwarnings="2"/>
+    <detail name="js" status="error" numerrors="1" numwarnings="1"/>
+    <detail name="css" status="error" numerrors="3" numwarnings="0"/>
+    <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="commit" status="error" numerrors="1" numwarnings="1"/>
+    <detail name="savepoint" status="error" numerrors="2" numwarnings="0"/>
+    <detail name="thirdparty" status="warning" numerrors="0" numwarnings="1"/>
+    <detail name="grunt" status="error" numerrors="1" numwarnings="1"/>
+    <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
+  </summary>
+  <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="1" numwarnings="0" allowfiltering="0">
+    <description>This section shows php lint problems in the code detected by php -l</description>
+    <mess>
+      <problem file="help.php" linefrom="59" lineto="59" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/help.php#L59" ruleset="moodle" rule="" url="http://php.net/docs.php" type="error" weight="5">
+        <message>PHP Parse error: syntax error, unexpected end of file, expecting ',' or ';' in /help.php on line 59 </message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="2" numwarnings="2" allowfiltering="1">
+    <description>This section shows the coding style problems detected in the code by phpcs</description>
+    <mess>
+      <problem file="lib/weblib.php" linefrom="2599" lineto="2599" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/weblib.php#L2599" ruleset="moodle" rule="Commenting.InlineComment.NotCapital" url="https://docs.moodle.org/dev/Coding_style" type="warning" weight="1">
+        <message>Inline comments must start with a capital letter, digit or 3-dots sequence</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="lib/weblib.php" linefrom="2599" lineto="2599" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/weblib.php#L2599" ruleset="moodle" rule="Commenting.InlineComment.InvalidEndChar" url="https://docs.moodle.org/dev/Coding_style" type="warning" weight="1">
+        <message>Inline comments must end in full-stops, exclamation marks, or question marks</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="lib/weblib.php" linefrom="2600" lineto="2600" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/weblib.php#L2600" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceBefore" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+        <message>Expected 1 space before "+"; 0 found</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="lib/weblib.php" linefrom="2600" lineto="2600" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/weblib.php#L2600" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceAfter" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+        <message>Expected 1 space after "+"; 0 found</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="js" title="Javascript coding style problems" url="https://docs.moodle.org/dev/Javascript/Coding_style" numerrors="1" numwarnings="1" allowfiltering="1">
+    <description>This section shows the coding style problems detected in the code by eslint</description>
+    <mess>
+      <problem file="lib/javascript-static.js" linefrom="1299" lineto="1299" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/javascript-static.js#L1299" ruleset="eslint" rule="rules.no-console" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="error" weight="5">
+        <message>Unexpected console statement. (no-console)</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="lib/yui/src/dock/js/block.js" linefrom="63" lineto="63" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/yui/src/dock/js/block.js#L63" ruleset="eslint" rule="rules.space-infix-ops" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
+        <message>Infix operators must be spaced. (space-infix-ops)</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="3" numwarnings="0" allowfiltering="1">
+    <description>This section shows CSS problems detected by stylelint</description>
+    <mess>
+      <problem file="mod/assign/styles.css" linefrom="6" lineto="6" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/mod/assign/styles.css#L6" ruleset="stylelint" rule="rules.csstree/validator" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Unknown property: local-ci-fake-property</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/assign/styles.css" linefrom="6" lineto="6" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/mod/assign/styles.css#L6" ruleset="stylelint" rule="rules.property-no-unknown" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Unexpected unknown property "local-ci-fake-property" (property-no-unknown)</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/quiz/styles.css" linefrom="13" lineto="13" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/mod/quiz/styles.css#L13" ruleset="stylelint" rule="rules.declaration-block-no-duplicate-properties" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Unexpected duplicate "text-align" (declaration-block-no-duplicate-properties)</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+    <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>
+    <mess/>
+  </check>
+  <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="1" numwarnings="1" allowfiltering="1">
+    <description>This section shows the problems detected in the commit messages by the commits checker</description>
+    <mess>
+      <problem file="9edecb1781" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/9edecb1781" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+        <message>The commit message does not contain the expected issue code MDL-53136 and a space. </message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="c556755e15" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/c556755e15" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="warning" weight="1">
+        <message>The commit message does not define a code area ending with a colon and a space after the issue code. </message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="savepoint" title="Update savepoints problems" url="https://docs.moodle.org/dev/Upgrade_API" numerrors="2" numwarnings="0" allowfiltering="1">
+    <description>This section shows problems detected with the handling of upgrade savepoints</description>
+    <mess>
+      <problem file="mod/quiz/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/mod/quiz/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Upgrade_API" type="error" weight="50">
+        <message>Detected more 'if' blocks (4) than 'savepoint' calls (3) </message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/quiz/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/mod/quiz/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Upgrade_API" type="error" weight="50">
+        <message>version 2016032600 is missing corresponding savepoint call </message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="thirdparty" title="Third party library modification problems" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" numerrors="0" numwarnings="1" allowfiltering="0">
+    <description>This section shows problems detected with the modification of third party libraries</description>
+    <mess>
+      <problem file="lib/amd/src/loglevel.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/lib/amd/src/loglevel.js#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
+        <message>modification to third party library (lib/amd/src/loglevel.js) without update to lib/thirdpartylibs.xml or lib/amd/src/readme_moodle.txt </message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
+    <description>This section shows files built by grunt and not commited</description>
+    <mess>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+        <message>Task "stylelint:css" failed. Use --force to continue.</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b372aa8468452f5510ee41e0a3b44fb56ade77ac/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+        <message>Problems running grunt</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
+  <check id="shifter" title="shifter problems" url="https://docs.moodle.org/dev/YUI/Shifter" numerrors="0" numwarnings="0" allowfiltering="1">
+    <description>This section shows problems detected by shifter</description>
+    <mess/>
+  </check>
+  <check id="travis" title="Travis CI problems" url="https://docs.moodle.org/dev/Travis_Integration" numerrors="0" numwarnings="0" allowfiltering="1">
+    <description>This section reports issues detected by Travis CI.</description>
+    <mess/>
+  </check>
+  <check id="mustache" title="Mustache template problems" url="https://docs.moodle.org/dev/Templates" numerrors="0" numwarnings="0" allowfiltering="0">
+    <description>This section shows problems detected in mustache templates</description>
+    <mess/>
+  </check>
+</smurf>

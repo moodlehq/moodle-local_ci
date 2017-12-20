@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="4" numwarnings="2">
-  <summary status="error" numerrors="4" numwarnings="2" condensedresult="smurf,error,4,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,3,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
+<smurf version="0.9.1" numerrors="5" numwarnings="2">
+  <summary status="error" numerrors="5" numwarnings="2" condensedresult="smurf,error,5,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,4,1;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,1,1;shifter,success,0,0;travis,success,0,0;mustache,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="css" status="error" numerrors="3" numwarnings="1"/>
+    <detail name="css" status="error" numerrors="4" numwarnings="1"/>
     <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
     <detail name="commit" status="success" numerrors="0" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
@@ -26,26 +26,31 @@
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess/>
   </check>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="3" numwarnings="1" allowfiltering="1">
+  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="4" numwarnings="1" allowfiltering="1">
     <description>This section shows CSS problems detected by stylelint</description>
     <mess>
-      <problem file="report/progress/styles.css" linefrom="4" lineto="4" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/report/progress/styles.css#L4" ruleset="stylelint" rule="rules.color-hex-case" url="https://docs.moodle.org/dev/CSS_coding_style" type="warning" weight="1">
+      <problem file="report/progress/styles.css" linefrom="5" lineto="5" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/report/progress/styles.css#L5" ruleset="stylelint" rule="rules.color-hex-case" url="https://docs.moodle.org/dev/CSS_coding_style" type="warning" weight="1">
         <message>Expected "#EEE" to be "#eee" (color-hex-case)</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/progress/styles.css" linefrom="4" lineto="4" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/report/progress/styles.css#L4" ruleset="stylelint" rule="rules.declaration-colon-space-after" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+      <problem file="report/progress/styles.css" linefrom="5" lineto="5" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/report/progress/styles.css#L5" ruleset="stylelint" rule="rules.declaration-colon-space-after" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
         <message>Expected single space after ":" with a single-line declaration (declaration-colon-space-after)</message>
         <description/>
         <code/>
       </problem>
-      <problem file="theme/bootstrapbase/less/moodle/user.less" linefrom="10" lineto="10" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/theme/bootstrapbase/less/moodle/user.less#L10" ruleset="stylelint" rule="rules.declaration-colon-space-after" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+      <problem file="theme/bootstrapbase/less/moodle/user.less" linefrom="10" lineto="10" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/theme/bootstrapbase/less/moodle/user.less#L10" ruleset="stylelint" rule="rules.declaration-colon-space-after" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
         <message>Expected single space after ":" with a single-line declaration (declaration-colon-space-after)</message>
         <description/>
         <code/>
       </problem>
-      <problem file="theme/clean/foo.scss" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/theme/clean/foo.scss#L1" ruleset="stylelint" rule="rules.block-no-single-line" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
-        <message>Unexpected single-line block (block-no-single-line)</message>
+      <problem file="theme/clean/foo.scss" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/theme/clean/foo.scss#L1" ruleset="stylelint" rule="rules.block-closing-brace-newline-before" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Expected newline before "}" (block-closing-brace-newline-before)</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="theme/clean/foo.scss" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/theme/clean/foo.scss#L1" ruleset="stylelint" rule="rules.block-opening-brace-newline-after" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
+        <message>Expected newline after "{" (block-opening-brace-newline-after)</message>
         <description/>
         <code/>
       </problem>
@@ -70,12 +75,12 @@
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
-        <message>Task "stylelint:less" failed. Use --force to continue.</message>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+        <message>Task "stylelint:scss" failed. Use --force to continue.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/37d67b299413134f176df1c42a8084a726e9a4dd/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/49effd12f320bb67f9b3b91c4a448b81745f13bf/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
         <message>Problems running grunt</message>
         <description/>
         <code/>

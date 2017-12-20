@@ -26,8 +26,8 @@
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess/>
   </check>
-  <check id="css" title="CSS problems" url="https://github.com/CSSLint/csslint/wiki/Rules" numerrors="0" numwarnings="0" allowfiltering="1">
-    <description>This section shows CSS problems detected by csslint</description>
+  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+    <description>This section shows CSS problems detected by stylelint</description>
     <mess/>
   </check>
   <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
