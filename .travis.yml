@@ -1,29 +1,37 @@
 language: php
+
+sudo: false
+
 addons:
-    apt:
-        packages:
-            - bc
-            - oracle-java8-installer
-            - oracle-java8-set-default
+  apt:
+    packages:
+      - bc
+      - oracle-java8-installer
+      - oracle-java8-set-default
+
+cache:
+  directories:
+      - $HOME/cachedir
+
 php:
-    - '7.0'
+    - 7.0
+
 env:
     - TEST_SUITE="0-*"
     - TEST_SUITE="1-*"
     - TEST_SUITE="2-*"
 
-sudo: false
-cache:
-  directories:
-      - $HOME/cachedir
 install:
   - git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
-  - nvm install 4
-  - nvm use 4
+  - nvm install 8.9
+  - nvm use 8.9
   - travis_retry composer install
   - npm install
+
 before_script:
-  - 'git config --global user.email "travis@localhost" && git config --global user.name "Travis CI"'
+  - 'git config --global user.email "travis@localhost"'
+  - 'git config --global user.name "Travis CI"'
+  - 'git config --global core.abbrev 10'
   - "export LOCAL_CI_TESTS_CACHEDIR=$HOME/cachedir && mkdir -p $LOCAL_CI_TESTS_CACHEDIR"
   - "export LOCAL_CI_TESTS_GITDIR=$HOME/gitdir && git clone git://github.com/moodle/moodle $LOCAL_CI_TESTS_GITDIR"
   - "git clone -q --depth 1 https://github.com/moodlehq/moodle-local_codechecker $HOME/moodle-local_codechecker"
@@ -33,6 +41,6 @@ before_script:
   - "export LOCAL_CI_TESTS_DBHOST=localhost"
   - "export LOCAL_CI_TESTS_DBUSER=travis"
   - "export LOCAL_CI_TESTS_DBPASS="
+
 script:
   - $HOME/bats/bin/bats tests/$TEST_SUITE
-

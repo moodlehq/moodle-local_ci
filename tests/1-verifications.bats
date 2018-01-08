@@ -25,7 +25,7 @@ load libs/shared_setup
     executables=('sh' 'bats')
     nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml' 'groovy')
     # Other nonexecutable files, but looked by name, not by extension
-    otherfiles=('.gitignore' '.htaccess' 'package.json')
+    otherfiles=('.gitignore' '.htaccess' 'package.json' 'package-lock.json')
 
     # git does NOT track directory perms at all, so we comment aout this test. Just kept here for reference.
     # Directories must have execution bits set
