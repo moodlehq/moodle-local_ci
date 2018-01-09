@@ -41,6 +41,7 @@ before_script:
   - "export LOCAL_CI_TESTS_DBHOST=localhost"
   - "export LOCAL_CI_TESTS_DBUSER=travis"
   - "export LOCAL_CI_TESTS_DBPASS="
+  - "unset _JAVA_OPTIONS" # stderr output on each java execution breaks our json expectations. See travis-ci/travis-ci#8408
 
 script:
   - $HOME/bats/bin/bats tests/$TEST_SUITE
