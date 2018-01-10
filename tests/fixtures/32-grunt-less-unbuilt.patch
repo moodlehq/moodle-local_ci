@@ -1,0 +1,27 @@
+From d50225b7e4eb492d4bd73fa1b9a1a24d763ca1a2 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Tue, 19 Dec 2017 15:45:48 +0100
+Subject: [PATCH] NOBUG fixture: less unbuilt for grunt tests
+
+With conflicts fixed to work on top of Moodle 3.2.6
+---
+ theme/bootstrapbase/less/moodle/reports.less | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/theme/bootstrapbase/less/moodle/reports.less b/theme/bootstrapbase/less/moodle/reports.less
+index 4f6b0fb789..08eab041be 100644
+--- a/theme/bootstrapbase/less/moodle/reports.less
++++ b/theme/bootstrapbase/less/moodle/reports.less
+@@ -3,6 +3,9 @@
+ // The home for small tweaks to reports that don't require
+ // changes drastic enough to pull in the full module css
+ // and replace it completely.
++.integrationcsschange {
++    display: none;
++}
+
+ #page-report-participation-index .participationselectform div label { // Using 'div' here to override the report styles.css
+     display: inline-block;
+-- 
+2.15.1
+

@@ -79,14 +79,14 @@ setup () {
 
 @test "compare_databases/compare_databases.sh: multiple branch runs work" {
     export gitbranchinstalled=master
-    export gitbranchupgraded=MOODLE_30_STABLE,MOODLE_31_STABLE
+    export gitbranchupgraded=MOODLE_31_STABLE,MOODLE_32_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (2) MOODLE_30_STABLE,MOODLE_31_STABLE'
+    assert_output --partial 'Info: Origin branches: (2) MOODLE_31_STABLE,MOODLE_32_STABLE'
     assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_30_STABLE'
     assert_output --partial 'Info: Comparing master and upgraded MOODLE_31_STABLE'
+    assert_output --partial 'Info: Comparing master and upgraded MOODLE_32_STABLE'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
     run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]

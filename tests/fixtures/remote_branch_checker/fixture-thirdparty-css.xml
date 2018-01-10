@@ -45,12 +45,12 @@
   <check id="thirdparty" title="Third party library modification problems" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" numerrors="0" numwarnings="2" allowfiltering="0">
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess>
-      <problem file="lib/jquery/ui-1.11.4/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b2f2dbb07baeeb5d915a72ccb8ea056854d29b25/lib/jquery/ui-1.11.4/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
+      <problem file="lib/jquery/ui-1.12.1/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a4249efdc0334d8ea87824553116f2768ab508da/lib/jquery/ui-1.12.1/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
         <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt </message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/jquery/ui-1.11.4/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/b2f2dbb07baeeb5d915a72ccb8ea056854d29b25/lib/jquery/ui-1.11.4/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
+      <problem file="lib/jquery/ui-1.12.1/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a4249efdc0334d8ea87824553116f2768ab508da/lib/jquery/ui-1.12.1/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
         <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt </message>
         <description/>
         <code/>

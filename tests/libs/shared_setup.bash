@@ -28,6 +28,7 @@ if [ -z $LOCAL_CI_TESTS_PHPCS_DIR ]; then
     exit 1
 fi
 
+export LANG=C # To ensure that all commands texts are in English
 
 export LOCAL_CI_TESTS_RUNNING=1
 export WORKSPACE=$BATS_TMPDIR/workspace
