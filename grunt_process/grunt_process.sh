@@ -4,6 +4,7 @@
 # $gitbranch: Branch we are going to install the DB
 # $npmcmd: Optional, path to the npm executable (global)
 # $npminstall: (optional), if set the script will install nodejs stuff. Else, nodejs managing is external.
+# $isplugin: (optional), if set we are examining a plugin, some exceptions may be applied.
 
 # Let's be strict. Any problem leads to failure.
 set -e
@@ -24,6 +25,7 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Apply some defaults.
 npmcmd=${npmcmd:-npm}
+isplugin=${isplugin:-}
 
 cd ${gitdir}
 rm -fr config.php
@@ -87,7 +89,12 @@ fi
 
 # Look for changes
 cd ${gitdir}
-changes=$(git ls-files -m)
+gitexclude=
+if [[ -n ${isplugin} ]]; then
+    gitexclude="':(exclude).eslintignore' ':(exclude).stylelintignore'"
+    echo "Checking a plugin, so applying for exclusion (git >= 1.9) with ${gitexclude}"
+fi
+changes=$(git ls-files -m ${gitexclude})
 if [[ -z ${changes} ]]; then
     echo | tee -a "${outputfile}"
     echo "OK: All modules are perfectly processed by grunt" | tee -a "${outputfile}"

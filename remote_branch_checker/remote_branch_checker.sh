@@ -322,6 +322,7 @@ export initialcommit=${basecommit}
 export GIT_PREVIOUS_COMMIT=${initialcommit}
 export finalcommit=${integrateto}_precheck
 export GIT_COMMIT=${finalcommit}
+export isplugin=${isplugin}
 
 # TODO: Run the db install/upgrade comparison check
 # (only if there is any *install* or *upgrade* file involved)

@@ -59,3 +59,22 @@ setup () {
     assert_output --partial "WARN: Some modules are not properly processed by grunt. Changes detected:"
     assert_output --regexp "GRUNT-CHANGE: (.*)/.eslintignore"
 }
+
+@test "grunt_process: Uncommited ignorefiles ignored when checking plugin" {
+    # When a 3rd party library is added, but we are checking a 3rd part plugin
+    # we ignore any change in ignorefiles.
+
+    # Testing on in-dev 3.2dev
+    create_git_branch 32-dev 5a1728df39116fc701cc907e85a638aa7674f416
+    git_apply_fixture 32-thirdparty-lib-added.patch
+
+    # Run test
+    export isplugin=1
+    ci_run grunt_process/grunt_process.sh
+
+    # Assert result
+    assert_success
+    assert_output --partial "Running \"ignorefiles\" task"
+    assert_output --partial "Checking a plugin, so applying for exclusion"
+    assert_output --partial "OK: All modules are perfectly processed by grunt"
+}
