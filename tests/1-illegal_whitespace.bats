@@ -48,3 +48,13 @@ teardown () {
     assert_output --partial "best count: 959"
     assert_output --partial "worse results than previous counter"
 }
+
+@test "illegal_whitespace: Whitespace in path of gitdir" {
+    tmpdir=`mktemp -d`
+    uit="$tmpdir/example space"
+    mkdir -p "{$uit}"
+    export gitdir="{$uit}"
+    export gitbranch="master"
+    ci_run illegal_whitespace/illegal_whitespace.sh
+    assert_success
+}

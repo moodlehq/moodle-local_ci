@@ -17,17 +17,18 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # dirs and files (egrep-like regexp) we are going to exclude from analysis
-. ${mydir}/../define_excluded/define_excluded.sh
+. "${mydir}/../define_excluded/define_excluded.sh"
 
 # files where results will be sent
-lastfile=$WORKSPACE/illegal_whitespace_last_execution_$gitbranch.txt
-correctfile=$WORKSPACE/illegal_whitespace_last_correct_$gitbranch.txt
-difffile=$WORKSPACE/illegal_whitespace_diff_$gitbranch.txt
-countfile=$WORKSPACE/illegal_whitespace_counters_$gitbranch.csv
-mincountfile=$WORKSPACE/illegal_whitespace_mincounter_$gitbranch.csv
+lastfile="$WORKSPACE/illegal_whitespace_last_execution_$gitbranch.txt"
+correctfile="$WORKSPACE/illegal_whitespace_last_correct_$gitbranch.txt"
+difffile="$WORKSPACE/illegal_whitespace_diff_$gitbranch.txt"
+countfile="$WORKSPACE/illegal_whitespace_counters_$gitbranch.csv"
+mincountfile="$WORKSPACE/illegal_whitespace_mincounter_$gitbranch.csv"
 
 # Co to proper gitdir and gitpath
-cd $gitdir && git reset --hard $gitbranch
+cd "$gitdir"
+git reset --hard $gitbranch
 
 # Search and send to $lastfile
 echo -n > "$lastfile"
