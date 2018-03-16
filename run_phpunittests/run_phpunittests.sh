@@ -178,6 +178,13 @@ if [ $exitstatus -eq 0 ]; then
         exitstatus=1
         rm "${resultfile}"
     fi
+    # strict standards
+    stacks=$(grep 'Strict Standards:' "${outputfile}" | wc -l)
+    if [[ ${stacks} -gt 0 ]]; then
+        echo "ERROR: uncontrolled strict standards output on execution."
+        exitstatus=1
+        rm "${resultfile}"
+    fi
     # debugging messages
     debugging=$(grep 'Debugging:' "${outputfile}" | wc -l)
     if [[ ${debugging} -gt 0 ]]; then
