@@ -152,7 +152,7 @@ foreach ($files as $file) {
     if ($count_if > 0 || $count_sp > 0) {
         if ($count_if !== $count_sp) {
             if ($count_if < $count_sp) {
-                echo "    + WARN: Detected less 'if' blocks ($count_if) than 'savepoint' calls ($count_sp). Repeated savepoints?" . LINEFEED;
+                echo "    + WARN: Detected fewer 'if' blocks ($count_if) than 'savepoint' calls ($count_sp). Repeated savepoints?" . LINEFEED;
             } else {
                 echo "    + ERROR: Detected more 'if' blocks ($count_if) than 'savepoint' calls ($count_sp)" . LINEFEED;
             }
