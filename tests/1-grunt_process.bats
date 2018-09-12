@@ -75,6 +75,7 @@ setup () {
     # Assert result
     assert_success
     assert_output --partial "Running \"ignorefiles\" task"
-    assert_output --partial "Checking a plugin, so applying for exclusion"
+    assert_output --partial "Looking for changes, applying some exclusion with"
+    assert_output --partial " -e .eslintignore "
     assert_output --partial "OK: All modules are perfectly processed by grunt"
 }
