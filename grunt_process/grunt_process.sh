@@ -89,12 +89,12 @@ fi
 
 # Look for changes
 cd ${gitdir}
-gitexclude="':(exclude)npm-shrinkwrap.json'"
+grepexclude="grep -v -e npm-shrinkwrap.json"
 if [[ -n ${isplugin} ]]; then
-    gitexclude="${gitexclude} ':(exclude).eslintignore' ':(exclude).stylelintignore'"
+    grepexclude="${grepexclude} -e .eslintignore -e .stylelintignore"
 fi
-echo "Looking for changes, applying some exclusion with ${gitexclude}"
-changes=$(git ls-files -m ${gitexclude})
+echo "Looking for changes, applying some exclusion with ${grepexclude}"
+changes=$(git ls-files -m | ${grepexclude} || true)
 if [[ -z ${changes} ]]; then
     echo | tee -a "${outputfile}"
     echo "OK: All modules are perfectly processed by grunt" | tee -a "${outputfile}"
