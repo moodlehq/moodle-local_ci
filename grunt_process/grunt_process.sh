@@ -89,11 +89,11 @@ fi
 
 # Look for changes
 cd ${gitdir}
-gitexclude=
+gitexclude="':(exclude)npm-shrinkwrap.json'"
 if [[ -n ${isplugin} ]]; then
-    gitexclude="':(exclude).eslintignore' ':(exclude).stylelintignore'"
-    echo "Checking a plugin, so applying for exclusion (git >= 1.9) with ${gitexclude}"
+    gitexclude="${gitexclude} ':(exclude).eslintignore' ':(exclude).stylelintignore'"
 fi
+echo "Looking for changes, applying some exclusion with ${gitexclude}"
 changes=$(git ls-files -m ${gitexclude})
 if [[ -z ${changes} ]]; then
     echo | tee -a "${outputfile}"
