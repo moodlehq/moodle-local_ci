@@ -88,12 +88,12 @@ yui/build/
 *.svg"
 
 # Normalize gitdir, we don't want trailing slashes there ever.
-gitdir=$(echo $gitdir | sed -n 's/\/*$//p')
+gitdir=$(echo "${gitdir}" | sed -n 's/\/*$//p')
 
 # Now, look for all the thirdpartylibs.xml in codebase, adding
 # all the found locations to the list of excluded.
-if [[ -n ${gitdir} ]]; then
-    for file in $(find ${gitdir} -name thirdpartylibs.xml); do
+if [[ -n "${gitdir}" ]]; then
+    for file in $(find "${gitdir}" -name thirdpartylibs.xml); do
         absolutebase=$(dirname ${file})
         # Everything relative to gitdir (diroot).
         base=${absolutebase#${gitdir}/}

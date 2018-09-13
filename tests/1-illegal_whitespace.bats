@@ -52,8 +52,8 @@ teardown () {
 @test "illegal_whitespace: Whitespace in path of gitdir" {
     tmpdir=`mktemp -d`
     uit="$tmpdir/example space"
-    mkdir -p "{$uit}"
-    export gitdir="{$uit}"
+    mkdir -p "${uit}"
+    export gitdir="${uit}"
     export gitbranch="master"
     ci_run illegal_whitespace/illegal_whitespace.sh
     assert_success
