@@ -43,9 +43,7 @@ TIA and ciao :-)"}
 
 # Let's search all the tested issues under current integration.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
-                 AND status = 'Waiting for Integration Review' \
-                 AND 'Currently in integration' IS EMPTY" \
+           --search "filter = 14000" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them
