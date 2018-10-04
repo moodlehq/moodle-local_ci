@@ -149,11 +149,11 @@ for c in ${commits}; do
                 # verify subject begins with matching issue code + space. Error.
                 if [[ ${hasissuecode} ]]; then
                     if [[ ! "${line}" =~ ^${issuecode}\  ]]; then
-                        # If the issue code in anywhere else in the message relax it a bit. Warning. Else Error.
-                        if [[ "${message}" =~ ${issuecode}\  ]]; then
-                            echo "${c}*warning*The commit message contains the expected issue code ${issuecode} but in wrong place. That is allowed only for epics or issues with subtasks. Verify it."
-                        elif [[ "${line}" =~ ^${issuecode}:\  ]]; then
+                        if [[ "${line}" =~ ^${issuecode}:\  ]]; then
                             echo "${c}*warning*The commit message contains ${issuecode} followed by a colon. The expected format is '${issuecode} codearea: message'"
+                        # If the issue code in anywhere else in the message relax it a bit. Warning. Else Error.
+                        elif [[ "${message}" =~ ${issuecode} ]]; then
+                            echo "${c}*warning*The commit message contains the expected issue code ${issuecode} but in wrong place. That is allowed only for epics or issues with subtasks. Verify it."
                         else
                             echo "${c}*error*The commit message does not contain the expected issue code ${issuecode} and a space."
                         fi

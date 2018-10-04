@@ -1,0 +1,26 @@
+From 6e0eeb392b286f2837ce28b2d40d6bc967371648 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Fri, 29 Jul 2016 12:54:22 +0100
+Subject: [PATCH 1/1] MDL-99999 area: short summary
+
+And issue being part of an epic or subtask of another can have the issue
+code specified elsewhere, for example: Part of MDL-12345
+
+And that will lead to a more relaxed warning instead of error.
+---
+ README.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/README.txt b/README.txt
+index 729dbe4..af81703 100644
+--- a/README.txt
++++ b/README.txt
+@@ -26,3 +26,5 @@ Moodle is written in PHP and JavaScript and uses an SQL database for storing
+ the data.
+ 
+ See <https://docs.moodle.org> for details of Moodle's many features.
++
++a dummy commit!
+-- 
+2.9.0
+

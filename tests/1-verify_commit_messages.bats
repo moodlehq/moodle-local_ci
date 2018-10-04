@@ -63,6 +63,12 @@ commit_apply_fixture_and_run() {
     assert_output "${shorthash}*error*The commit message does not begin with the expected issue code MDL-[0-9]{3,6} and a space."
 }
 
+@test "verify_commit_messages/verify_commit_messages.sh: warning elsewhere" {
+    commit_apply_fixture_and_run warning-elsewhere.patch
+    assert_failure
+    assert_output "${shorthash}*warning*The commit message contains the expected issue code MDL-12345 but in wrong place. That is allowed only for epics or issues with subtasks. Verify it."
+}
+
 @test "verify_commit_messages/verify_commit_messages.sh: no colon" {
     commit_apply_fixture_and_run no-colon.patch
     assert_failure
