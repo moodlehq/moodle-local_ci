@@ -42,6 +42,12 @@ commit_apply_fixture_and_run() {
     assert_output ""
 }
 
+@test "verify_commit_messages/verify_commit_messages.sh: message contains the word parent" {
+    commit_apply_fixture_and_run includes-parent-in-message.patch
+    assert_success
+    assert_output ""
+}
+
 @test "verify_commit_messages/verify_commit_messages.sh: long first line " {
     commit_apply_fixture_and_run too-long.patch
     assert_failure
