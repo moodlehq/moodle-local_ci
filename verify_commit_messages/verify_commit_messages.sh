@@ -84,7 +84,7 @@ for c in ${commits}; do
     numproblems=0
     message=$(${gitcmd} show -s --pretty=format:%B ${c})
     # detect if the commit is a merge
-    numparents=$(${gitcmd} cat-file -p ${c} | grep '^parent ' | wc -l)
+    numparents=$(${gitcmd} show --no-patch --format="%P" ${c} | wc -w)
     if [[ ${numparents} -gt 1 ]]; then
         ismerge=1
         mergecommits=$((mergecommits+1))
