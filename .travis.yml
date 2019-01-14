@@ -14,7 +14,7 @@ cache:
       - $HOME/cachedir
 
 php:
-    - 7.0
+    - 7.1
 
 env:
     - TEST_SUITE="0-*"
