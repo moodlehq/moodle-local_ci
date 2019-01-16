@@ -233,7 +233,8 @@ class remote_branch_reporter {
             'codedir' => dirname($this->directory) . '/',
             'errorweight' => 5,
             'warningweight' => 1,
-            'allowfiltering' => 0);
+            'allowfiltering' => 0,
+            'sorting' => 1);
         if ($node = $this->apply_xslt($params, $this->directory . '/grunt.xml', 'checkstyle2smurf.xsl')) {
             if ($check = $node->getElementsByTagName('check')->item(0)) {
                 $snode = $doc->importNode($check, true);
