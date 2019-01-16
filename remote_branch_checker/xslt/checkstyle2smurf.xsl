@@ -5,6 +5,7 @@
   <!-- convert xml output generated in checkstyle xml into smurf xml format -->
   <xsl:output method="xml" indent="yes"/>
 
+  <xsl:param name="abbr">abbr</xsl:param>
   <xsl:param name="title">checkstyle</xsl:param>
   <xsl:param name="url">http://pear.php.net/package/PHP_CodeSniffer</xsl:param>
   <xsl:param name="description">checkstyle description</xsl:param>
@@ -12,6 +13,7 @@
   <xsl:param name="errorweight">3</xsl:param>
   <xsl:param name="warningweight">1</xsl:param>
   <xsl:param name="allowfiltering">1</xsl:param>
+  <xsl:param name="sorting">0</xsl:param>
 
   <xsl:template match="/">
     <check>
@@ -25,13 +27,19 @@
         <xsl:value-of select="$description"/>
       </description>
       <mess>
-          <xsl:apply-templates select="checkstyle/file/error">
-              <xsl:sort select="substring-after(../@name, $codedir)"/>
-              <xsl:sort select="@line" data-type="number"/>
-              <xsl:sort select="@source"/>
-              <xsl:sort select="@severity" order="descending"/>
-              <xsl:sort select="@message"/>
-          </xsl:apply-templates>
+          <xsl:choose>
+              <xsl:when test="$sorting='1'">
+                  <xsl:apply-templates select="checkstyle/file/error">
+                      <xsl:sort select="substring-after(../@name, $codedir)"/>
+                      <xsl:sort select="@line" data-type="number"/>
+                      <xsl:sort select="@source"/>
+                      <xsl:sort select="@severity"/>
+                  </xsl:apply-templates>
+              </xsl:when>
+              <xsl:otherwise>
+                  <xsl:apply-templates select="checkstyle/file/error"/>
+              </xsl:otherwise>
+              </xsl:choose>
       </mess>
     </check>
   </xsl:template>
