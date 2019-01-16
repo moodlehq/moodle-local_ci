@@ -60,13 +60,13 @@
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
-        <message>Task "stylelint:scss" failed. Use --force to continue.</message>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+        <message>Problems running grunt</message>
         <description/>
         <code/>
       </problem>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
-        <message>Problems running grunt</message>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+        <message>Task "stylelint:scss" failed. Use --force to continue.</message>
         <description/>
         <code/>
       </problem>
