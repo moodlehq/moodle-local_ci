@@ -25,7 +25,13 @@
         <xsl:value-of select="$description"/>
       </description>
       <mess>
-        <xsl:apply-templates select="checkstyle/file/error"/>
+          <xsl:apply-templates select="checkstyle/file/error">
+              <xsl:sort select="substring-after(../@name, $codedir)"/>
+              <xsl:sort select="@line" data-type="number"/>
+              <xsl:sort select="@source"/>
+              <xsl:sort select="@severity" order="descending"/>
+              <xsl:sort select="@message"/>
+          </xsl:apply-templates>
       </mess>
     </check>
   </xsl:template>
