@@ -66,7 +66,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
     ${basereq} --action transitionIssue \
         --issue ${issue} \
-        --transition "Test passed" \
+        --transition "Testing passed" \
         --comment "Testing passed after 24h without any problem reported, yay!"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP progress2tested ${issue}" >> "${logfile}"
 done
