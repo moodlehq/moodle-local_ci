@@ -192,16 +192,59 @@ function print_message($severity, $mesage) {
 }
 
 /**
- * Wrap the template content in a html5 wrapper and validate it
+ * Fix partials and wrap the template content in a html5 wrapper.
+ *
+ * There could be the case when partial template got elements that have a strict
+ * parent element requirement. We can wrap most obvious elements into correct parent,
+ * assuming the partial template is "balanced" i.e. contain equal number of start
+ * and end tags (though, if it is not equial, the partial template will fail
+ * validation anyway). This partial fixing wrapper will not be required if we
+ * find a way to exclude partials from linting at some point (MDL-56504).
+ *
+ * @param string $content the raw template as string.
+ * @return string $wrappedcontent
+ */
+function wrap_content($content) {
+    // Primitive detection if we have full html body, if not, we need to wrap it.
+    if (strpos($content, '<head>')) {
+        return $content;
+    }
+
+    // Mapping of child elements to their required parent elements.
+    $reqparent = [
+        // List.
+        'li' => 'ul',
+        // Table.
+        'td' => 'tr',
+        'th' => 'tr',
+        'tr' => 'table',
+        'thead' => 'table',
+        'tbody' => 'table',
+        'tfoot' => 'table',
+        // Definition list.
+        'dd' => 'dl',
+        'dt' => 'dl',
+    ];
+
+    // Determine if the first element has strict parent element requirement and wrap it if necessary.
+    // Iterate through, as further wrapping may be needed.
+    while (preg_match('@^<(' . join('|', array_keys($reqparent)) . ')[^>]*>@is', trim($content), $matches)) {
+        $parent = $reqparent[$matches[1]];
+        $content = "<{$parent}>\n{$content}\n</{$parent}>";
+    }
+
+    // Wrap in html5 body.
+    $wrappedcontent = "<!DOCTYPE html><head><title>Validate</title></head><body>\n{$content}\n</body></html>";
+    return $wrappedcontent;
+}
+
+/**
+ * Validate template content.
  */
 function check_html_validation($content) {
-    if (strpos($content, '<head>') === false) {
-        // Primative detection if we have full html body, if not, wrap it.
-        // (This isn't bulletproof, obviously).
-        $wrappedcontent = "<!DOCTYPE html><head><title>Validate</title></head><body>\n{$content}\n</body></html>";
-    } else {
-        $wrappedcontent = $content;
-    }
+    // We need to wrap template content first.
+    $wrappedcontent = wrap_content($content);
+    // And then call validator.
     $response = validate_html($wrappedcontent);
 
     if (!$response || !isset($response->messages)) {
