@@ -4,4 +4,5 @@ admin/tool/installaddon/tests/fixtures/versionphp/version1.php,
 auth/cas/CAS/,auth/fc/fcFPP.php,backup/bb/bb5.5_to_moodle.xsl,
 lib/dragmath/,
 lib/editor/atto/tests/fixtures/pretty-good-en.vtt,lib/editor/atto/tests/fixtures/pretty-good-sv.vtt,
-repository/s3/S3.php,repository/url/locallib.php,theme/bootstrapbase/amd/src/bootstrap.js,theme/bootstrapbase/javascript/html5shiv.js,theme/bootstrapbase/less/bootstrap,theme/bootstrapbase/less/bootstrap/,theme/mymobile/javascript/,theme/mymobile/jquery/,theme/mymobile/style/jmobile,vendor/,webservice/amf/testclient/AMFTester.mxml,webservice/amf/testclient/customValidators/JSONValidator.as,work/,yui/build/
+repository/s3/S3.php,repository/url/locallib.php
+theme/bootstrapbase/amd/src/bootstrap.js,theme/bootstrapbase/javascript/html5shiv.js,theme/bootstrapbase/less/bootstrap,theme/bootstrapbase/less/bootstrap/,theme/mymobile/javascript/,theme/mymobile/jquery/,theme/mymobile/style/jmobile,vendor/,webservice/amf/testclient/AMFTester.mxml,webservice/amf/testclient/customValidators/JSONValidator.as,work/,yui/build/

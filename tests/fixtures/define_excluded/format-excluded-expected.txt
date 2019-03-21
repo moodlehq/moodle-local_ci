@@ -94,8 +94,8 @@ node_modules/
 question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
-theme/bootstrapbase/amd/src/bootstrap.js
-theme/bootstrapbase/javascript/html5shiv.js
+theme/boost/style/moodle.css
+theme/classic/style/moodle.css
 theme/bootstrapbase/less/bootstrap
 theme/bootstrapbase/less/bootstrap/
 theme/mymobile/javascript/
