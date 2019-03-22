@@ -73,8 +73,8 @@ question/format/qti_two/templates/
 repository/s3/S3.php
 repository/url/locallib.php
 theme/boost/style/moodle.css
-theme/classic/style/moodle.css
 theme/bootstrapbase/less/bootstrap
+theme/classic/style/moodle.css
 theme/mymobile/javascript/
 theme/mymobile/jquery/
 theme/mymobile/style/jmobile
