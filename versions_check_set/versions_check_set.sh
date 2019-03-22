@@ -270,10 +270,10 @@ for i in ${allfiles}; do
         dependencies=$( echo ${dependencies} | sed -e "s/[ '\"	]*//g" )
         echo "  + INFO: Dependencies found" >> "${resultfile}"
         # Extract the dependencies
-        if [[ ! "${dependencies}" =~ dependencies=array\((.*)\)\; ]]; then
+        if [[ ! "${dependencies}" =~ dependencies=(array\(|\[)(.*)(\)|\])\; ]]; then
             echo "  + ERROR: Dependencies format does not seem correct" >> "${resultfile}"
         else
-            dependencies="$( echo ${BASH_REMATCH[1]} | sed -e 's/,$//g' )"
+            dependencies="$( echo ${BASH_REMATCH[2]} | sed -e 's/,$//g' )"
         fi
         # Split dependencies by comma
         for dependency in $( echo ${dependencies} | sed -e 's/,/ /g' ); do

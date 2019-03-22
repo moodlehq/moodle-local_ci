@@ -13,6 +13,15 @@ setup () {
     refute_output --partial 'ERROR:'
 }
 
+@test "versions_check_set/versions_check_set.sh: short array syntax" {
+    git_apply_fixture versions_check_set/short_array_syntax.patch
+
+    ci_run versions_check_set/versions_check_set.sh
+    assert_success
+    run cat $WORKSPACE/versions_check_set.txt
+    refute_output --partial 'ERROR:'
+}
+
 @test "versions_check_set/versions_check_set.sh: main version missing" {
     git_apply_fixture versions_check_set/main_version_missing.patch
 

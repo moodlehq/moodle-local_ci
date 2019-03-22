@@ -1,0 +1,40 @@
+From 96f06391aee02665b9aada9eabe43910d0f79063 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Fri, 22 Mar 2019 19:51:56 +0100
+Subject: [PATCH] Using short arrays syntax (1 and multiline)
+
+---
+ filter/data/version.php                   | 2 +-
+ question/type/calculatedmulti/version.php | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/filter/data/version.php b/filter/data/version.php
+index 6a662d442b..170a9c8a2d 100644
+--- a/filter/data/version.php
++++ b/filter/data/version.php
+@@ -29,4 +29,4 @@ $plugin->version  = 2016052300;
+ $plugin->requires = 2016051900;  // Requires this Moodle version.
+ $plugin->component= 'filter_data';
+ 
+-$plugin->dependencies = array('mod_data' => 2016051900);
++$plugin->dependencies = ['mod_data' => 2016051900];
+diff --git a/question/type/calculatedmulti/version.php b/question/type/calculatedmulti/version.php
+index 5d6ad23026..1449c9ae19 100644
+--- a/question/type/calculatedmulti/version.php
++++ b/question/type/calculatedmulti/version.php
+@@ -29,10 +29,10 @@ $plugin->component = 'qtype_calculatedmulti';
+ $plugin->version   = 2016052300;
+ 
+ $plugin->requires  = 2016051900;
+-$plugin->dependencies = array(
++$plugin->dependencies = [
+     'qtype_numerical'   => 2016051900,
+     'qtype_calculated'  => 2016051900,
+     'qtype_multichoice' => 2016051900,
+-);
++];
+ 
+ $plugin->maturity  = MATURITY_STABLE;
+-- 
+2.20.1
+
