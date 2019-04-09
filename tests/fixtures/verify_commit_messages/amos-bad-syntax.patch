@@ -6,10 +6,11 @@ Subject: [PATCH 1/1] MDL-12345 amos: dummy commit
 Here we are going to test the commit checker..
 
 This commit should fail because i'm introducing an amos syntax error
-with nametextarea
+with nametextarea and mod__bar
 
 AMOS BEGIN
  MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]
+ CPY [foo,bar],[foo,mod__bar]
 AMOS END
 ---
  mod/data/lang/en/data.php | 1 -

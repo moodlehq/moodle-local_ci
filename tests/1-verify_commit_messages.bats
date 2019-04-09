@@ -96,7 +96,8 @@ commit_apply_fixture_and_run() {
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS bad syntax" {
     commit_apply_fixture_and_run amos-bad-syntax.patch
     assert_failure
-    assert_output "${shorthash}*error*AMOS - Instruction not understood 'MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]'"
+    assert_output --partial "${shorthash}*error*AMOS - Instruction not understood 'MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]'"
+    assert_output --partial "${shorthash}*error*AMOS - Instruction not understood 'CPY [foo,bar],[foo,mod__bar]'"
 }
 
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS incomplete commands" {
@@ -108,7 +109,8 @@ commit_apply_fixture_and_run() {
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS good commands" {
     commit_apply_fixture_and_run amos-good-commands.patch
     assert_success
-    assert_output "${shorthash}*info*AMOS - String to be copied: searchengine/admin to type_search/plugin"
+    assert_output --partial "${shorthash}*info*AMOS - String to be copied: searchengine/admin to type_search/plugin"
+    assert_output --partial "${shorthash}*info*AMOS - String to be copied: emailpasswordchangeinfosubject/moodle to emailpasswordchangeinfosubject/auth_oauth2"
 }
 
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS no modified lang files" {

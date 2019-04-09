@@ -321,20 +321,30 @@ class amos_script_parser {
      * @return string|false legacy style like moodle, admin, workshop or auth_ldap, false in case of error
      */
     protected static function legacy_component_name($newstyle) {
+
         $newstyle = trim($newstyle);
-        if (preg_match('/[^a-z_\.-]/', $newstyle)) {
-            // only letters and underscore should be allowed - blame component 'moodle.org' for the dot
+
+        // See {@link PARAM_COMPONENT}.
+        if (!preg_match('/^[a-z]+(_[a-z][a-z0-9_]*)?[a-z0-9]+$/', $newstyle)) {
             return false;
         }
+
+        if (strpos($newstyle, '__') !== false) {
+            return false;
+        }
+
         if ($newstyle == 'core') {
             return 'moodle';
         }
+
         if (substr($newstyle, 0, 5) == 'core_') {
             return substr($newstyle, 5);
         }
+
         if (substr($newstyle, 0, 4) == 'mod_') {
             return substr($newstyle, 4);
         }
+
         return $newstyle;
     }
 }
