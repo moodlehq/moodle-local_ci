@@ -7,6 +7,7 @@ This should be correct AMOS syntax
 
 AMOS BEGIN
   CPY [searchengine,admin],[type_search,plugin]
+  CPY [emailpasswordchangeinfosubject,core],[emailpasswordchangeinfosubject,auth_oauth2]
 AMOS END
 ---
  lang/en/admin.php | 1 -
