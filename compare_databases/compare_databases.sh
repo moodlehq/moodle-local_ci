@@ -49,7 +49,8 @@ installdb=ci_installed_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 upgradedb=ci_upgraded_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 logfile=$WORKSPACE/compare_databases_${gitbranchinstalled}_logfile.txt
-touch "${logfile}"
+# Remove contents and ensure logfile exists
+:> "${logfile}"
 
 # Going to install the $gitbranchinstalled database
 # Create the database to install
