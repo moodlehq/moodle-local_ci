@@ -87,7 +87,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "Testing passed" \
-        --comment "Testing passed after 24h without any problem reported, yay! Issue will now wait for next minor/security release."
+        --comment "Testing passed after 24h without any problem reported, yay!"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP progress2tested ${issue}" >> "${logfile}"
 done
 
@@ -109,7 +109,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "Security testing passed" \
-        --comment "Testing passed after 24h without any problem reported, yay!"
+        --comment "Testing passed after 24h without any problem reported, yay! Issue will now wait for next minor/security release."
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP progress2tested_security ${issue}" >> "${logfile}"
 done
 
