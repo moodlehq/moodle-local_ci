@@ -104,6 +104,7 @@ while read -r line; do
     fi
 
     masterfound=
+    otherfound=
     while read -r tagversion; do
 
         # Strip quotes and minors.
@@ -121,6 +122,7 @@ while read -r line; do
             if ! [[ "${activebranches[@]}" =~ "${branchname}" ]]; then
                 activebranches+=($branchname)
             fi
+            otherfound=1
         fi
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
@@ -139,6 +141,12 @@ while read -r line; do
             # No commit present in the repo.
             errors+=("${issue} - no commit present in master. Add 'skip-ci-version-check' label if this is expected.")
         fi
+    fi
+
+    # Finally if we have masterfound together with otherfound, the fix versions are not correct
+    # (fix versions must be one of stables or master, never both together). Report it.
+    if [ -n "$masterfound" ] && [ -n "$otherfound" ]; then
+        errors+=("${issue} - cannot mix stables and master fix versions in the Tracker. Please solve that.")
     fi
 
 done <<< "${issueslist}"
