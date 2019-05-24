@@ -130,7 +130,7 @@ while read issue; do
                       -p "integrateto=${target}" -p "issue=${issue}" \
                       -p "filtering=true" -p "format=html" \
                       -p "maxcommitswarn=${maxcommitswarn}" -p "maxcommitserror=${maxcommitserror}" \
-                      -s -v > "${resultfile}.jiracli"
+                      -s -v > "${resultfile}.jiracli" < /dev/null
             status=${PIPESTATUS[0]}
             set -e
             # Let's wait artifacts to be written

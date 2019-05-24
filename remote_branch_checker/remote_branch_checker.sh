@@ -98,7 +98,7 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]] && [[ -n "${jenkinsserver}
     fi
     echo "Info: Setting build display name: ${displayname}"
     java -jar ${mydir}/../jenkins_cli/jenkins-cli.jar -s ${jenkinsserver} \
-        set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname}
+        set-build-display-name "${JOB_NAME}" ${BUILD_NUMBER} ${displayname} < /dev/null
 fi
 
 # Create the work directory where all the tasks will happen/be stored
