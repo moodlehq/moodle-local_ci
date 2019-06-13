@@ -107,7 +107,7 @@ ${basereq} --action getIssueList \
                    'Reopened', \
                    'Closed') \
                    AFTER ${lastintegrationdatequoted}
-               AND comment ~ '\"The integration of this issue has been delayed to next week because\"'" \
+               AND comment ~ 'The integration of this issue has been delayed until next week because'" \
            --file "${tempfile}"
 
 # Iterate over found issues, annotating them
