@@ -76,7 +76,6 @@ setup () {
 
     # Assert result
     assert_failure
-    assert_output --partial "NPM installed validator found."
     assert_output --partial "Running mustache lint from $GIT_PREVIOUS_COMMIT to $GIT_COMMIT"
     assert_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: End tag “p” seen, but there were open elements. (ello World</p></bo)"
     assert_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: Unclosed element “span”. (<body><p><span>Hello )"
@@ -100,6 +99,24 @@ setup () {
     assert_output --partial "No mustache problems found"
 }
 
+@test "mustache_lint: Partial contains elements with strict parent requirement" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-partial.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_success
+    # We should not have a validation warning about stray tags.
+    refute_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: Stray start tag “td”."
+    refute_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: Stray end tag “td”."
+
+    assert_output --partial "lib/templates/linting.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}
+
 @test "mustache_lint: Full HTML page doesn't get embeded in <html> body" {
     # Set up.
     git_apply_fixture 31-mustache_lint-full-html-body.patch
@@ -110,7 +127,7 @@ setup () {
 
     # Assert result
     assert_success
-    # We should not have a vlidation warning about multiple 'html' tags.
+    # We should not have a validation warning about multiple 'html' tags.
     refute_output --partial 'Stray start tag “html”.'
 
     assert_output --partial "lib/templates/full-html-page.mustache - OK: Mustache rendered html succesfully"
