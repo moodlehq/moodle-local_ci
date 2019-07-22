@@ -9,9 +9,14 @@ integration happens.
 ## Dependencies
 
 + Some checks require a MySQL, master-based site to be up and running.
++ Some checks require a PHP engine to run (other are pure shell scripts).
 + Some checks require the installation of 3rd part tools (phpunit...).
 + Some checks require the presence of both local_codechecker and local_moodlecheck local plugins.
-+ Visit [HQ-326](http://tracker.moodle.org/browse/HQ-326) for a step by step record about the installation of http://integration.moodle.org:8080 It can be useful to know what to install and the real php/pear dependencies.
++ You can run them standalone or also with the ease and functionalities coming with different tools like:
+    - Jenkins: http://jenkins-php.org
+    - Travis: https://docs.travis-ci.com/user/languages/php/
+    - Docker: https://github.com/moodlehq/moodle-php-apache
+    - ...
 
 ## TODO
 
@@ -21,3 +26,4 @@ integration happens.
 ## Self-versions
 
 + 20121112 - Eloy - Initial version of this README.md.
++ 20190722 - Eloy - Replace bogus link by some general information alternatives to use the scripts.
