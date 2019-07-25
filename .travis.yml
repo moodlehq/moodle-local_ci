@@ -1,3 +1,5 @@
+dist: xenial
+
 language: php
 
 sudo: false
@@ -6,7 +8,6 @@ addons:
   apt:
     packages:
       - bc
-      - openjdk-8-jre-headless
 
 cache:
   directories:
@@ -18,19 +19,10 @@ services:
 php:
     - 7.1
 
-matrix:
-  include:
-    - dist: xenial
-      env: TEST_SUITE="0-*" DIST="xenial"
-    - dist: xenial
-      env: TEST_SUITE="1-*" DIST="xenial"
-    - dist: xenial
-      env: TEST_SUITE="2-*" DIST="xenial"
-
 env:
-    - TEST_SUITE="0-*" DIST="trusty"
-    - TEST_SUITE="1-*" DIST="trusty"
-    - TEST_SUITE="2-*" DIST="trusty"
+    - TEST_SUITE="0-*"
+    - TEST_SUITE="1-*"
+    - TEST_SUITE="2-*"
 
 install:
   - git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
