@@ -198,7 +198,7 @@ function check_html_validation($content) {
     if (strpos($content, '<head>') === false) {
         // Primative detection if we have full html body, if not, wrap it.
         // (This isn't bulletproof, obviously).
-        $wrappedcontent = "<!DOCTYPE html><head><title>Validate</title></head><body>\n{$content}\n</body></html>";
+        $wrappedcontent = "<!DOCTYPE html><html lang=\"en\"><head><title>Validate</title></head><body>\n{$content}\n</body></html>";
     } else {
         $wrappedcontent = $content;
     }

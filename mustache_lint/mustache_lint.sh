@@ -24,10 +24,12 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 validator=${validator:-"https://html5.validator.nu"}
 if [ -f "$mydir/../node_modules/vnu-jar/build/dist/vnu.jar" ]
 then
-    if java -version 2>&1 >/dev/null | grep -q "java version"
+    if java -version 2>&1 >/dev/null | grep -Eq "(java|openjdk) version"
     then
-        javaversion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-        if [[ "$javaversion" > "1.8" ]]
+        # Extract major and minor digits of version and compare it as float
+        # numbers. Not error proof, but sufficient to ensure it is >= 1.8
+        javaversion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/')
+        if [ $( echo "${javaversion} >= 1.8" | bc ) == 1 ]
         then
             echo "NPM installed validator found."
             validator="$( cd $mydir/../node_modules/ && pwd)/vnu-jar/build/dist/vnu.jar"
