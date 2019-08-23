@@ -300,6 +300,8 @@ function compare_connect($library, $type, $host, $user, $pass, $name, $prefix, $
         $CFG->dirroot = $gitdir;
         $CFG->libdir = $CFG->dirroot . '/lib';
         $CFG->admin = 'admin';
+
+        class moodle_exception extends Exception {} // Dummy moodle_exception, dont want the whole setuplib to be loaded.
     }
 
     $classname = "{$type}_{$library}_moodle_database";
