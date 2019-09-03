@@ -10,7 +10,7 @@
     <lines from="333" to="333"/>
     <lines from="343" to="343"/>
   </file>
-  <file name="npm-shrinkwrap.json">
+  <file name="package-lock.json">
     <lines from="5" to="5"/>
     <lines from="7" to="7"/>
     <lines from="45" to="47"/>

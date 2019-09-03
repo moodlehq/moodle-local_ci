@@ -163,10 +163,10 @@ index 467f13b..4d9a81d 100644
  
      // Register the startup task.
      grunt.registerTask('startup', 'Run the correct tasks for the current directory', tasks.startup);
-diff --git a/npm-shrinkwrap.json b/npm-shrinkwrap.json
+diff --git a/package-lock.json b/package-lock.json
 index 8da4417..dc87272 100644
---- a/npm-shrinkwrap.json
-+++ b/npm-shrinkwrap.json
+--- a/package-lock.json
++++ b/package-lock.json
 @@ -2,9 +2,9 @@
    "name": "Moodle",
    "dependencies": {

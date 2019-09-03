@@ -45,7 +45,7 @@ rm -fr ${gitdir}/node_modules
 # Install general stuff only if there is a package.json file
 if [[ -f ${gitdir}/package.json ]]; then
 
-    echo "INFO: Installing npm stuff following package/shrinkwrap details"
+    echo "INFO: Installing npm stuff following package/lock details"
 
     # Always run npm install to keep our npm packages correct
     ${npmcmd} --no-color install
