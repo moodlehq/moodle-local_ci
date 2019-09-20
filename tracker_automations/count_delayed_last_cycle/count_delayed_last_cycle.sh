@@ -9,6 +9,9 @@
 # Let's go strict (exit on error)
 set -e
 
+# To enable CLI output, clean this.
+quiet='--quiet'
+
 # Verify everything is set
 required="WORKSPACE jiraclicmd jiraserver jirauser jirapass integrationdate_cf"
 for var in $required; do
@@ -46,7 +49,7 @@ allintegrationfile="${WORKSPACE}/count_delayed_all_cycles.csv"
 
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass} ${quiet}"
 
 # Let's search the latest Integration date in the Tracker
 # (we cannot get the Integration date with this query because
@@ -63,7 +66,7 @@ ${basereq} --action getIssueList \
 # Iterate over found issues (only 1, but iterate just in case)
 # and get its Integration date
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
-    echo "Processing ${issue}"
+    echo "Calculating last integration date from Jira (looking to ${issue})"
     ${basereq} --action getFieldValue \
         --issue ${issue} \
         --field "${integrationdate_cf}" \
@@ -93,6 +96,7 @@ fi
 # we detected a new integration cycle.
 lastintegrationnum=0
 lastintegrationdatequoted=\'${lastintegrationdate}\'
+lastintegrationdatesecs=$(date -d "${lastintegrationdate}" +%s)
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                AND status WAS IN ( \
@@ -114,8 +118,45 @@ ${basereq} --action getIssueList \
 results=''
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
     echo "Processing ${issue}"
-    (( lastintegrationnum += 1 ))
-    results="${results}\n    ${issue}"
+    # Now fetch all the comments for that issue. We have to look for the delayed message comment date.
+    ${basereq} --action getCommentList \
+               --issue ${issue} \
+               --columns Author,Created,Comment \
+               --dateFormat "yyyy-MM-dd HH:mm" \
+               --file "${tempfile}"
+    ##--regex "The integration of this issue has been delayed until next week because" \
+    ## not working till cli 7.7, so we have to filter in bash (below). JCLI-1420
+    # Remove all the lines not having the delayed message (and clean CRLF)
+    tr -d '\r\n' < "${tempfile}" | sed 's/""/"\n"/g' |
+        grep 'The integration of this issue has been delayed until next week because' > "${tempfile}.filtered"
+    mv "${tempfile}.filtered" "${tempfile}"
+
+    # Now iterate over remaining lines, counting total of delays and delays after ${lastintegrationdate}
+    total=0
+    lastdate=
+    lastauthor=
+    while IFS=, read -r commentauthor commentdate comment
+    do
+        # Remove quotes from CSV
+        commentauthor=${commentauthor//\"/}
+        commentdate=${commentdate//\"/}
+        (( total += 1 ))
+        commentdatesecs=$(date -d "${commentdate}" +%s)
+        echo "    $commentdate ($commentdatesecs) by $commentauthor"
+        if [[ $commentdatesecs -gt $lastintegrationdatesecs ]]; then
+            lastdate=${commentdate}
+            lastauthor=${commentauthor}
+            echo "        DELAYED! ${lastintegrationdate} ($lastintegrationdatesecs)"
+        fi
+    done < "${tempfile}"
+
+    if [[ -z ${lastdate} ]]; then
+        echo "    Ignoring ${issue}, it has not been recently delayed"
+    else
+        (( lastintegrationnum += 1 ))
+        results="${results}\n    ${issue}, delayed on ${lastdate} by ${lastauthor} (${total} times delayed)"
+        echo "    FOUND ${issue}, delayed on ${lastdate} by ${lastauthor} (${total} times delayed)"
+    fi
 done
 
 # Fill lastintegrationfile contents
