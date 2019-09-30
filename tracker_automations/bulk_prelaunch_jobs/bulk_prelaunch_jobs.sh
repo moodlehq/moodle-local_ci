@@ -48,10 +48,6 @@ fi
 
 echo "Using criteria: ${criteria}"
 
-# Apply some defaults
-maxcommitswarn=${maxcommitswarn:-10}
-maxcommitserror=${maxcommitserror:-100}
-
 # Execute the criteria query. It will save a list of issues (format 101) to $resultfile.
 . "${mydir}/criteria/${criteria}/query.sh"
 
