@@ -57,7 +57,6 @@ maxcommitserror=${maxcommitserror:-100}
 
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
-    issueresult="success"
     echo -n > "${resultfile}.${issue}.txt"
     echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
     # Fetch repository
@@ -68,7 +67,6 @@ while read issue; do
     repository=$(cat "${resultfile}.repository" | tr -d ' ')
     rm "${resultfile}.repository"
     if [[ -z "${repository}" ]]; then
-        issueresult="error"
         echo "(x) Error: the repository field is empty. Nothing was launched." | tee -a "${resultfile}.${issue}.txt"
     else
         echo "Issue ${issue} has git repository ${repository}"
@@ -98,7 +96,9 @@ while read issue; do
             echo "Launching automatic jobs for branch ${branch}" | tee -a "${resultfile}.${issue}.txt"
             # Launch the jobs for current criteria (jobs.sh)
             jenkinsreq="java -jar ${mydir}/../../jenkins_cli/jenkins-cli.jar -s ${jenkinsserver} ${jenkinsauth} build"
+            set +e
             . "${mydir}/criteria/${criteria}/jobs.sh"
+            set -e
             # Calculate the type, job names and build numbers
             regex="^([^:]+): Started ([^#]+) #([0-9]+)$"
             while read jobline; do
