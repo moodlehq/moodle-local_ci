@@ -126,8 +126,8 @@ while read -r line; do
         fi
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
-            # No commit present in the repo.
-            errors+=("${issue} - ${tagversion} marked as fixed but no commit present in '${branch}'. Add 'skip-ci-version-check' label if this is expected.")
+            # No commit present in the repo since last roll.
+            errors+=("${issue} - ${tagversion} marked as already integrated but no commit present in '${branch}'. Add 'skip-ci-version-check' label if this is expected.")
             continue
         fi
 
@@ -138,7 +138,7 @@ while read -r line; do
     if [ -z "$masterfound" ]; then
         branch=$gitremotename'/master'
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
-            # No commit present in the repo.
+            # No commit present in the repo since last roll.
             errors+=("${issue} - no commit present in master. Add 'skip-ci-version-check' label if this is expected.")
         fi
     fi
