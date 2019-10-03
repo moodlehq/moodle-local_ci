@@ -40,7 +40,7 @@ This rigid timeframe on each integration/testing cycle aims to produce a better 
 
 This is a bulk-automated message, so if you want to blame somebody/thing/where don't do it here (use git instead) :-D :-P
 
-Apologies for the inconvenience, this will be integrated next week. Thanks for your collaboration & ciao :-)"}
+Apologies for the inconvenience, this might be integrated next week. Thanks for your collaboration & ciao :-)"}
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the closed issues within jenkins ($logfile)
