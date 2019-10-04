@@ -32,14 +32,19 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
 
-# Let's search all the issues in Moodle project having empty integration priority and
-# being under current integration or awaiting integration.
+# Let's search all the issues in Moodle project:
+#   - Under current integration having NULL integration priority
+#   - Awaiting for integration having NULL integration priority
+#   - Reopened having integration priority set
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
-                 AND 'Integration priority' IS EMPTY \
                  AND ( \
-                       'Currently in integration' = 'Yes' \
-                       OR status = 'Waiting for integration review')" \
+                     ('Currently in integration' = 'Yes' AND 'Integration priority' IS EMPTY) \
+                     OR \
+                     (status = 'Waiting for integration review' AND 'Integration priority' IS EMPTY) \
+                     OR \
+                     (status = 'Reopened' AND 'Integration priority' is NOT EMPTY AND 'Integration priority' > 0) \
+                 )" \
            --file "${resultfile}"
 
 # Iterate over found issues and set their integration priority (customfield_12210) to 0.
