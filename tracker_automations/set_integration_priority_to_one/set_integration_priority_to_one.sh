@@ -40,11 +40,11 @@ ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND 'Integration priority' = 0 \
                  AND ( \
-                       'Currently in integration' = 'Yes' \
+                       ('Currently in integration' = 'Yes' AND status != 'Reopened') \
                        OR status = 'Waiting for integration review' \
                      ) \
                  AND ( \
-                       labels IN (mdlqa)
+                       labels IN (mdlqa) \
                        OR fixVersion = '${mustfixversion}' \
                        OR level IS NOT EMPTY \
                      )" \
