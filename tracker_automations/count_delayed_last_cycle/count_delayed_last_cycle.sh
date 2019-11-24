@@ -126,7 +126,11 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
                --file "${tempfile}"
     ##--regex "The integration of this issue has been delayed until next week because" \
     ## not working till cli 7.7, so we have to filter in bash (below). JCLI-1420
-    # Remove all the lines not having the delayed message (and clean CRLF)
+
+    # Remove all the CSV content quotes ("" - they come escaped with another quote)
+    sed -i 's/""\+//g' "${tempfile}"
+    # Remove all the lines not having the delayed message (cleaning CRLF)
+    # and split lines by "" (end of one line and begin of the next one)
     tr -d '\r\n' < "${tempfile}" | sed 's/""/"\n"/g' |
         grep 'The integration of this issue has been delayed until next week because' > "${tempfile}.filtered"
     mv "${tempfile}.filtered" "${tempfile}"
