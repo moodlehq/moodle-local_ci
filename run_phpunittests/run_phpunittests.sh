@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # $phpcmd: Path to the PHP CLI executable
 # $psqlcmd: Path to the psql CLI executable
-# $mysqlcmd: Path to the mysql CLI executable
+# $mysqlcmd: Path to the mysql/mariadb CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB
 # $dblibrary: Type of library (native, pdo...)
@@ -32,14 +32,14 @@ datadirphpunit=/tmp/ci_dataroot_phpunit_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 
 # Going to install the $gitbranch database
 # Create the database
-# Based on $dbtype, execute different DB creation commands (mysqli, pgsql)
+# Based on $dbtype, execute different DB creation commands (mysqli, pgsql, mariadb)
 if [[ "${dbtype}" == "pgsql" ]]; then
     export PGPASSWORD=${dbpass}
     ${psqlcmd} -h ${dbhost} -U ${dbuser} -d postgres \
         -c "CREATE DATABASE ${installdb} ENCODING 'utf8'"
-elif [[ "${dbtype}" == "mysqli" ]]; then
+elif [[ "${dbtype}" == "mysqli" ]] || [[ "${dbtype}" == "mariadb" ]]; then
     ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
-        --execute="CREATE DATABASE ${installdb} CHARACTER SET utf8 COLLATE utf8_bin"
+        --execute="CREATE DATABASE ${installdb} CHARACTER SET utf8 COLLATE utf8mb4_bin"
 else
     echo "Error: Incorrect dbtype=${dbtype}"
     exit 1
@@ -209,12 +209,12 @@ if [ $exitstatus -eq 0 ]; then
 fi
 
 # Drop the databases and delete files
-# Based on $dbtype, execute different DB deletion commands (pgsql, mysqli)
+# Based on $dbtype, execute different DB deletion commands (pgsql, mysqli, mariadb)
 if [[ "${dbtype}" == "pgsql" ]]; then
     export PGPASSWORD=${dbpass}
     ${psqlcmd} -h ${dbhost} -U ${dbuser} -d postgres \
         -c "DROP DATABASE ${installdb}"
-elif [[ "${dbtype}" == "mysqli" ]]; then
+elif [[ "${dbtype}" == "mysqli" ]] || [[ "${dbtype}" == "mariadb" ]]; then
     ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
         --execute="DROP DATABASE ${installdb}"
 else
