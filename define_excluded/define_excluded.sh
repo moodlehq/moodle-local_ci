@@ -86,6 +86,7 @@ yui/build/
 *.csv
 *.gif
 *.jpg
+*.ics
 *.png
 *.svg"
 
