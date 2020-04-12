@@ -282,6 +282,7 @@ echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintignore' >> ${WORKSPACE}/work/patchset.files
+echo '.gherkin-lintrc' >> ${WORKSPACE}/work/patchset.files
 
 echo "Info: Calculating excluded files"
 . ${mydir}/../define_excluded/define_excluded.sh
@@ -351,6 +352,18 @@ cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter
 echo "Info: Running mustache lint..."
 ${mydir}/../mustache_lint/mustache_lint.sh > "${WORKSPACE}/work/mustachelint.txt"
 cat "${WORKSPACE}/work/mustachelint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=mustachelint > "${WORKSPACE}/work/mustachelint.xml"
+
+if [ -f $WORKSPACE/.gherkin-lintrc ]; then
+    echo "Info: Running gherkin-lint..."
+    gherkinlintcmd="$(${npmcmd} bin)"/gherkin-lint
+    if [ -x $gherkinlintcmd ]; then
+        $gherkinlintcmd --format=json '**/tests/behat/*.feature' 2> "${WORKSPACE}/work/gherkin-lint.txt"
+        cat "${WORKSPACE}/work/gherkin-lint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gherkinlint > "${WORKSPACE}/work/gherkin-lint.xml"
+    else
+        echo "Error: .gherkin-lintrc file found, but /gherkin-lint executable not found" | tee -a ${errorfile}
+        exit 1
+    fi
+fi
 
 # Run the grunt checker if Gruntfile exists. node stuff has been already installed.
 if [ -f ${WORKSPACE}/Gruntfile.js ]; then
