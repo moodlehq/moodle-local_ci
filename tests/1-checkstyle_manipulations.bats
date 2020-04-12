@@ -57,3 +57,11 @@ assert_checkstyle() {
 @test "remote_branch_checker/checkstyle_converter.php: mustachelint" {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=mustachelint' mustachelint.txt mustachelint.xml
 }
+
+@test "remote_branch_checker/checkstyle_converter.php: gherkinlint ok" {
+    assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=gherkinlint' gherkinlint_ok.txt gherkinlint_ok.xml
+}
+
+@test "remote_branch_checker/checkstyle_converter.php: gherkinlint err" {
+    assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=gherkinlint' gherkinlint_err.txt gherkinlint_err.xml
+}

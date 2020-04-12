@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="1.3.2">
+<file name="/admin/tool/behat/tests/fixtures/theme/withfeatures/theme_test_1.feature">
+<error line="9" column="0" severity="error" source="indentation" message="Wrong indentation for &quot;given&quot;, expected indentation level of 4, but got 6" />
+<error line="10" column="0" severity="error" source="indentation" message="Wrong indentation for &quot;given&quot;, expected indentation level of 4, but got 6" />
+</file>
+<file name="/admin/tool/behat/tests/fixtures/theme/withfeatures/theme_test_2.feature">
+<error line="2" column="0" severity="error" source="no-dupe-feature-names" message="Feature name is already used in: admin/tool/behat/tests/fixtures/core/test_2.feature" />
+</file>
+<file name="/admin/tool/task/tests/behat/clear_fail_delay.feature">
+<error line="26" column="0" severity="error" source="no-multiple-empty-lines" message="Multiple empty lines are not allowed" />
+</file>
+</checkstyle>

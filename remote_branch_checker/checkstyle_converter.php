@@ -41,7 +41,7 @@ if ($unrecognized) {
 
 }
 
-$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis', 'mustachelint');
+$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'travis', 'mustachelint', 'gherkinlint');
 
 
     $help =
@@ -269,5 +269,27 @@ function process_mustachelint($line) {
         $output.= '</file>';
     }
 
+    return $output;
+}
+
+/**
+ * Converts gherkin-lint json output into checkstyle format.
+ *
+ * @param string $line the line of file (in the case of json, it's everything into 1 line.
+ * @return string the xml fragment
+ */
+function process_gherkinlint($line) {
+    $output = '';
+    $converted = json_decode($line);
+    foreach ($converted as $file) {
+        if (isset($file->errors) && !empty($file->errors)) {
+            $output .= '<file name="' . $file->filePath . '">'.PHP_EOL;
+            foreach ($file->errors as $error) {
+                $output .= '<error line="' . $error->line . '" column="0" severity="error" ';
+                $output .= 'source="' . s($error->rule) . '" message="' . s($error->message) . '" />' . PHP_EOL;
+            }
+            $output .= '</file>' . PHP_EOL;
+        }
+    }
     return $output;
 }
