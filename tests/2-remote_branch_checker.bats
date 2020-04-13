@@ -98,6 +98,10 @@ assert_prechecker () {
     assert_prechecker fixture-mustache-lint-js MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
 
+@test "remote_branch_checker/remote_branch_checker.sh: gherkin lint" {
+    assert_prechecker fixture-gherkin-lint MDL-12345 f968cd44e8ee5d54b1bc56823040ff770dbf18af
+}
+
 @test "remote_branch_checker/remote_branch_checker.sh: grunt build failed" {
     assert_prechecker fixture-grunt-build-failed MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
 }
