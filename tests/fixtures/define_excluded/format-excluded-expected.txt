@@ -1,5 +1,6 @@
 # Each line contents must exist independently in results.
 *.csv
+*.ics
 *.gif
 *.jpg
 *.png

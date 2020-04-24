@@ -1,5 +1,5 @@
 # Each line contents must exist independently in results.
-*.csv,*.gif,*.jpg,*.png,*.svg,.git/,
+*.csv,*.gif,*.ics,*.jpg,*.png,*.svg,.git/,
 admin/tool/installaddon/tests/fixtures/versionphp/version1.php,
 auth/cas/CAS/,auth/fc/fcFPP.php,backup/bb/bb5.5_to_moodle.xsl,
 lib/dragmath/,

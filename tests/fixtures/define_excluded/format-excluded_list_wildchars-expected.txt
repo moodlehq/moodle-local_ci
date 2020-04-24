@@ -1,6 +1,6 @@
  # Each line contents must exist independently in results.
 --exclude */*.csv*
---exclude */*.gif* --exclude */*.jpg*
+--exclude */*.gif* --exclude */*.ics* --exclude */*.jpg*
 --exclude */admin/tool/installaddon/tests/fixtures/versionphp/version1.php*
 --exclude */auth/cas/CAS/* --exclude */auth/fc/fcFPP.php*
 --exclude */enrol/lti/ims-blti/*

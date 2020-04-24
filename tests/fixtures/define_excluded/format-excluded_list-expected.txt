@@ -1,5 +1,5 @@
 # Each line contents must exist independently in results.
---exclude *.csv --exclude *.gif --exclude *.jpg --exclude *.png --exclude *.svg
+--exclude *.csv --exclude *.gif --exclude *.ics --exclude *.jpg --exclude *.png --exclude *.svg
 --exclude admin/tool/installaddon/tests/fixtures/versionphp/version1.php
 --exclude auth/cas/CAS
 --exclude auth/fc/fcFPP.php

@@ -293,6 +293,23 @@ class remote_branch_reporter {
             }
         }
 
+        // Process the gherkin-lint output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'Gherkin .feature problems',
+            'abbr' => 'gherkin',
+            'description' => 'This section shows problems detected in behat .feature files',
+            'url' => 'https://docs.moodle.org/dev/Writing_acceptance_tests',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1,
+            'allowfiltering' => 1);
+        if ($node = $this->apply_xslt($params, $this->directory . '/gherkin-lint.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Conditionally, perform the filtering
         if ($patchset) {
             $this->patchset_filter($doc, $patchset);
