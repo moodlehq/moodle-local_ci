@@ -5,6 +5,7 @@ load libs/shared_setup
 setup () {
     create_git_branch master origin/master
     rm -fr $gitdir/node_modules
+    rm -fr $gitdir/package-lock.json
     rm -fr $gitdir/npm-shrinkwrap.json
 }
 
