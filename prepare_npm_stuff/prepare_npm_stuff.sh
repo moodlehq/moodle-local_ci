@@ -60,7 +60,7 @@ if [[ -r ".nvmrc" ]]; then
     # Source it, install and use the .nvmrc version
     source $NVM_DIR/nvm.sh --no-use
     echo "INFO: nvm version: $(nvm --version)"
-    nvm install > /dev/null 2>&1 && nvm use > /dev/null 2>&1
+    nvm install && nvm use
     echo "INFO: node installation completed"
 else
     echo "INFO: .nvmrc not found, nvm install skipped"
