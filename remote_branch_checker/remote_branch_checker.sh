@@ -289,7 +289,7 @@ echo "Info: Calculating excluded files"
 
 echo "Info: Preparing npm"
 # Everything is ready, let's install all the required node stuff that some tools will use.
-${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh >> "${WORKSPACE}/work/prepare_npm.txt" 2>&1
+. ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh >> "${WORKSPACE}/work/prepare_npm.txt" 2>&1
 
 # Before deleting all the files not part of the patchest we calculate the
 # complete list of valid components (plugins, subplugins and subsystems)
