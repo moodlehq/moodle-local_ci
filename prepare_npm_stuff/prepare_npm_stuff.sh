@@ -19,8 +19,15 @@ for var in $required; do
     fi
 done
 
+# Important, this script is always run sourced from others, so it shouldn't define
+# any shell variable also set/used by caller scripts. A clear example is the $mydir
+# variable below, that was being set for caller script, leading to strange failures.
+#
+# In this case it was easy to fix, because this script doesn't use it, so getting rid
+# of it was enough. But in general, avoid setting any widely used variable here.
+#
 # calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Apply some defaults.
 shifterversion=${shifterversion:-0.4.6}
