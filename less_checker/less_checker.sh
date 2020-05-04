@@ -33,7 +33,7 @@ rm -fr config.php
 rm -fr ${outputfile}
 
 # Prepare all the npm stuff if needed unconditionally
-${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+. ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 
 # Iterate over all themes
 exitstatus=0
