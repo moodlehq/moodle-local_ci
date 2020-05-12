@@ -416,7 +416,15 @@ if [ -f $WORKSPACE/.eslintrc ]; then
     echo "Info: Running eslint..."
     eslintcmd="$(${npmcmd} bin)"/eslint
     if [ -x $eslintcmd ]; then
-        $eslintcmd -f checkstyle $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
+        # TODO: Remove this once everybody is using nodejs 14 or up.
+        # We need to invoke eslint differently depending of the installed version.
+        # (new versions v6.8 and up have this option to avoid exiting with error if there aren't JS files)
+        eslintarg="--no-error-on-unmatched-pattern"
+        # Old versions don't have this option, they exit without error if there aren't JS files, so don't use it.
+        if ! $eslintcmd --help | grep -q -- $eslintarg; then
+            eslintarg=""
+        fi
+        $eslintcmd -f checkstyle $eslintarg $WORKSPACE > "${WORKSPACE}/work/eslint.xml"
     else
         echo "Error: .eslintrc file found, but eslint executable not found" | tee -a ${errorfile}
         exit 1
@@ -432,7 +440,15 @@ if [ -f $WORKSPACE/.stylelintrc ]; then
     fi
 
     # Run stylelint
-    if $stylelintcmd --customFormatter 'node_modules/stylelint-checkstyle-formatter' "*/**/*.{css,less,scss}" > "${WORKSPACE}/work/stylelint.xml"
+    # TODO: Remove this once everybody is using nodejs 14 or up.
+    # We need to invoke stylelint differently depending of the installed version.
+    # (new versions 7.7.0 and up have this option to avoid exiting with error if there aren't CSS files)
+    stylelintarg="--allow-empty-input"
+    # Old versions don't have this option, they exit without error if there aren't CSS files, so don't use it.
+    if ! $stylelintcmd --help | grep -q -- $stylelintarg; then
+        eslintarg=""
+    fi
+    if $stylelintcmd $stylelintarg --customFormatter 'node_modules/stylelint-checkstyle-formatter' "*/**/*.{css,less,scss}" > "${WORKSPACE}/work/stylelint.xml"
     then
         echo "Info: stylelint completed without errors."
     else
