@@ -63,6 +63,8 @@ movemax=${movemax:-3}
 # the search and the update in order to log all the closed issues within jenkins ($logfile)
 
 # 1) Move "important" issues from candidates to current.
+
+# Get the list of issues.
 ${basereq} --action getIssueList \
            --search "filter=14000
                  AND NOT filter = 21366
@@ -75,7 +77,7 @@ ${basereq} --action getIssueList \
                  )" \
            --file "${resultfile}"
 
-# Iterate over found issues and perform the actions with them
+# Iterate over found issues and perform the actions with them.
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
     # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
@@ -92,17 +94,63 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
                --issue ${issue} \
                --step "CI Global Self-Transition" \
-               --field "Currently in integration" --values "Yes"
+               --field "Currently in integration" --values "Yes" \
                --comment "Continuous queues manage: Moving to current because it's important" \
                --role "Integrators"
-    echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} important moved to current" >> "${logfile}"
-    exit
+    echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
 done
 
 #  2) Keep the current queue fed with issues when it's under a threshold.
 
-# TODO: Implement this
+# Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
+${basereq} --action getIssueList \
+           --search "project = MDL \
+                 AND 'Currently in integration' IS NOT EMPTY \
+                 AND status IN ('Waiting for integration review')" \
+           --file "${resultfile}"
 
+# Iterate over found issues just to count them.
+counter=0
+for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+    counter=$((counter+1))
+done
+echo "$counter issues awaiting integration in current queue"
+
+# If there are < $currentmin issues, let's add up to $movemax issues from the candidates queue.
+if [[ "$counter" -lt "$currentmin" ]]; then
+    # Get an ordered list of up to $movemax issues in the candidate queue.
+    ${basereq} --action getIssueList \
+               --limit $movemax \
+               --search "filter=14000 \
+                   ORDER BY 'Integration priority' DESC, \
+                            priority DESC, \
+                            votes DESC, \
+                            'Last comment date' ASC" \
+               --file "${resultfile}"
+
+    # Iterate over found issues, moving them to the current queue.
+    for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+        echo "Processing ${issue}"
+        # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
+        # we are setting some custom fields not available (on purpose) on that screen. So we have created a
+        # global transition, only available to the bots, not transitioning but bringing access to all the fields
+        # via special screen. So we'll ne using that global transition via progressIssue instead.
+        # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
+        # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
+        # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
+        # that non-transitional transition and use normal update.
+        #${basereq} --action updateIssue \
+        #    --issue ${issue} \
+        #    --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes"
+        ${basereq} --action progressIssue \
+                   --issue ${issue} \
+                   --step "CI Global Self-Transition" \
+                   --field "Currently in integration" --values "Yes" \
+                   --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
+                   --role "Integrators"
+        echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: below threshold" >> "${logfile}"
+    done
+fi
 
 # Remove the resultfile. We don't want to disclose those details.
 rm -fr "${resultfile}"
