@@ -23,7 +23,7 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p PHPVERSION=7.2 \
     -p BROWSER=chrome \
     -p MOBILE_VERSION=latest \
-    -p INSTALL_PLUGINAPP=1 \
+    -p INSTALL_PLUGINAPP=true \
     -p TAGS=@app \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
