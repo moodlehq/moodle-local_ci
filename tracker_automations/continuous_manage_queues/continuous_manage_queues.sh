@@ -4,7 +4,7 @@
 #  - current queue: issues under current integration.
 #
 # The automatisms are as follow:
-#  0) Add the "integration_held" (+ std. comment) to non-bug issue missing it @ candidates.
+#  0) Add the "integration_held" (+ std. comment) to new features & improvements issue missing it @ candidates.
 #  1) Move "important" issues from candidates to current.
 #  2) Move issues away from the current queue:
 #    2a) Before a date (last week), keep the current queue fed with issues when it's under a threshold.
@@ -83,7 +83,7 @@ fi
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the closed issues within jenkins ($logfile)
 
-# 0) Add the "integration_held" (+ std. comment) to non-bug issue missing it @ candidates.
+# 0) Add the "integration_held" (+ std. comment) to new features & improvements issue missing it @ candidates.
 
 # Basically get all the issues in the candidates queue (filter=14000), that are not bug
 # and that haven't received any comment with the standard unholding text (NOT filter = 22054)
@@ -91,7 +91,7 @@ fi
 # Get the list of issues.
 ${basereq} --action getIssueList \
            --search "filter=14000 \
-                 AND type NOT IN (Bug) \
+                 AND type IN ('New Feature', Improvement) \
                  AND NOT filter = 22054" \
            --file "${resultfile}"
 
