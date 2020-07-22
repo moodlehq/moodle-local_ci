@@ -1,8 +1,8 @@
-dist: xenial
-
 language: php
 
-sudo: false
+os: linux
+
+dist: xenial
 
 addons:
   apt:
@@ -27,10 +27,7 @@ env:
 
 install:
   - git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
-  - nvm install 8.9
-  - nvm use 8.9
   - travis_retry composer install
-  - npm install
 
 before_script:
   - 'git config --global user.email "travis@localhost"'
