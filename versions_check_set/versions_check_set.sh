@@ -2,8 +2,9 @@
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo
-# $setversion: 10digits (YYYYMMDD00) to set all versions to. Empty = not set
-# $setrequires: 10digits (YYYYMMDD00) to set all dependencies to. Empty = $setversion
+# $betweenversions: Optional, specify the min and max 8digits (YYYYMMDD) allowed. Hyphen separated. Max = min if not specified.
+# $setversion: Optional, 10digits (YYYYMMDD00) to set all versions to. Empty = not set
+# $setrequires: Optional, 10digits (YYYYMMDD00) to set all dependencies to. Empty = $setversion
 
 # Let's go strict (exit on error)
 set -e
@@ -17,14 +18,42 @@ for var in $required; do
     fi
 done
 
+# Prepare the output file where everything will be reported
+resultfile=${WORKSPACE}/versions_check_set.txt
+echo -n > "${resultfile}"
+
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 versionregex="^([0-9]{10}(\.[0-9]{2})?)$"
 anyversionstr="ANY_VERSION"
-
-# Prepare the output file where everything will be reported
-resultfile=${WORKSPACE}/versions_check_set.txt
-echo -n > "${resultfile}"
+minversion=
+maxversion=
+if [[ -n "$betweenversions" ]]; then
+    if [[ "$betweenversions" =~ ([0-9]{8})-?([0-9]{8})? ]]; then
+        minversion=${BASH_REMATCH[1]}
+        if [[ -n "${BASH_REMATCH[2]}" ]]; then
+            maxversion="${BASH_REMATCH[2]}"
+        else
+            maxversion=$minversion
+        fi
+        # Build standard YYYY-MM-DD date and verify it with date
+        set +e
+        for ymdversion in $minversion, $maxversion; do
+            ymddate=$(date -d ${ymdversion} -I 2>&1)
+            if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+                echo "  + ERROR: Invalid 8 digits date in environment variable: $ymdversion" >> "${resultfile}"
+                exit 1
+            fi
+        done
+        set -e
+        echo "+ INFO: Applying versions interval check: $minversion - $maxversion" >> "${resultfile}"
+    else
+        echo "+ ERROR: Incorrect versions interval check environment variable: $betweenversions" >> "${resultfile}"
+        exit 1
+    fi
+else
+    echo "+ INFO: Not applying versions interval check (betweenversions environment variable)" >> "${resultfile}"
+fi
 
 # First of all, guess the current branch from main version.php file ($branch). We'll be using
 # it to decide about different checks later.
@@ -35,8 +64,8 @@ elif [[ ${currentbranch} =~ branch\ *=\ *.([0-9]{2,3}).\; ]]; then
     currentbranch=${BASH_REMATCH[1]}
     echo "+ INFO: Correct main version.php branch found: ${currentbranch}" >> "${resultfile}"
 else
-    currentbranch="27"
-    echo "+ WARN: No correct main version.php branch 'XY[Z]' found. Using ${currentbranch}" >> "${resultfile}"
+    echo "+ ERROR: No correct main version.php branch 'XY[Z]' found." >> "${resultfile}"
+    exit 1
 fi
 
 # Calculate the list of valid components for checks later
@@ -119,12 +148,19 @@ for i in ${allfiles}; do
         set -e
     fi
 
-    # Verify the version is not pointing to a future > 7days date (only if we have the correct date)
+    # Verify versions are under expected limits.
     if [ ! -z "${ymdversion}" ]; then
-        if [[ ${ymdversion} -gt $(date -d "+7 days" +"%Y%m%d") ]]; then
-            echo "  + ERROR: No correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+        # Verify that the version is between the interval check (if defined)
+        # TODO: If there are interval checks defined, apply for them (only if we have the correct date)
+        if  [[ -n "$betweenversions" ]]; then
+            echo "TODO: intervalchecks pending!!!" >> "${resultfile}"
         else
-            echo "  + INFO: Correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+            # Verify the version is not pointing to a future > 7days date (if there isn't interval check)
+            if [[ ${ymdversion} -gt $(date -d "+7 days" +"%Y%m%d") ]]; then
+                echo "  + ERROR: No correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+            else
+                echo "  + INFO: Correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
+            fi
         fi
     fi
 
@@ -180,6 +216,13 @@ for i in ${allfiles}; do
 
         # Verify branch matches normalised release
         normalisedrelease=${mainrelease/\./}
+        # After 3.9 all branches are 3 digits, so we have to convert them (4.0 => 400, 4.1 => 401...)
+        if [[ $normalisedrelease -gt 39 ]]; then
+            # Only if the version is 2 digit, because 3 digit ones (3.10 => 310...) are already correct.
+            if [[ ${#normalisedrelease} -eq 2 ]]; then
+                normalisedrelease=${normalisedrelease:0:1}0${normalisedrelease:1:1}
+            fi
+        fi
         if [[ ! ${normalisedrelease} =~ ${mainbranch} ]]; then
             echo "  + ERROR: Branch ${mainbranch} does not match release ${mainrelease}"  >> "${resultfile}"
         else
@@ -325,9 +368,8 @@ else
         backupversion=""
         echo "  + ERROR: No correct backup version YYYYYMMDDZZ found" >> "${resultfile}"
     fi
-    # But this only applies to STABLE branches, let's try to get current one
-    gitbranch=$( basename $( cd "${gitdir}" && git symbolic-ref -q HEAD ) )
-    if [[ ${gitbranch} =~ MOODLE_[0-9]*_STABLE ]]; then
+    # But this only applies to MATURITY_STABLE branches, never to alpha/beta/rc ones.
+    if [[ -n "$mainmaturity" ]] && [[ "$mainmaturity" == "MATURITY_STABLE" ]]; then
         cutmainversion=$( echo ${mainversion} | cut -c -8 )
         cutbackupversion=$( echo ${backupversion} | cut -c -8 )
         # Integer comparison (give it 15 days before start failing and requiring to adjust stable backup version)
@@ -338,7 +380,7 @@ else
             echo "  + ERROR: Backup version ${cutbackupversion} does not satisfy main version ${cutmainversion}." >> "${resultfile}"
         fi
     else
-        echo "  + INFO: Detected git branch ${gitbranch}. Skipping the backup version verification." >> "${resultfile}"
+        echo "  + INFO: Detected maturity ${mainmaturity}. Skipping the backup version verification." >> "${resultfile}"
     fi
 
     # - backup::RELEASE must match $release (X.Y only)
