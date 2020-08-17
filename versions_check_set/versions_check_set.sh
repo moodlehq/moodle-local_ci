@@ -38,7 +38,7 @@ if [[ -n "$betweenversions" ]]; then
         fi
         # Build standard YYYY-MM-DD date and verify it with date
         set +e
-        for ymdversion in $minversion, $maxversion; do
+        for ymdversion in $minversion $maxversion; do
             ymddate=$(date -d ${ymdversion} -I 2>&1)
             if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
                 echo "  + ERROR: Invalid 8 digits date in environment variable: $ymdversion" >> "${resultfile}"
@@ -149,12 +149,20 @@ for i in ${allfiles}; do
     fi
 
     # Verify versions are under expected limits.
+    # TODO: Consider if we should apply the same check also to requires and dependencies.
     if [ ! -z "${ymdversion}" ]; then
         # Verify that the version is between the interval check (if defined)
-        # TODO: If there are interval checks defined, apply for them (only if we have the correct date)
         if  [[ -n "$betweenversions" ]]; then
-            echo "TODO: intervalchecks pending!!!" >> "${resultfile}"
-        else
+            if [[ ${ymdversion} -gt ${maxversion} ]]; then
+                echo "  + ERROR: Version ($version) cannot be after ${maxversion} (YYYMMDD)" >> "${resultfile}"
+            elif [[ ${ymdversion} -lt ${minversion} ]]; then
+                echo "  + ERROR: Version ($version) cannot be before ${minversion} (YYYYMMDD)" >> "${resultfile}"
+            fi
+        fi
+        # If the minversion and the maxversion are different, or if there isn't any
+        # interval defined, then also apply for the 7days rule. If they are the same,
+        # then it's more restrictive than the 7days one, so no need to apply for it.
+        if [[ "${minversion}" != "${maxversion}" ]] || [[ -z "$betweenversions" ]]; then
             # Verify the version is not pointing to a future > 7days date (if there isn't interval check)
             if [[ ${ymdversion} -gt $(date -d "+7 days" +"%Y%m%d") ]]; then
                 echo "  + ERROR: No correct actual (<+7d) date found (${ymddate})" >> "${resultfile}"
@@ -215,7 +223,13 @@ for i in ${allfiles}; do
         fi
 
         # Verify branch matches normalised release
-        normalisedrelease=${mainrelease/\./}
+        if [[ ${mainrelease} =~ ([0-9]{1,2}\.[0-9]{1,2}) ]]; then
+            mainmajorrelease=${BASH_REMATCH[1]}
+            echo "  + INFO: Correct major release found: ${mainmajorrelease}" >> "${resultfile}"
+        else
+            echo "  + ERROR: Incorrect major release found: ${mainmajorrelease} (for ${mainrelease})" >> "${resultfile}"
+        fi
+        normalisedrelease=${mainmajorrelease/\./}
         # After 3.9 all branches are 3 digits, so we have to convert them (4.0 => 400, 4.1 => 401...)
         if [[ $normalisedrelease -gt 39 ]]; then
             # Only if the version is 2 digit, because 3 digit ones (3.10 => 310...) are already correct.
