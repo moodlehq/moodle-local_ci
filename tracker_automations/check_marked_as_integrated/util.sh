@@ -6,7 +6,10 @@ set -e
 # (since last roll happened, aka, since upstream last commit)
 function check_issue () {
     # Fetch the equivalent moodle.git branch (from where we are looking for existing commits).
-    ${1} fetch -q git://git.moodle.org/moodle.git ${3#"origin/"}
+    if ! $(${1} fetch -q git://git.moodle.org/moodle.git ${3#"origin/"}); then
+        echo "  WARNING: moodle.git ${3#"origin/"} fetching problems, cannot look for commits. Please check if that's correct."
+        return 0
+    fi
     if [[ -z $( ${1} log  --grep "${2}" --pretty=oneline --abbrev-commit FETCH_HEAD...${3} ) ]]; then
         # If the 2 branch heads (moodle.git and integration.git are exactly the same... it means that
         # we have just rolled. In those cases, we give the integrator up to 60 minutes to proceed to
