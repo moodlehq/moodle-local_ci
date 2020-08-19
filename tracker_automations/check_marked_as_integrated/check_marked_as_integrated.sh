@@ -9,7 +9,11 @@
 #gitcmd: git cli path
 #gitdir: git directory with integration.git repo
 #gitremotename: integration.git remote name
-#currentmaster: the final major version current master will be (e.g. 32)
+#currentmaster: Deprecated, use devbranches instead. The final major version current master will be (e.g. 32).
+#devbranches: the next major versions ($branch) under development, comma separated. Ordered by release "distance".
+#             Since 3.10 (310) always use 3 digits. The last element in the list is assumed to be "master",
+#             The rest are MOODLE_branch_STABLE ones. Normally only one, but when we are in parallel
+#             development periods, for example: 310,400 (3.10 and 4.0)
 
 # Let's go strict (exit on error)
 set -e
@@ -18,8 +22,13 @@ if [ -z "$gitremotename" ]; then
     gitremotename="origin"
 fi
 
+# TODO: Remove these backward compatibility lines after some prudential time (say, in 2021).
+if [ -n $currentmaster ]; then
+    devbranches=$currentmaster
+fi
+
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass gitcmd gitdir gitremotename currentmaster"
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass gitcmd gitdir gitremotename devbranches"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -34,6 +43,7 @@ echo -n > "${resultfile}"
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+IFS=',' read -a devbranchesarr <<< "$devbranches" # Convert devbranches to array.
 
 # Include some utility functions
 . "${mydir}/util.sh"
@@ -67,7 +77,14 @@ ${gitcmd} fetch ${gitremotename}
 
 # While looking at all the issues in integration, capture some variables to use
 # for unowned commits check later.
-activebranches=(master) # The active branches which we have commits on.
+# Pre-fill them with current development branches, note that last element is master, no MOODLE_branch_STABLE.
+for devbranchcode in "${devbranchesarr[@]}"; do
+    if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} != ${devbranchcode} ]]; then
+        activebranches+=(MOODLE_${devbranchcode}_STABLE)
+    else
+        activebranches+=(master)
+    fi
+done
 issues=() # The list of issues in current integration.
 
 ####
@@ -103,18 +120,31 @@ while read -r line; do
         continue
     fi
 
-    masterfound=
-    otherfound=
+    devfound=0
+    stablefound=0
     while read -r tagversion; do
 
         # Strip quotes and minors.
         majorversion=$( echo ${tagversion} | grep -o "[0-9]\+\.[0-9]\+" )
         majorversion=${majorversion//.}
+        # After 3.9 all branches are 3 digits, so we have to convert them (4.0 => 400, 4.1 => 401...)
+        if [[ $majorversion -gt 39 ]]; then
+            # Only if the version is 2 digit, because 3 digit ones (3.10 => 310...) are already correct.
+            if [[ ${#majorversion} -eq 2 ]]; then
+                majorversion=${majorversion:0:1}0${majorversion:1:1}
+            fi
+        fi
 
-        if [[ "$majorversion" == "$currentmaster" ]]; then
-            branch=$gitremotename'/master'
-            masterfound=1
+        if [[ ${devbranchesarr[@]} =~ $majorversion ]]; then
+            devfound=$((devfound+1))
+            # Last element corresponds to master, previous ones to MOODLE_branch_STABLE
+            if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} == $majorversion ]]; then
+                branch=$gitremotename/master
+            else
+                branch=$gitremotename/"MOODLE_${majorversion}_STABLE"
+            fi
         else
+            stablefound=$((stablefound+1))
             branchname="MOODLE_${majorversion}_STABLE"
             branch="${gitremotename}/${branchname}"
 
@@ -122,7 +152,6 @@ while read -r line; do
             if ! [[ "${activebranches[@]}" =~ "${branchname}" ]]; then
                 activebranches+=($branchname)
             fi
-            otherfound=1
         fi
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
@@ -133,20 +162,34 @@ while read -r line; do
 
     done <<< "${fixversions}"
 
-    # If we haven't checked master (we don't mark next major in fixVersion) we
+    # If we haven't checked dev branches (we don't mark next major in fixVersion) we
     # check it here. May report false positives.
-    if [ -z "$masterfound" ]; then
-        branch=$gitremotename'/master'
-        if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
-            # No commit present in the repo since last roll.
-            errors+=("${issue} - no commit present in master. Add 'skip-ci-version-check' label if this is expected.")
-        fi
+    # TODO: Incorrect. We have to accumulate branches en devfound and, verify that all the remaining have received the fix.
+    # If something is integrated to 3.10 it must be in master, yes or yes.
+    if [ $devfound -eq 0 ]; then
+        for devbranchcode in "${devbranchesarr[@]}"; do
+            if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} != ${devbranchcode} ]]; then
+                branch=${gitremotename}/MOODLE_${devbranchcode}_STABLE
+            else
+                branch=${gitremotename}/master
+            fi
+
+            if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
+                # No commit present in the repo since last roll.
+                errors+=("${issue} - no commit present in ${branch}. Add 'skip-ci-version-check' label if this is expected.")
+            fi
+        done
     fi
 
-    # Finally if we have masterfound together with otherfound, the fix versions are not correct
-    # (fix versions must be one of stables or master, never both together). Report it.
-    if [ -n "$masterfound" ] && [ -n "$otherfound" ]; then
-        errors+=("${issue} - cannot mix stables and master fix versions in the Tracker. Please solve that.")
+    # If we have devfound together with stablefound, the fix versions are not correct
+    # (fix versions must be stables or one dev, never both together). Report it.
+    if [ $devfound -gt 0 ] && [ $stablefound -gt 0 ]; then
+        errors+=("${issue} - cannot mix stables and dev fix versions in the Tracker. Please solve that.")
+    fi
+
+    # If there are multiple devfound that's incorrect too, only one (the 1st) must be set.
+    if [ $devfound -gt 1 ]; then
+        errors+=("${issue} - cannot set multiple dev fix versions in the Tracker (earliest to be released wins). Please solve that.")
     fi
 
 done <<< "${issueslist}"
@@ -163,6 +206,11 @@ grepsearch="(${allissues// /|}|^Automatically generated|^weekly.*release|^Moodle
 for branch in "${activebranches[@]}"
 do
     echo "Looking for unowned commits in $branch"
+    # Verify the branch exists.
+    if [[ -z $($gitcmd ls-remote --heads git://git.moodle.org/moodle.git ${branch#"origin/"}) ]]; then
+        echo "  WARNING: moodle.git ${branch#"origin/"} fetching problems, cannot look for commits. Please check if that's correct."
+        continue
+    fi
     # Fetch the equivalent moodle.git branch
     $gitcmd fetch -q git://git.moodle.org/moodle.git $branch
     # Find unowned commits since moodle.git
