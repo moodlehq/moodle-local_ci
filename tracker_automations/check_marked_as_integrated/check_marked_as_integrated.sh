@@ -23,7 +23,7 @@ if [ -z "$gitremotename" ]; then
 fi
 
 # TODO: Remove these backward compatibility lines after some prudential time (say, in 2021).
-if [ -n $currentmaster ]; then
+if [ -z "$devbranches" ] && [ -n "$currentmaster" ]; then
     devbranches=$currentmaster
 fi
 
