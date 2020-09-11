@@ -73,6 +73,11 @@ if (strpos($FILENAME, $CFG->dirroot) !== 0) {
     exit(1);
 }
 
+// Ignore the .mustachelintignore file itself.
+if (basename($FILENAME) === '.mustachelintignore') {
+    exit(0);
+}
+
 require_once(__DIR__.'/simple_core_component_mustache_loader.php');
 require_once(__DIR__.'/js_helper.php');
 
@@ -105,10 +110,24 @@ try {
     exit(1);
 }
 
+$performhtmlvalidation = true;
+$ignorefilepath = dirname($FILENAME) . '/.mustachelintignore';
+if (file_exists($ignorefilepath)) {
+    foreach (file($ignorefilepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $ignorepattern) {
+        if (strpos($ignorepattern, '#')) {
+            continue;
+        }
+        if (fnmatch(trim($ignorepattern), basename($FILENAME))) {
+            print_message('INFO', 'HTML validation skipped');
+            $performhtmlvalidation = false;
+        }
+    }
+}
+
 if (empty($content)) {
     // This probably is related to a partial or so on. Best to avoid raising an error.
     print_message('INFO', 'Template produced no content');
-} else {
+} else if ($performhtmlvalidation) {
     check_html_validation($content);
 }
 

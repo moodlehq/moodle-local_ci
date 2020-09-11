@@ -1,0 +1,33 @@
+From 02c7c121afe0cec8dacdb36ec5dd821ed92a15dc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?David=20Mudr=C3=A1k?= <david@moodle.com>
+Date: Mon, 7 Sep 2020 15:50:28 +0200
+Subject: [PATCH 2/2] Add .mustachelintignore to exclude files from HTML
+ validation
+
+---
+ local/test/templates/.mustachelintignore              | 2 ++
+ local/test/templates/local/mobile/.mustachelintignore | 3 +++
+ 2 files changed, 5 insertions(+)
+ create mode 100644 local/test/templates/.mustachelintignore
+ create mode 100644 local/test/templates/local/mobile/.mustachelintignore
+
+diff --git a/local/test/templates/.mustachelintignore b/local/test/templates/.mustachelintignore
+new file mode 100644
+index 0000000000..f2d6f7d6b4
+--- /dev/null
++++ b/local/test/templates/.mustachelintignore
+@@ -0,0 +1,2 @@
++# Ignore all the mobile app templates.
++mobile_*.mustache
+diff --git a/local/test/templates/local/mobile/.mustachelintignore b/local/test/templates/local/mobile/.mustachelintignore
+new file mode 100644
+index 0000000000..379d827608
+--- /dev/null
++++ b/local/test/templates/local/mobile/.mustachelintignore
+@@ -0,0 +1,3 @@
++# Ignore all the templates here.
++
++*.mustache
+-- 
+2.26.2
+
