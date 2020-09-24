@@ -44,15 +44,21 @@ if [[ ${fulllint} -ne 1 ]]; then
 fi
 
 if [[ ${fulllint} -eq 1 ]]; then
-    mfiles=$(find $gitdir/ -name \*.php ! -path \*/vendor/\* | sed "s|$gitdir/||")
+    mfiles=$(find $gitdir/ -name \*.php | sed "s|$gitdir/||")
     echo "Running php syntax check on all files:"
 fi
 
 # Verify all the changed files.
 errorfound=0
 for mfile in ${mfiles} ; do
+
+    # Exclude any /vendor/ stuff. Always, no matter this is a full or commit run.
+    if [[ "${mfile}" =~ (^|/)vendor/ ]]; then
+        continue
+    fi
+
     # Only run on php files.
-    if [[ "${mfile}" =~ ".php" ]] ; then
+    if [[ "${mfile}" =~ .php$ ]] ; then
         fullpath=$gitdir/$mfile
 
         if [ -e $fullpath ] ; then
