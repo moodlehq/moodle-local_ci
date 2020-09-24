@@ -36,6 +36,21 @@ setup () {
     assert_output --regexp "PHP syntax errors found."
 }
 
+@test "php_lint: Ensure vendor directories aren't checked ever" {
+    # Set up.
+    git_apply_fixture 31-php_lint-vendor.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run php_lint/php_lint.sh
+
+    # Assert result
+    assert_success
+    assert_output --partial "Running php syntax check from $GIT_PREVIOUS_COMMIT to $GIT_COMMIT"
+    assert_output --partial "No PHP syntax errors found"
+    refute_output --partial "vendor"
+}
+
 @test "php_lint: shows the php version being used" {
     # Set up.
     git_apply_fixture 31-php_lint-ok.patch
