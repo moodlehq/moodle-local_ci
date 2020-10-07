@@ -12,6 +12,7 @@
 #cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
+#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-chrome, behat-goutte.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
 
 # Let's go strict (exit on error)
@@ -47,6 +48,11 @@ if [[ ! -f "${mydir}/criteria/${criteria}/query.sh" ]]; then
 fi
 
 echo "Using criteria: ${criteria}"
+
+# Calculate jobtype (default to all).
+jobtype=${jobtype:-all}
+
+echo "Using jobtype: ${jobtype}"
 
 # Execute the criteria query. It will save a list of issues (format 101) to $resultfile.
 . "${mydir}/criteria/${criteria}/query.sh"
