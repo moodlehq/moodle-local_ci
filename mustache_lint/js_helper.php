@@ -64,7 +64,7 @@ class js_helper {
         ];
 
         $cmd = "$eslint --stdin --no-eslintrc --config {$this->moodleroot}/.eslintrc --format=json";
-        $proc = proc_open($cmd, $pipesspec, $pipes);
+        $proc = proc_open($cmd, $pipesspec, $pipes, $this->moodleroot);
         // Send the JS to stdin.
         fwrite($pipes[0], $this->js);
         fclose($pipes[0]);
