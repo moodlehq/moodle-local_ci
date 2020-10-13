@@ -179,3 +179,43 @@ setup () {
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [camelcase]: Identifier 'my_message' is not in camel case"
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); )"
 }
+
+@test "mustache_lint: Test eslint runs ok when invoked from any directory" {
+
+    # We need to use recent version here, the default 3.1.3 used for tests (that already had eslint)
+    # did not expose the problem (and it ran ok from any CWD directory).
+    # TODO: Some day, kill all old-version tests by moving them to 39_STABLE or later.
+    create_git_branch MOODLE_39_STABLE v3.9.2
+
+    # Calculate moodleroot and localciroot.
+    localciroot=$PWD
+    moodleroot=${LOCAL_CI_TESTS_GITDIR}
+
+    # Install npm depends so we have eslint (sourced).
+    source ${localciroot}/prepare_npm_stuff/prepare_npm_stuff.sh
+
+    # Run normally (from moodleroot).
+    cd ${moodleroot}
+    ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
+        --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
+    assert_success
+    refute_output --partial "INFO: ESLint did not run"
+    refute_output --partial "was not found when loaded as a Node module"
+
+    # Run also from another dir within moodleroot.
+    cd ${moodleroot}/mod/forum
+    ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
+        --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
+    assert_success
+    refute_output --partial "INFO: ESLint did not run"
+    refute_output --partial "was not found when loaded as a Node module"
+
+    # Let's switch to any other directory (out from moodleroot).
+    cd ${moodleroot}/..
+    ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
+        --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
+    assert_success
+    refute_output --partial "INFO: ESLint did not run"
+    refute_output --partial "was not found when loaded as a Node module"
+    refute_output --partial "${LOCAL_CI_TESTS_CACHEDIR}"
+}
