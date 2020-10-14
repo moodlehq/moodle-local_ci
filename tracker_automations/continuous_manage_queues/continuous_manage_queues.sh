@@ -6,7 +6,7 @@
 # The automatisms are as follow:
 #  0) Add the "integration_held" (+ std. comment) to new features & improvements issue missing it @ candidates.
 #  1) Move "important" issues from candidates to current.
-#  2) Move issues away from the current queue:
+#  2) Move issues away from the candidates queue:
 #    2a) Before a date (last week), keep the current queue fed with issues when it's under a threshold.
 #    2b) After a date (last week), add the "integration_held" (+ std.comment) to bug issues.
 #
@@ -112,7 +112,7 @@ If you want Moodle HQ to consider including it into the incoming major release p
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} integration_held added" >> "${logfile}"
 done
 
-# 1) Move "important" issues from candidates to current.
+# 1) Move "important" issues from candidates to current (cleaning integrator and tester).
 
 # Get the list of issues.
 ${basereq} --action getIssueList \
@@ -144,7 +144,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
                --issue ${issue} \
                --step "CI Global Self-Transition" \
-               --field "Currently in integration" --values "Yes" \
+               --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
                --comment "Continuous queues manage: Moving to current because it's important" \
                --role "Integrators"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -181,7 +181,7 @@ if [[ "${behavior2}" == "move" ]]; then
                                 'Last comment date' ASC" \
                    --file "${resultfile}"
 
-        # Iterate over found issues, moving them to the current queue.
+        # Iterate over found issues, moving them to the current queue (cleaning integrator and tester).
         for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
             echo "Processing ${issue}"
             # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
@@ -198,7 +198,7 @@ if [[ "${behavior2}" == "move" ]]; then
             ${basereq} --action progressIssue \
                        --issue ${issue} \
                        --step "CI Global Self-Transition" \
-                       --field "Currently in integration" --values "Yes" \
+                       --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${datetoholdbugs})" >> "${logfile}"
