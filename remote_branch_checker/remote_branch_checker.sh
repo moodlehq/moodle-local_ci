@@ -482,7 +482,10 @@ echo "Info: Running phpcs..."
 if [[ ! -n "${phpcsstandard}" ]]; then
     phpcsstandard="${mydir}/../../codechecker/moodle"
 fi
+# Note we need to specify where both moodle and PHPCompatibility, specifically the later, standards sit.
+# TODO: Some day this will work from the moodle ruleset.xml file, it doesn't right now.
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
+    --runtime-set installed_paths "${phpcsstandard}","${phpcsstandard}/../PHPCompatibility" \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard=${phpcsstandard} ${WORKSPACE}
 
