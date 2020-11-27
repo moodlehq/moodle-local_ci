@@ -38,7 +38,7 @@ before_script:
   - 'git config --global core.abbrev 10'
   - "export LOCAL_CI_TESTS_CACHEDIR=$HOME/cachedir && mkdir -p $LOCAL_CI_TESTS_CACHEDIR"
   - "export LOCAL_CI_TESTS_GITDIR=$HOME/gitdir && git clone git://github.com/moodle/moodle $LOCAL_CI_TESTS_GITDIR"
-  - "git clone -q --depth 1 --branch phpcs3 https://github.com/moodlehq/moodle-local_codechecker $HOME/moodle-local_codechecker"
+  - "git clone -q --depth 1 https://github.com/moodlehq/moodle-local_codechecker $HOME/moodle-local_codechecker"
   - "export LOCAL_CI_TESTS_PHPCS_DIR=$HOME/moodle-local_codechecker/moodle/"
   - "export LOCAL_CI_TESTS_DBLIBRARY=native"
   - "export LOCAL_CI_TESTS_DBTYPE=mysqli"
