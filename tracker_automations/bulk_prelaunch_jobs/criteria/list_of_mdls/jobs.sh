@@ -12,7 +12,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=sqlsrv \
-        -p PHPVERSION=7.2 \
+        -p PHPVERSION=LOWEST \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
@@ -24,7 +24,7 @@ fi
 #    -p REPOSITORY=${repository} \
 #    -p BRANCH=${branch} \
 #    -p DATABASE=pgsql \
-#    -p PHPVERSION=7.2 \
+#    -p PHPVERSION=LOWEST \
 #    -p BROWSER=chrome \
 #    -p BEHAT_TOTAL_RUNS=1 \
 #    -p MOBILE_VERSION=latest \
@@ -40,7 +40,7 @@ echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
-        -p PHPVERSION=7.2 \
+        -p PHPVERSION=LOWEST \
         -p BROWSER=goutte \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -52,7 +52,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-chrome" ]]; then
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
-        -p PHPVERSION=7.2 \
+        -p PHPVERSION=LOWEST \
         -p BROWSER=chrome \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi

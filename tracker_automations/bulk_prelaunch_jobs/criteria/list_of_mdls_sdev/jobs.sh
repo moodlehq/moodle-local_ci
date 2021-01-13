@@ -11,7 +11,7 @@ ${jenkinsreq} "SDEV.02 - Developer-requested PHPUnit" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
     -p DATABASE=sqlsrv \
-    -p PHPVERSION=7.2 \
+    -p PHPVERSION=LOWEST \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # Disabled for now, it's failing a lot :-(
@@ -21,7 +21,7 @@ ${jenkinsreq} "SDEV.02 - Developer-requested PHPUnit" \
 #    -p REPOSITORY=${repository} \
 #    -p BRANCH=${branch} \
 #    -p DATABASE=pgsql \
-#    -p PHPVERSION=7.2 \
+#    -p PHPVERSION=LOWEST \
 #    -p BROWSER=chrome \
 #    -p BEHAT_TOTAL_RUNS=1 \
 #    -p MOBILE_VERSION=latest \
@@ -35,7 +35,7 @@ ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
     -p DATABASE=pgsql \
-    -p PHPVERSION=7.2 \
+    -p PHPVERSION=LOWEST \
     -p BROWSER=goutte \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
@@ -45,6 +45,6 @@ ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
     -p DATABASE=pgsql \
-    -p PHPVERSION=7.2 \
+    -p PHPVERSION=LOWEST \
     -p BROWSER=chrome \
     -w >> "${resultfile}.jenkinscli" < /dev/null
