@@ -13,6 +13,17 @@ setup () {
     refute_output --partial 'ERROR:'
 }
 
+@test "check_upgrade_savepoints/check_upgrade_savepoints.sh: function returning bool" {
+    git_apply_fixture check_upgrade_savepoints/returning_bool.patch
+
+    ci_run check_upgrade_savepoints/check_upgrade_savepoints.sh
+    assert_success
+    run cat $WORKSPACE/check_upgrade_savepoints_MOODLE_31_STABLE.txt
+    refute_output --partial "ERROR"
+    refute_output --partial "WARN"
+    assert_output --partial "found 92 matching 'if' blocks and 'savepoint' calls"
+}
+
 @test "check_upgrade_savepoints/check_upgrade_savepoints.sh: blank upgrade file" {
     git_apply_fixture check_upgrade_savepoints/blank_upgrade_file.patch
 

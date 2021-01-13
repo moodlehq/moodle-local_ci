@@ -60,7 +60,7 @@ foreach ($files as $file) {
 
     $contents = file_get_contents($file);
 
-    $function_regexp = '\s*function\s+xmldb_[a-zA-Z0-9_]+?_upgrade\s*\(.*?version.*?\)\s*(?=\{)';
+    $function_regexp = '\s*function\s+xmldb_[a-zA-Z0-9_]+?_upgrade\s*\(.*?version.*?\)(?::\sbool)?\s*(?=\{)';
     $return_regexp = '\s*return true;';
     $anyfunction_regexp = '\s*function\s*[a-z0-9_]+?\s*\(.*?\)\s*{'; // MDL-34103
 
