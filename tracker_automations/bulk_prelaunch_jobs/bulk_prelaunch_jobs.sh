@@ -9,11 +9,13 @@
 #  (requiring keys to be in place and jenkins ssh enabled), or also -html (and then
 #  use a combination of user and password or token). See Jenkins CLI docs for more info.
 #cf_repository: id for "Pull from Repository" custom field (customfield_10100)
-#cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
+#cf_branches: comma separated trios of moodle branch, id for "Pull XXXX Branch" custom field and php version.
+#             Trios are colon separated, example: master:customfield_10111:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-chrome, behat-goutte.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
+
 
 # Let's go strict (exit on error)
 set -e
@@ -81,9 +83,16 @@ while read issue; do
         if [[ -z "${repository}" ]]; then
             break
         fi
-        # Split into target branch and custom field
-        target=${candidate%%:*}
-        cf_branch=${candidate##*:}
+        # Split into target branch, custom field and php version.
+        arrcandidate=(${candidate//:/ })
+        target=${arrcandidate[0]}
+        cf_branch=${arrcandidate[1]}
+        php_version=${arrcandidate[2]}
+        # Verify we have all the information
+        if [[ -z ${target} ]] || [[ -z ${cf_branch} ]] || [[ -z ${php_version} ]]; then
+            echo "(x) Error: the branch definition ${candidate} is missing branch, custom field or php version. All them are required" | tee -a "${resultfile}.${issue}.txt"
+            continue
+        fi
         # Fetch branch information
         ${basereq} --action getFieldValue \
                    --issue ${issue} \
