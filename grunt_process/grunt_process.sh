@@ -89,7 +89,7 @@ fi
 
 # Look for changes
 cd ${gitdir}
-grepexclude="grep -v -e npm-shrinkwrap.json"
+grepexclude="grep -v -e npm-shrinkwrap.json -e package-lock.json"
 if [[ -n ${isplugin} ]]; then
     grepexclude="${grepexclude} -e .eslintignore -e .stylelintignore"
 fi
