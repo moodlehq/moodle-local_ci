@@ -34,7 +34,7 @@ fi
 #fi
 
 # We want to launch always a Behat (goutte) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
 echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
@@ -46,7 +46,7 @@ echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
 fi
 
 # We want to launch always a Behat (chrome) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-chrome" ]]; then
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-chrome" ]]; then
     echo -n "Behat (chrome): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
