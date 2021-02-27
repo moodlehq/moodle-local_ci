@@ -1,8 +1,7 @@
-dist: xenial
-
 language: php
 
-sudo: false
+os: linux
+dist: xenial
 
 addons:
   apt:
@@ -17,7 +16,7 @@ services:
   - mysql
 
 php:
-    - 7.2
+    - 7.3
 
 env:
     - TEST_SUITE="0-*"
@@ -26,11 +25,19 @@ env:
     - TEST_SUITE="3-*"
 
 install:
-  - git clone --depth 1 https://github.com/sstephenson/bats.git $HOME/bats
+  - git clone --depth 1 https://github.com/bats-core/bats-core.git $HOME/bats-core
   - nvm install 8.9
   - nvm use 8.9
   - travis_retry composer install
   - npm install
+  - echo -e "[server]\ninnodb_flush_log_at_trx_commit=0" | sudo tee -a /etc/mysql/my.cnf # General speed bump.
+  # Move MySQL data to tmpfs (see core travis). Without that we get random timeouts here and there.
+  - sudo mkdir /mnt/ramdisk
+  - sudo mount -t tmpfs -o size=1024m tmpfs /mnt/ramdisk
+  - sudo service mysql stop
+  - sudo mv /var/lib/mysql /mnt/ramdisk
+  - sudo ln -s /mnt/ramdisk/mysql /var/lib/mysql
+  - sudo service mysql restart
 
 before_script:
   - 'git config --global user.email "travis@localhost"'
@@ -48,4 +55,4 @@ before_script:
   - "unset _JAVA_OPTIONS" # stderr output on each java execution breaks our json expectations. See travis-ci/travis-ci#8408
 
 script:
-  - $HOME/bats/bin/bats tests/$TEST_SUITE
+  - $HOME/bats-core/bin/bats --timing tests/$TEST_SUITE

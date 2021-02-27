@@ -37,18 +37,18 @@ setup () {
     assert_output --partial 'Error: dbtype environment variable is not defined. See the script comments.'
 }
 
-@test "compare_databases/compare_databases.sh: single actual (>= 35_STABLE) branch runs work" {
+@test "compare_databases/compare_databases.sh: single actual (>= 36_STABLE) branch runs work" {
     export gitbranchinstalled=master
-    export gitbranchupgraded=MOODLE_35_STABLE
+    export gitbranchupgraded=MOODLE_36_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (1) MOODLE_35_STABLE'
+    assert_output --partial 'Info: Origin branches: (1) MOODLE_36_STABLE'
     assert_output --partial 'Info: Target branch: master'
     assert_output --partial 'Info: Installing Moodle master into ci_installed_'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_35_STABLE'
-    assert_output --partial 'Info: Installing Moodle MOODLE_35_STABLE into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle MOODLE_35_STABLE to master into ci_upgraded_'
+    assert_output --partial 'Info: Comparing master and upgraded MOODLE_36_STABLE'
+    assert_output --partial 'Info: Installing Moodle MOODLE_36_STABLE into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle MOODLE_36_STABLE to master into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
@@ -57,36 +57,36 @@ setup () {
     assert_success
 }
 
-@test "compare_databases/compare_databases.sh: single old (< 35_STABLE) branch runs work" {
-    export gitbranchinstalled=v3.4.5
-    export gitbranchupgraded=v3.4.1
+@test "compare_databases/compare_databases.sh: single old (< 37_STABLE) branch runs work" {
+    export gitbranchinstalled=v3.6.9
+    export gitbranchupgraded=v3.6.4
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (1) v3.4.1'
-    assert_output --partial 'Info: Target branch: v3.4.5'
-    assert_output --partial 'Info: Installing Moodle v3.4.5 into ci_installed_'
-    assert_output --partial 'Info: Comparing v3.4.5 and upgraded v3.4.1'
-    assert_output --partial 'Info: Installing Moodle v3.4.1 into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle v3.4.1 to v3.4.5 into ci_upgraded_'
+    assert_output --partial 'Info: Origin branches: (1) v3.6.4'
+    assert_output --partial 'Info: Target branch: v3.6.9'
+    assert_output --partial 'Info: Installing Moodle v3.6.9 into ci_installed_'
+    assert_output --partial 'Info: Comparing v3.6.9 and upgraded v3.6.4'
+    assert_output --partial 'Info: Installing Moodle v3.6.4 into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle v3.6.4 to v3.6.9 into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_v3.4.5_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_v3.6.9_logfile.txt ]
     assert_success
 }
 
 @test "compare_databases/compare_databases.sh: multiple branch runs work" {
     export gitbranchinstalled=master
-    export gitbranchupgraded=MOODLE_36_STABLE,MOODLE_37_STABLE
+    export gitbranchupgraded=MOODLE_39_STABLE,MOODLE_310_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (2) MOODLE_36_STABLE,MOODLE_37_STABLE'
+    assert_output --partial 'Info: Origin branches: (2) MOODLE_39_STABLE,MOODLE_310_STABLE'
     assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_36_STABLE'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_37_STABLE'
+    assert_output --partial 'Info: Comparing master and upgraded MOODLE_39_STABLE'
+    assert_output --partial 'Info: Comparing master and upgraded MOODLE_310_STABLE'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
     run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
