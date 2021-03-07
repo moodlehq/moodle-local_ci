@@ -137,7 +137,7 @@ for c in ${commits}; do
         currentline=1
         missingissuecode=""
         codearea=""
-        while read line; do
+        while IFS= read -r line; do
             # check 1st line
             if [[ ${currentline} -eq 1 ]]; then
                 # verify subject begins with template issue code + space. Error.

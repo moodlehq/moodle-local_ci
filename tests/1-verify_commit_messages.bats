@@ -93,6 +93,14 @@ commit_apply_fixture_and_run() {
     assert_output "${shorthash}*error*The line #3 has more than 132 characters (found: 181)"
 }
 
+@test "verify_commit_messages/verify_commit_messages.sh: backslash ended lines" {
+    commit_apply_fixture_and_run backslash-ended-lines.patch
+    assert_failure
+    refute_output "#3"
+    refute_output "#5"
+    assert_output "${shorthash}*error*The line #7 has more than 132 characters (found: 141)"
+}
+
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS bad syntax" {
     commit_apply_fixture_and_run amos-bad-syntax.patch
     assert_failure
