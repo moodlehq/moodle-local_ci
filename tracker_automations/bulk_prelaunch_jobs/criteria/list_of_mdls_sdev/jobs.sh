@@ -39,12 +39,12 @@ ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
     -p BROWSER=goutte \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
-# We want to launch always a Behat (chrome) job
-echo -n "Behat (chrome): " >> "${resultfile}.jenkinscli"
+# We want to launch always a Behat (firefox) job
+echo -n "Behat (firefox): " >> "${resultfile}.jenkinscli"
 ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
     -p DATABASE=pgsql \
     -p PHPVERSION=${php_version} \
-    -p BROWSER=chrome \
+    -p BROWSER=firefox \
     -w >> "${resultfile}.jenkinscli" < /dev/null

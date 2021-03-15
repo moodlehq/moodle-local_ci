@@ -45,14 +45,14 @@ echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (chrome) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-chrome" ]]; then
-    echo -n "Behat (chrome): " >> "${resultfile}.jenkinscli"
+# We want to launch always a Behat (firefox) job
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
+    echo -n "Behat (firefox): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
-        -p BROWSER=chrome \
+        -p BROWSER=firefox \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
