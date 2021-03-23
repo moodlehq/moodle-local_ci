@@ -18,7 +18,7 @@ load libs/shared_setup
     # A branch which Dan has had integrated and won't touch again (and is protected for this purpose). Using travis-ci.org
     ci_run_php travis/check_branch_status.php --repository=git://github.com/danpoltawski/moodle.git --branch=MDL-52127-master
     assert_success
-    assert_line 'WARNING: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
+    assert_line 'SKIP: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
     assert_line --partial 'WARNING: travis-ci.org integration working, but migration to travis-ci.com required.'
     assert_line --partial '. See https://docs.moodle.org/dev/Travis_integration'
     assert_line 'OK: Build status was passed, see https://travis-ci.org/danpoltawski/moodle/builds/137772508'
@@ -35,8 +35,8 @@ load libs/shared_setup
     # Use a moodlehq github repo which is unlikely to ever have travis integration.
     ci_run_php travis/check_branch_status.php --repository=https://github.com/moodlehq/moodle-theme_afterburner --branch=master
     assert_success
-    assert_line 'WARNING: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
-    assert_line 'WARNING: travis-ci.org integration not setup. See https://docs.moodle.org/dev/Travis_integration'
+    assert_line 'SKIP: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
+    assert_line 'SKIP: travis-ci.org integration not setup. See https://docs.moodle.org/dev/Travis_integration'
 }
 
 @test "travis/check_branch_status.php: not github repo" {

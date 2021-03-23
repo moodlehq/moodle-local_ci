@@ -64,13 +64,13 @@ $branchname = $options['branch'];
 $info = travis_com_api_request('/repo/'.$username.'%2F'.$reponame);
 
 if (!isset($info->active) || !$info->active) {
-    echo "WARNING: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration\n";
+    echo "SKIP: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration\n";
 
     // Fallback to travis-ci.org, to see if that integration is setup.
     // TODO: Remove all this and related org functions once travis-ci.org is completely gone.
     $info = travis_org_api_request('/repos/'.$username.'/'.$reponame);
     if (!isset($info->repo->active) || !$info->repo->active) {
-        echo "WARNING: travis-ci.org integration not setup. See https://docs.moodle.org/dev/Travis_integration\n";
+        echo "SKIP: travis-ci.org integration not setup. See https://docs.moodle.org/dev/Travis_integration\n";
         exit(0);
     } else {
         // Recommend the migration to travis-ci.com.
