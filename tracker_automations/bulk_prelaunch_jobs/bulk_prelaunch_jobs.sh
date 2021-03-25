@@ -13,8 +13,9 @@
 #             Trios are colon separated, example: master:customfield_10111:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
-#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-chrome, behat-goutte.
+#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-chrome, behat-goutte, behat-all.
 #quiet: if enabled ("true"), don't perform any action in the Tracker.
+#restrictedto: name of the project (MDL) role we want to restrict the comment to. Blank means no restriction.
 
 
 # Let's go strict (exit on error)
@@ -142,6 +143,11 @@ while read issue; do
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
+        # Let's see if there is any restriction to the comment in the Tracker
+        commentrestriction=
+        if [[ -n "${restrictedto}" ]]; then
+            commentrestriction="--role \"$restrictedto\""
+        fi
         echo "  - Sending results to the Tracker"
         . "${mydir}/criteria/${criteria}/postissue.sh"
     fi
