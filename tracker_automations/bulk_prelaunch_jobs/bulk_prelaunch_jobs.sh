@@ -146,7 +146,7 @@ while read issue; do
         # Let's see if there is any restriction to the comment in the Tracker
         commentrestriction=
         if [[ -n "${restrictedto}" ]]; then
-            commentrestriction="--role \"$restrictedto\""
+            commentrestriction="--role $restrictedto"
         fi
         echo "  - Sending results to the Tracker"
         . "${mydir}/criteria/${criteria}/postissue.sh"
