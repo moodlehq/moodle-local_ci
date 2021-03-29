@@ -74,7 +74,7 @@ if (!isset($info->active) || !$info->active) {
         exit(0);
     } else {
         // Recommend the migration to travis-ci.com.
-        echo "WARNING: travis-ci.org integration working, but migration to travis-ci.com required. See https://docs.moodle.org/dev/Travis_integration\n";
+        echo "SKIP: travis-ci.org integration working, but migration to travis-ci.com required. See https://docs.moodle.org/dev/Travis_integration\n";
         // Analyse travis-ci.org branch.
         $json = travis_org_api_request('/repos/'.$username.'/'.$reponame.'/branches/'.$branchname);
         analyse_branch_status('https://travis-ci.org', $username, $reponame,
