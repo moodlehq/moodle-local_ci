@@ -9,12 +9,6 @@
 excluded=".git/
 auth/cas/CAS/
 admin/tool/installaddon/tests/fixtures/versionphp/version1.php
-admin/tool/brickfield/LICENSE_QUAIL.txt
-admin/tool/brickfield/classes/local/htmlchecker/common/resources/placeholder.txt
-admin/tool/brickfield/tests/local/htmlchecker/common/checks/img_alt_is_different_test.php
-admin/tool/brickfield/tests/local/htmlchecker/common/checks/img_alt_not_empty_in_anchor_test.php
-admin/tool/brickfield/tests/local/htmlchecker/common/checks/img_has_alt_test.php
-admin/tool/brickfield/tests/local/htmlchecker/common/checks/img_alt_is_too_long_test.php
 backup/bb/bb5.5_to_moodle.xsl
 backup/bb/bb6_to_moodle.xsl
 backup/cc/schemas/
