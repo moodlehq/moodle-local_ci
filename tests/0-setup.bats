@@ -19,7 +19,7 @@ load libs/shared_setup
     assert_success
 
     run $phpcs --version
-    assert_output "PHP_CodeSniffer version 3.5.8 (stable) by Squiz (http://www.squiz.net)"
+    assert_output --regexp "PHP_CodeSniffer version [0-9]+\.[0-9]+\.[0-9]+ \(stable\) by Squiz \(http://www.squiz.net\)"
 }
 
 @test "GNU grep installed" {
