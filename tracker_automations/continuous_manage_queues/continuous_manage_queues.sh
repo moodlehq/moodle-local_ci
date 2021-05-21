@@ -29,7 +29,7 @@
 #      - Automated functional tests (behat)
 #      - Unit tests
 #
-# This job must be enabled only since freeze day to packaging day.
+# This job must be enabled only since freeze day to the end of on-sync period, when normal weeklies begin.
 #
 # Parameters:
 #  jiraclicmd: fill execution path of the jira cli
