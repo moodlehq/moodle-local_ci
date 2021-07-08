@@ -9,6 +9,7 @@
 excluded=".git/
 auth/cas/CAS/
 admin/tool/componentlibrary/hugo/dist/css/docs.css.map
+admin/tool/componentlibrary/docs/
 admin/tool/installaddon/tests/fixtures/versionphp/version1.php
 backup/bb/bb5.5_to_moodle.xsl
 backup/bb/bb6_to_moodle.xsl
