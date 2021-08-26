@@ -71,7 +71,7 @@ echo "Info: Installing Moodle $gitbranchinstalled into $installdb" | tee -a "${l
 githashinstalled=$(cd $gitdir && \
                    $gitcmd rev-parse -q --verify origin/$gitbranchinstalled || \
                    $gitcmd rev-parse -q --verify $gitbranchinstalled)
-cd $gitdir && $gitcmd checkout -q -f -B installbranch $githashinstalled
+cd $gitdir && $gitcmd checkout -q -f -B installbranch $githashinstalled && $gitcmd clean -fdq
 # Use HEAD hash as admin pseudorandom password for all Moodle sites (not used).
 moodleadminpass=$($gitcmd rev-list -n1 --abbrev-commit HEAD)
 rm -fr config.php
@@ -110,7 +110,7 @@ for upgrade in "${upgradedarr[@]}"; do
         githashupgrade=$(cd $gitdir && \
                            $gitcmd rev-parse -q --verify origin/$upgrade || \
                            $gitcmd rev-parse -q --verify $upgrade)
-        cd $gitdir && $gitcmd checkout -q -f -B upgradebranch $githashupgrade
+        cd $gitdir && $gitcmd checkout -q -f -B upgradebranch $githashupgrade && $gitcmd clean -fdq
         rm -fr config.php
         ${phpcmd} admin/cli/install.php --non-interactive --allow-unstable --agree-license --wwwroot="http://localhost" --dataroot="$datadir" --dbtype=$dbtype --dbhost=$dbhost2 --dbname=$upgradedb --dbuser=$dbuser2 --dbpass=$dbpass2 --prefix=$dbprefixupgrade --fullname=$upgradedb --shortname=$upgradedb --adminuser=$dbuser2 --adminpass=$moodleadminpass 2>&1 >> "${logfile}"
         # Error installing, we cannot continue. Exit
@@ -124,7 +124,7 @@ for upgrade in "${upgradedarr[@]}"; do
     # only if we don't come from an erroneus previous situation
     if [ $exitstatus -eq 0 ]; then
         echo "Info: Upgrading Moodle $upgrade to $gitbranchinstalled into $upgradedb" | tee -a "${logfile}"
-        cd $gitdir && $gitcmd checkout -q -f installbranch
+        cd $gitdir && $gitcmd checkout -q -f installbranch && $gitcmd clean -fdq
         ${phpcmd} admin/cli/upgrade.php --non-interactive --allow-unstable 2>&1 >> "${logfile}"
         # Error upgrading, inform and continue
         exitstatus=${PIPESTATUS[0]}
