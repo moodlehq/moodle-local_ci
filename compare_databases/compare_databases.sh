@@ -44,7 +44,6 @@ dbhost2="${dbhost2:-$dbhost1}"
 dbuser2="${dbuser2:-$dbuser1}"
 dbpass2="${dbpass2:-$dbpass1}"
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-currentbranch=$( cd $gitdir && $gitcmd rev-parse -q --abbrev-ref HEAD )
 installdb=ci_installed_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 upgradedb=ci_upgraded_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
 datadir=/tmp/ci_dataroot_${BUILD_NUMBER}_${EXECUTOR_NUMBER}
@@ -164,7 +163,7 @@ ${mysqlcmd} --user=${dbuser1} --password=${dbpass1} --host=${dbhost1} \
         --execute="DROP DATABASE ${installdb}" 2>&1 >> "${logfile}"
 rm -fr config.php
 rm -fr $datadir
-$gitcmd checkout -q -f $currentbranch
+$gitcmd checkout -q -f $gitbranchinstalled && $gitcmd clean -fdq
 $gitcmd branch -q -D installbranch upgradebranch
 
 # If arrived here, return the counterrors of the php execution
