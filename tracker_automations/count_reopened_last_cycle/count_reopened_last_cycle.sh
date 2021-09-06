@@ -73,6 +73,7 @@ done
 
 # get the contents of the integration date
 integrationjira=$( cat "${tempfile}" )
+integrationjira="${integrationjira//.}" # Some buggy Java AU locales come with dots in month names. Remove them.
 
 # if the last integration at jira has changed... start a new cycle
 if [ "${lastintegrationjira}" != "${integrationjira}" ]; then
