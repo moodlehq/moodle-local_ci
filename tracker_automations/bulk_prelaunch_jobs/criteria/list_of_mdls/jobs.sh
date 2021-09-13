@@ -5,6 +5,9 @@
 # to stop silently. This was discovered @ MDLSITE-5313
 # and we need to keep it (until we move to REST from CLI)
 
+# Set the runner if not specified.
+runner="${runner:-STABLE}"
+
 # We want to launch always a sqlsrv PHPUNIT
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
     echo -n "PHPUnit (sqlsrv): " >> "${resultfile}.jenkinscli"
@@ -13,6 +16,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -p BRANCH=${branch} \
         -p DATABASE=sqlsrv \
         -p PHPVERSION=${php_version} \
+        -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
@@ -30,18 +34,20 @@ fi
 #    -p MOBILE_VERSION=latest \
 #    -p INSTALL_PLUGINAPP=true \
 #    -p TAGS=@app \
+#    -p RUNNERVERSION=${runner} \
 #    -w >> "${resultfile}.jenkinscli" < /dev/null
 #fi
 
 # We want to launch always a Behat (goutte) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
-echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=goutte \
+        -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
@@ -54,5 +60,6 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=firefox \
+        -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
