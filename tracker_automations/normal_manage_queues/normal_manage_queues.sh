@@ -9,7 +9,9 @@
 #    - When the number of issues awaiting for integration falls below a threshold (currentmin).
 #    - Moving up to a maximum number of issue (movemax).
 #  C) Raise the integration priority of all the issues sitting in the candidates queue too long,
-#     in order to guarantee that they will be moved to current integration sooner.
+#     in order to guarantee that they will be moved to current integration sooner. But avoid
+#     modifying the priority of any issue being blocked or blocking to others. This type of issues
+#     are managed exclusively by the set_integration_priority_to_[zero|one] scripts.
 
 # The criteria to consider an issue "important" are:
 #  1) It must be in the candidates queue, awaiting for integration.       |

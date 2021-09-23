@@ -119,6 +119,7 @@ function run_C() {
     ${basereq} --action getIssueList \
                --search "filter=14000
                      AND 'Integration priority' = 0
+                     AND NOT (issueLinkType = 'blocks' OR issueLinkType = 'is blocked by')
                      AND NOT status CHANGED AFTER -${waitingdays}d" \
                --file "${resultfile}"
 
