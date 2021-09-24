@@ -104,20 +104,21 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         # If there are issues returned... then the issue still has unresolved blockers.
         unresolvedfound=
         for unresolvedissue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
-            echo "  ${linkedissue} blocks it and it is unresolved."
+            echo "  ${unresolvedissue} blocks it and it is unresolved."
             unresolvedfound=1
         done
 
         # If there are unresolved blockers, skip this issue.
         if [[ -n ${unresolvedfound} ]]; then
-            echo "  skipping this issue"
+            echo "  skipping this issue (has unresolved blockers)"
             echo
             continue
         fi
     fi
+
     # Arrived here, this is an issue that is blocking others but isn't blocked by any unresolved issue.
     # So we raise its priority here and now.
-    echo "  Raising its integration priority to 1"
+    echo "  Raising its integration priority to 1 (is blocker and has not unresolved blockers)"
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
