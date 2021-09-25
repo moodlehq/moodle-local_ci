@@ -28,6 +28,7 @@
 #      - Unit tests
 #
 # This job must be enabled over normal weeklies period (since end of on-sync to freeze).
+# (see https://docs.moodle.org/dev/Release_process#2_weeks_after)
 #
 # Parameters:
 #  jiraclicmd: fill execution path of the jira cli

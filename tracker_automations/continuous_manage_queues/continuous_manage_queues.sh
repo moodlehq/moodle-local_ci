@@ -4,7 +4,7 @@
 #  - current queue: issues under current integration.
 #
 # The automatisms are as follow:
-#  A) Before release only! (normally 6 weeks of continuous before release)
+#  A) Before release only! (normally 5 weeks of continuous between freeze and release)
 #    1) Add the "integration_held" (+ standard comment) to new features & improvements issue missing it @ candidates.
 #    2) Move "important" issues from candidates to current.
 #    3) Move issues away from the candidates queue.
@@ -30,6 +30,7 @@
 #      - Unit tests
 #
 # This job must be enabled only since freeze day to the end of on-sync period, when normal weeklies begin.
+# (see https://docs.moodle.org/dev/Release_process#5_weeks_prior)
 #
 # Parameters:
 #  jiraclicmd: fill execution path of the jira cli
@@ -112,7 +113,7 @@ if [ -n "${dryrun}" ]; then
     echo "Dry-run enabled, no changes will be performed to the tracker"
 fi
 
-# Behaviour A, before the release (normally the 6 weeks of continuous).
+# Behaviour A, before the release (normally the 5 weeks between freeze and release).
 
 if [ $behaviorAB == "before" ]; then
     # A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates.
