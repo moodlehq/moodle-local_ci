@@ -251,6 +251,11 @@ done <<< "${issueslist}"
 allissues=${issues[*]}
 grepsearch="(${allissues// /|}|^Automatically generated|^weekly.*release|^Moodle release|^on\-demand|^NOBUG\:|This reverts commit)"
 
+# No issues, no active branches to check yet (so the next 2 loops won't happen)
+if [[ ${#issues[@]} -eq 0 ]]; then
+    activebranches=()
+fi
+
 # Loop through the active branches looking for commits without issues in integration
 for branch in "${activebranches[@]}"
 do
