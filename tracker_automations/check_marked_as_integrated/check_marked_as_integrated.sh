@@ -86,6 +86,8 @@ for devbranchcode in "${devbranchesarr[@]}"; do
     fi
 done
 issues=() # The list of issues in current integration.
+declare -A branchesbyissue # Associative array, issues as key, branches from fix versions
+                           # in the tracker as value. Format: [MDL-123]=>MOODLE_311_STABLE, master
 
 ####
 # Iterate over issues in integration and check their commits are integrated in the
@@ -96,12 +98,6 @@ while read -r line; do
     ismasteronly=
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
     issues+=($issue)
-
-    if [[ $line == *"skip-ci-version-check"* ]]
-    then
-        echo "Skipping ${issue} - is marked with skip-ci-version-check"
-        continue
-    fi
 
     if [[ -z ${issue} ]]; then
         # No issue found...
@@ -129,6 +125,7 @@ while read -r line; do
     devfound=0
     stablefound=0
     masterfixversionfound=
+    branchesfromfixversion=
     while read -r tagversion; do
 
         # Strip quotes and minors.
@@ -146,21 +143,25 @@ while read -r line; do
             devfound=$((devfound+1))
             # Last element corresponds to master, previous ones to MOODLE_branch_STABLE
             if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} == $majorversion ]]; then
-                branch=$gitremotename/master
+                branchname=master
                 masterfixversionfound=${tagversion}
             else
-                branch=$gitremotename/"MOODLE_${majorversion}_STABLE"
+                branchname="MOODLE_${majorversion}_STABLE"
             fi
         else
             stablefound=$((stablefound+1))
             branchname="MOODLE_${majorversion}_STABLE"
-            branch="${gitremotename}/${branchname}"
 
             # Capture this as an active branch if not already added to the array.
             if ! [[ "${activebranches[@]}" =~ "${branchname}" ]]; then
                 activebranches+=($branchname)
             fi
         fi
+
+        branch="${gitremotename}/${branchname}"
+
+        # Add the branch to the list of branches from fix versions.
+        branchesfromfixversion+=${branchname},
 
         if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
             # No commit present in the repo since last roll.
@@ -169,6 +170,19 @@ while read -r line; do
         fi
 
     done <<< "${fixversions}"
+
+    # And, if master is missing... add it, we'll need it later.
+    if [[ ! ${branchesfromfixversion} =~ master ]]; then
+        branchesfromfixversion+=master
+    fi
+    # Add the branches from the tracker fix versions to the branchesbyissue associative array.
+    branchesbyissue[${issue}]=${branchesfromfixversion}
+
+    if [[ $line == *"skip-ci-version-check"* ]]
+    then
+        echo "Skipping ${issue} - is marked with skip-ci-version-check"
+        continue
+    fi
 
     # If we haven't checked all dev branches (we don't add dev versions to fixVersion) we
     # check it here. May report false positives, but normally everything going to stables
@@ -258,6 +272,32 @@ do
     if [[ $unownedcommits ]]; then
         errors+=("$branch commits found without issue in integration:" "$unownedcommits")
     fi
+done
+
+# Loop through the active branches verifying that their commits match the fix-versions in the tracker.
+for branch in "${activebranches[@]}"
+do
+    echo "Looking for $branch issues and matching against tracker fix versions"
+    # Fetch the equivalent moodle.git branch
+    $gitcmd fetch -q git://git.moodle.org/moodle.git $branch
+    # Look for all the issues having commits in the branch.
+    foundissues=$($gitcmd log origin/${branch}...FETCH_HEAD \
+        --pretty=format:"%s" --no-merges \
+        --extended-regexp --regexp-ignore-case \
+        --grep="$grepsearch" | cut -d' ' -f1 | sort | uniq)
+    while read -r issue; do
+        # Get the list of tracker expectations (fix-versions) for the issue.
+        fixbranches=${branchesbyissue[${issue}]}
+        # Ignore, unowned commits above already should have detected this.
+        if [[ -z ${fixbranches} ]]; then
+            continue
+        fi
+        # Now ensure that the branch being tested is in the list of fixed branches coming from tracker.
+        if [[ ! ${fixbranches} =~ ${branch} ]]; then
+            errors+=("${issue} has commits in $branch but missed that fix-version in tracker")
+        fi
+
+    done <<< "${foundissues}"
 done
 
 echo
