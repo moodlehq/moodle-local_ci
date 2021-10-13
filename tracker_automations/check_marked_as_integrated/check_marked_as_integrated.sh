@@ -291,6 +291,10 @@ do
         --extended-regexp --regexp-ignore-case \
         --grep="$grepsearch" | cut -d' ' -f1 | sort | uniq)
     while read -r issue; do
+        # No issues were found in history, nothing to do or check.
+        if [[ -z ${issue} ]]; then
+            continue
+        fi
         # Get the list of tracker expectations (fix-versions) for the issue.
         fixbranches=${branchesbyissue[${issue}]}
         # Ignore, unowned commits above already should have detected this.
