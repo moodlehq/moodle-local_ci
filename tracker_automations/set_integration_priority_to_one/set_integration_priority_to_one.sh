@@ -35,7 +35,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Let's search all the issues in Moodle project having zero integration priority and
 # being under current integration or awaiting integration. Raise integration priority
-# for those having the mdlqa label or a given mustfixversion.
+# for those having the mdlqa label or a given mustfixversion of security or being blockers of others.
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND 'Integration priority' = 0 \
@@ -47,6 +47,7 @@ ${basereq} --action getIssueList \
                        labels IN (mdlqa) \
                        OR fixVersion = '${mustfixversion}' \
                        OR level IS NOT EMPTY \
+                       OR issueLinkType = 'blocks' \
                      )" \
            --file "${resultfile}"
 
@@ -60,24 +61,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
 
-# Now, let's look for all the issues, also having zero integration priority and
-# being under current integration or awaiting integration. Raise integration priority
-# for those being blockers of other issues and not being blocked by unresolved issue.
-#
-# Note that this can be achieved using a simple query using features provided by the J-Tricks
-# plugin (and others), but they won't be compatible with Jira Cloud instances, so we are doing
-# it using exclusively JiraCLI and its facilities (requiring multiple actions to be executed).
-
-# First, get all the issues that are blockers.
-${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
-                 AND 'Integration priority' = 0 \
-                 AND ( \
-                       ('Currently in integration' = 'Yes' AND status != 'Reopened') \
-                       OR status = 'Waiting for integration review' \
-                     ) \
-                 AND issueLinkType = 'blocks'" \
-           --file "${resultfile}"
+# Now look if the issue is blocked by any, still unresolved, issue (we
+# won't raise the priority of those).
 
 # Iterate over found issues and get its list of links being "is blocked by"
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
@@ -116,9 +101,14 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         fi
     fi
 
-    # Arrived here, this is an issue that is blocking others but isn't blocked by any unresolved issue.
+    # Arrived here, this is an issue that is important:
+    # - mdlqa label
+    # - Has must-fix version
+    # - Has security level
+    # - Is blocking others but isn't blocked by any unresolved issue.
+
     # So we raise its priority here and now.
-    echo "  Raising its integration priority to 1 (is blocker and has not unresolved blockers)"
+    echo "  Raising its integration priority to 1"
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
