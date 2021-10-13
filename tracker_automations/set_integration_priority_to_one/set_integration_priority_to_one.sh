@@ -51,16 +51,6 @@ ${basereq} --action getIssueList \
                      )" \
            --file "${resultfile}"
 
-# Iterate over found issues and set their integration priority (customfield_12210) to 1.
-for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
-    echo "Processing ${issue}"
-    ${basereq} --action progressIssue \
-        --issue ${issue} \
-        --step "CI Global Self-Transition" \
-        --custom "customfield_12210:1"
-    echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
-done
-
 # Now look if the issue is blocked by any, still unresolved, issue (we
 # won't raise the priority of those).
 
