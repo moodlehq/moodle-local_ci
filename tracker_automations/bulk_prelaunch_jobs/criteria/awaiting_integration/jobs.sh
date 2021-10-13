@@ -39,12 +39,23 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p BROWSER=goutte \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
-# We want to launch always a Behat (firefox) job
-echo -n "Behat (firefox): " >> "${resultfile}.jenkinscli"
+# We want to launch always a Behat (firefox - boost) job
+echo -n "Behat (firefox - boost): " >> "${resultfile}.jenkinscli"
 ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
     -p DATABASE=pgsql \
     -p PHPVERSION=${php_version} \
     -p BROWSER=firefox \
+    -w >> "${resultfile}.jenkinscli" < /dev/null
+
+# We want to launch always a Behat (firefox - classic) job
+echo -n "Behat (firefox - classic): " >> "${resultfile}.jenkinscli"
+${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+    -p REPOSITORY=${repository} \
+    -p BRANCH=${branch} \
+    -p DATABASE=pgsql \
+    -p PHPVERSION=${php_version} \
+    -p BROWSER=firefox \
+    -p BEHAT_SUITE=classic \
     -w >> "${resultfile}.jenkinscli" < /dev/null
