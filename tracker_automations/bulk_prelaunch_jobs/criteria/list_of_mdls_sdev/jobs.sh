@@ -51,15 +51,29 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (firefox) job
+# We want to launch always a Behat (firefox - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (firefox): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (firefox - boost): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=firefox \
+        -p RUNNERVERSION=${runner} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
+# We want to launch always a Behat (firefox - classic) job
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
+    echo -n "Behat (firefox -classic): " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER=firefox \
+        -p BEHAT_SUITE=classic \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
