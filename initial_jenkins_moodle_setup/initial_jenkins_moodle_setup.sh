@@ -86,7 +86,7 @@ cd ${basedir}/${gitdir}/${moodledir} && ${gitcmd} pull origin master && ${gitcmd
 
 # Create the git clone for the codechecker, master branch and add it to .git/info/exclude
 if [ -d "${basedir}/${gitdir}/${moodledir}/local/codechecker" ]; then
-    echo "Skip git://github.com/moodlehq/moodle-local_codechecker.git already present at local/codechecker"
+    echo "Skip https://github.com/moodlehq/moodle-local_codechecker.git already present at local/codechecker"
 else
     cd ${basedir}/${gitdir}/${moodledir}/local && ${gitcmd} clone git://github.com/moodlehq/moodle-local_codechecker.git codechecker
     echo local/codechecker >> ${basedir}/${gitdir}/${moodledir}/.git/info/exclude
@@ -95,7 +95,7 @@ cd ${basedir}/${gitdir}/${moodledir}/local/codechecker && ${gitcmd} pull origin 
 
 # Create the git clone for the moodlecheck, master branch and add it to .git/info/exclude
 if [ -d "${basedir}/${gitdir}/${moodledir}/local/moodlecheck" ]; then
-    echo "Skip git://github.com/moodlehq/moodle-local_moodlecheck.git already present at local/moodlecheck"
+    echo "Skip https://github.com/moodlehq/moodle-local_moodlecheck.git already present at local/moodlecheck"
 else
     cd ${basedir}/${gitdir}/${moodledir}/local && ${gitcmd} clone git://github.com/moodlehq/moodle-local_moodlecheck.git moodlecheck
     echo local/moodlecheck >> ${basedir}/${gitdir}/${moodledir}/.git/info/exclude
@@ -104,7 +104,7 @@ cd ${basedir}/${gitdir}/${moodledir}/local/moodlecheck && ${gitcmd} pull origin 
 
 # Create the git clone for the ci, master branch and add it to .git/info/exclude
 if [ -d "${basedir}/${gitdir}/${moodledir}/local/ci" ]; then
-    echo "Skip git://github.com/moodlehq/moodle-local_ci.git already present at local/ci"
+    echo "Skip https://github.com/moodlehq/moodle-local_ci.git already present at local/ci"
 else
     cd ${basedir}/${gitdir}/${moodledir}/local && ${gitcmd} clone git://github.com/moodlehq/moodle-local_ci.git ci
     echo local/ci >> ${basedir}/${gitdir}/${moodledir}/.git/info/exclude
