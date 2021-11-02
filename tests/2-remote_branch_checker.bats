@@ -120,7 +120,7 @@ assert_prechecker () {
 
 @test "remote_branch_checker/remote_branch_checker.sh: github branch rewritten" {
     # With this test, we are only interested in checking the github url rewriting..
-    export remote=git://github.com/danpoltawski/moodle.git
+    export remote=https://github.com/danpoltawski/moodle.git
     export branch="https://github.com/danpoltawski/moodle/tree/a-branch-which-doesnt-exist"
     export issue="MDL-12345"
     export integrateto=master
@@ -131,5 +131,21 @@ assert_prechecker () {
     # The main part of the test:
     assert_output --partial "Warn: the branch https://github.com/danpoltawski/moodle/tree/a-branch-which-doesnt-exist should not be specified as a github url"
     # This is just how it will fail because we don't want to run the entire testsuite..
-    assert_output --partial "Error: Unable to fetch information from a-branch-which-doesnt-exist branch at git://github.com/danpoltawski/moodle.git"
+    assert_output --partial "Error: Unable to fetch information from a-branch-which-doesnt-exist branch at https://github.com/danpoltawski/moodle.git"
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: github remote rewritten" {
+    # With this test, we are only interested in checking the github url rewriting for git://github.com URLs.
+    export remote=git://github.com/moodle/moodle.git
+    export branch="a-branch-which-doesnt-exist"
+    export issue="MDL-12345"
+    export integrateto=master
+    export rebaseerror=9999
+
+    ci_run remote_branch_checker/remote_branch_checker.sh
+    assert_failure
+    # The main part of the test:
+    assert_output --partial "Warn: the remote 'git://github.com/moodle/moodle.git' is using an unauthenticated github url which is no longer supported. Converting to 'https://github.com/moodle/moodle.git'"
+    # This is just how it will fail because we don't want to run the entire testsuite..
+    assert_output --partial "Error: Unable to fetch information from a-branch-which-doesnt-exist branch at https://github.com/moodle/moodle.git"
 }

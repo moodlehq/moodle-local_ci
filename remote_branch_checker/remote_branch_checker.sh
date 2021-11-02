@@ -154,6 +154,13 @@ then
     branch=${BASH_REMATCH[3]}
 fi
 
+if [[ "$remote" =~ ^git://github.com.*$ ]]
+then
+    newremote="$(echo $remote | sed 's@git://github.com@https://github.com@')"
+    echo "Warn: the remote '$remote' is using an unauthenticated github url which is no longer supported. Converting to '${newremote}'" | tee -a ${errorfile}
+    remote="${newremote}"
+fi
+
 # Fetch the remote branch.
 if ! ${gitcmd} fetch -q ${remote} ${branch}
 then
