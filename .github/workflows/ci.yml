@@ -1,0 +1,93 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  CI:
+    env:
+      LOCAL_CI_TESTS_CACHEDIR: ${{ GITHUB.WORKSPACE }}/cachedir
+      LOCAL_CI_TESTS_GITDIR: "${{ GITHUB.WORKSPACE }}/moodle"
+      LOCAL_CI_TESTS_PHPCS_DIR: "${{ GITHUB.WORKSPACE }}/moodle-local_codechecker/moodle"
+      LOCAL_CI_TESTS_DBLIBRARY: native
+      LOCAL_CI_TESTS_DBTYPE: mysqli
+      LOCAL_CI_TESTS_DBHOST: 127.0.0.1
+      LOCAL_CI_TESTS_DBUSER: moodle
+      LOCAL_CI_TESTS_DBPASS: ""
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: example
+          MYSQL_USER: ${{ env.LOCAL_CI_TESTS_DBUSER }}
+          MYSQL_PASSWORD: ""
+          MYSQL_ROOT_PASSWORD: ""
+        ports:
+          - 3306:3306
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        php: [7.3]
+        node: [8.9]
+        testsuite: [0, 1, 2, 3]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          path: ci
+
+      - name: Check out BATS
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          repository: bats-core/bats-core
+          path: bats-core
+
+      - name: Check out Moodle
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          repository: moodle/moodle
+          path: moodle
+
+      - name: Configure Moodle Git
+        working-directory: moodle
+        run: |
+          git config --global user.email "moodle@example.com"
+          git config --global user.name "Moodle CI Testing"
+          git config --global core.abbrev 10
+          git config checkout.defaultRemote origin
+
+      - name: Check out local_codechecker
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          repository: moodlehq/moodle-local_codechecker
+          path: moodle-local_codechecker
+
+      - name: Configure environment
+        run: |
+          mkdir -p "${{ env.LOCAL_CI_TESTS_CACHEDIR }}"
+          echo "${{ GITHUB.WORKSPACE }}/bats-core/bin" >> $GITHUB_PATH
+
+      - name: Setup Node
+        uses: dcodeIO/setup-node-nvm@master
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Composer install
+        uses: php-actions/composer@v6               
+        with:
+          working_dir: ci
+
+      - name: Run BATS testsuites
+        working-directory: ci
+        run: bats --timing tests/${{ matrix.testsuite }}-*
