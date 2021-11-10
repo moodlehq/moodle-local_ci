@@ -4,14 +4,15 @@
 #  - current queue: issues under current integration.
 #
 # The automatisms are as follow:
-#  A) Move "important" issues from candidates to current.
-#  B) Keep the current queue fed with issues from the candidates queue in rigorous priority order.
+#  A) Move (if not blocked) "important" issues from candidates to current.
+#  B) Keep the current queue fed with (not blocked) issues from the candidates queue in rigorous priority order.
 #    - When the number of issues awaiting for integration falls below a threshold (currentmin).
 #    - Moving up to a maximum number of issue (movemax).
 #  C) Raise the integration priority of all the issues sitting in the candidates queue too long,
 #     in order to guarantee that they will be moved to current integration sooner. But avoid
 #     modifying the priority of any issue being blocked or blocking to others. This type of issues
 #     are managed exclusively by the set_integration_priority_to_[zero|one] scripts.
+# Note that all the "move to current" operations are always subject to the issue being free of unresolved blockers.
 
 # The criteria to consider an issue "important" are:
 #  1) It must be in the candidates queue, awaiting for integration.       |

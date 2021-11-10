@@ -32,6 +32,17 @@ function run_A() {
     # Iterate over found issues and perform the actions with them.
     for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         echo "Processing ${issue}"
+        # If it's blocked by unresolved, don't move it to current.
+        if is_blocked_by_unresolved $issue; then
+            if [ -n "${dryrun}" ]; then
+                echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} not moved (blocked by unresolved): important"
+                continue
+            fi
+            echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} not moved (blocked by unresolved): important" >> "${logfile}"
+            continue
+        fi
+
+        # Arriving here, we assume we are going to proceed with the move.
         if [ -n "${dryrun}" ]; then
             echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important"
             continue
@@ -88,6 +99,17 @@ function run_B() {
         # Iterate over found issues, moving them to the current queue (cleaning integrator and tester).
         for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
             echo "Processing ${issue}"
+            # If it's blocked by unresolved, don't move it to current.
+            if is_blocked_by_unresolved $issue; then
+                if [ -n "${dryrun}" ]; then
+                    echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} not moved (blocked by unresolved): threshold"
+                    continue
+                fi
+                echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} not moved (blocked by unresolved): threshold" >> "${logfile}"
+                continue
+            fi
+
+            # Arriving here, we assume we are going to proceed with the move.
             if [ -n "${dryrun}" ]; then
             echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold"
                 continue
@@ -149,4 +171,40 @@ function run_C() {
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} raised integration priority" >> "${logfile}"
     done
+}
+
+# Given an issue (1st param), detect if it is blocked by some, still unresolved, issue.
+function is_blocked_by_unresolved() {
+    unresolvedfound=0
+
+    ${basereq} --action getLinkList \
+               --issue "$1" \
+               --columns "To Issue" \
+               --regex "(?i)is blocked by" \
+               --file "${resultfile}.2"
+
+    # Iterate over found "is blocked by" issues and concat them for the next query.
+    blockedbyissues=
+    for linkedissue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}.2" ); do
+        blockedbyissues="${blockedbyissues} ${linkedissue},"
+    done
+    blockedbyissues=${blockedbyissues%?}
+
+    # Now let's see if any of the blockedby issues is unresolved.
+    # (note that, since JiraCLI 8.1, getIssueCount can be used instead, but we are using older)
+    if [[ -n ${blockedbyissues} ]]; then
+        ${basereq} --action getIssueList \
+                   --search "resolution = Unresolved AND issue IN (${blockedbyissues})" \
+                   --file "${resultfile}.2"
+        # If there are issues returned... then the issue still has unresolved blockers.
+        for unresolvedissue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}.2" ); do
+            unresolvedfound=$((unresolvedfound+1))
+        done
+    fi
+    rm -fr "${resultfile}.2"
+    if [[ $unresolvedfound -gt 0 ]]; then
+        echo "    is blocked by $unresolvedfound unresolved issues"
+        return 0 # Exit code, meaning true, blocked.
+    fi
+    return 1 # Exit code, meaning false, not blocked.
 }

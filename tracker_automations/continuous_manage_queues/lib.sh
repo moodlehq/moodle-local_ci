@@ -306,7 +306,6 @@ function run_B1b() {
 }
 
 # Given an issue (1st param), detect if it is blocked by some, still unresolved, issue.
-# returning, as exit code, the number of unresolved blockers found.
 function is_blocked_by_unresolved() {
     unresolvedfound=0
 
