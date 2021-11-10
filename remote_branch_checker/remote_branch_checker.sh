@@ -282,6 +282,11 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
 sed '/^$/d' ${WORKSPACE}/work/patchset.files > ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
+# Add version.php and config-dist.php to patchset files because they
+# allow us to find moodle dirroot and branch later.
+echo "${WORKSPACE}/version.php" >> ${WORKSPACE}/work/patchset.files
+echo "${WORKSPACE}/config-dist.php" >> ${WORKSPACE}/work/patchset.files
+
 # Add linting config files to patchset files to avoid it being deleted for use later..
 echo '.jshint' >> ${WORKSPACE}/work/patchset.files
 echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
