@@ -6,14 +6,15 @@
 # The automatisms are as follow:
 #  A) Before release only! (normally 5 weeks of continuous between freeze and release)
 #    1) Add the "integration_held" (+ standard comment) to new features & improvements issue missing it @ candidates.
-#    2) Move "important" issues from candidates to current.
-#    3) Move issues away from the candidates queue.
+#    2) Move (if not blocked) "important" issues from candidates to current.
+#    3) Move (if not blocked) issues away from the candidates queue.
 #      a) Before a date (last week), keep the current queue fed with bug issues when it's under a threshold.
 #      b) After a date (last week), add the "integration_held" (+ standard comment) to bug issues.
 #  B) After release only! (normally 2 weeks of on-sync continuous after release)
-#    1) Move issues away from the candidates queue.
+#    1) Move (if not blocked) issues away from the candidates queue.
 #      a) Keep the current queue fed with bug issues when it's under a threshold.
 #      b) Add the "integration_held" (+ on-sync standard comment) to new features and improvements missing it @ candidates.
+# Note that all the "move to current" operations are always subject to the issue being free of unresolved blockers.
 #
 # The criteria to consider an issue "important" are:
 #  1) It must be in the candidates queue, awaiting for integration.        |
