@@ -24,6 +24,9 @@ env:
     - TEST_SUITE="2-*"
     - TEST_SUITE="3-*"
 
+before_install:
+  - sudo apt update && sudo apt install libgnutls-openssl27 libgnutls30
+
 install:
   - git clone --depth 1 https://github.com/bats-core/bats-core.git $HOME/bats-core
   - nvm install 8.9
