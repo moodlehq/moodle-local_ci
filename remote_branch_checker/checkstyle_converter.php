@@ -37,7 +37,7 @@ list($options, $unrecognized) = cli_get_params(
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
-    cli_error("Unrecognised options:\n{$Unrecognised}\n Please use --help option.");
+    cli_error("Unrecognised options:\n{$unrecognised}\n Please use --help option.");
 
 }
 
