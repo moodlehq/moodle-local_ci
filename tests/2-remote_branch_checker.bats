@@ -22,7 +22,6 @@ prepare_prechecker_npmbins () {
 }
 
 setup () {
-
     prepare_prechecker_npmbins
 
     create_git_branch MOODLE_34_STABLE v3.4.0 # Must be always a .0 version coz we precheck it in master.
@@ -80,6 +79,10 @@ assert_prechecker () {
     # Ensure stylelint doesn't complain about the third party css, but thirdpart does
     # TODO: thirdparty check bug with reporting same file twice..
     assert_prechecker fixture-thirdparty-css MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup" {
+    assert_prechecker local_ci_fixture_upgrade_external_backup MDL-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
