@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <smurf version="0.9.1" numerrors="0" numwarnings="2">
-  <summary status="warning" numerrors="0" numwarnings="2" condensedresult="smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+  <summary status="warning" numerrors="0" numwarnings="2" condensedresult="smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0;gherkin,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
@@ -9,6 +9,7 @@
     <detail name="commit" status="success" numerrors="0" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="thirdparty" status="warning" numerrors="0" numwarnings="2"/>
+    <detail name="externalbackup" status="success" numerrors="0" numwarnings="0"/>
     <detail name="grunt" status="success" numerrors="0" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
@@ -57,6 +58,10 @@
         <code/>
       </problem>
     </mess>
+  </check>
+  <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" numerrors="0" numwarnings="0" allowfiltering="0">
+    <description>This section shows potential problems detected when there are new database structures added in a patch and it is detected that nothing has been changed related with external functions (to be used by WS) or backup and restore. It must be checked that everything is correct and nothing is being missed in those areas.</description>
+    <mess/>
   </check>
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>

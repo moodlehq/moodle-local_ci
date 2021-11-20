@@ -1,0 +1,70 @@
+From 432f063bdffb33c61f5e0df9c714273c5221dac6 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Sun, 14 Nov 2021 16:47:31 +0100
+Subject: [PATCH] NOBUG fixture: no changes upgrade_external_backup check
+
+---
+ mod/forum/backup/moodle2/backup_forum_stepslib.php | 2 +-
+ mod/forum/db/upgrade.php                           | 7 +++++++
+ mod/forum/externallib.php                          | 1 +
+ mod/forum/version.php                              | 2 +-
+ 4 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/mod/forum/backup/moodle2/backup_forum_stepslib.php b/mod/forum/backup/moodle2/backup_forum_stepslib.php
+index 8255dd81f74..600a2d3cbf0 100644
+--- a/mod/forum/backup/moodle2/backup_forum_stepslib.php
++++ b/mod/forum/backup/moodle2/backup_forum_stepslib.php
+@@ -39,7 +39,7 @@ class backup_forum_activity_structure_step extends backup_activity_structure_ste
+         // Define each element separated
+ 
+         $forum = new backup_nested_element('forum', array('id'), array(
+-            'type', 'name', 'intro', 'introformat', 'duedate', 'cutoffdate',
++            'bats', 'type', 'name', 'intro', 'introformat', 'duedate', 'cutoffdate',
+             'assessed', 'assesstimestart', 'assesstimefinish', 'scale',
+             'maxbytes', 'maxattachments', 'forcesubscribe', 'trackingtype',
+             'rsstype', 'rssarticles', 'timemodified', 'warnafter',
+diff --git a/mod/forum/db/upgrade.php b/mod/forum/db/upgrade.php
+index 505be0aaf52..2c29a2d714c 100644
+--- a/mod/forum/db/upgrade.php
++++ b/mod/forum/db/upgrade.php
+@@ -257,6 +257,13 @@ function xmldb_forum_upgrade($oldversion) {
+ 
+     // Automatically generated Moodle v3.10.0 release upgrade line.
+     // Put any upgrade step following this.
++    //
++    if ($oldversion < 2021051701) {
++
++        // Let's do something here, like updating something or so, but without DDL.
++
++        upgrade_mod_savepoint(true, 2021051701, 'forum');
++    }
+ 
+     return true;
+ }
+diff --git a/mod/forum/externallib.php b/mod/forum/externallib.php
+index 407dc7096c6..7e0323f28b1 100644
+--- a/mod/forum/externallib.php
++++ b/mod/forum/externallib.php
+@@ -125,6 +125,7 @@ class mod_forum_external extends external_api {
+             new external_single_structure(
+                 array(
+                     'id' => new external_value(PARAM_INT, 'Forum id'),
++                    'bats' => new external_value(PARAM_TEXT, 'The forum bats'),
+                     'course' => new external_value(PARAM_INT, 'Course id'),
+                     'type' => new external_value(PARAM_TEXT, 'The forum type'),
+                     'name' => new external_value(PARAM_RAW, 'Forum name'),
+diff --git a/mod/forum/version.php b/mod/forum/version.php
+index 44579728cc6..2ed37326f54 100644
+--- a/mod/forum/version.php
++++ b/mod/forum/version.php
+@@ -24,6 +24,6 @@
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+-$plugin->version   = 2021051700;       // The current module version (Date: YYYYMMDDXX).
++$plugin->version   = 2021051701;       // The current module version (Date: YYYYMMDDXX).
+ $plugin->requires  = 2021051100;       // Requires this Moodle version.
+ $plugin->component = 'mod_forum';      // Full name of the plugin (used for diagnostics)
+-- 
+2.33.1
+

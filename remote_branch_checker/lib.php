@@ -224,6 +224,23 @@ class remote_branch_reporter {
             }
         }
 
+        // Process the externalbackup missing stuff output, weighting errors with 5 and warnings with 1
+        $params = array(
+            'title' => 'Missing changes in external functions or backup support for new detected tables or columns',
+            'abbr' => 'externalbackup',
+            'description' => 'This section shows potential problems detected when there are new database structures added in a patch and it is detected that nothing has been changed related with external functions (to be used by WS) or backup and restore. It must be checked that everything is correct and nothing is being missed in those areas.',
+            'url' => 'https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1,
+            'allowfiltering' => 0);
+        if ($node = $this->apply_xslt($params, $this->directory . '/externalbackup.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Process the unbuilt grunt output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'grunt changes',

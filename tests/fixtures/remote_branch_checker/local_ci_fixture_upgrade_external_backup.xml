@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="0" numwarnings="0">
-  <summary status="success" numerrors="0" numwarnings="0" condensedresult="smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+<smurf version="0.9.1" numerrors="0" numwarnings="3">
+  <summary status="warning" numerrors="0" numwarnings="3" condensedresult="smurf,warning,0,3:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,warning,0,3;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0;gherkin,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
@@ -9,7 +9,7 @@
     <detail name="commit" status="success" numerrors="0" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="thirdparty" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="externalbackup" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="externalbackup" status="warning" numerrors="0" numwarnings="3"/>
     <detail name="grunt" status="success" numerrors="0" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
@@ -38,13 +38,7 @@
   </check>
   <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
-    <mess>
-      <problem file="c8c8470b8c" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/c8c8470b8c" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="info" weight="1">
-        <message>AMOS - String to be copied: searchengine/admin to type_search/plugin </message>
-        <description/>
-        <code/>
-      </problem>
-    </mess>
+    <mess/>
   </check>
   <check id="savepoint" title="Update savepoints problems" url="https://docs.moodle.org/dev/Upgrade_API" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected with the handling of upgrade savepoints</description>
@@ -54,9 +48,25 @@
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess/>
   </check>
-  <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" numerrors="0" numwarnings="3" allowfiltering="0">
     <description>This section shows potential problems detected when there are new database structures added in a patch and it is detected that nothing has been changed related with external functions (to be used by WS) or backup and restore. It must be checked that everything is correct and nothing is being missed in those areas.</description>
-    <mess/>
+    <mess>
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+        <message>Database modifications (new tables or columns) detected in the patch without any change to some important areas. </message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+        <message>No changes detected to external functions, that may affect apps and other web service integrations, please verify! </message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+        <message>No changes detected to backup and restore, that may affect storage and transportability, please verify! </message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
   </check>
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
