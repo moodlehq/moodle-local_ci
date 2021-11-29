@@ -498,10 +498,15 @@ echo "Info: Running phpcs..."
 if [[ ! -n "${phpcsstandard}" ]]; then
     phpcsstandard="${mydir}/../../codechecker/moodle"
 fi
+# Note we have to pass the full list of components (valid_components.txt) as calculated
+# earlier in the script when the whole code-base was available. Now, for performance
+# reasons, only the patch-modified files are remaining so we cannot use phpcs abilities
+# to detect all components anymore. Hence using the complete, already calculated, list.
 # Note we need to specify where both moodle and PHPCompatibility, specifically the later, standards sit.
 # TODO: Some day this will work from the moodle ruleset.xml file, it doesn't right now.
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --runtime-set installed_paths "${phpcsstandard}","${phpcsstandard}/../PHPCompatibility" \
+    --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard=${phpcsstandard} ${WORKSPACE}
 
