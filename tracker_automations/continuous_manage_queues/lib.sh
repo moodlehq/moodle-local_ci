@@ -124,9 +124,8 @@ function run_A3a() {
 
     # If there are < $currentmin issues, let's add up to $movemax issues from the candidates queue.
     if [[ "$counter" -lt "$currentmin" ]]; then
-        # Get an ordered list of up to $movemax issues in the candidate queue.
+        # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --limit $movemax \
                    --search "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
                                 priority DESC, \
@@ -134,8 +133,13 @@ function run_A3a() {
                                 'Last comment date' ASC" \
                    --file "${resultfile}"
 
-        # Iterate over found issues, moving them to the current queue (cleaning integrator and tester).
+        # Iterate over found issues, moving up to $movemax of them to the current queue (cleaning integrator and tester).
+        moved=0
         for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+            # Already have moved $movemax issues, stop processing more issues.
+            if [[ "$moved" -eq "$movemax" ]]; then
+                break
+            fi
             echo "Processing ${issue}"
             # If it's blocked by unresolved, don't move it to current.
             if is_blocked_by_unresolved $issue; then
@@ -148,6 +152,7 @@ function run_A3a() {
             fi
 
             # Arriving here, we assume we are going to proceed with the move.
+            moved=$((moved+1))
             if [ -n "${dryrun}" ]; then
             echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})"
                 continue
@@ -219,9 +224,8 @@ function run_B1a() {
 
     # If there are < $currentmin issues, let's add up to $movemax issues from the candidates queue.
     if [[ "$counter" -lt "$currentmin" ]]; then
-        # Get an ordered list of up to $movemax issues in the candidate queue.
+        # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --limit $movemax \
                    --search "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
                                 priority DESC, \
@@ -229,8 +233,13 @@ function run_B1a() {
                                 'Last comment date' ASC" \
                    --file "${resultfile}"
 
-        # Iterate over found issues, moving them to the current queue (cleaning integrator and tester).
+        # Iterate over found issues, moving up to $movemax of them to the current queue (cleaning integrator and tester).
+        moved=0
         for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+            # Already have moved $movemax issues, stop processing more issues.
+            if [[ "$moved" -eq "$movemax" ]]; then
+                break
+            fi
             echo "Processing ${issue}"
             # If it's blocked by unresolved, don't move it to current.
             if is_blocked_by_unresolved $issue; then
@@ -243,6 +252,7 @@ function run_B1a() {
             fi
 
             # Arriving here, we assume we are going to proceed with the move.
+            moved=$((moved+1))
             if [ -n "${dryrun}" ]; then
             echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current on-sync: threshold"
                 continue
