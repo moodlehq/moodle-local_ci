@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="55" numwarnings="6">
-  <summary status="error" numerrors="55" numwarnings="6" condensedresult="smurf,error,55,6:phplint,success,0,0;phpcs,error,20,2;js,warning,0,3;css,success,0,0;phpdoc,error,3,0;commit,error,28,1;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,3,0;shifter,success,0,0;travis,error,1,0">
+<smurf version="0.9.1" numerrors="54" numwarnings="6">
+  <summary status="error" numerrors="54" numwarnings="6" condensedresult="smurf,error,54,6:phplint,success,0,0;phpcs,error,20,2;js,warning,0,3;css,success,0,0;phpdoc,error,3,0;commit,error,28,1;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,3,0;shifter,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="error" numerrors="20" numwarnings="2"/>
     <detail name="js" status="warning" numerrors="0" numwarnings="3"/>
@@ -11,7 +11,6 @@
     <detail name="thirdparty" status="success" numerrors="0" numwarnings="0"/>
     <detail name="grunt" status="error" numerrors="3" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="travis" status="error" numerrors="1" numwarnings="0"/>
   </summary>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
@@ -357,15 +356,5 @@
   <check id="shifter" title="shifter problems" url="https://docs.moodle.org/dev/YUI/Shifter" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected by shifter</description>
     <mess/>
-  </check>
-  <check id="travis" title="Travis CI problems" url="https://docs.moodle.org/dev/Travis_Integration" numerrors="1" numwarnings="0" allowfiltering="1">
-    <description>This section reports issues detected by Travis CI.</description>
-    <mess>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://travis-ci.org/FMCorz/moodle/builds/146598004" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Travis_Integration" type="error" weight="5">
-        <message>Build failed, see https://travis-ci.org/FMCorz/moodle/builds/146598004</message>
-        <description/>
-        <code/>
-      </problem>
-    </mess>
   </check>
 </smurf>

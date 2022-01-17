@@ -49,11 +49,6 @@ assert_checkstyle() {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=shifter' grunt-errors.txt shifter.xml
 }
 
-@test "remote_branch_checker/checkstyle_converter.php: travis" {
-    assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=travis' travis.txt travis.xml
-    assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=travis' travis-error.txt travis-error.xml
-}
-
 @test "remote_branch_checker/checkstyle_converter.php: mustachelint" {
     assert_checkstyle 'remote_branch_checker/checkstyle_converter.php --format=mustachelint' mustachelint.txt mustachelint.xml
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <smurf version="0.9.1" numerrors="0" numwarnings="0">
-  <summary status="success" numerrors="0" numwarnings="0" condensedresult="smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;travis,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+  <summary status="success" numerrors="0" numwarnings="0" condensedresult="smurf,success,0,0:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
@@ -12,7 +12,6 @@
     <detail name="externalbackup" status="success" numerrors="0" numwarnings="0"/>
     <detail name="grunt" status="success" numerrors="0" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="travis" status="success" numerrors="0" numwarnings="0"/>
     <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
     <detail name="gherkin" status="success" numerrors="0" numwarnings="0"/>
   </summary>
@@ -64,10 +63,6 @@
   </check>
   <check id="shifter" title="shifter problems" url="https://docs.moodle.org/dev/YUI/Shifter" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected by shifter</description>
-    <mess/>
-  </check>
-  <check id="travis" title="Travis CI problems" url="https://docs.moodle.org/dev/Travis_Integration" numerrors="0" numwarnings="0" allowfiltering="1">
-    <description>This section reports issues detected by Travis CI.</description>
     <mess/>
   </check>
   <check id="mustache" title="Mustache template problems" url="https://docs.moodle.org/dev/Templates" numerrors="0" numwarnings="0" allowfiltering="0">
