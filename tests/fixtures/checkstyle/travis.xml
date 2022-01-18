@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="1.3.2">
-<file name="">
-<error diffurl="https://docs.moodle.org/dev/Travis_Integration" line="0" column="0" severity="warning" message="Travis integration not setup. See https://docs.moodle.org/dev/Travis_Integration"/>
-</file></checkstyle>

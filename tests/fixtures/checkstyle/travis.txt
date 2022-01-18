@@ -1,1 +1,0 @@
-WARNING: Travis integration not setup. See https://docs.moodle.org/dev/Travis_Integration
