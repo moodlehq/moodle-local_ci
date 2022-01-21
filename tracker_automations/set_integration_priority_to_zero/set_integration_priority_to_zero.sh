@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Look all reopened issues under current integration and move them out
+# Look for issues known to need their integration priority lowered.
 #jiraclicmd: fill execution path of the jira cli
 #jiraserver: jira server url we are going to connect to
 #jirauser: user that will perform the execution

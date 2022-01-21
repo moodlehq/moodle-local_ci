@@ -98,6 +98,7 @@ ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                AND status CHANGED AFTER ${lastintegrationdatequoted} FROM ( \
                    'Integration review in progress', \
+                   'Waiting for feedback', \
                    'Problem during testing') TO 'Reopened'" \
            --file "${tempfile}"
 

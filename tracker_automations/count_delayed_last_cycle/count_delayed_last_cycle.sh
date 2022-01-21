@@ -102,7 +102,8 @@ ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                AND status WAS IN ( \
                    'Waiting for integration review', \
-                   'Integration review in progress') \
+                   'Integration review in progress', \
+                   'Waiting for feedback') \
                    AFTER ${lastintegrationdatequoted} \
                AND status WAS NOT IN ( \
                    'Waiting for testing', \
