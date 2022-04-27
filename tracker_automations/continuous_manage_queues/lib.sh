@@ -206,8 +206,8 @@ function run_A3b() {
     done
 }
 
-# B1a, keep the current queue fed with bug issues when it's under a threshold.
-function run_B1a() {
+# B1b, keep the current queue fed with bug issues when it's under a threshold.
+function run_B1b() {
     # Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
     ${basereq} --action getIssueList \
                --search "project = MDL \
@@ -279,8 +279,8 @@ function run_B1a() {
     fi
 }
 
-# B1b, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates.
-function run_B1b() {
+# B1a, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates.
+function run_B1a() {
     # Note this could be done by one unique "runFromIssueList" action, but we are splitting
     # the search and the update in order to log all the closed issues within jenkins ($logfile)
 

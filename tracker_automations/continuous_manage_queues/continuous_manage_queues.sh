@@ -12,8 +12,8 @@
 #      b) After a date (last week), add the "integration_held" (+ standard comment) to bug issues.
 #  B) After release only! (normally 2 weeks of on-sync continuous after release)
 #    1) Move (if not blocked) issues away from the candidates queue.
-#      a) Keep the current queue fed with bug issues when it's under a threshold.
-#      b) Add the "integration_held" (+ on-sync standard comment) to new features and improvements missing it @ candidates.
+#      a) Add the "integration_held" (+ on-sync standard comment) to new features and improvements missing it @ candidates.
+#      b) Keep the current queue fed with bug issues when it's under a threshold.
 # Note that all the "move to current" operations are always subject to the issue being free of unresolved blockers.
 #
 # The criteria to consider an issue "important" are:
@@ -135,9 +135,9 @@ fi
 # Behaviour B, after the release (normally the 2 weeks of on-sync).
 
 if [ $behaviorAB == "after" ]; then
-    # B1a, keep the current queue fed with bug issues when it's under a threshold.
-    run_B1a
     # B1b, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates.
+    run_B1a
+    # B1a, keep the current queue fed with bug issues when it's under a threshold.
     run_B1b
 fi
 
