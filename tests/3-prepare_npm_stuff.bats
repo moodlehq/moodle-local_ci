@@ -70,19 +70,19 @@ setup () {
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
 }
 
-@test "prepare_npm_stuff: Install custom node v10.18.1 works ok" {
+@test "prepare_npm_stuff: Install custom node v16.11.0 works ok" {
     # Set up.
-    echo "v10.18.1" > $gitdir/.nvmrc
+    echo "v16.11.0" > $gitdir/.nvmrc
 
     ci_run prepare_npm_stuff/prepare_npm_stuff.sh
 
     # Assert result.
     assert_success
     assert_output --partial "INFO: using nvm version:"
-    assert_output --partial "INFO: .nvmrc file found: v10.18.1. Installing node.."
+    assert_output --partial "INFO: .nvmrc file found: v16.11.0. Installing node.."
     assert_output --partial "INFO: node installation completed"
-    assert_output --partial "INFO: node version: v10.18.1"
-    assert_output --partial "INFO: npm version: 6.13.4"
+    assert_output --partial "INFO: node version: v16.11.0"
+    assert_output --partial "INFO: npm version: 8.0.0"
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
     assert_output --partial "INFO:    - Installed grunt"
 }
