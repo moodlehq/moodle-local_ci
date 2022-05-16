@@ -63,7 +63,7 @@ echo "Using jobtype: ${jobtype}"
 # Iterate over found issues and launch the prechecker for them
 while read issue; do
     echo -n > "${resultfile}.${issue}.txt"
-    echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
+    echo "Results for ${issue} (${jiraserver}/browse/${issue})"
     # Fetch repository
     ${basereq} --action getFieldValue \
                --issue ${issue} \

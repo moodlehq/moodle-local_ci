@@ -72,7 +72,7 @@ fi
 while read issue; do
     issueresult="success"
     echo -n > "${resultfile}.${issue}.txt"
-    echo "Results for ${issue} (https://tracker.moodle.org/browse/${issue})"
+    echo "Results for ${issue} (${jiraserver}/browse/${issue})"
     # Fetch repository
     ${basereq} --action getFieldValue \
                --issue ${issue} \
