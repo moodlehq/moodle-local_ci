@@ -39,7 +39,7 @@ if [[ "${dbtype}" == "pgsql" ]]; then
         -c "CREATE DATABASE ${installdb} ENCODING 'utf8'"
 elif [[ "${dbtype}" == "mysqli" ]] || [[ "${dbtype}" == "mariadb" ]]; then
     ${mysqlcmd} --user=${dbuser} --password=${dbpass} --host=${dbhost} \
-        --execute="CREATE DATABASE ${installdb} CHARACTER SET utf8 COLLATE utf8mb4_bin"
+        --execute="CREATE DATABASE ${installdb} CHARACTER SET utf8mb4 COLLATE utf8mb4_bin"
 else
     echo "Error: Incorrect dbtype=${dbtype}"
     exit 1
