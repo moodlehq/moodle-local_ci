@@ -112,7 +112,7 @@ definedtests=$(grep -r "directory suffix" ${gitdir}/phpunit.xml | sed 's/^[^>]*>
 # Load all the existing tests
 existingtests=$(cd ${gitdir} && find . -name tests | sed 's/^\.\/\(.*\)$/\1/g')
 # Some well-known "tests" that we can ignore here
-ignoretests="local/codechecker/pear/PHP/tests lib/phpexcel/PHPExcel/Shared/JAMA/tests"
+ignoretests="lib/phpexcel/PHPExcel/Shared/JAMA/tests"
 # Unit test classes to look for with each file (must be 1 and only 1). MDLSITE-2096
 # TODO: Some day replace this with the list of abstract classes, from PHPUnit_Framework_TestCase using some classmap
 unittestclasses="basic_testcase advanced_testcase database_driver_testcase externallib_advanced_testcase data_loading_method_test_base question_testcase question_attempt_upgrader_test_base qbehaviour_walkthrough_test_base grade_base_testcase"
