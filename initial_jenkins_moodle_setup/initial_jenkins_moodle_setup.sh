@@ -84,15 +84,6 @@ else
 fi
 cd ${basedir}/${gitdir}/${moodledir} && ${gitcmd} pull origin master && ${gitcmd} reset --hard v2.4.0-beta
 
-# Create the git clone for the codechecker, master branch and add it to .git/info/exclude
-if [ -d "${basedir}/${gitdir}/${moodledir}/local/codechecker" ]; then
-    echo "Skip https://github.com/moodlehq/moodle-local_codechecker.git already present at local/codechecker"
-else
-    cd ${basedir}/${gitdir}/${moodledir}/local && ${gitcmd} clone https://github.com/moodlehq/moodle-local_codechecker.git codechecker
-    echo local/codechecker >> ${basedir}/${gitdir}/${moodledir}/.git/info/exclude
-fi
-cd ${basedir}/${gitdir}/${moodledir}/local/codechecker && ${gitcmd} pull origin master && ${gitcmd} reset --hard origin/master
-
 # Create the git clone for the moodlecheck, master branch and add it to .git/info/exclude
 if [ -d "${basedir}/${gitdir}/${moodledir}/local/moodlecheck" ]; then
     echo "Skip https://github.com/moodlehq/moodle-local_moodlecheck.git already present at local/moodlecheck"

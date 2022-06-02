@@ -1,6 +1,11 @@
 {
     "require": {
-        "squizlabs/php_codesniffer": "^3.5.8",
-        "mustache/mustache": "^2.11"
+        "moodlehq/moodle-cs": "^3.2.3",
+        "mustache/mustache": "^2.14.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

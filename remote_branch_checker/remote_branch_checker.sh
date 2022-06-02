@@ -16,7 +16,6 @@
 # $npmcmd: Optional, path to the npm executable (global)
 # $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
 # $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
-# $phpcsstandard: (optional) directory for coding standard path
 
 # Don't want debugging @ start, but want exit on error
 set +x
@@ -315,6 +314,7 @@ echo "Info: Preparing npm"
 # the list of components available in the moodle-ci-site, because getting
 # the list from the checked branch does require installing the site completely and
 # that would slowdown the checker a lot. It's ok 99% of times.
+echo "Info: Calculating valid components..."
 ${phpcmd} ${mydir}/../list_valid_components/list_valid_components.php \
     --basedir="${WORKSPACE}" --absolute=true > "${WORKSPACE}/work/valid_components.txt"
 
@@ -489,11 +489,6 @@ ${phpcmd} ${WORKSPACE}/check_upgrade_savepoints.php > "${WORKSPACE}/work/savepoi
 cat "${WORKSPACE}/work/savepoints.txt" | ${phpcmd} ${mydir}/../check_upgrade_savepoints/savepoints2checkstyle.php > "${WORKSPACE}/work/savepoints.xml"
 rm ${WORKSPACE}/check_upgrade_savepoints.php
 
-# Run the PHPCS
-echo "Info: Running phpcs..."
-if [[ ! -n "${phpcsstandard}" ]]; then
-    phpcsstandard="${mydir}/../../codechecker/moodle"
-fi
 # Note we have to pass the full list of components (valid_components.txt) as calculated
 # earlier in the script when the whole code-base was available. Now, for performance
 # reasons, only the patch-modified files are remaining so we cannot use phpcs abilities
@@ -501,10 +496,9 @@ fi
 # Note we need to specify where both moodle and PHPCompatibility, specifically the later, standards sit.
 # TODO: Some day this will work from the moodle ruleset.xml file, it doesn't right now.
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
-    --runtime-set installed_paths "${phpcsstandard}","${phpcsstandard}/../PHPCompatibility" \
     --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
-    --extensions=php --standard=${phpcsstandard} ${WORKSPACE}
+    --extensions=php --standard=moodle ${WORKSPACE}
 
 if [[ -n "${LOCAL_CI_TESTS_RUNNING}" ]]; then
     # We don't run the moodlecheck tests in our testing environment because local_moodlecheck requires

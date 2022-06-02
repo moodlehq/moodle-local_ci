@@ -79,7 +79,7 @@ ${mydir}/../list_valid_components/list_valid_components.sh > "${WORKSPACE}/valid
 allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}' | sort -n | cut -f 2- )
 
 # version.php files to ignore
-ignorefiles="(local/(ci|codechecker|moodlecheck)/version.php|.*/tests/fixtures/.*/version.php)"
+ignorefiles="(local/(ci|moodlecheck)/version.php|.*/tests/fixtures/.*/version.php)"
 
 # Perform various checks with the version.php files
 for i in ${allfiles}; do
