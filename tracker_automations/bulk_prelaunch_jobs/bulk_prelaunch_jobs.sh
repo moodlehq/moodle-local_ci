@@ -144,11 +144,11 @@ while read issue; do
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
         # Let's see if there is any restriction to the comment in the Tracker
-        commentrestriction=
+        restrictiontype=
         if [[ -n "${restrictedto}" ]]; then
-            commentrestriction="--role $restrictedto"
+            restrictiontype=--role
         fi
-        echo "  - Sending results to the Tracker"
+        echo "  - Sending results to the Tracker (${restrictiontype} ${restrictedto})"
         . "${mydir}/criteria/${criteria}/postissue.sh"
     fi
 done < "${resultfile}"
