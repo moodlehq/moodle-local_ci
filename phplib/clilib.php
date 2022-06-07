@@ -234,6 +234,7 @@ function load_core_component_from_moodle($moodledirroot) {
     $CFG->dirroot = $moodledirroot;
     $CFG->libdir = $CFG->dirroot . '/lib';
     $CFG->admin = 'admin';
+    $CFG->filepermissions = '0666';
     require_once($CFG->dirroot . '/lib/classes/component.php');
 
     return true;
