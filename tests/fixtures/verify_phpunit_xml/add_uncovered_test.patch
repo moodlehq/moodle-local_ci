@@ -1,0 +1,25 @@
+From e769cd9f4260e534244b93c8fb70bd7ad1c17707 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Tue, 7 Jun 2022 16:29:15 +0200
+Subject: [PATCH] Add a test into admin/tests
+
+---
+ admin/tests/some_test.php | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 admin/tests/some_test.php
+
+diff --git a/admin/tests/some_test.php b/admin/tests/some_test.php
+new file mode 100644
+index 0000000000..25ec9d94b0
+--- /dev/null
++++ b/admin/tests/some_test.php
+@@ -0,0 +1,6 @@
++<?php
++
++class some_test extends \advanced_testcase {
++    public function test_something() {
++    }
++}
+-- 
+2.36.1
+
