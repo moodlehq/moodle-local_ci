@@ -35,7 +35,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Let's search all the issues in Moodle project having zero integration priority and
 # being under current integration or awaiting integration. Raise integration priority
-# for those having the mdlqa label or a given mustfixversion of security or being blockers of others.
+# for those having the mdlqa label or a given mustfixversion or security or CLR or being blockers of others.
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND 'Integration priority' = 0 \
@@ -47,6 +47,7 @@ ${basereq} --action getIssueList \
                        labels IN (mdlqa) \
                        OR fixVersion = '${mustfixversion}' \
                        OR level IS NOT EMPTY \
+                       OR 'Component Lead Review' = 'Yes' \
                        OR issueLinkType = 'blocks' \
                      )" \
            --file "${resultfile}"
@@ -95,6 +96,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # - mdlqa label
     # - Has must-fix version
     # - Has security level
+    # - Is CLR issue
     # - Is blocking others but isn't blocked by any unresolved issue.
 
     # So we raise its priority here and now.
