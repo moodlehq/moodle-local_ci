@@ -62,7 +62,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
-        --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes,customfield_10011:" \
+        --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes,customfield_15810:No,customfield_10011:" \
         --comment "Moving this issue to current integration cycle, will be reviewed soon. Thanks for the hard work!"
     ${basereq} --action removeLabels \
         --issue ${issue} \

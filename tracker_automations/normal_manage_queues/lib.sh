@@ -61,7 +61,7 @@ function run_A() {
         ${basereq} --action progressIssue \
                    --issue ${issue} \
                    --step "CI Global Self-Transition" \
-                   --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
+                   --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
                    --comment "Normal queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -133,7 +133,7 @@ function run_B() {
             ${basereq} --action progressIssue \
                        --issue ${issue} \
                        --step "CI Global Self-Transition" \
-                       --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
+                       --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
                        --comment "Normal queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold" >> "${logfile}"

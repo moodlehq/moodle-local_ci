@@ -99,7 +99,7 @@ function run_A2() {
         ${basereq} --action progressIssue \
                    --issue ${issue} \
                    --step "CI Global Self-Transition" \
-                   --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
+                   --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
                    --comment "Continuous queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -171,7 +171,7 @@ function run_A3a() {
             ${basereq} --action progressIssue \
                        --issue ${issue} \
                        --step "CI Global Self-Transition" \
-                       --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
+                       --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})" >> "${logfile}"
@@ -271,7 +271,7 @@ function run_B1b() {
             ${basereq} --action progressIssue \
                        --issue ${issue} \
                        --step "CI Global Self-Transition" \
-                       --custom "customfield_10211:Yes,customfield_10110:,customfield_10011:" \
+                       --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current on-sync: threshold" >> "${logfile}"
