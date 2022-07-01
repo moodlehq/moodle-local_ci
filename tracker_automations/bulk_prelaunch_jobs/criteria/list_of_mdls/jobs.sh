@@ -40,13 +40,14 @@ fi
 
 # We want to launch always a Behat (goutte) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
-    echo -n "Behat (goutte): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (goutte) - boost and classic: " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=goutte \
+        -p BEHAT_SUITE=ALL \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
