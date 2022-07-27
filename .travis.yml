@@ -16,7 +16,7 @@ services:
   - mysql
 
 php:
-    - 7.3
+    - 7.4
 
 env:
     - TEST_SUITE="0-*"

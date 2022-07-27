@@ -37,18 +37,18 @@ setup () {
     assert_output --partial 'Error: dbtype environment variable is not defined. See the script comments.'
 }
 
-@test "compare_databases/compare_databases.sh: single actual (>= 36_STABLE) branch runs work" {
+@test "compare_databases/compare_databases.sh: single actual (>= 39_STABLE) branch runs work" {
     export gitbranchinstalled=master
-    export gitbranchupgraded=MOODLE_36_STABLE
+    export gitbranchupgraded=MOODLE_39_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (1) MOODLE_36_STABLE'
+    assert_output --partial 'Info: Origin branches: (1) MOODLE_39_STABLE'
     assert_output --partial 'Info: Target branch: master'
     assert_output --partial 'Info: Installing Moodle master into ci_installed_'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_36_STABLE'
-    assert_output --partial 'Info: Installing Moodle MOODLE_36_STABLE into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle MOODLE_36_STABLE to master into ci_upgraded_'
+    assert_output --partial 'Info: Comparing master and upgraded MOODLE_39_STABLE'
+    assert_output --partial 'Info: Installing Moodle MOODLE_39_STABLE into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle MOODLE_39_STABLE to master into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
@@ -57,23 +57,23 @@ setup () {
     assert_success
 }
 
-@test "compare_databases/compare_databases.sh: single old (< 37_STABLE) branch runs work" {
-    export gitbranchinstalled=v3.6.9
-    export gitbranchupgraded=v3.6.4
+@test "compare_databases/compare_databases.sh: single old (< 311_STABLE) branch runs work" {
+    export gitbranchinstalled=v3.11.8
+    export gitbranchupgraded=v3.11.1
 
     ci_run compare_databases/compare_databases.sh
     assert_success
-    assert_output --partial 'Info: Origin branches: (1) v3.6.4'
-    assert_output --partial 'Info: Target branch: v3.6.9'
-    assert_output --partial 'Info: Installing Moodle v3.6.9 into ci_installed_'
-    assert_output --partial 'Info: Comparing v3.6.9 and upgraded v3.6.4'
-    assert_output --partial 'Info: Installing Moodle v3.6.4 into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle v3.6.4 to v3.6.9 into ci_upgraded_'
+    assert_output --partial 'Info: Origin branches: (1) v3.11.1'
+    assert_output --partial 'Info: Target branch: v3.11.8'
+    assert_output --partial 'Info: Installing Moodle v3.11.8 into ci_installed_'
+    assert_output --partial 'Info: Comparing v3.11.8 and upgraded v3.11.1'
+    assert_output --partial 'Info: Installing Moodle v3.11.1 into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle v3.11.1 to v3.11.8 into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_v3.6.9_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_v3.11.8_logfile.txt ]
     assert_success
 }
 
@@ -94,23 +94,25 @@ setup () {
 }
 
 @test "compare_databases/compare_databases.sh: problems are detected" {
-    skip # FIXME: MDLSITE-4769 temporarily skipped, to save wasting time on a busy week.
-    export gitbranchinstalled=ccee2dc2c5ad983bf0b10716a1f627664e3dc023
-    export gitbranchupgraded=MOODLE_31_STABLE
+    export gitbranchinstalled=3ba580e3f2a5f253365d33642b0bb6a94285ba2c
+    export gitbranchupgraded=MOODLE_311_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_failure
-    assert_output --partial 'Info: Origin branches: (1) MOODLE_31_STABLE'
-    assert_output --partial 'Info: Target branch: ccee2dc2c5ad983bf0b10716a1f627664e3dc023'
-    assert_output --partial 'Info: Comparing ccee2dc2c5ad983bf0b10716a1f627664e3dc023 and upgraded MOODLE_31_STABLE'
+    assert_output --partial 'Info: Origin branches: (1) MOODLE_311_STABLE'
+    assert_output --partial 'Info: Target branch: 3ba580e3f2a5f253365d33642b0bb6a94285ba2c'
+    assert_output --partial 'Info: Comparing 3ba580e3f2a5f253365d33642b0bb6a94285ba2c and upgraded MOODLE_311_STABLE'
     assert_output --partial 'Problems found comparing databases!'
-    assert_output --partial 'Number of errors: 3'
-    assert_output --partial 'Column completionstatusallscos of table scorm difference found in not_null: false !== true'
-    assert_output --partial 'Column completionstatusallscos of table scorm difference found in has_default: false !== true'
-    assert_output --partial 'Column completionstatusallscos of table scorm difference found in default_value: null !== 0'
+    assert_output --partial 'Number of errors: 6'
+    assert_output --partial 'Column status of table enrol_lti_app_registration difference found in has_default: true !== false'
+    assert_output --partial 'Column status of table enrol_lti_app_registration difference found in default_value: 0 !== null'
+    assert_output --partial 'Column hidden of table grade_categories difference found in type: tinyint !== bigint'
+    assert_output --partial 'Column hidden of table grade_categories difference found in max_length: 2 !== 18'
+    assert_output --partial 'Column hidden of table grade_categories_history difference found in type: tinyint !== bigint'
+    assert_output --partial 'Column hidden of table grade_categories_history difference found in max_length: 2 !== 18'
     assert_output --partial 'Error: Problem comparing databases ci_installed_'
     assert_output --partial 'Error: Process ended with 1 errors'
     refute_output --partial 'Ok: Process ended without errors'
-    run [ -f $WORKSPACE/compare_databases_ccee2dc2c5ad983bf0b10716a1f627664e3dc023_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_3ba580e3f2a5f253365d33642b0bb6a94285ba2c_logfile.txt ]
     assert_success
 }

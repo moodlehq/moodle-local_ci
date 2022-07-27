@@ -56,7 +56,7 @@ logfile=$WORKSPACE/compare_databases_${gitbranchinstalled}_logfile.txt
 #  TODO: Based on $dbtype, execute different DB creation commands
 echo "Info: Creating $installdb database" | tee -a "${logfile}"
 ${mysqlcmd} --user=$dbuser1 --password=$dbpass1 --host=$dbhost1 \
-    --execute="CREATE DATABASE $installdb CHARACTER SET utf8 COLLATE utf8_bin" 2>&1 >> "${logfile}"
+    --execute="CREATE DATABASE $installdb CHARACTER SET utf8mb4 COLLATE utf8mb4_bin" 2>&1 >> "${logfile}"
 # Error creating DB, we cannot continue. Exit
 exitstatus=${PIPESTATUS[0]}
 if [ $exitstatus -ne 0 ]; then
@@ -94,7 +94,7 @@ for upgrade in "${upgradedarr[@]}"; do
     # TODO: Based on $dbtype, execute different DB creation commands
     echo "Info: Creating $upgradedb database" | tee -a "${logfile}"
     ${mysqlcmd} --user=$dbuser2 --password=$dbpass2 --host=$dbhost2 \
-        --execute="CREATE DATABASE $upgradedb CHARACTER SET utf8 COLLATE utf8_bin" 2>&1 >> "${logfile}"
+        --execute="CREATE DATABASE $upgradedb CHARACTER SET utf8mb4 COLLATE utf8mb4_bin" 2>&1 >> "${logfile}"
     # Error creating DB, we cannot continue. Exit
     exitstatus=${PIPESTATUS[0]}
     if [ $exitstatus -ne 0 ]; then
