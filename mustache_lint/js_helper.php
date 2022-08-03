@@ -81,6 +81,23 @@ class js_helper {
         }
 
         // We should only have problem messages for the one file passed.
-        return $problems[0]->messages;
+        $messages = $problems[0]->messages;
+
+        foreach ($messages as $problem) {
+            $problem->linesource = '';
+            if ($problem->line) {
+                $lines = explode("\n", $this->js, $problem->line);
+                if ($lines && count($lines) === $problem->line) {
+                    $problem->linesource = array_pop($lines);
+                }
+            }
+            if (!property_exists($problem, 'source')) {
+                // Fatal errors do not include a source.
+                // Fill the entire source line.
+                $problem->source = $problem->linesource;
+            }
+        }
+
+        return $messages;
     }
 }
