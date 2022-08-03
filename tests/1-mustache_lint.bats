@@ -180,6 +180,24 @@ setup () {
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); )"
 }
 
+@test "mustache_lint: Test eslint handles parsing failures safely" {
+
+    # a8c64d6 has eslint in package.json (switch to v3.1.3 when releaseD)
+    create_git_branch MOODLE_31_STABLE a8c64d6267fd0a2f12435ea75af88eb4de980d6f
+    git_apply_fixture 31-mustache_lint-js_token_test.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    # Install npm depends so we have eslint
+    ci_run prepare_npm_stuff/prepare_npm_stuff.sh
+    # Run with eslint.
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_failure
+    assert_output --partial "lib/templates/js_token_test.mustache - WARNING: ESLint error []: Parsing error: Unexpected token bar ( var foo bar baz = 'bum'; )"
+}
+
 @test "mustache_lint: Test eslint runs ok when invoked from any directory" {
 
     # We need to use recent version here, the default 3.1.3 used for tests (that already had eslint)
