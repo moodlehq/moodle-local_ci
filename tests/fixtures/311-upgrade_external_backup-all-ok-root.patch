@@ -1,0 +1,77 @@
+From 70b2b84eccdfb7c16064a28da5c4248c28c26dc5 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Sat, 6 Aug 2022 18:33:39 +0200
+Subject: [PATCH] NOBUG fixture: ALL OK upgrade_external_backup check (root)
+
+---
+ backup/moodle2/backup_stepslib.php |  2 +-
+ course/externallib.php             |  1 +
+ lib/db/install.xml                 |  1 +
+ lib/db/upgrade.php                 | 15 +++++++++++++++
+ 4 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/backup/moodle2/backup_stepslib.php b/backup/moodle2/backup_stepslib.php
+index 045e6575e37..081be220296 100644
+--- a/backup/moodle2/backup_stepslib.php
++++ b/backup/moodle2/backup_stepslib.php
+@@ -274,7 +274,7 @@ class backup_module_structure_step extends backup_structure_step {
+             'added', 'score', 'indent', 'visible', 'visibleoncoursepage',
+             'visibleold', 'groupmode', 'groupingid',
+             'completion', 'completiongradeitemnumber', 'completionview', 'completionexpected',
+-            'availability', 'showdescription'));
++            'availability', 'showdescription', 'lang'));
+ 
+         $tags = new backup_nested_element('tags');
+         $tag = new backup_nested_element('tag', array('id'), array('name', 'rawname'));
+diff --git a/course/externallib.php b/course/externallib.php
+index fbcbcfd750d..847f4621ab5 100644
+--- a/course/externallib.php
++++ b/course/externallib.php
+@@ -2828,6 +2828,7 @@ class core_course_external extends external_api {
+             $info->groupmode = $cm->groupmode;
+             $info->groupingid = $cm->groupingid;
+             $info->completion = $cm->completion;
++            $info->lang = $cm->lang;
+         }
+         // Format name.
+         $info->name = external_format_string($cm->name, $context->id);
+diff --git a/lib/db/install.xml b/lib/db/install.xml
+index 7cc424e45ff..a7a74dea196 100644
+--- a/lib/db/install.xml
++++ b/lib/db/install.xml
+@@ -307,6 +307,7 @@
+         <FIELD NAME="showdescription" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Some module types support a 'description' which shows within the module pages. This option controls whether it also displays on the course main page. 0 = does not display (default), 1 = displays"/>
+         <FIELD NAME="availability" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Availability restrictions for viewing this activity, in JSON format. Null if no restrictions."/>
+         <FIELD NAME="deletioninprogress" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
++        <FIELD NAME="lang" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="Testing adding a field"/>
+       </FIELDS>
+       <KEYS>
+         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+diff --git a/lib/db/upgrade.php b/lib/db/upgrade.php
+index e2fe20d944c..f20be37ef26 100644
+--- a/lib/db/upgrade.php
++++ b/lib/db/upgrade.php
+@@ -2654,5 +2654,20 @@ function xmldb_main_upgrade($oldversion) {
+         upgrade_main_savepoint(true, 2021043000.01);
+     }
+ 
++    if ($oldversion < 2021043000.02) {
++
++        // Define field lang to be added to course_modules.
++        $table = new xmldb_table('course_modules');
++        $field = new xmldb_field('lang', XMLDB_TYPE_CHAR, '30', null, null, null, null, 'downloadcontent');
++
++        // Conditionally launch add field lang.
++        if (!$dbman->field_exists($table, $field)) {
++            $dbman->add_field($table, $field);
++        }
++
++        // Main savepoint reached.
++        upgrade_main_savepoint(true, 2021043000.02);
++    }
++
+     return true;
+ }
+-- 
+2.36.1
+

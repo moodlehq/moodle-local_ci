@@ -58,7 +58,7 @@ while read modifiedfile; do
     if [[ "${modifiedfile}" =~ externallib\.php|/classes/external/ ]]; then
         externalfound=1
     fi
-    if [[ "${modifiedfile}" =~ /backup/moodle2/ ]]; then
+    if [[ "${modifiedfile}" =~ backup/moodle2/backup ]]; then
         backupfound=1
     fi
 
@@ -78,7 +78,6 @@ if [[ -z ${externalfound} ]] || [[ -z ${backupfound} ]]; then
 
     if [[ -z ${externalfound} ]]; then
         echo "${upgradefile} - WARN: No changes detected to external functions, that may affect apps and other web service integrations, please verify!"
-        warnedout=1
     fi
 
     if [[ -z ${backupfound} ]]; then

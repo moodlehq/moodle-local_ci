@@ -64,8 +64,23 @@ setup () {
     refute_output --partial "INFO: OK the patch includes changes to both external and backup code"
 }
 
-@test "upgrade_external_backup: upgrade_external_backup_check all ok" {
-    git_apply_fixture 311-upgrade_external_backup-all-ok.patch
+@test "upgrade_external_backup: upgrade_external_backup_check all ok (plugin)" {
+    git_apply_fixture 311-upgrade_external_backup-all-ok-plugin.patch
+    export initialcommit=$FIXTURE_HASH_BEFORE
+    export finalcommit=$FIXTURE_HASH_AFTER
+
+    ci_run upgrade_external_backup_check/upgrade_external_backup_check.sh
+    assert_success
+    assert_output --partial "INFO: Checking for DB modifications from $initialcommit to $finalcommit"
+    assert_output --partial "INFO: The patch does include new tables or columns"
+    refute_output --partial "WARN: Database modifications (new tables or columns) detected"
+    refute_output --partial "WARN: No changes detected to external functions"
+    refute_output --partial "WARN: No changes detected to backup and restore"
+    assert_output --partial "INFO: OK the patch includes changes to both external and backup code"
+}
+
+@test "upgrade_external_backup: upgrade_external_backup_check all ok (root)" {
+    git_apply_fixture 311-upgrade_external_backup-all-ok-root.patch
     export initialcommit=$FIXTURE_HASH_BEFORE
     export finalcommit=$FIXTURE_HASH_AFTER
 
