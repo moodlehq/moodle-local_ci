@@ -361,9 +361,12 @@ echo "Info: Running thirdparty..."
 ${mydir}/../thirdparty_check/thirdparty_check.sh > "${WORKSPACE}/work/thirdparty.txt"
 cat "${WORKSPACE}/work/thirdparty.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/thirdparty.xml"
 
-echo "Info: Running missing external/backup stuff..."
-${mydir}/../upgrade_external_backup_check/upgrade_external_backup_check.sh > "${WORKSPACE}/work/externalbackup.txt"
-cat "${WORKSPACE}/work/externalbackup.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/externalbackup.xml"
+# We skip this if the requested build is $isplugin
+if [[ -z "${isplugin}" ]]; then
+    echo "Info: Running missing external/backup stuff..."
+    ${mydir}/../upgrade_external_backup_check/upgrade_external_backup_check.sh > "${WORKSPACE}/work/externalbackup.txt"
+    cat "${WORKSPACE}/work/externalbackup.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=thirdparty > "${WORKSPACE}/work/externalbackup.xml"
+fi
 
 echo "Info: Running mustache lint..."
 ${mydir}/../mustache_lint/mustache_lint.sh > "${WORKSPACE}/work/mustachelint.txt"
@@ -493,8 +496,6 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 # earlier in the script when the whole code-base was available. Now, for performance
 # reasons, only the patch-modified files are remaining so we cannot use phpcs abilities
 # to detect all components anymore. Hence using the complete, already calculated, list.
-# Note we need to specify where both moodle and PHPCompatibility, specifically the later, standards sit.
-# TODO: Some day this will work from the moodle ruleset.xml file, it doesn't right now.
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \

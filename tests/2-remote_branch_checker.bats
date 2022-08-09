@@ -85,6 +85,12 @@ assert_prechecker () {
     assert_prechecker local_ci_fixture_upgrade_external_backup MDL-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
 }
 
+@test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup skipped for plugins" {
+    # With branches named PLUGIN-xxxx, the upgrade_external_backup check will be skipped,
+    # no matter the verified branch has 3 warnings when running for non plugins.
+    assert_prechecker local_ci_fixture_upgrade_external_backup_skipped_for_plugins PLUGIN-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
+}
+
 @test "remote_branch_checker/remote_branch_checker.sh: phpcs aware of all components" {
     assert_prechecker local_ci_fixture_phpcs_aware_components MDL-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
 }
