@@ -67,6 +67,12 @@ if [[ ! $daystoremind -lt $daystoreopen ]]; then
     exit 1
 fi
 
+# We need to use hours instead of days, because the "AFTER -5d" is not accurate enough. In
+# practice it accounts for 4.5 days, or something like that, hence the actions are happening
+# some hours before they should. So, using hours (days * 24) to get more accurate results.
+hourstoreopen=$((24*$daystoreopen))
+hourstoremind=$((24*$daystoremind))
+
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
 
@@ -105,13 +111,13 @@ done
 
 # B) Let's reopen the issue with a comment.
 #    - Do it for all the issues in the status having "Waiting for Feedback Notifications" = 2 or 3
-#      that have spent more than ${daystoreopen} awaiting for feedback.
+#      that have spent more than ${hourstoreopen} awaiting for feedback.
 #    - Note that the transition, automatically, will clear the "Waiting for Feedback Notifications"
 #      field. It has been defined in the Workflow as a post action.
 ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status IN ('Waiting for feedback', 'Waiting for feedback (CLR)') \
-                 AND NOT status CHANGED AFTER -${daystoreopen}d \
+                 AND NOT status CHANGED AFTER -${hourstoreopen}h \
                  AND 'Waiting for Feedback Notifications' IN (2,3)" \
            --file "${resultfile}"
 
@@ -126,15 +132,15 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
                --comment "${comment}"
 done
 
-# C) Let's remind in the issue with a comment, only if ${daystoremind} > 0.
+# C) Let's remind in the issue with a comment, only if ${hourstoremind} > 0.
 #    - Do it for all the issues in the status having "Waiting for Feedback Notifications" = 2
-#      that have spent more than ${daystoremind} awaiting for feedback.
+#      that have spent more than ${hourstoremind} awaiting for feedback.
 #    - And, once done, set the "Waiting for Feedback Notifications" field to 3.
-if [[ ${daystoremind} -gt 0 ]]; then
+if [[ ${hourstoremind} -gt 0 ]]; then
     ${basereq} --action getIssueList \
                --jql "project = 'Moodle' \
                      AND status IN ('Waiting for feedback', 'Waiting for feedback (CLR)') \
-                     AND NOT status CHANGED AFTER -${daystoremind}d \
+                     AND NOT status CHANGED AFTER -${hourstoremind}h \
                      AND 'Waiting for Feedback Notifications' = 2" \
                --file "${resultfile}"
 
