@@ -128,12 +128,12 @@ restore_workspace() {
 # Clever idea, borrowed from https://github.com/dgholz/detect_virtualenv/blob/master/t/begin_and_end.bash
 # Are we in the first test of a file?
 function first_test() {
-  [ "$BATS_TEST_NUMBER" = 1 ]
+  [ "$BATS_TEST_NUMBER" -eq 1 ]
 }
 
 # Are we in the last test of a file?
 function last_test() {
-  [ "$BATS_TEST_NAME" = "${BATS_TEST_NAMES[@]:(-1)}" ]
+  [ "$BATS_TEST_NUMBER" -eq "${#BATS_TEST_NAMES[@]}" ]
 }
 
 # Clean up any $WORKSPACE state on every run.
