@@ -65,6 +65,7 @@ unittestclasses="
     mod_assign\\\\externallib_advanced_testcase
     mod_lti_testcase
     mod_quiz_attempt_walkthrough_from_csv_testcase
+    mod_quiz\\\\attempt_walkthrough_from_csv_test
     provider_testcase
     qbehaviour_walkthrough_test_base
     question_attempt_upgrader_test_base
