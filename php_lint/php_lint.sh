@@ -62,7 +62,9 @@ for mfile in ${mfiles} ; do
         fullpath=$gitdir/$mfile
 
         if [ -e $fullpath ] ; then
-            if LINTERRORS=$(($phpcmd -l $fullpath >/dev/null) 2>&1)
+            # We have to ensure that error_log is not set because it makes the
+            # CLI to add blank lines to output. Crazy but true.
+            if LINTERRORS=$(($phpcmd -d error_log= -l $fullpath >/dev/null) 2>&1)
             then
                 echo "$fullpath - OK"
             else
