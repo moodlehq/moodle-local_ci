@@ -185,7 +185,7 @@ then
     loops=0
 
     # Ensure (gruntcmd or (recesscmd and shiftercmd)) are available (depends on $gitbranch)
-    . ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+    source ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 
     fix_conflict
     until $gitcmd rebase --continue; do

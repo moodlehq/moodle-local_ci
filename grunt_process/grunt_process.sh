@@ -35,7 +35,7 @@ rm -fr ${outputfile}.stderr
 # Prepare all the npm stuff if needed
 # (only if the job is in charge of handling it, aka, $npminstall was passed
 if [[ -n ${npminstall} ]]; then
-    . ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
+    source ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 fi
 
 # Ensure we have grunt cli available before continue.
