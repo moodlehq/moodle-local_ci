@@ -1,7 +1,7 @@
 language: php
 
 os: linux
-dist: xenial
+dist: focal
 
 addons:
   apt:
@@ -10,13 +10,16 @@ addons:
 
 cache:
   directories:
-      - $HOME/cachedir
+    - $HOME/cachedir
 
 services:
   - mysql
 
 php:
-    - 7.4
+  - 7.4
+
+node:
+  - 16
 
 env:
     - TEST_SUITE="0-*"
@@ -29,10 +32,10 @@ before_install:
 
 install:
   - git clone --depth 1 https://github.com/bats-core/bats-core.git $HOME/bats-core
-  - nvm install 8.9
-  - nvm use 8.9
+  # Install local_ci own dependencies
   - travis_retry composer install
-  - npm install
+  - travis_retry npm install
+  # Performance for MySQL.
   - echo -e "[server]\ninnodb_flush_log_at_trx_commit=0" | sudo tee -a /etc/mysql/my.cnf # General speed bump.
   # Move MySQL data to tmpfs (see core travis). Without that we get random timeouts here and there.
   - sudo mkdir /mnt/ramdisk
