@@ -2,7 +2,6 @@
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
 # $jshintcmd: Path to jshint executable.
-# $csslintcmd: Path to csslint executable.
 # $remote: Remote repo where the branch to check resides.
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
@@ -22,7 +21,7 @@ set +x
 set -e
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd csslintcmd remote branch integrateto issue"
+required="WORKSPACE gitcmd phpcmd jshintcmd remote branch integrateto issue"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -288,7 +287,6 @@ echo "${WORKSPACE}/config-dist.php" >> ${WORKSPACE}/work/patchset.files
 
 # Add linting config files to patchset files to avoid it being deleted for use later..
 echo '.jshint' >> ${WORKSPACE}/work/patchset.files
-echo '.csslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
@@ -522,33 +520,6 @@ if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
     echo "Info: Running jshint..."
     ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
         --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
-fi
-
-# Run csslint if we haven't got stylelint results
-if [ ! -f  "${WORKSPACE}/work/stylelint.xml" ]; then
-    echo "Info: Running csslint..."
-    if [ ! -f ${WORKSPACE}/.csslintrc ]; then
-        echo "csslintrc file not found, defaulting to error checking only"
-        echo '--errors=errors' > ${WORKSPACE}/.csslintrc
-        echo '--exclude-list=vendor/,lib/editor/tinymce/,lib/yuilib/,theme/bootstrapbase/style/' >> ${WORKSPACE}/.csslintrc
-    fi
-
-    ${csslintcmd} --format=checkstyle-xml --quiet ${WORKSPACE} > "${WORKSPACE}/work/csslint.out"
-    # Unfortunately csslint doesn't give us decent error codes.. so we have to grep:
-    if grep -q '<?xml' ${WORKSPACE}/work/csslint.out
-    then
-        echo "Info: csslint check completed."
-        mv ${WORKSPACE}/work/csslint.out ${WORKSPACE}/work/csslint.xml
-    elif grep -q 'No files specified.' ${WORKSPACE}/work/csslint.out
-    then
-        echo "Info: No checkable CSS files detected in patchset."
-        echo $emptycheckstyle > "${WORKSPACE}/work/csslint.xml"
-    else
-        echo "Error: Unknown csslint error occured. See csslint.out" >> ${errorfile}
-        echo 'csslint exited with error:'
-        cat ${WORKSPACE}/work/csslint.out
-        exit 1
-    fi
 fi
 
 # ########## ########## ########## ##########

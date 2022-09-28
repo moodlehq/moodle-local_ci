@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="3" numwarnings="1">
-  <summary status="error" numerrors="3" numwarnings="1" condensedresult="smurf,error,3,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,error,2,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,error,1,1;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+<smurf version="0.9.1" numerrors="4" numwarnings="1">
+  <summary status="error" numerrors="4" numwarnings="1" condensedresult="smurf,error,4,1:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,error,1,1;shifter,success,0,0;mustache,success,0,0;gherkin,error,3,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="css" status="error" numerrors="2" numwarnings="0"/>
+    <detail name="css" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
     <detail name="commit" status="success" numerrors="0" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
@@ -13,7 +13,7 @@
     <detail name="grunt" status="error" numerrors="1" numwarnings="1"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
     <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="gherkin" status="success" numerrors="0" numwarnings="0"/>
+    <detail name="gherkin" status="error" numerrors="3" numwarnings="0"/>
   </summary>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
@@ -27,20 +27,9 @@
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess/>
   </check>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="2" numwarnings="0" allowfiltering="1">
+  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows CSS problems detected by stylelint</description>
-    <mess>
-      <problem file="theme/boost/scss/moodle/icons.scss" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/theme/boost/scss/moodle/icons.scss#L20" ruleset="stylelint" rule="rules.csstree/validator" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
-        <message>Unknown property: some-unknown-css</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="theme/boost/scss/moodle/icons.scss" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/theme/boost/scss/moodle/icons.scss#L20" ruleset="stylelint" rule="rules.property-no-unknown" url="https://docs.moodle.org/dev/CSS_coding_style" type="error" weight="5">
-        <message>Unexpected unknown property "some-unknown-css" (property-no-unknown)</message>
-        <description/>
-        <code/>
-      </problem>
-    </mess>
+    <mess/>
   </check>
   <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>
@@ -65,13 +54,13 @@
   <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/83c8b6109158647f2c87c24e5c19390077d9cf5e/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
         <message>Problems running grunt</message>
         <description/>
         <code/>
       </problem>
-      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/18958c1906a1e71fa32a1dba7e3ec5f53b07abf0/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
-        <message>Task "stylelint:scss" failed. Use --force to continue.</message>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/83c8b6109158647f2c87c24e5c19390077d9cf5e/#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="warning" weight="1">
+        <message>Task "gherkinlint" failed. Use --force to continue.</message>
         <description/>
         <code/>
       </problem>
@@ -85,8 +74,24 @@
     <description>This section shows problems detected in mustache templates</description>
     <mess/>
   </check>
-  <check id="gherkin" title="Gherkin .feature problems" url="https://docs.moodle.org/dev/Writing_acceptance_tests" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="gherkin" title="Gherkin .feature problems" url="https://docs.moodle.org/dev/Writing_acceptance_tests" numerrors="3" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected in behat .feature files</description>
-    <mess/>
+    <mess>
+      <problem file="mod/glossary/tests/behat/edit_tags.feature" linefrom="2" lineto="2" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/83c8b6109158647f2c87c24e5c19390077d9cf5e/mod/glossary/tests/behat/edit_tags.feature#L2" ruleset="moodle" rule="no-dupe-feature-names" url="https://docs.moodle.org/dev/Writing_acceptance_tests" type="error" weight="5">
+        <message>Feature name is already used in: mod/glossary/tests/behat/categories.feature</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/glossary/tests/behat/search_entries.feature" linefrom="57" lineto="57" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/83c8b6109158647f2c87c24e5c19390077d9cf5e/mod/glossary/tests/behat/search_entries.feature#L57" ruleset="moodle" rule="no-multiple-empty-lines" url="https://docs.moodle.org/dev/Writing_acceptance_tests" type="error" weight="5">
+        <message>Multiple empty lines are not allowed</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="mod/glossary/tests/behat/search_entries.feature" linefrom="83" lineto="83" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/83c8b6109158647f2c87c24e5c19390077d9cf5e/mod/glossary/tests/behat/search_entries.feature#L83" ruleset="moodle" rule="indentation" url="https://docs.moodle.org/dev/Writing_acceptance_tests" type="error" weight="5">
+        <message>Wrong indentation for "and", expected indentation level of 4, but got 6</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
   </check>
 </smurf>

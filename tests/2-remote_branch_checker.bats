@@ -9,11 +9,6 @@ prepare_prechecker_npmbins () {
     mkdir -p $npmglobals
     cd $npmglobals
 
-    export csslintcmd=$npmglobals/node_modules/.bin/csslint
-    if [[ ! -f $csslintcmd ]]; then
-        npm --silent install csslint
-    fi
-
     export jshintcmd=$npmglobals/node_modules/.bin/jshint
     if [[ ! -f $jshintcmd ]]; then
         npm --silent install jshint
@@ -24,7 +19,8 @@ prepare_prechecker_npmbins () {
 setup () {
     prepare_prechecker_npmbins
 
-    create_git_branch MOODLE_34_STABLE v3.4.0 # Must be always a .0 version coz we precheck it in master.
+    # This was the first .0 version coming with .nvmrc file, so it's the minimum supported by local_ci.
+    create_git_branch MOODLE_38_STABLE v3.8.0 # Must be always a .0 version coz we precheck it in master.
     export WORKSPACE=$gitdir
     export phpcsstandard=$LOCAL_CI_TESTS_PHPCS_DIR
 }
@@ -53,42 +49,41 @@ assert_prechecker () {
 
 @test "remote_branch_checker/remote_branch_checker.sh: old branch failing" {
     # An extremely old branch running jshint..
-    assert_prechecker local_ci_fixture_oldbranch MDLSITE-3899 b3f5865eabbbdd439ac7f2ec763046f2ac7f0b37
+    assert_prechecker local_ci_fixture_oldbranch MDLSITE-3899 v2.9.0-rc1
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
     # A branch with a good number of errors
-    assert_prechecker local_ci_fixture_manyproblems MDL-53136 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_manyproblems_38 MDL-53136 v3.8.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {
-    # from https://integration.moodle.org/job/Precheck%20remote%20branch/25996/
-    assert_prechecker MDL-53572-master-8ce58c9 MDL-53572 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_all_passing MDL-53572 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: stylelint checks" {
-    assert_prechecker prechecker-fixture-stylelint MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_stylelint MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {
     # Ensure we always report each section, even if there are no php/css/js files to check
-    assert_prechecker fixture-non-code-update MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_noncode_update MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: thirdparty css modification" {
-    # Ensure stylelint doesn't complain about the third party css, but thirdpart does
+    # Ensure stylelint doesn't complain about the third party css, but thirdparty does
     # TODO: thirdparty check bug with reporting same file twice..
-    assert_prechecker fixture-thirdparty-css MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_thirdparty_css MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup" {
-    assert_prechecker local_ci_fixture_upgrade_external_backup MDL-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
+    assert_prechecker local_ci_fixture_upgrade_external_backup MDL-12345 v4.0.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup skipped for plugins" {
     # With branches named PLUGIN-xxxx, the upgrade_external_backup check will be skipped,
     # no matter the verified branch has 3 warnings when running for non plugins.
-    assert_prechecker local_ci_fixture_upgrade_external_backup_skipped_for_plugins PLUGIN-12345 c69c33b14d9fb83ca22bde558169e36b5e1047cf
+    assert_prechecker local_ci_fixture_upgrade_external_backup_skipped_for_plugins PLUGIN-12345 v4.0.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: phpcs aware of all components" {
@@ -96,27 +91,27 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
-    assert_prechecker fixture-bad-amos-commands MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_bad_amos_command MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: good amos commands" {
-    assert_prechecker fixture-good-amos-commit MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_good_amos_commit MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: mustache lint" {
-    assert_prechecker fixture-mustache-lint MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_mustache_lint MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: mustache lint eslint problem" {
-    assert_prechecker fixture-mustache-lint-js MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_mustache_lint_js MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: gherkin lint" {
-    assert_prechecker fixture-gherkin-lint MDL-12345 f968cd44e8ee5d54b1bc56823040ff770dbf18af
+    assert_prechecker local_ci_fixture_gherkin_lint MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: grunt build failed" {
-    assert_prechecker fixture-grunt-build-failed MDL-12345 665c3ac59c35b7387a4fc70b8ac6600ce9ffeb87
+    assert_prechecker local_ci_fixture_grunt_build_failed MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: remote which doesnt exist" {

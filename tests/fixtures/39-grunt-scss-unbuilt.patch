@@ -1,0 +1,26 @@
+From 4f1772815048e2177f8df4fd543db01babdc2a86 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Thu, 29 Sep 2022 09:34:02 +0200
+Subject: [PATCH] NOBUG fixture: scss unbuilt for grunt tests
+
+---
+ theme/boost/scss/moodle/reports.scss | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/theme/boost/scss/moodle/reports.scss b/theme/boost/scss/moodle/reports.scss
+index 79289a17eee..edb83053744 100644
+--- a/theme/boost/scss/moodle/reports.scss
++++ b/theme/boost/scss/moodle/reports.scss
+@@ -3,6 +3,9 @@
+ // The home for small tweaks to reports that don't require
+ // changes drastic enough to pull in the full module css
+ // and replace it completely.
++.integrationcsschange {
++    display: none;
++}
+ 
+ #page-report-participation-index .participationselectform div label { // Using 'div' here to override the report styles.css
+     display: inline-block;
+-- 
+2.37.2
+
