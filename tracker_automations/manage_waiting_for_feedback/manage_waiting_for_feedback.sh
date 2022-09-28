@@ -72,6 +72,7 @@ fi
 # some hours before they should. So, using hours (days * 24) to get more accurate results.
 hourstoreopen=$((24*$daystoreopen))
 hourstoremind=$((24*$daystoremind))
+hoursafterremind=$((hourstoreopen-hourstoremind))
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
 # the search and the update in order to log all the reopenend issues within jenkins ($logfile)
@@ -114,11 +115,18 @@ done
 #      that have spent more than ${hourstoreopen} awaiting for feedback.
 #    - Note that the transition, automatically, will clear the "Waiting for Feedback Notifications"
 #      field. It has been defined in the Workflow as a post action.
+#    - As far as the reminder (C) notification performs a fake transition, we need to, separately
+#      look for issues which status did not change:
+#      - Since the beginning (hourstoreopen) is they were not reminded. (aka, 7 days, for example).
+#      - Since the reminder (hoursafterremind) if they were reminded. (aka, 2 days, for example).
 ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status IN ('Waiting for feedback', 'Waiting for feedback (CLR)') \
-                 AND NOT status CHANGED AFTER -${hourstoreopen}h \
-                 AND 'Waiting for Feedback Notifications' IN (2,3)" \
+                 AND ( \
+                     (NOT status CHANGED AFTER -${hourstoreopen}h  AND 'Waiting for Feedback Notifications' = 2) \
+                   OR \
+                     (NOT status CHANGED AFTER -${hoursafterremind}h AND 'Waiting for Feedback Notifications' = 3) \
+                 )" \
            --file "${resultfile}"
 
 # Iterate over found issues, adding the comment ('Waiting for Feedback Notifications' will be cleaned by the workflow).
