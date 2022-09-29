@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2012113000;
-$plugin->requires  = 2013070400;        // Moodle 2.6dev (Build 20130704) and upwards.
+$plugin->version   = 2022093000;
+$plugin->requires  = 2019111800;        // Moodle 3.8.0 (Build 20191118) and upwards.
 $plugin->dependencies = array(          // Also requires these plugins to be installed.
     'local_moodlecheck' => '2012011000',
 );
 $plugin->component = 'local_ci';
-$plugin->release   = '0.9.1';
+$plugin->release   = '0.9.2';
 $plugin->maturity  = MATURITY_BETA;
