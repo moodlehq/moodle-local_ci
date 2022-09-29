@@ -90,9 +90,8 @@ class remote_branch_reporter {
             }
         }
 
-        // For the 'js coding style problems section', conditionally use eslint or jshint
         if (file_exists($this->directory . '/eslint.xml')) {
-            // Process the jshint output, weighting errors with 5 and warnings with 1
+            // Process the eslint output, weighting errors with 5 and warnings with 1
             $params = array(
                 'title' => 'Javascript coding style problems',
                 'abbr' => 'js',
@@ -102,22 +101,6 @@ class remote_branch_reporter {
                 'errorweight' => 5,
                 'warningweight' => 1);
             if ($node = $this->apply_xslt($params, $this->directory . '/eslint.xml', 'checkstyle2smurf.xsl')) {
-                if ($check = $node->getElementsByTagName('check')->item(0)) {
-                    $snode = $doc->importNode($check, true);
-                    $smurf->appendChild($snode);
-                }
-            }
-        } else {
-            // Process the jshint output, weighting errors with 5 and warnings with 1
-            $params = array(
-                'title' => 'Javascript coding style problems',
-                'abbr' => 'js',
-                'description' => 'This section shows the coding style problems detected in the code by jshint',
-                'url' => 'https://docs.moodle.org/dev/Javascript/Coding_style',
-                'codedir' => dirname($this->directory) . '/',
-                'errorweight' => 5,
-                'warningweight' => 1);
-            if ($node = $this->apply_xslt($params, $this->directory . '/jshint.xml', 'checkstyle2smurf.xsl')) {
                 if ($check = $node->getElementsByTagName('check')->item(0)) {
                     $snode = $doc->importNode($check, true);
                     $smurf->appendChild($snode);

@@ -2,23 +2,7 @@
 
 load libs/shared_setup
 
-# TODO: we will get rid of these depencies soon.
-prepare_prechecker_npmbins () {
-    npmglobals=$LOCAL_CI_TESTS_CACHEDIR/prechecker_npmglobals
-
-    mkdir -p $npmglobals
-    cd $npmglobals
-
-    export jshintcmd=$npmglobals/node_modules/.bin/jshint
-    if [[ ! -f $jshintcmd ]]; then
-        npm --silent install jshint
-    fi
-    cd $OLDPWD
-}
-
 setup () {
-    prepare_prechecker_npmbins
-
     # This was the first .0 version coming with .nvmrc file, so it's the minimum supported by local_ci.
     create_git_branch MOODLE_38_STABLE v3.8.0 # Must be always a .0 version coz we precheck it in master.
     export WORKSPACE=$gitdir

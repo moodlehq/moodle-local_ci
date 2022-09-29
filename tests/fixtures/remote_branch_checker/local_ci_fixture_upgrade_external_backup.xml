@@ -50,17 +50,17 @@
   <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" numerrors="0" numwarnings="3" allowfiltering="0">
     <description>This section shows potential problems detected when there are new database structures added in a patch and it is detected that nothing has been changed related with external functions (to be used by WS) or backup and restore. It must be checked that everything is correct and nothing is being missed in those areas.</description>
     <mess>
-      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/fb0e3aacb3036e0353aab727b86a186f8001a8f0/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
         <message>Database modifications (new tables or columns) detected in the patch without any change to some important areas. </message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/fb0e3aacb3036e0353aab727b86a186f8001a8f0/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
         <message>No changes detected to external functions, that may affect apps and other web service integrations, please verify! </message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/129efea5f8ddb304f993222adc053829d4506ba7/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
+      <problem file="mod/forum/db/upgrade.php" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/fb0e3aacb3036e0353aab727b86a186f8001a8f0/mod/forum/db/upgrade.php#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" type="warning" weight="1">
         <message>No changes detected to backup and restore, that may affect storage and transportability, please verify! </message>
         <description/>
         <code/>

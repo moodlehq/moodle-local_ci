@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="4" numwarnings="7">
-  <summary status="error" numerrors="4" numwarnings="7" condensedresult="smurf,error,4,7:phplint,success,0,0;phpcs,success,0,0;js,warning,0,6;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,error,1,1;shifter,success,0,0;mustache,success,0,0">
+<smurf version="0.9.1" numerrors="4" numwarnings="1">
+  <summary status="error" numerrors="4" numwarnings="1" condensedresult="smurf,error,4,1:phplint,success,0,0;phpcs,success,0,0;phpdoc,success,0,0;commit,error,3,0;savepoint,success,0,0;thirdparty,success,0,0;externalbackup,success,0,0;grunt,error,1,1;shifter,success,0,0;mustache,success,0,0">
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
-    <detail name="js" status="warning" numerrors="0" numwarnings="6"/>
     <detail name="phpdoc" status="success" numerrors="0" numwarnings="0"/>
     <detail name="commit" status="error" numerrors="3" numwarnings="0"/>
     <detail name="savepoint" status="success" numerrors="0" numwarnings="0"/>
@@ -20,41 +19,6 @@
   <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by phpcs</description>
     <mess/>
-  </check>
-  <check id="js" title="Javascript coding style problems" url="https://docs.moodle.org/dev/Javascript/Coding_style" numerrors="0" numwarnings="6" allowfiltering="1">
-    <description>This section shows the coding style problems detected in the code by jshint</description>
-    <mess>
-      <problem file="lib/amd/src/ajax.js" linefrom="39" lineto="39" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/amd/src/ajax.js#L39" ruleset="jshint" rule="W033" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>Missing semicolon.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/amd/src/ajax.js" linefrom="39" lineto="39" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/amd/src/ajax.js#L39" ruleset="jshint" rule="W098" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>'foo' is defined but never used.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/javascript-static.js" linefrom="9" lineto="9" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/javascript-static.js#L9" ruleset="jshint" rule="W033" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>Missing semicolon.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/javascript-static.js" linefrom="9" lineto="9" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/javascript-static.js#L9" ruleset="jshint" rule="W098" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>'foo' is defined but never used.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/yui/src/tooltip/js/tooltip.js" linefrom="16" lineto="16" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/yui/src/tooltip/js/tooltip.js#L16" ruleset="jshint" rule="W033" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>Missing semicolon.</message>
-        <description/>
-        <code/>
-      </problem>
-      <problem file="lib/yui/src/tooltip/js/tooltip.js" linefrom="16" lineto="16" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/8b0f63da1743bd175115ea9e07d298dd19500f9b/lib/yui/src/tooltip/js/tooltip.js#L16" ruleset="jshint" rule="W098" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
-        <message>'foo' is defined but never used.</message>
-        <description/>
-        <code/>
-      </problem>
-    </mess>
   </check>
   <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>

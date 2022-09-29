@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
-# $jshintcmd: Path to jshint executable.
 # $remote: Remote repo where the branch to check resides.
 # $branch: Remote branch we are going to check.
 # $integrateto: Local branch where the remote branch is going to be integrated.
@@ -21,7 +20,7 @@ set +x
 set -e
 
 # Verify everything is set
-required="WORKSPACE gitcmd phpcmd jshintcmd remote branch integrateto issue"
+required="WORKSPACE gitcmd phpcmd remote branch integrateto issue"
 for var in ${required}; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -286,7 +285,6 @@ echo "${WORKSPACE}/version.php" >> ${WORKSPACE}/work/patchset.files
 echo "${WORKSPACE}/config-dist.php" >> ${WORKSPACE}/work/patchset.files
 
 # Add linting config files to patchset files to avoid it being deleted for use later..
-echo '.jshint' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintrc' >> ${WORKSPACE}/work/patchset.files
 echo '.eslintignore' >> ${WORKSPACE}/work/patchset.files
 echo '.stylelintrc' >> ${WORKSPACE}/work/patchset.files
@@ -510,16 +508,6 @@ else
     echo "Info: Running phpdocs..."
     ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
         --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
-fi
-
-# Exclude build directories from the results (e.g. lib/yui/build, lib/amd/build/)
-find $WORKSPACE -type d -path \*/build | sed "s|$WORKSPACE/||" > $WORKSPACE/.jshintignore
-
-# Run jshint if we haven't got eslint results
-if [ ! -f  "${WORKSPACE}/work/eslint.xml" ]; then
-    echo "Info: Running jshint..."
-    ${jshintcmd} --config $WORKSPACE/.jshintrc --exclude-path $WORKSPACE/.jshintignore \
-        --reporter=checkstyle ${WORKSPACE} > "${WORKSPACE}/work/jshint.xml"
 fi
 
 # ########## ########## ########## ##########
