@@ -1,18 +1,17 @@
-From c51f28d5fba3662e3d17823e3345b4390ab84be4 Mon Sep 17 00:00:00 2001
+From 7999a12d1839d17ab9ddaae20cf672ead09bd8bf Mon Sep 17 00:00:00 2001
 From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
-Date: Tue, 19 Dec 2017 15:57:22 +0100
+Date: Thu, 29 Sep 2022 09:40:38 +0200
 Subject: [PATCH] NOBUG fixture: unbuilt js change for grunt
 
-With conflicts fixed to work on top of Moodle 3.2.6
 ---
  lib/amd/src/url.js | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/lib/amd/src/url.js b/lib/amd/src/url.js
-index 61dd56b85e..4b1ff4e742 100644
+index 61dd56b85e8..0150c1dbfa4 100644
 --- a/lib/amd/src/url.js
 +++ b/lib/amd/src/url.js
-@@ -38,7 +38,7 @@ define(['core/config'], function(config) {
+@@ -38,7 +38,7 @@ define(['jquery', 'core/config'], function($, config) {
           */
          fileUrl: function(relativeScript, slashArg) {
  
@@ -22,5 +21,5 @@ index 61dd56b85e..4b1ff4e742 100644
              // Force a /
              if (slashArg.charAt(0) != '/') {
 -- 
-2.15.1
+2.37.2
 

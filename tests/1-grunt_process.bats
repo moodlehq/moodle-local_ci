@@ -3,7 +3,7 @@
 load libs/shared_setup
 
 setup () {
-    create_git_branch MOODLE_32_STABLE v3.2.6
+    create_git_branch MOODLE_39_STABLE v3.9.0
 
     export npminstall=1
 }
@@ -15,9 +15,9 @@ setup () {
     assert_output --partial "OK: All modules are perfectly processed by grunt"
 }
 
-@test "grunt_process: Uncommited .less change" {
-    # Create less change
-    git_apply_fixture 32-grunt-less-unbuilt.patch
+@test "grunt_process: Uncommited .scss change" {
+    # Create scss change
+    git_apply_fixture 39-grunt-scss-unbuilt.patch
 
     # Run test
     ci_run grunt_process/grunt_process.sh
@@ -26,12 +26,12 @@ setup () {
     assert_failure
     assert_output --partial "Done." # Grunt shouldn't have an issue here.
     assert_output --partial "WARN: Some modules are not properly processed by grunt. Changes detected:"
-    assert_output --regexp "GRUNT-CHANGE: (.*)/theme/bootstrapbase/style/moodle.css"
+    assert_output --regexp "GRUNT-CHANGE: (.*)/theme/boost/style/moodle.css"
 }
 
 @test "grunt_process: Uncommited .js change" {
     # Create js change.
-    git_apply_fixture 32-grunt-js-unbuilt.patch
+    git_apply_fixture 39-grunt-js-unbuilt.patch
 
     # Run test
     ci_run grunt_process/grunt_process.sh
