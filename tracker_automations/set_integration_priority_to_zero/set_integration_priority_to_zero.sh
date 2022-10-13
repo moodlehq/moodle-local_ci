@@ -93,6 +93,13 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     done
     blockedbyissues=${blockedbyissues%?}
 
+    # If there aren't unresolved blockers, skip this issue.
+    if [[ -z ${blockedbyissues} ]]; then
+        echo "  skipping this issue (unable to find MDL blockers)"
+        echo
+        continue
+    fi
+
     # Now let's see if any of the blockedby issues is unresolved.
     # (note that, since JiraCLU 8.1, getIssueCount can be used instead, but we are using older)
     if [[ -n ${blockedbyissues} ]]; then
@@ -117,6 +124,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # Arrived here, this is an issue that is blocked by some unresolved issue.
     # So we lower  its priority here and now.
     echo "  lowering its integration priority to 0 (has unresolved blockers)"
+    echo
     ${basereq} --action progressIssue \
         --issue ${issue} \
         --step "CI Global Self-Transition" \
