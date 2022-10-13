@@ -65,7 +65,7 @@ done
 # plugin (and others), but they won't be compatible with Jira Cloud instances, so we are doing
 # it using exclusively JiraCLI and its facilities (requiring multiple actions to be executed).
 
-# First, get all the issues that are blocked by others.
+# First, get all the issues that are blocked by others and are not CLR.
 ${basereq} --action getIssueList \
            --search "project = 'Moodle' \
                  AND 'Integration priority' > 0 \
@@ -73,7 +73,8 @@ ${basereq} --action getIssueList \
                        ('Currently in integration' = 'Yes' AND status != 'Reopened') \
                        OR status = 'Waiting for integration review' \
                      ) \
-                 AND issueLinkType = 'is blocked by'" \
+                 AND issueLinkType = 'is blocked by' \
+                 AND 'Component Lead Review' != 'Yes'" \
            --file "${resultfile}"
 
 # Iterate over found issues and get its list of links being "is blocked by"
