@@ -50,7 +50,7 @@ IFS=',' read -a devbranchesarr <<< "$devbranches" # Convert devbranches to array
 
 # Let's search for all the issues currently under integration.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status IN ( \
                         'Waiting for testing', \
                         'Testing in progress', \

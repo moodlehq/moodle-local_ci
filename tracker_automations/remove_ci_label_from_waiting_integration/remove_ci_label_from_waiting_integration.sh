@@ -38,7 +38,7 @@ now=$(date +%s)
 # Let's search all the issues having the "ci" label that have landed to integration along the last hour
 # but are not under current integration.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND labels IN ('ci') \
                  AND labels NOT IN (integration_held, security_held) \
                  AND status = 'Waiting for integration review' \

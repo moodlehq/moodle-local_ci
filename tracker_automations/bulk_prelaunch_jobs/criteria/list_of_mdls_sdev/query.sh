@@ -1,5 +1,5 @@
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND issue IN (${issueslist}) \
                  AND cf[10100] ~ 'integration/security-testing' \
                  AND level IS NOT EMPTY \

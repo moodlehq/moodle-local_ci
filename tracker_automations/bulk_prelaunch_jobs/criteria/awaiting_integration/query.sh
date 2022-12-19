@@ -1,5 +1,5 @@
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Waiting for integration review' \
                  AND status WAS NOT 'Waiting for integration review' ON '-${schedulemins}' \
                  AND participants not in (tobic) \

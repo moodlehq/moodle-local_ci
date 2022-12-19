@@ -35,7 +35,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Let's search all the reopened issues under current integration, not updated in 1h
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Reopened' \
                  AND updated < '-1h' \
                  AND 'Currently in integration' is not empty" \

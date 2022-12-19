@@ -24,7 +24,7 @@ function run_A1() {
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --search "filter=14000 \
+               --jql "filter=14000 \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = 22054" \
                --file "${resultfile}"
@@ -56,7 +56,7 @@ If you want Moodle HQ to consider including it into the incoming major release p
 function run_A2() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --search "filter=14000
+               --jql "filter=14000
                      AND NOT filter = 21366
                      AND (
                        filter = 21363 OR
@@ -110,7 +110,7 @@ function run_A2() {
 function run_A3a() {
     # Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
     ${basereq} --action getIssueList \
-               --search "project = MDL \
+               --jql "project = MDL \
                      AND 'Currently in integration' IS NOT EMPTY \
                      AND status IN ('Waiting for integration review')" \
                --file "${resultfile}"
@@ -126,7 +126,7 @@ function run_A3a() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --search "filter=14000 \
+                   --jql "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
                                 priority DESC, \
                                 votes DESC, \
@@ -183,7 +183,7 @@ function run_A3a() {
 function run_A3b() {
     # Get the list of issues in the candidates queue. All them will be held with last week comment.
     ${basereq} --action getIssueList \
-               --search "filter=14000" \
+               --jql "filter=14000" \
                --file "${resultfile}"
 
     # Iterate over found issues, moving them to the current queue.
@@ -210,7 +210,7 @@ function run_A3b() {
 function run_B1b() {
     # Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
     ${basereq} --action getIssueList \
-               --search "project = MDL \
+               --jql "project = MDL \
                      AND 'Currently in integration' IS NOT EMPTY \
                      AND status IN ('Waiting for integration review')" \
                --file "${resultfile}"
@@ -226,7 +226,7 @@ function run_B1b() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --search "filter=14000 \
+                   --jql "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
                                 priority DESC, \
                                 votes DESC, \
@@ -289,7 +289,7 @@ function run_B1a() {
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --search "filter=14000 \
+               --jql "filter=14000 \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = 22054" \
                --file "${resultfile}"
@@ -336,7 +336,7 @@ function is_blocked_by_unresolved() {
     # (note that, since JiraCLI 8.1, getIssueCount can be used instead, but we are using older)
     if [[ -n ${blockedbyissues} ]]; then
         ${basereq} --action getIssueList \
-                   --search "resolution = Unresolved AND issue IN (${blockedbyissues})" \
+                   --jql "resolution = Unresolved AND issue IN (${blockedbyissues})" \
                    --file "${resultfile}.2"
         # If there are issues returned... then the issue still has unresolved blockers.
         for unresolvedissue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}.2" ); do

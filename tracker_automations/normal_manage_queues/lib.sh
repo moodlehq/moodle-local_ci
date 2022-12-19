@@ -18,7 +18,7 @@ done
 function run_A() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --search "filter=14000
+               --jql "filter=14000
                      AND NOT filter = 21366
                      AND (
                        filter = 21363 OR
@@ -72,7 +72,7 @@ function run_A() {
 function run_B() {
     # Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
     ${basereq} --action getIssueList \
-               --search "project = MDL \
+               --jql "project = MDL \
                      AND 'Currently in integration' IS NOT EMPTY \
                      AND status IN ('Waiting for integration review')" \
                --file "${resultfile}"
@@ -88,7 +88,7 @@ function run_B() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of up to issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --search "filter=14000 \
+                   --jql "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
                                 priority DESC, \
                                 votes DESC, \
@@ -144,7 +144,7 @@ function run_B() {
 function run_C() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --search "filter=14000
+               --jql "filter=14000
                      AND 'Integration priority' = 0
                      AND NOT (issueLinkType = 'blocks' OR issueLinkType = 'is blocked by')
                      AND NOT status CHANGED AFTER -${waitingdays}d" \
@@ -199,7 +199,7 @@ function is_blocked_by_unresolved() {
     # (note that, since JiraCLI 8.1, getIssueCount can be used instead, but we are using older)
     if [[ -n ${blockedbyissues} ]]; then
         ${basereq} --action getIssueList \
-                   --search "resolution = Unresolved AND issue IN (${blockedbyissues})" \
+                   --jql "resolution = Unresolved AND issue IN (${blockedbyissues})" \
                    --file "${resultfile}.2"
         # If there are issues returned... then the issue still has unresolved blockers.
         for unresolvedissue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}.2" ); do

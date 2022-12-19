@@ -1,5 +1,5 @@
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND issue IN (${issueslist}) \
                  AND level IS EMPTY \
                  ORDER BY priority DESC, votes DESC, 'Last comment date' ASC" \

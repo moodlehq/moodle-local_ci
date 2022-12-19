@@ -37,7 +37,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 #   - Awaiting for integration having NULL integration priority
 #   - Reopened having integration priority set
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND ( \
                      ('Currently in integration' = 'Yes' AND 'Integration priority' IS EMPTY) \
                      OR \
@@ -67,7 +67,7 @@ done
 
 # First, get all the issues that are blocked by others and are not CLR.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND 'Integration priority' > 0 \
                  AND ( \
                        ('Currently in integration' = 'Yes' AND status != 'Reopened') \
@@ -104,7 +104,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # (note that, since JiraCLU 8.1, getIssueCount can be used instead, but we are using older)
     if [[ -n ${blockedbyissues} ]]; then
         ${basereq} --action getIssueList \
-                   --search "resolution = Unresolved AND issue IN (${blockedbyissues})" \
+                   --jql "resolution = Unresolved AND issue IN (${blockedbyissues})" \
                    --file "${resultfile}"
         # If there are issues returned... then the issue still has unresolved blockers.
         unresolvedfound=

@@ -56,7 +56,7 @@ basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${ji
 # it is a custom field (outputFormat = 2) and it requires
 # admin provileges. For now we don't want the cibot to have them.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Closed' \
                  AND 'Integration date' IS NOT empty
                  ORDER BY 'Integration date' DESC" \
@@ -99,7 +99,7 @@ lastintegrationnum=0
 lastintegrationdatequoted=\'${lastintegrationdate}\'
 lastintegrationdatesecs=$(date -d "${lastintegrationdate}" +%s)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                AND status WAS IN ( \
                    'Waiting for integration review', \
                    'Integration review in progress', \

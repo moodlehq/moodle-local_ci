@@ -47,7 +47,7 @@ Closing as fixed!"}
 
 # Let's search all the tested issues under current integration.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Tested' \
                  AND 'Currently in integration' IS NOT EMPTY" \
            --file "${resultfile}"

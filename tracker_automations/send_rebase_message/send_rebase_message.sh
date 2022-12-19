@@ -50,7 +50,7 @@ fi
 
 # Let's search all the issues under candidates queue.
 ${basereq} --action getIssueList \
-           --search "filter = 14000" \
+           --jql "filter = 14000" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them
@@ -72,7 +72,7 @@ TIA and ciao :-)"}
 
 # Let's search all the issues under current integration waiting for review or in progress.
 ${basereq} --action getIssueList \
-           --search "filter = 22610" \
+           --jql "filter = 22610" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them.

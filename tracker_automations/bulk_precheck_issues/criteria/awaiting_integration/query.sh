@@ -1,5 +1,5 @@
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Waiting for integration review' \
                  AND (labels IS EMPTY OR labels NOT IN (ci, security_held, integration_held)) \
                  AND level IS EMPTY \

@@ -34,7 +34,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Let's search 1a) Waiting for testing => Testing in progress (via Start testing)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Waiting for testing' \
                  AND 'Currently in integration' IS NOT EMPTY \
                  AND Tester IN (cibot, nobody)" \
@@ -54,7 +54,7 @@ echo -n > "${resultfile}"
 
 # Let's search 1b) Waiting for security testing => Security testing in progress (via Start security testing)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Waiting for security testing' \
                  AND 'Currently in integration' IS NOT EMPTY \
                  AND Tester IN (cibot, nobody)" \
@@ -74,7 +74,7 @@ echo -n > "${resultfile}"
 
 # Let's search 2a) Testing in progress => Tested (via Testing passed)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Testing in progress' \
                  AND 'Currently in integration' IS NOT EMPTY \
                  AND Tester IN (cibot, nobody) \
@@ -96,7 +96,7 @@ rm -fr "${resultfile}"
 
 # Let's search 2b) Security testing in progress => Waiting for release (via Security testing passed)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND status = 'Security testing in progress' \
                  AND 'Currently in integration' IS NOT EMPTY \
                  AND Tester IN (cibot, nobody) \

@@ -34,7 +34,7 @@ BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Let's search all the issues having the "ci" label that have been sent back to development (form peer review or integration)
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                  AND labels IN ('ci') \
                  AND status IN ('Development in progress', 'Reopened')" \
            --file "${resultfile}"

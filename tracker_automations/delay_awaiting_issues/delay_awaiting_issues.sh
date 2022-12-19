@@ -47,7 +47,7 @@ Apologies for the inconvenience, this might be integrated next week. Thanks for 
 
 # Let's search all the tested issues under current integration.
 ${basereq} --action getIssueList \
-           --search "project = 'Moodle' \
+           --jql "project = 'Moodle' \
                 AND status = 'Waiting for integration review' \
                 AND 'Currently in integration' IS NOT EMPTY" \
            --file "${resultfile}"
