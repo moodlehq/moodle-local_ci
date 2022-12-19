@@ -71,6 +71,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
         --issue ${issue} \
         --field "${integrationdate_cf}" \
         --dateFormat "d/MMM/yy" \
+        --quiet \
         --file "${tempfile}"
 done
 

@@ -68,6 +68,7 @@ while read issue; do
     ${basereq} --action getFieldValue \
                --issue ${issue} \
                --field ${cf_repository} \
+               --quiet \
                --file "${resultfile}.repository" > /dev/null
     repository=$(cat "${resultfile}.repository" | tr -d ' ')
     rm "${resultfile}.repository"
@@ -98,6 +99,7 @@ while read issue; do
         ${basereq} --action getFieldValue \
                    --issue ${issue} \
                    --field ${cf_branch} \
+                   --quiet \
                    --file "${resultfile}.branch" > /dev/null
         branch=$(cat "${resultfile}.branch" | tr -d ' ')
         rm "${resultfile}.branch"
