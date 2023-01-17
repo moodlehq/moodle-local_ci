@@ -50,18 +50,21 @@ function run_A() {
         # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
         # we are setting some custom fields not available (on purpose) on that screen. So we have created a
         # global transition, only available to the bots, not transitioning but bringing access to all the fields
-        # via special screen. So we'll ne using that global transition via progressIssue instead.
+        # via special screen. So we'll ne using that global transition via transitionIssue instead.
         # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
         # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
         # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes"
-        ${basereq} --action progressIssue \
+        #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+        ${basereq} --action transitionIssue \
                    --issue ${issue} \
-                   --step "CI Global Self-Transition" \
-                   --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
+                   --transition "CI Global Self-Transition" \
+                   --field "customfield_10211=Yes" \
+                   --field "customfield_15810=No" \
+                   --field "customfield_10110=" \
+                   --field "customfield_10011=" \
                    --comment "Normal queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -122,18 +125,21 @@ function run_B() {
             # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
             # we are setting some custom fields not available (on purpose) on that screen. So we have created a
             # global transition, only available to the bots, not transitioning but bringing access to all the fields
-            # via special screen. So we'll ne using that global transition via progressIssue instead.
+            # via special screen. So we'll ne using that global transition via transitionIssue instead.
             # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
             # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
             # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
             # that non-transitional transition and use normal update.
             #${basereq} --action updateIssue \
             #    --issue ${issue} \
-            #    --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes"
-            ${basereq} --action progressIssue \
+            #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+            ${basereq} --action transitionIssue \
                        --issue ${issue} \
-                       --step "CI Global Self-Transition" \
-                       --custom "customfield_10211:Yes,customfield_15810:No,customfield_10110:,customfield_10011:" \
+                       --transition "CI Global Self-Transition" \
+                       --field "customfield_10211=Yes" \
+                       --field "customfield_15810=No" \
+                       --field "customfield_10110=" \
+                       --field "customfield_10011=" \
                        --comment "Normal queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold" >> "${logfile}"
@@ -160,18 +166,18 @@ function run_C() {
         # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
         # we are setting some custom fields not available (on purpose) on that screen. So we have created a
         # global transition, only available to the bots, not transitioning but bringing access to all the fields
-        # via special screen. So we'll ne using that global transition via progressIssue instead.
+        # via special screen. So we'll ne using that global transition via transitionIssue instead.
         # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
         # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
         # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --custom "customfield_10110:,customfield_10210:,customfield_10211:Yes"
-        ${basereq} --action progressIssue \
+        #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+        ${basereq} --action transitionIssue \
                    --issue ${issue} \
-                   --step "CI Global Self-Transition" \
-                   --custom "customfield_12210:1" \
+                   --transition "CI Global Self-Transition" \
+                   --field "customfield_12210=1" \
                    --comment "Normal queues manage: Raising integration priority after ${waitingdays} days awaiting" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} raised integration priority" >> "${logfile}"

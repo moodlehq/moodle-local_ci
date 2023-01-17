@@ -55,12 +55,13 @@ ${basereq} --action getIssueList \
 # Iterate over found issues and perform the actions with them
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
-    # We use progressIssue instead of updateIssue because some of the fileds are not available in the default screen.
+    # We use transitionIssue instead of updateIssue because some of the fileds are not available in the default screen.
     # (current in integration = customfield_10211, integration priority = customfield_12210)
-    ${basereq} --action progressIssue \
+    ${basereq} --action transitionIssue \
         --issue ${issue} \
-        --step "CI Global Self-Transition" \
-        --custom "customfield_10211:,customfield_12210:1" \
+        --transition "CI Global Self-Transition" \
+        --field "customfield_10211=" \
+        --field "customfield_12210=1" \
         --comment "${altcomment}"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done

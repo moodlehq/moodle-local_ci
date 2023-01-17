@@ -101,10 +101,10 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
 
     # So we raise its priority here and now.
     echo "  Raising its integration priority to 1"
-    ${basereq} --action progressIssue \
+    ${basereq} --action transitionIssue \
         --issue ${issue} \
-        --step "CI Global Self-Transition" \
-        --custom "customfield_12210:1"
+        --transition "CI Global Self-Transition" \
+        --field "customfield_12210=1"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
     echo
 done

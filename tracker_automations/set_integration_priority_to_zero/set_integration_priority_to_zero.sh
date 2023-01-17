@@ -50,10 +50,10 @@ ${basereq} --action getIssueList \
 # Iterate over found issues and set their integration priority (customfield_12210) to 0.
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
-    ${basereq} --action progressIssue \
+    ${basereq} --action transitionIssue \
         --issue ${issue} \
-        --step "CI Global Self-Transition" \
-        --custom "customfield_12210:0"
+        --transition "CI Global Self-Transition" \
+        --field "customfield_12210=0"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
 
@@ -125,10 +125,10 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # So we lower  its priority here and now.
     echo "  lowering its integration priority to 0 (has unresolved blockers)"
     echo
-    ${basereq} --action progressIssue \
+    ${basereq} --action transitionIssue \
         --issue ${issue} \
-        --step "CI Global Self-Transition" \
-        --custom "customfield_12210:0"
+        --transition "CI Global Self-Transition" \
+        --field "customfield_12210=0"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
     echo
 done
