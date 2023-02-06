@@ -63,6 +63,10 @@ setup () {
     # Assert result.
     # Cannot know if install will success or no (depends if npm/node binaries are elsewhere)
     # (hence, we are not asserting the result, just that the case is handled)
+
+    # Note this can end with some warnings if npm/node is not installed elsewhere and with
+    # exit status = 2, but, as commented above, we are not asserting that here (success / failure...)
+    # so that's ok.
     assert_output --partial "INFO: nvm not found, installing via git"
     assert_output --partial "INFO: nvm git installation found, updating to latest release"
     assert_output --partial "INFO: using nvm version:"

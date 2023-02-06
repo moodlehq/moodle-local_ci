@@ -31,9 +31,11 @@ assert_prechecker () {
     assert_files_same $smurfxmlfixture $WORKSPACE/work/smurf.xml
 }
 
-@test "remote_branch_checker/remote_branch_checker.sh: old branch failing" {
-    # An extremely old branch running jshint..
-    assert_prechecker local_ci_fixture_oldbranch MDLSITE-3899 v2.9.0-rc1
+@test "remote_branch_checker/remote_branch_checker.sh: old branch (38_STABLE) failing" {
+    # An extremely old branch. MOODLE_38_STABLE (with node v14) is the oldest we support.
+    # (note MOODLE_35_STABLE and up also is supported but not v3.5.0, v3.6.0...  support came later and
+    # we need to use always .0 versions in the tests as base, so 3.8.0 is the very first .0).
+    assert_prechecker local_ci_fixture_oldbranch_38 MDLSITE-3899 v3.8.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all possible checks failing" {
