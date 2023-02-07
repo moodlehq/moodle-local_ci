@@ -47,9 +47,9 @@ setup () {
     # When a third party library is added, developers need to commit
     # ignorefiles change since 3.2.
 
-    # Testing on in-dev 3.2dev
-    create_git_branch 32-dev 5a1728df39116fc701cc907e85a638aa7674f416
-    git_apply_fixture 32-thirdparty-lib-added.patch
+    # Testing on v3.5.9
+    create_git_branch 35-stable v3.5.9
+    git_apply_fixture 35-thirdparty-lib-added.patch
 
     # Run test
     ci_run grunt_process/grunt_process.sh
@@ -64,9 +64,9 @@ setup () {
     # When a 3rd party library is added, but we are checking a 3rd part plugin
     # we ignore any change in ignorefiles.
 
-    # Testing on in-dev 3.2dev
-    create_git_branch 32-dev 5a1728df39116fc701cc907e85a638aa7674f416
-    git_apply_fixture 32-thirdparty-lib-added.patch
+    # Testing on v3.5.9
+    create_git_branch 35-stable v3.5.9
+    git_apply_fixture 35-thirdparty-lib-added.patch
 
     # Run test
     export isplugin=1

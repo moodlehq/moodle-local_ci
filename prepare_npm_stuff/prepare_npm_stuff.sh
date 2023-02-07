@@ -90,63 +90,30 @@ if [[ -f ${gitdir}/package.json ]]; then
 
     echo "INFO: Installing npm stuff following package/shrinkwrap details"
 
+    if ! hash ${npmcmd} 2>/dev/null; then
+        echo "ERROR: npm not found in the system. Use .nvmrc OR install it in the PATH"
+        exit 2
+    fi
+
     # Always run npm install to keep our npm packages correct
     ${npmcmd} --no-color install
 
-    # Verify there is a grunt executable available, installing if missing
-    gruntcmd="$(${npmcmd} bin)"/grunt
-    if [[ ! -f ${gruntcmd} ]]; then
-        echo "WARN: grunt-cli executable not found. Installing everything"
-        ${npmcmd} --no-color --no-save install grunt-cli
+    # Verify that grunt-cli is available (locally), installing if missing
+    if ! ${npmcmd} list --parseable | grep -q grunt-cli; then
+        # Last chance, look for the binary itself.
+        if [[ ! -x node_modules/.bin/grunt ]]; then
+            echo "WARN: grunt binary not found. Installing it now"
+            ${npmcmd} --no-color --no-save install grunt-cli
+        fi
+    fi
+
+    # Verify that stylelint-checkstyle-formatter is available (locally), installing if missing
+    if ! ${npmcmd} list --parseable | grep -q stylelint-checkstyle-formatter; then
+        echo "WARN: stylelint-checkstyle-formatter package not found. Installing it now"
+        ${npmcmd} --no-color --no-save install stylelint-checkstyle-formatter
     fi
 else
-
-    # Install shifter version if there is not package.json
-    # (this is required for branches < 29_STABLE)
-    shifterinstall=""
-    shiftercmd="$(${npmcmd} bin)"/shifter
-    if [[ ! -f ${shiftercmd} ]]; then
-        echo "WARN: shifter executable not found. Installing it"
-        shifterinstall=1
-    else
-        # Have shifter, look its version matches expected one
-        # Cannot use --version because it's varying (performing calls to verify latest). Use --help instead
-        shiftercurrent=$(${shiftercmd} --no-color --help | head -1 | cut -d "@" -f2)
-        if [[ "${shiftercurrent}" != "${shifterversion}" ]]; then
-            echo "WARN: shifter executable "${shiftercurrent}" found, "${shifterversion}" expected. Installing it"
-            shifterinstall=1
-        else
-            # All right, shifter found and version matches
-            echo "INFO: shifter executable (${shifterversion}) found"
-        fi
-    fi
-    if [[ -n ${shifterinstall} ]]; then
-        ${npmcmd} --no-color install shifter@${shifterversion}
-        echo "INFO: shifter executable (${shifterversion}) installed"
-    fi
-
-    # Install recess version if there is not package.json
-    # (this is required for branches < 29_STABLE)
-    recessinstall=""
-    recesscmd="$(${npmcmd} bin)"/recess
-    if [[ ! -f ${recesscmd} ]]; then
-        echo "WARN: recess executable not found. Installing it"
-        recessinstall=1
-    else
-        # Have recess, look its version matches expected one
-        recesscurrent=$(${recesscmd} --no-color --version)
-        if [[ "${recesscurrent}" != "${recessversion}" ]]; then
-            echo "WARN: recess executable "${recesscurrent}" found, "${recessversion}" expected. Installing it"
-            recessinstall=1
-        else
-            # All right, recess found and version matches
-            echo "INFO: recess executable (${recessversion}) found"
-        fi
-    fi
-    if [[ -n ${recessinstall} ]]; then
-        ${npmcmd} --no-color install recess@${recessversion}
-        echo "INFO: recess executable (${recessversion}) installed"
-    fi
+    echo "ERROR: Something is wrong. Missing package.json"
 fi
 
 # Move back to base directory.
@@ -154,8 +121,9 @@ cd ${gitdir}
 
 # Output information about installed binaries.
 echo "INFO: Installation ended"
-echo "INFO: Available binaries @ ${gitdir}"
-echo "INFO: (Contents of $(${npmcmd} bin))"
-for binary in $(ls $(${npmcmd} bin)); do
-    echo "INFO:    - Installed ${binary}"
+echo "INFO: Installed packages @ $(npm root)"
+echo "INFO: (Contents of ${npmcmd} list --depth=1)"
+for package in $(${npmcmd} list --depth=1 --parseable); do
+    echo "INFO:    - Installed $(basename ${package})"
 done
+echo "============== END OF LIST =============="

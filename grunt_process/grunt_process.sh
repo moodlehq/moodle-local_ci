@@ -38,9 +38,9 @@ if [[ -n ${npminstall} ]]; then
     source ${mydir}/../prepare_npm_stuff/prepare_npm_stuff.sh
 fi
 
-# Ensure we have grunt cli available before continue.
-gruntcmd="$(${npmcmd} bin)"/grunt
-if [ ! -x $gruntcmd ]; then
+# Ensure we have grunt binary available before continue.
+#
+if [[ ! -x node_modules/.bin/grunt ]]; then
     echo "Error: grunt executable not found" | tee "${outputfile}"
     exitstatus=1
 else
@@ -63,7 +63,7 @@ else
     fi
 
     set +e
-    $gruntcmd $tasks --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
+    npx grunt $tasks --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)
     exitstatus=$?
     set -e
 fi
