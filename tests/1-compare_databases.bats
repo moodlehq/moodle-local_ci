@@ -38,22 +38,22 @@ setup () {
 }
 
 @test "compare_databases/compare_databases.sh: single actual (>= 39_STABLE) branch runs work" {
-    export gitbranchinstalled=master
+    export gitbranchinstalled=MOODLE_401_STABLE
     export gitbranchupgraded=MOODLE_39_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
     assert_output --partial 'Info: Origin branches: (1) MOODLE_39_STABLE'
-    assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Installing Moodle master into ci_installed_'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_39_STABLE'
+    assert_output --partial 'Info: Target branch: MOODLE_401_STABLE'
+    assert_output --partial 'Info: Installing Moodle MOODLE_401_STABLE into ci_installed_'
+    assert_output --partial 'Info: Comparing MOODLE_401_STABLE and upgraded MOODLE_39_STABLE'
     assert_output --partial 'Info: Installing Moodle MOODLE_39_STABLE into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle MOODLE_39_STABLE to master into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle MOODLE_39_STABLE to MOODLE_401_STABLE into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_MOODLE_401_STABLE_logfile.txt ]
     assert_success
 }
 
@@ -78,18 +78,18 @@ setup () {
 }
 
 @test "compare_databases/compare_databases.sh: multiple branch runs work" {
-    export gitbranchinstalled=master
+    export gitbranchinstalled=MOODLE_401_STABLE
     export gitbranchupgraded=MOODLE_39_STABLE,MOODLE_310_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
     assert_output --partial 'Info: Origin branches: (2) MOODLE_39_STABLE,MOODLE_310_STABLE'
-    assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_39_STABLE'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_310_STABLE'
+    assert_output --partial 'Info: Target branch: MOODLE_401_STABLE'
+    assert_output --partial 'Info: Comparing MOODLE_401_STABLE and upgraded MOODLE_39_STABLE'
+    assert_output --partial 'Info: Comparing MOODLE_401_STABLE and upgraded MOODLE_310_STABLE'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_MOODLE_401_STABLE_logfile.txt ]
     assert_success
 }
 
