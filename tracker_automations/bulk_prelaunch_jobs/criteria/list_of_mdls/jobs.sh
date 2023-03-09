@@ -22,29 +22,31 @@ if [[ -n ${phpunit_filter} ]] && [[ -n ${behat_tags} ]]; then
 fi
 
 # Calculate the PHPUnit options (filter, testsuite) to use.
-phpunit_options=
+phpunit_options=""
 if [[ -n ${phpunit_filter} ]]; then
     phpunit_options="--filter ${phpunit_filter}"
 fi
 if [[ -n ${phpunit_suite} ]]; then
     phpunit_options+=" --testsuite ${phpunit_suite}"
 fi
+phpunit_options="${phpunit_options:-complete}"
 
 # Calculate the Behat options (tags, name) to use.
-behat_options=
+behat_options=""
 if [[ -n ${behat_tags} ]]; then
     behat_options="--tags ${behat_tags}"
 fi
 if [[ -n ${behat_name} ]]; then
     behat_options+=" --name \"${behat_name}\""
 fi
+behat_options="${behat_options:-complete}"
 
 echo "PHPUnit options: ${phpunit_options}"
 echo "Behat options: ${behat_options}"
 
 # We want to launch always a sqlsrv PHPUNIT
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
-    echo -n "PHPUnit (sqlsrv): " >> "${resultfile}.jenkinscli"
+    echo -n "PHPUnit (sqlsrv / ${phpunit_options}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.02 - Developer-requested PHPUnit" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
@@ -76,7 +78,7 @@ fi
 
 # We want to launch always a Behat (goutte) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
-    echo -n "Behat (goutte - boost and classic): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (goutte - boost and classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
@@ -92,7 +94,7 @@ fi
 
 # We want to launch always a Behat (firefox - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (firefox - boost): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (firefox - boost / ${behat_options}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
@@ -107,7 +109,7 @@ fi
 
 # We want to launch always a Behat (firefox - classic) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (firefox - classic): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (firefox - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
