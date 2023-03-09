@@ -8,6 +8,40 @@
 # Set the runner if not specified.
 runner="${runner:-STABLE}"
 
+# Some issue must be specified.
+if [[ -z ${issueslist} ]]; then
+    echo "Error: Need to specify one or multiple (comma separated) MDL issues in $issueslist"
+    exit 1
+fi
+
+# We don't allow both phpunit_filter and behat_tags together
+# (because they both use the very same TAGS env variable)
+if [[ -n ${phpunit_filter} ]] && [[ -n ${behat_tags} ]]; then
+    echo "ERROR: Cannot use phpunit_filter and behat_tags together"
+    exit 1
+fi
+
+# Calculate the PHPUnit options (filter, testsuite) to use.
+phpunit_options=
+if [[ -n ${phpunit_filter} ]]; then
+    phpunit_options="--filter ${phpunit_filter}"
+fi
+if [[ -n ${phpunit_suite} ]]; then
+    phpunit_options+=" --testsuite ${phpunit_suite}"
+fi
+
+# Calculate the Behat options (tags, name) to use.
+behat_options=
+if [[ -n ${behat_tags} ]]; then
+    behat_options="--tags ${behat_tags}"
+fi
+if [[ -n ${behat_name} ]]; then
+    behat_options+=" --name \"${behat_name}\""
+fi
+
+echo "PHPUnit options: ${phpunit_options}"
+echo "Behat options: ${behat_options}"
+
 # We want to launch always a sqlsrv PHPUNIT
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
     echo -n "PHPUnit (sqlsrv): " >> "${resultfile}.jenkinscli"
@@ -16,6 +50,8 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -p BRANCH=${branch} \
         -p DATABASE=sqlsrv \
         -p PHPVERSION=${php_version} \
+        -p TAGS=${phpunit_filter} \
+        -p TESTSUITE=${phpunit_suite} \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -48,6 +84,8 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER=goutte \
         -p BEHAT_SUITE=ALL \
+        -p TAGS=${behat_tags} \
+        -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -61,6 +99,8 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=firefox \
+        -p TAGS=${behat_tags} \
+        -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -75,6 +115,8 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER=firefox \
         -p BEHAT_SUITE=classic \
+        -p TAGS=${behat_tags} \
+        -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
