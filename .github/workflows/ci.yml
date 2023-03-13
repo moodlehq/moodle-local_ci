@@ -1,0 +1,81 @@
+name: Moodle Local CI
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  Test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - test: 0-*
+          - test: 1-*
+          - test: 2-*
+          - test: 3-*
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checking out moodle-local_ci
+        uses: actions/checkout@v3
+        with:
+          path: local_ci
+
+      - name: Checking out moodle
+        uses: actions/checkout@v3
+        with:
+          repository: moodle/moodle
+          fetch-depth: 0 # We need a complete clone, because we use various commits / tags.
+          path: moodle
+
+      - name: Setting user in moodle clone
+        run: | # We need this set because local_ci does perform git write operations.
+          git config --global user.email "local_ci@moodle.com"
+          git config --global user.name "Local CI"
+
+      - name: Setting up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          ini-values: max_input_vars=5000
+          tools: composer
+
+
+      - name: Configuring node & npm
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'moodle/.nvmrc'
+
+      - name: Installing composer and node stuff
+        run: |
+          cd local_ci
+          composer install
+          npm install
+
+      - name: Setting up DB mysql
+        uses: moodlehq/mysql-action@v1
+        with:
+          collation server: utf8mb4_bin
+          mysql version: 8.0
+          mysql root password: test
+          use tmpfs: true
+          tmpfs size: '1024M'
+          extra conf: --skip-log-bin
+
+      - name: Setup Bats
+        uses: amdilabs/setup-bats@v1
+        with:
+          bats-version: 1.9.0
+
+      - name: Run Tests
+        working-directory: local_ci # Tests have to start from here, because some use $PWD to detect the local_ci base.
+        env:
+          LOCAL_CI_TESTS_CACHEDIR: ${{ github.workspace }}/cachedir
+          LOCAL_CI_TESTS_GITDIR: ${{ github.workspace }}/moodle
+          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/moodle
+          LOCAL_CI_TESTS_DBLIBRARY: native
+          LOCAL_CI_TESTS_DBTYPE: mysqli
+          LOCAL_CI_TESTS_DBHOST: 127.0.0.1
+          LOCAL_CI_TESTS_DBUSER: root
+          LOCAL_CI_TESTS_DBPASS: test
+        run: |
+          mkdir -p ${LOCAL_CI_TESTS_CACHEDIR}
+          bats --timing tests/${{ matrix.test }}
