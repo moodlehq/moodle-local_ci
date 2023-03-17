@@ -1,6 +1,6 @@
 # CI local plugin
 
-[![Build Status](https://travis-ci.com/moodlehq/moodle-local_ci.svg?branch=master)](https://travis-ci.com/moodlehq/moodle-local_ci)
+[![Build Status](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml)
 
 This local_ci plugin contains all the scripts needed
 by Moodle CI servers to automate checks while
