@@ -408,8 +408,9 @@ for todelete in ${excluded}; do
 done
 
 # Remove all the files, but the patchset ones and .git, work and node_modules
-find ${WORKSPACE} -type f -and -not \( -path "*/.git/*" -or -path "*/work/*" -or -path "*/node_modules/*" \) | \
-    grep -vf ${WORKSPACE}/work/patchset.files | xargs -I{} rm {}
+find ${WORKSPACE} -type f -and -not \( \
+    -path "/${WORKSPACE}/.git/*" -or -path "${WORKSPACE}/work/*" -or -path "${WORKSPACE}/node_modules/*" \
+\) | grep -vf ${WORKSPACE}/work/patchset.files | xargs -I{} rm {}
 
 # Remove all the empty dirs remaining, but .git and work
 find ${WORKSPACE} -depth -empty -type d -and -not \( -name .git -or -name work -or -name node_modules \) -delete

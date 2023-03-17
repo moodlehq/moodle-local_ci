@@ -38,17 +38,17 @@
   <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="2" numwarnings="0" allowfiltering="1">
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
     <mess>
-      <problem file="f3aa1ea795" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/f3aa1ea795" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="f3aa1ea795d7" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/f3aa1ea795d7" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>AMOS - No valid commands parsed, but 'AMOS BEGIN' in commit. Syntax is wrong. </message>
         <description/>
         <code/>
       </problem>
-      <problem file="62856ee140" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/62856ee140" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="62856ee1401f" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/62856ee1401f" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>AMOS - Instruction not understood 'MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]' </message>
         <description/>
         <code/>
       </problem>
-      <problem file="62856ee140" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/62856ee140" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="info" weight="1">
+      <problem file="62856ee1401f" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/62856ee1401f" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="info" weight="1">
         <message>AMOS - String to be moved: nameurl/data to fieldtypelabel/datafield_url </message>
         <description/>
         <code/>

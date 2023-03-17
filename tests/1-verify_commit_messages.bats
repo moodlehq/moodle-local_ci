@@ -14,7 +14,7 @@ commit_apply_fixture_and_run() {
     git_apply_fixture verify_commit_messages/$1
     export initialcommit=$FIXTURE_HASH_BEFORE
     export finalcommit=$FIXTURE_HASH_AFTER
-    export shorthash=$(cd $gitdir && git rev-list -n1 --abbrev-commit $finalcommit)
+    export shorthash=$(cd $gitdir && git rev-list -n1 --abbrev-commit --abbrev=12 $finalcommit)
 
     ci_run verify_commit_messages/verify_commit_messages.sh
 }

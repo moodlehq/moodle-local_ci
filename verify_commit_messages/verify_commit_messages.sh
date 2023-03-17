@@ -73,7 +73,7 @@ if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
 fi
 
 # get all the commits between both commits
-commits=$(${gitcmd} rev-list --abbrev-commit ${initialcommit}..${finalcommit})
+commits=$(${gitcmd} rev-list --abbrev-commit --abbrev=12 ${initialcommit}..${finalcommit})
 
 # iterate over all commits, performing checks and reporting problems/status
 totalnumproblems=0

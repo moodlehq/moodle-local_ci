@@ -92,12 +92,12 @@
   <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="1" numwarnings="1" allowfiltering="1">
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
     <mess>
-      <problem file="d48cad00ec" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/d48cad00ec" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
+      <problem file="d48cad00ecab" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/d48cad00ecab" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>The commit message does not contain the expected issue code MDL-53136 and a space. </message>
         <description/>
         <code/>
       </problem>
-      <problem file="56ec07ed1c" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/56ec07ed1c" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="warning" weight="1">
+      <problem file="56ec07ed1cef" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/commit/56ec07ed1cef" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="warning" weight="1">
         <message>The commit message does not define a code area ending with a colon and a space after the issue code. </message>
         <description/>
         <code/>
