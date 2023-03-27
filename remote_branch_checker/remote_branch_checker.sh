@@ -380,12 +380,22 @@ if [ -f $WORKSPACE/.gherkin-lintrc ]; then
     cat "${WORKSPACE}/work/gherkin-lint.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gherkinlint > "${WORKSPACE}/work/gherkin-lint.xml"
 fi
 
-# Run the grunt checker if Gruntfile exists. node stuff has been already installed.
-if [ -f ${WORKSPACE}/Gruntfile.js ]; then
+# Time for grunt results to be checked (conditionally).
+# First, let's calculate if there is any .css / .scss / .less / .map / .js in the patch.
+gruntneeded=
+if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' patchset.files; then
+    gruntneeded=1
+fi
+
+# Run the grunt checker if Gruntfile exists (node stuff has been already installed) and
+# if it's really needed to run grunt (gruntneeded), because it's slow.
+if [ -f ${WORKSPACE}/Gruntfile.js ] && [ -n ${gruntneeded} ]; then
     echo "Info: Running grunt..."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
     cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
     cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
+else
+    echo "Info: Skipping grunt..."
 fi
 
 # TODO: Maybe add a GHA checker to see if the user has them enabled? 99% of times they will, but can be checked with just
