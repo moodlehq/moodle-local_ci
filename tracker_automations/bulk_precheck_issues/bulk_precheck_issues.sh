@@ -81,11 +81,18 @@ while read issue; do
                --file "${resultfile}.repository" > /dev/null
     repository=$(cat "${resultfile}.repository" | tr -d ' ')
     rm "${resultfile}.repository"
+    # Check a repository is given.
     if [[ -z "${repository}" ]]; then
         issueresult="error"
         echo "  (x) Error: the repository field is empty. Nothing was checked." | tee -a "${resultfile}.${issue}.txt"
     else
         echo "  Checked ${issue} using repository: ${repository}" | tee -a "${resultfile}.${issue}.txt"
+    fi
+    # Check if the git repository is ok (error on git://github.com)
+    if [[ "${repository}" =~ ^git://github.com ]]; then
+        issueresult="error"
+        echo "  (x) Error: GitHub git://github.com remotes are no longer supported. Please change to https://github.com" | \
+            tee -a "${resultfile}.${issue}.txt"
     fi
 
     # Check if there are testing instructions
@@ -100,6 +107,7 @@ while read issue; do
         issueresult="error"
         echo " - (x) Testing instructions are missing." | tee -a "${resultfile}.${issue}.txt"
     fi
+
     # Iterate over the candidate branches
     branchesfound=""
     for candidate in ${cf_branches//,/ }; do
