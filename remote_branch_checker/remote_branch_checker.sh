@@ -383,13 +383,13 @@ fi
 # Time for grunt results to be checked (conditionally).
 # First, let's calculate if there is any .css / .scss / .less / .map / .js in the patch.
 gruntneeded=
-if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' ${WORKSPACE}/work/patchset.files; then
+if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' "${WORKSPACE}/work/patchset.files"; then
     gruntneeded=1
 fi
 
 # Run the grunt checker if Gruntfile exists (node stuff has been already installed) and
 # if it's really needed to run grunt (gruntneeded), because it's slow.
-if [ -f ${WORKSPACE}/Gruntfile.js ] && [ -n ${gruntneeded} ]; then
+if [[ -f ${WORKSPACE}/Gruntfile.js ]] && [[ -n "${gruntneeded}" ]]; then
     echo "Info: Running grunt..."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
     cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
