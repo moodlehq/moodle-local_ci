@@ -383,7 +383,7 @@ fi
 # Time for grunt results to be checked (conditionally).
 # First, let's calculate if there is any .css / .scss / .less / .map / .js in the patch.
 gruntneeded=
-if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' patchset.files; then
+if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' ${WORKSPACE}/work/patchset.files; then
     gruntneeded=1
 fi
 
