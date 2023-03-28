@@ -126,10 +126,13 @@ fi
 # that NEVER it will point to a hash older than moodle.git tip.
 # Get moodle.git (origin) tip as default base commit
 baseref="origin/${integrateto}"
+integrationbaseref="integration/${integrateto}"
+
 
 if [[ -n "${resettocommit}" ]]; then
     # If we are testing..
     baseref=$resettocommit
+    integrationbaseref=$resettocommit
 fi
 
 basecommit=$(${gitcmd} rev-parse --verify ${baseref})
@@ -176,7 +179,7 @@ if [[ ! ${ancestor} ]]; then
 fi
 
 # Look for the common ancestor against integration.git
-integrationancestor="$(${gitcmd} merge-base FETCH_HEAD integration/${integrateto})"
+integrationancestor="$(${gitcmd} merge-base FETCH_HEAD $integrationbaseref)"
 # Not sure if this can happen, just imagining rare cases of rewriting history, with moodle.git passing and this failing.
 if [[ ! ${integrationancestor} ]]; then
     echo "Error: The ${branch} branch at ${remote} and integration.git ${integrateto} do not have any common ancestor." | tee -a ${errorfile}
@@ -381,6 +384,9 @@ if [ -f $WORKSPACE/.gherkin-lintrc ]; then
 fi
 
 # Time for grunt results to be checked (conditionally).
+touch "${WORKSPACE}/work/grunt.txt"
+touch "${WORKSPACE}/work/grunt-errors.txt"
+
 # First, let's calculate if there is any .css / .scss / .less / .map / .js in the patch.
 gruntneeded=
 if grep -Eq '(\.css|\.scss|\.less|\.js|\.map)$' "${WORKSPACE}/work/patchset.files"; then
@@ -392,11 +398,13 @@ fi
 if [[ -f ${WORKSPACE}/Gruntfile.js ]] && [[ -n "${gruntneeded}" ]]; then
     echo "Info: Running grunt..."
     ${mydir}/../grunt_process/grunt_process.sh > "${WORKSPACE}/work/grunt.txt" 2> "${WORKSPACE}/work/grunt-errors.txt"
-    cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
-    cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 else
     echo "Info: Skipping grunt..."
 fi
+
+# Always run the converter, so we get the needed xml files to ensure the grunt & shifter sections are always present.
+cat "${WORKSPACE}/work/grunt.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=gruntdiff > "${WORKSPACE}/work/grunt.xml"
+cat "${WORKSPACE}/work/grunt-errors.txt" | ${phpcmd} ${mydir}/checkstyle_converter.php --format=shifter > "${WORKSPACE}/work/shifter.xml"
 
 # TODO: Maybe add a GHA checker to see if the user has them enabled? 99% of times they will, but can be checked with just
 # a quick http request (without looking to more details using the API.
