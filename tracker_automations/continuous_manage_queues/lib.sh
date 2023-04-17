@@ -204,7 +204,7 @@ function run_A3b() {
                    --issue ${issue} \
                    --labels "integration_held"
         # Add the standard comment for held issues the last week.
-        comment='We are currently in the final week before release ( https://docs.moodle.org/dev/Integration_Review#During_continuous_integration.2FFreeze.2FQA_period ) so this issue is being held until after release. Thanks for your patience!'
+        comment='We are currently in the [final week before release|https://moodledev.io/general/development/process/integration#during-continuous-integrationfreezeqa-period] so this issue is being held until after release. Thanks for your patience!'
         ${basereq} --action addComment \
                    --issue ${issue} \
                    --comment "${comment}"
