@@ -373,7 +373,7 @@ function run_C() {
     for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         echo "Processing ${issue}"
         if [ -n "${dryrun}" ]; then
-            echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current integration"
+            echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current because it's held"
             continue
         fi
         # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
@@ -395,6 +395,6 @@ function run_C() {
                    --field "customfield_10011=" \
                    --comment "Continuous queues manage: Moving out from current because it's held" \
                    --role "Integrators"
-        echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved our from current: held" >> "${logfile}"
+        echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current: held" >> "${logfile}"
     done
 }
