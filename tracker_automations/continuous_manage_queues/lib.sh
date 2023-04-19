@@ -359,3 +359,42 @@ function is_blocked_by_unresolved() {
     fi
     return 1 # Exit code, meaning false, not blocked.
 }
+
+# Move, always, all held issues awaiting for integration away from current integration.
+function run_C() {
+    # Count the list of issues in the current queue. (We cannot use getIssueCount till bumping to Jira CLI 8.1, hence, old way)
+    ${basereq} --action getIssueList \
+               --jql "project = MDL \
+                     AND 'Currently in integration' IS NOT EMPTY \
+                     AND status IN ('Waiting for integration review') \
+                     AND labels in (security_held, integration_held)" \
+               --file "${resultfile}"
+    # Let's iterate over found issues.
+    for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
+        echo "Processing ${issue}"
+        if [ -n "${dryrun}" ]; then
+            echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current integration"
+            continue
+        fi
+        # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
+        # we are setting some custom fields not available (on purpose) on that screen. So we have created a
+        # global transition, only available to the bots, not transitioning but bringing access to all the fields
+        # via special screen. So we'll ne using that global transition via transitionIssue instead.
+        # Also, there is one bug in the 4.4.x series, setting the destination as 0, leading to error in the
+        # execution, so the form was hacked in the browser to store correct -1: https://jira.atlassian.com/browse/JRA-25002
+        # Commented below, it's the "ideal" code. If some day JIRA changes that restriction we could stop using
+        # that non-transitional transition and use normal update.
+        #${basereq} --action updateIssue \
+        #    --issue ${issue} \
+        #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+        ${basereq} --action transitionIssue \
+                   --issue ${issue} \
+                   --transition "CI Global Self-Transition" \
+                   --field "customfield_10211=" \
+                   --field "customfield_10110=" \
+                   --field "customfield_10011=" \
+                   --comment "Continuous queues manage: Moving out from current because it's held" \
+                   --role "Integrators"
+        echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved our from current: held" >> "${logfile}"
+    done
+}

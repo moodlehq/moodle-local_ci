@@ -14,6 +14,8 @@
 #    1) Move (if not blocked) issues away from the candidates queue.
 #      a) Add the "integration_held" (+ on-sync standard comment) to new features and improvements missing it @ candidates.
 #      b) Keep the current queue fed with bug issues when it's under a threshold.
+#  C) Move, always, all held issues awaiting for integration away from current integration.
+#
 # Note that all the "move to current" operations are always subject to the issue being free of unresolved blockers.
 #
 # The criteria to consider an issue "important" are:
@@ -140,6 +142,9 @@ if [ $behaviorAB == "after" ]; then
     # B1a, keep the current queue fed with bug issues when it's under a threshold.
     run_B1b
 fi
+
+# Task C, move, always, all held issues awaiting for integration away from current integration.
+run_C
 
 # Remove the resultfile. We don't want to disclose those details.
 rm -fr "${resultfile}"
