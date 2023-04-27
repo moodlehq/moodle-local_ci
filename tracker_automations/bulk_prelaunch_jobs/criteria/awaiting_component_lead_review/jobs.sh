@@ -6,11 +6,11 @@
 # and we need to keep it (until we move to REST from CLI)
 
 # We want to launch always a sqlsrv PHPUNIT
-echo -n "PHPUnit (pgsql): " >> "${resultfile}.jenkinscli"
+echo -n "PHPUnit (sqlsrv): " >> "${resultfile}.jenkinscli"
 ${jenkinsreq} "DEV.02 - Developer-requested PHPUnit" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
-    -p DATABASE=pgsql \
+    -p DATABASE=sqlsrv \
     -p PHPVERSION=${php_version} \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 

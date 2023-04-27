@@ -46,11 +46,11 @@ echo "Behat options: ${behat_options}"
 
 # We want to launch always a sqlsrv PHPUNIT
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
-    echo -n "PHPUnit (pgsql / ${phpunit_options}): " >> "${resultfile}.jenkinscli"
+    echo -n "PHPUnit (sqlsrv / ${phpunit_options}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.02 - Developer-requested PHPUnit" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
-        -p DATABASE=pgsql \
+        -p DATABASE=sqlsrv \
         -p PHPVERSION=${php_version} \
         -p TAGS=${phpunit_filter} \
         -p TESTSUITE=${phpunit_suite} \
