@@ -50,13 +50,16 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p BROWSER=firefox \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
-# We want to launch always a Behat (firefox - classic) job
-echo -n "Behat (firefox - classic): " >> "${resultfile}.jenkinscli"
-${jenkinsreq} "DEV.01 - Developer-requested Behat" \
-    -p REPOSITORY=${repository} \
-    -p BRANCH=${branch} \
-    -p DATABASE=pgsql \
-    -p PHPVERSION=${php_version} \
-    -p BROWSER=firefox \
-    -p BEHAT_SUITE=classic \
-    -w >> "${resultfile}.jenkinscli" < /dev/null
+# We want to launch a Behat (firefox - classic) job
+# only if the target branch is master.
+if [[ ${target} == "master" ]]; then
+    echo -n "Behat (firefox - classic): " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER=firefox \
+        -p BEHAT_SUITE=classic \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
