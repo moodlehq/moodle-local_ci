@@ -1,8 +1,8 @@
 {
     "require": {
-        "moodlehq/moodle-cs": "^3.2.3",
+        "moodlehq/moodle-cs": "^3.3.3",
         "mustache/mustache": "^2.14.1",
-        "phpcompatibility/php-compatibility": "dev-develop#2fb82334"
+        "phpcompatibility/php-compatibility": "dev-develop#70e4ca24"
     },
     "config": {
         "allow-plugins": {
