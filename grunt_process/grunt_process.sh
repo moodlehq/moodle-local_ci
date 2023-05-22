@@ -53,14 +53,25 @@ else
 
     # Send both stdout and stderr to files while passing them intact (for callers consumption).
     # The echo here works around a problem where shifter is sending colours (MDL-52591).
+
     # Run the default task (same as specifying no arguments)
     tasks="default"
 
+    # Add some non-default tasks to the run
+    # TODO: This conditional block can be removed once we move to 311_STABLE
+    #       as minimum required branch. Just remove it and add "ignorefiles" go the next block.
     if grep -q ignorefiles Gruntfile.js
     then
         # In 3.2 and later run ignorefiles task
         tasks="$tasks ignorefiles"
     fi
+    # Since 3.11 we have split scripts for every task, let's check for their existence there.
+    nondefault="jsconfig jsdoc upgradablelibs"
+    for task in ${nondefault}; do
+        if [[ -r .grunt/tasks/${task}.js ]]; then
+            tasks="${tasks} ${task}"
+        fi
+    done
 
     set +e
     npx grunt $tasks --no-color > >(tee "${outputfile}") 2> >(tee "${outputfile}".stderr >&2)

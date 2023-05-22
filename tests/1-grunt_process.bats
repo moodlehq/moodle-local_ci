@@ -79,3 +79,18 @@ setup () {
     assert_output --partial " -e .eslintignore "
     assert_output --partial "OK: All modules are perfectly processed by grunt"
 }
+
+@test "grunt process: Problems generating jsdoc" {
+    # When something in the jsdoc annotations is incorrect and leads the grunt jsdoc task to fail
+
+    # Testing on 4.2.0 because there was an error there, fixed few weeks later by MDL-78323. So we don't need any fixture.
+    create_git_branch 402-stable v4.2.0
+
+    # Run test
+    ci_run grunt_process/grunt_process.sh
+
+    assert_failure
+    assert_output --partial "Running \"jsdoc:dist\" (jsdoc) task"
+    assert_output --partial "ERROR: Unable to parse a tag's type expression for source file"
+    assert_output --partial "grade/report/grader/amd/src/collapse.js in line 497"
+}
