@@ -5,18 +5,18 @@ load 'libs/bats-support/load'
 load 'libs/bats-assert/load'
 
 if [ -z $LOCAL_CI_TESTS_CACHEDIR ]; then
-    echo "Please define LOCAL_CI_TESTS_CACHEDIR" >&2
+    echo "Please define LOCAL_CI_TESTS_CACHEDIR"
     exit 1;
 fi
 
 if [ ! -d $LOCAL_CI_TESTS_CACHEDIR ]; then
-    echo "Please ensure LOCAL_CI_TESTS_CACHEDIR is a directory" >&2
+    echo "Please ensure LOCAL_CI_TESTS_CACHEDIR is a directory"
     exit 1
 fi
 
 if [ -z $LOCAL_CI_TESTS_GITDIR ]; then
-    echo "Please define LOCAL_CI_TESTS_GITDIR. It should be a git clone of moodle.git." >&2
-    echo "IT WILL CAUSE DESTRUCTIVE CHANGES TO THE GIT REPO, DO NOT SHARE IT WITH YOUR CODE!" >&2
+    echo "Please define LOCAL_CI_TESTS_GITDIR. It should be a git clone of moodle.git."
+    echo "IT WILL CAUSE DESTRUCTIVE CHANGES TO THE GIT REPO, DO NOT SHARE IT WITH YOUR CODE!"
     exit 1;
 else
     # Ensure $LOCAL_CI_TESTS_GITDIR does not have trailing slashes, it breaks various tests.
@@ -24,7 +24,7 @@ else
 fi
 
 if [ -z $LOCAL_CI_TESTS_PHPCS_DIR ]; then
-    echo "Please ensure LOCAL_CI_TESTS_PHPCS_DIR is set to the path to the phpcs standard" >&2
+    echo "Please ensure LOCAL_CI_TESTS_PHPCS_DIR is set to the path to the phpcs standard"
     exit 1
 fi
 
@@ -44,7 +44,7 @@ create_git_branch() {
 
     cd $gitdir
     $gitcmd checkout . -q
-    $gitcmd clean -fd -q
+    $gitcmd clean -fdx -q
     $gitcmd checkout -B $branch -q
     $gitcmd reset --hard $resetto -q
 
@@ -58,7 +58,7 @@ git_apply_fixture() {
 
     if [ ! -f $patch ];
     then
-        echo "Fixture named $patchname does not exist in fixtures directory" 1>&2
+        echo "Fixture named $patchname does not exist in fixtures directory"
         exit 1
     fi
 
