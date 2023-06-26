@@ -1,20 +1,20 @@
-From a1a390512135d23bde0788e479f5187c7e317472 Mon Sep 17 00:00:00 2001
+From e5c0e94dde233f5bcf627980ef1afbe91f975a65 Mon Sep 17 00:00:00 2001
 From: Dan Poltawski <dan@moodle.com>
 Date: Fri, 14 Oct 2016 12:25:22 +0100
-Subject: [PATCH 1/1] MDLSITE-4770 - A template to check that partial loading
- is working.
+Subject: [PATCH] MDLSITE-4770 - A template to check that partial loading is
+ working.
 
 ---
- blocks/lp/templates/test_partial_loading.mustache | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ .../templates/test_partial_loading.mustache   | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
  create mode 100644 blocks/lp/templates/test_partial_loading.mustache
 
 diff --git a/blocks/lp/templates/test_partial_loading.mustache b/blocks/lp/templates/test_partial_loading.mustache
 new file mode 100644
-index 0000000..2f36d6f
+index 00000000000..853d13ea79a
 --- /dev/null
 +++ b/blocks/lp/templates/test_partial_loading.mustache
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,22 @@
 +{{!
 +    @template block_lp/test_partial_loading
 +
@@ -30,12 +30,13 @@ index 0000000..2f36d6f
 +    * None
 +
 +    Example context (json): {
-+        "attributes": [
-+        { "name": "src", "value": "https://moodle.org/logo/moodle-logo.svg" },
-+        { "name": "alt", "value": "test" }
-+    ]}
++        "message": "Your pants are on fire!",
++        "closebutton": 1,
++        "announce": 1,
++        "extraclasses": "foo bar"
++    }
 +}}
-+{{> core/pix_icon}}
++{{> core/notification_info}}
 -- 
-2.10.0
+2.40.0
 
