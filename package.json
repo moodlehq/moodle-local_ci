@@ -4,6 +4,6 @@
   "description": "Tools for CI with Moodle",
   "private": true,
   "dependencies": {
-    "vnu-jar": "18.11.5"
+    "vnu-jar": "23.4.11"
   }
 }
