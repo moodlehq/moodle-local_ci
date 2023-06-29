@@ -20,24 +20,6 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# Disabled for now, it's failing a lot :-(
-# We want to launch always a Behat (latest, @app only) job
-#if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-app" ]]; then
-#echo -n "App tests (experimental): " >> "${resultfile}.jenkinscli"
-#${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
-#    -p REPOSITORY=${repository} \
-#    -p BRANCH=${branch} \
-#    -p DATABASE=pgsql \
-#    -p PHPVERSION=${php_version} \
-#    -p BROWSER=chrome \
-#    -p BEHAT_TOTAL_RUNS=1 \
-#    -p MOBILE_VERSION=latest \
-#    -p INSTALL_PLUGINAPP=true \
-#    -p TAGS=@app \
-#    -p RUNNERVERSION=${runner} \
-#    -w >> "${resultfile}.jenkinscli" < /dev/null
-#fi
-
 # We want to launch always a Behat (goutte) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
     echo -n "Behat (goutte - boost and classic): " >> "${resultfile}.jenkinscli"
@@ -77,4 +59,25 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BEHAT_SUITE=classic \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
+# We want to launch a Behat (latest-test, @app only) job
+# only if the target branch is master.
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-app" ]]; then
+    # Only for master or when behat-app is explicitly asked.
+    if [[ ${target} == "master" ]] || [[ "${jobtype}" == "behat-app" ]]; then
+        echo -n "App tests (stable app version): " >> "${resultfile}.jenkinscli"
+        ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
+            -p REPOSITORY=${repository} \
+            -p BRANCH=${branch} \
+            -p DATABASE=pgsql \
+            -p PHPVERSION=${php_version} \
+            -p BROWSER=chrome \
+            -p BEHAT_INCREASE_TIMEOUT=3 \
+            -p MOBILE_VERSION=latest-test \
+            -p INSTALL_PLUGINAPP=ci \
+            -p TAGS="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip" \
+            -p RUNNERVERSION=${runner} \
+            -w >> "${resultfile}.jenkinscli" < /dev/null
+    fi
 fi
