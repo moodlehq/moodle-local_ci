@@ -14,7 +14,7 @@
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-chrome, behat-goutte, behat-all.
-#quiet: if enabled ("true"), don't perform any action in the Tracker.
+#quiet: if enabled ("true"), don't perform any action in the Tracker. When "false", perform Tracker actions.
 #restrictedto: name of the project (MDL) role we want to restrict the comment to. Blank means no restriction.
 
 
@@ -113,6 +113,10 @@ while read issue; do
             set +e
             . "${mydir}/criteria/${criteria}/jobs.sh"
             set -e
+            # Only if we have got some new job registered in ${resultfile}.jenkinscli
+            if [[ ! -f "${resultfile}.jenkinscli" ]]; then
+                continue
+            fi
             # Calculate the type, job names and build numbers
             regex="^([^:]+): Started ([^#]+) #([0-9]+)$"
             while read jobline; do

@@ -141,7 +141,35 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
             -p PHPVERSION=${php_version} \
             -p BROWSER=firefox \
             -p BEHAT_SUITE=default \
-            -p TAGS=${behat_tags} \
+            -p TAGS="${final_tags}" \
+            -p NAME="${behat_name}" \
+            -p RUNNERVERSION=${runner} \
+            -w >> "${resultfile}.jenkinscli" < /dev/null
+    done
+fi
+
+# This is a behat-app jobtype, let's launch it.
+if [[ "${jobtype}" == "behat-app" ]]; then
+    # Loop over all the configured dbtypes.
+    dbtypesarr=($(echo ${dbtypes} | tr ',' '\n'))
+    for dbtype in "${dbtypesarr[@]}"; do
+        dbtype=${dbtype//[[:blank:]]/}
+        echo -n "App tests (stable app version) - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
+        # These are the default tags for any app run.
+        final_tags="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip"
+        if [[ -n "${behat_tags}" ]]; then
+            # Add the specified tags, if any to the default ones.
+            final_tags="${final_tags}&&${behat_tags}"
+        fi
+        ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+            -p REPOSITORY=${repository} \
+            -p BRANCH=${branch} \
+            -p DATABASE=${dbtype} \
+            -p PHPVERSION=${php_version} \
+            -p BROWSER=chrome \
+            -p BEHAT_INCREASE_TIMEOUT=3 \
+            -p MOBILE_VERSION=latest-test \
+            -p INSTALL_PLUGINAPP=ci \
             -p TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
