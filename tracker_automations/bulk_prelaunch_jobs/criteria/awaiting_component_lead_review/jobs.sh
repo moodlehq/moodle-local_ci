@@ -59,7 +59,7 @@ if [[ ${target} == "master" ]]; then
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER=chrome \
-        -p BEHAT_INCREASE_TIMEOUT=3 \
+        -p BEHAT_INCREASE_TIMEOUT=4 \
         -p MOBILE_VERSION=latest-test \
         -p INSTALL_PLUGINAPP=ci \
         -p TAGS="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip" \
