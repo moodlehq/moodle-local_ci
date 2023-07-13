@@ -132,6 +132,21 @@ setup () {
     assert_failure
 }
 
+@test "mustache lint: Test str helper is working" {
+    # Set up.
+    create_git_branch MOODLE_402_STABLE v4.2.0
+    git_apply_fixture 402-mustache_lint-str.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result
+    assert_success
+    assert_output --partial "lib/templates/test_str.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}
+
 @test "mustache_lint: Test quote and uniq helpers are working" {
     # Set up.
     git_apply_fixture 31-mustache_lint-quote_and_uniq.patch

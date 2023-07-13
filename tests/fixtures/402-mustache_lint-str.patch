@@ -1,0 +1,30 @@
+From d64cf216e6f0cdfed617b538fde5b4e193e7da88 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Tue, 11 Jul 2023 15:16:18 +0200
+Subject: [PATCH] MDL-12345: test str helper
+
+---
+ lib/templates/test_str.mustache | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 lib/templates/test_str.mustache
+
+diff --git a/lib/templates/test_str.mustache b/lib/templates/test_str.mustache
+new file mode 100644
+index 00000000000..cb7a906deb9
+--- /dev/null
++++ b/lib/templates/test_str.mustache
+@@ -0,0 +1,11 @@
++{{!
++    @template core/test_str
++
++    Example context (json):
++    {
++    }
++
++}}
++<p>{{#str}} string, component {{/str}}</p>
++<label data-type="{{#str}} string, component {{/str}}'">Label</label>
++<a href="{{#str}} string, component {{/str}}'">Link</a>
+-- 
+2.40.0
+

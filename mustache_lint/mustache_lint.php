@@ -87,7 +87,7 @@ $jshelper = new js_helper($CFG->dirroot);
 $mustache = new Mustache_Engine([
     'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
     'helpers' => [ // Emulate some helpers for html validation purposes.
-        'str' => function($text) { return "[[$text]]"; },
+        'str' => function($text) { return '((' . urlencode($text) . '))'; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
         'uniqid' => function() { return "would-be-a-uniqid"; },
         'quote' => function($text, $helper) {
