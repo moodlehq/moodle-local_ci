@@ -78,13 +78,17 @@ if [ -n "${dryrun}" ]; then
 fi
 
 # A, move "important" issues from candidates to current.
-run_A
+# Note: This has been disabled as of 2023-07-13. See MDLSITE-7296 for more information.
+echo "Automatism A disabled, not considering important issues any more"
+# run_A
 
 # B, keep the current queue fed with issues when it's under a threshold.
 run_B
 
 # C, raise interation priority for issues awaiting as candidates too long.
-run_C
+# Note: This has been disabled as of 2023-07-13. See MDLSITE-7296 for more information.
+echo "Automatism C disabled, not raising the integration priority of issues waiting too long any more"
+# run_C
 
 # Remove the resultfile. We don't want to disclose those details.
 rm -fr "${resultfile}"

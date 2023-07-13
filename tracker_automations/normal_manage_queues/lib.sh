@@ -93,9 +93,7 @@ function run_B() {
         ${basereq} --action getIssueList \
                    --jql "filter=14000 \
                        ORDER BY 'Integration priority' DESC, \
-                                priority DESC, \
-                                votes DESC, \
-                                'Last comment date' ASC" \
+                                Rank ASC" \
                    --file "${resultfile}"
 
         # Iterate over found issues, moving up to $movemax of them to the current queue (cleaning integrator and tester).
