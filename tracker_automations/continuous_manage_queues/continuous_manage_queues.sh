@@ -122,7 +122,9 @@ if [ $behaviorAB == "before" ]; then
     # A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates.
     run_A1
     # A2, move "important" issues from candidates to current
-    run_A2
+    # Note: This has been disabled as of 2023-07-13. See MDLSITE-7296 for more information.
+    echo "Automatism A2 disabled, not considering important issues any more"
+    # run_A2
     # A3, move all issues aways from candidates queue:
     if [ $behaviorA3 == "move" ]; then
         # A3a, keep the current queue fed with bug issues when it's under a threshold.
