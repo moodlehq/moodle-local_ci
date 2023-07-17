@@ -192,7 +192,11 @@ setup () {
     # Assert result
     assert_failure
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [camelcase]: Identifier 'my_message' is not in camel case"
-    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); )"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING:     var my_message = 'Hello World!';"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING:         ^"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert."
+    assert_output --partial "lib/templates/js_test.mustache - WARNING:     alert(my_message);"
+    assert_output --partial "lib/templates/js_test.mustache - WARNING:     ^"
 }
 
 @test "mustache_lint: Test eslint handles parsing failures safely" {
@@ -210,7 +214,10 @@ setup () {
 
     # Assert result
     assert_failure
-    assert_output --partial "lib/templates/js_token_test.mustache - WARNING: ESLint error []: Parsing error: Unexpected token bar ( var foo bar baz = 'bum'; )"
+    assert_output --partial "lib/templates/js_token_test.mustache - INFO: ESLint reported JavaScript errors"
+    assert_output --partial "lib/templates/js_token_test.mustache - WARNING: ESLint error []: Parsing error: Unexpected token bar, Line: 2 Column: 13"
+    assert_output --partial "lib/templates/js_token_test.mustache - WARNING:     var foo bar baz = 'bum';"
+    assert_output --partial "lib/templates/js_token_test.mustache - WARNING:             ^"
 }
 
 @test "mustache_lint: Test eslint runs ok when invoked from any directory" {

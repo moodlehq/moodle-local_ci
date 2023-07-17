@@ -140,6 +140,7 @@ if ($eslintproblems === false) {
     // When we have no example context, parse errors are common because
     // there are missing variables in the js, thus we ignore them.
     $ignoreparseerrors = empty($example) ? true : false;
+    print_message('INFO', 'ESLint reported JavaScript errors');
     print_eslint_problems($eslintproblems, $ignoreparseerrors);
 }
 
@@ -260,8 +261,18 @@ function print_eslint_problems($problems, $ignoreparseerrors) {
         } else {
             $severity = 'warning';
         }
-        $message = "ESLint {$severity} [{$problem->ruleId}]: {$problem->message} ( {$problem->source} ), Line: {$problem->line} Column: {$problem->column}";
-        print_problem('WARNING', $message);
+        if ($problem->linesource) {
+            $message = "ESLint {$severity} [{$problem->ruleId}]: {$problem->message}, Line: {$problem->line} Column: {$problem->column}";
+            print_problem('WARNING', $message);
+            print_problem('WARNING', rtrim($problem->linesource));
+
+            if ($problem->column !== null) {
+                print_problem('WARNING', str_pad(' ', $problem->column - 1) . '^');
+            }
+        } else {
+            $message = "ESLint {$severity} [{$problem->ruleId}]: {$problem->message} ( {$problem->source} ), Line: {$problem->line} Column: {$problem->column}";
+            print_problem('WARNING', $message);
+        }
     }
 }
 
