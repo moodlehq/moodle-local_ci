@@ -130,8 +130,7 @@ function run_A3a() {
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
                    --jql "filter=14000 \
-                       ORDER BY 'Integration priority' DESC, \
-                                Rank ASC" \
+                       ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
         # Iterate over found issues, moving up to $movemax of them to the current queue (cleaning integrator and tester).
@@ -231,8 +230,7 @@ function run_B1b() {
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
                    --jql "filter=14000 \
-                       ORDER BY 'Integration priority' DESC, \
-                                Rank ASC" \
+                       ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
         # Iterate over found issues, moving up to $movemax of them to the current queue (cleaning integrator and tester).
