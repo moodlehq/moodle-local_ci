@@ -102,7 +102,7 @@ class amos_script_parser {
 
     public static function print_message($message, $severity = 'info') {
         global $COMMIT;
-        echo "${COMMIT}*${severity}*AMOS - ${message}\n";
+        echo "{$COMMIT}*{$severity}*AMOS - {$message}\n";
     }
 
     /**

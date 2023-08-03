@@ -3,12 +3,12 @@
 load libs/shared_setup
 
 setup () {
-    create_git_branch MOODLE_31_STABLE v3.1.0
+    create_git_branch MOODLE_402_STABLE v4.2.1
 }
 
 @test "php_lint: lib/moodlelib.php lint free" {
     # Set up.
-    git_apply_fixture 31-php_lint-ok.patch
+    git_apply_fixture 402-php_lint-ok.patch
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
@@ -23,7 +23,7 @@ setup () {
 
 @test "php_lint: lib/moodlelib.php lint error detected" {
     # Set up.
-    git_apply_fixture 31-php_lint-bad.patch
+    git_apply_fixture 402-php_lint-bad.patch
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
@@ -38,7 +38,7 @@ setup () {
 
 @test "php_lint: Ensure vendor directories aren't checked ever" {
     # Set up.
-    git_apply_fixture 31-php_lint-vendor.patch
+    git_apply_fixture 402-php_lint-vendor.patch
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 
@@ -53,7 +53,7 @@ setup () {
 
 @test "php_lint: shows the php version being used" {
     # Set up.
-    git_apply_fixture 31-php_lint-ok.patch
+    git_apply_fixture 402-php_lint-ok.patch
     export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
     export GIT_COMMIT=$FIXTURE_HASH_AFTER
 

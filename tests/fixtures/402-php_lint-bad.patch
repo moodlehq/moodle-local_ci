@@ -1,0 +1,25 @@
+From dbe6c7fffdbb08918094540289bf6c1365f161cc Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Fri, 4 Aug 2023 08:28:39 +0200
+Subject: [PATCH] MDLSITE-4211 fixture: for php_lint tests
+
+This should be applied on top of v4.1.0
+---
+ lib/moodlelib.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/moodlelib.php b/lib/moodlelib.php
+index 7b7e462219..56ffe31218 100644
+--- a/lib/moodlelib.php
++++ b/lib/moodlelib.php
+@@ -10882,6 +10882,7 @@ class lang_string {
+         $this->forcedstring = true;
+         return array('forcedstring', 'string', 'lang');
+     }
++die('oh this is gonna be a problem!
+ 
+     /**
+      * Returns the identifier.
+-- 
+2.40.0
+

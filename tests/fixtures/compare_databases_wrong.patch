@@ -1,0 +1,44 @@
+From cf4705ca3622530482459f681559d1300cbb9799 Mon Sep 17 00:00:00 2001
+From: "Eloy Lafuente (stronk7)" <stronk7@moodle.org>
+Date: Thu, 3 Aug 2023 14:37:20 +0200
+Subject: [PATCH] MDL-12345 install: Force some differences in DB schema for
+ testing
+
+---
+ lib/db/install.xml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/db/install.xml b/lib/db/install.xml
+index e18b9a07e03..f70d8899bbc 100644
+--- a/lib/db/install.xml
++++ b/lib/db/install.xml
+@@ -865,7 +865,7 @@
+         <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="suspended" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="suspended flag prevents users to log in"/>
+         <FIELD NAME="mnethostid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+-        <FIELD NAME="username" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
++        <FIELD NAME="username" TYPE="char" LENGTH="200" NOTNULL="true" SEQUENCE="false"/>
+         <FIELD NAME="password" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+         <FIELD NAME="idnumber" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+         <FIELD NAME="firstname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+@@ -883,7 +883,7 @@
+         <FIELD NAME="calendartype" TYPE="char" LENGTH="30" NOTNULL="true" DEFAULT="gregorian" SEQUENCE="false"/>
+         <FIELD NAME="theme" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false"/>
+         <FIELD NAME="timezone" TYPE="char" LENGTH="100" NOTNULL="true" DEFAULT="99" SEQUENCE="false"/>
+-        <FIELD NAME="firstaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
++        <FIELD NAME="firstaccess" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="1" SEQUENCE="false"/>
+         <FIELD NAME="lastaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="lastlogin" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="currentlogin" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+@@ -896,7 +896,7 @@
+         <FIELD NAME="maildigest" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="maildisplay" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="2" SEQUENCE="false"/>
+         <FIELD NAME="autosubscribe" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+-        <FIELD NAME="trackforums" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
++        <FIELD NAME="trackforums" TYPE="char" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="trustbitmask" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+-- 
+2.40.0
+
