@@ -19,7 +19,7 @@
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess>
       <problem file="help.php" linefrom="59" lineto="59" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a108efda67467c48bbc9a4c8a5f4c4497a3e51bd/help.php#L59" ruleset="moodle" rule="" url="http://php.net/docs.php" type="error" weight="5">
-        <message>PHP Parse error: syntax error, unexpected end of file, expecting ';' or ',' in /help.php on line 59 </message>
+        <message>PHP Parse error: syntax error, unexpected end of file, expecting "," or ";" in /help.php on line 59 </message>
         <description/>
         <code/>
       </problem>
