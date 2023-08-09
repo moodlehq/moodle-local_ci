@@ -175,6 +175,16 @@ ${mydir}/../git_garbage_collector/git_garbage_collector.sh
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 $gitcmd checkout -B $securitybranch security/$securitybranch
 
+# If integration.git and security.git HEADs are already the same, there is nothing
+# to rebase. Just update lastbased to the very same HEAD and done.
+if [ $(git rev-parse integration/$gitbranch) == $(git rev-parse security/$gitbranch) ]; then
+    info "integration.git and security.git ($gitbranch branch) already match. Nothing to rebase"
+    info "Both are pointing to $(git rev-parse integration/$gitbranch)"
+    info "Force pushing updated reference branch:"
+    $gitcmd push -f security integration/$gitbranch:$referencebranch
+    exit 0 # We are done!
+fi
+
 # Do the magic!
 # ABRACADABRA!!🌟
 info "Rebasing security branch:"
