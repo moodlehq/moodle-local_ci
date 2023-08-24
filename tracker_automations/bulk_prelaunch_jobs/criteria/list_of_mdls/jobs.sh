@@ -58,9 +58,9 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (goutte) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-goutte" ]]; then
-    echo -n "Behat (goutte - boost and classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
+# We want to launch always a Behat (BrowserKit (non-js)) job
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-nonjs" ]]; then
+    echo -n "Behat (NonJS - boost and classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then
         # Add the ~@javascript tag, because this is a non-js run.
@@ -71,7 +71,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
-        -p BROWSER=goutte \
+        -p BROWSER="BrowserKit (non-js)" \
         -p BEHAT_SUITE=ALL \
         -p TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
@@ -79,9 +79,9 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (firefox - boost) job
+# We want to launch always a Behat (Firefox (js) - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (firefox - boost / ${behat_options}): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (Firefox - boost / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then
         # Add the @javascript tag, because this is a js run.
@@ -92,17 +92,16 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
-        -p BROWSER=firefox \
-        -p TAGS=${behat_tags} \
+        -p BROWSER="Firefox (js)" \
         -p TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (firefox - classic) job
+# We want to launch always a Behat (Firefox (js) - classic) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (firefox - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (Firefox - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then
         # Add the @javascript tag, because this is a js run.
@@ -113,7 +112,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BRANCH=${branch} \
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
-        -p BROWSER=firefox \
+        -p BROWSER="Firefox (js)" \
         -p BEHAT_SUITE=classic \
         -p TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
@@ -138,7 +137,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
             -p BRANCH=${branch} \
             -p DATABASE=pgsql \
             -p PHPVERSION=${php_version} \
-            -p BROWSER=chrome \
+            -p BROWSER="Chrome (js)" \
             -p BEHAT_INCREASE_TIMEOUT=4 \
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \

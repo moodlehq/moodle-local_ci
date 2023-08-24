@@ -96,13 +96,13 @@ if [[ "${jobtype}" == "phpunit" ]]; then
     done
 fi
 
-# This is a behat-goutte jobtype, let's launch it.
-if [[ "${jobtype}" == "behat-goutte" ]]; then
+# This is a behat-nonjs jobtype, let's launch it.
+if [[ "${jobtype}" == "behat-nonjs" ]]; then
     # Loop over all the configured dbtypes.
     dbtypesarr=($(echo ${dbtypes} | tr ',' '\n'))
     for dbtype in "${dbtypesarr[@]}"; do
         dbtype=${dbtype//[[:blank:]]/}
-        echo -n "Behat (goutte - boost and classic - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
+        echo -n "Behat (NonJS - boost and classic - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
         final_tags=
         if [[ -n "${behat_tags}" ]]; then
             # Add the ~@javascript tag, because this is a non-js run.
@@ -113,7 +113,7 @@ if [[ "${jobtype}" == "behat-goutte" ]]; then
             -p BRANCH=${branch} \
             -p DATABASE=${dbtype} \
             -p PHPVERSION=${php_version} \
-            -p BROWSER=goutte \
+            -p BROWSER="BrowserKit (non-js)" \
             -p BEHAT_SUITE=ALL \
             -p TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
@@ -128,7 +128,7 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
     dbtypesarr=($(echo ${dbtypes} | tr ',' '\n'))
     for dbtype in "${dbtypesarr[@]}"; do
         dbtype=${dbtype//[[:blank:]]/}
-        echo -n "Behat (firefox - boost - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
+        echo -n "Behat (Firefox - boost - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
         final_tags=
         if [[ -n "${behat_tags}" ]]; then
             # Add the @javascript tag, because this is a js run.
@@ -139,7 +139,7 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
             -p BRANCH=${branch} \
             -p DATABASE=${dbtype} \
             -p PHPVERSION=${php_version} \
-            -p BROWSER=firefox \
+            -p BROWSER="Firefox (js)" \
             -p BEHAT_SUITE=default \
             -p TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
@@ -166,7 +166,7 @@ if [[ "${jobtype}" == "behat-app" ]]; then
             -p BRANCH=${branch} \
             -p DATABASE=${dbtype} \
             -p PHPVERSION=${php_version} \
-            -p BROWSER=chrome \
+            -p BROWSER="Chrome (js)" \
             -p BEHAT_INCREASE_TIMEOUT=4 \
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \
