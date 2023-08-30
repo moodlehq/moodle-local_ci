@@ -122,6 +122,32 @@ if [[ "${jobtype}" == "behat-nonjs" ]]; then
     done
 fi
 
+# This is a behat-chrome jobtype, let's launch it.
+if [[ "${jobtype}" == "behat-chrome" ]]; then
+    # Loop over all the configured dbtypes.
+    dbtypesarr=($(echo ${dbtypes} | tr ',' '\n'))
+    for dbtype in "${dbtypesarr[@]}"; do
+        dbtype=${dbtype//[[:blank:]]/}
+        echo -n "Behat (Chrome - boost - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
+        final_tags=
+        if [[ -n "${behat_tags}" ]]; then
+            # Add the @javascript tag, because this is a js run, and skip known chrome bug.
+            final_tags="${behat_tags}&&@javascript&&~@skip_chrome_zerosize"
+        fi
+        ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+            -p REPOSITORY=${repository} \
+            -p BRANCH=${branch} \
+            -p DATABASE=${dbtype} \
+            -p PHPVERSION=${php_version} \
+            -p BROWSER="Chrome (js)" \
+            -p BEHAT_SUITE=default \
+            -p TAGS="${final_tags}" \
+            -p NAME="${behat_name}" \
+            -p RUNNERVERSION=${runner} \
+            -w >> "${resultfile}.jenkinscli" < /dev/null
+    done
+fi
+
 # This is a behat-firefox jobtype, let's launch it.
 if [[ "${jobtype}" == "behat-firefox" ]]; then
     # Loop over all the configured dbtypes.

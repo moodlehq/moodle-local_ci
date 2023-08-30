@@ -34,6 +34,32 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
+# We want to launch sometimes a Behat (Chrome (js) - boost) job.
+if [[ "${jobtype}" == "behat-chrome" ]]; then
+    echo -n "Behat (Chrome - boost): " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER="Chrome (js)" \
+        -p RUNNERVERSION=${runner} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
+# We want to launch sometimes a Behat (Chrome (js) - classic) job.
+if [[ "${jobtype}" == "behat-chrome" ]]; then
+    echo -n "Behat (Chrome - classic): " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER="Chrome (js)" \
+        -p BEHAT_SUITE=classic \
+        -p RUNNERVERSION=${runner} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+
 # We want to launch always a Behat (Firefox (js) - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
     echo -n "Behat (Firefox - boost): " >> "${resultfile}.jenkinscli"

@@ -79,6 +79,47 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
+# We want to launch sometimes a Behat (Chrome (js) - boost) job.
+if [[ "${jobtype}" == "behat-chrome" ]]; then
+    echo -n "Behat (Chrome - boost / ${behat_options}): " >> "${resultfile}.jenkinscli"
+    final_tags=
+    if [[ -n "${behat_tags}" ]]; then
+        # Add the @javascript tag, because this is a js run, and skip known chrome bug.
+        final_tags="${behat_tags}&&@javascript&&~@skip_chrome_zerosize"
+    fi
+    ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER="Chrome (js)" \
+        -p TAGS="${final_tags}" \
+        -p NAME="${behat_name}" \
+        -p RUNNERVERSION=${runner} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
+# We want to launch sometimes a Behat (Chrome (js) - classic) job.
+if [[ "${jobtype}" == "behat-chrome" ]]; then
+    echo -n "Behat (Chrome - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
+    final_tags=
+    if [[ -n "${behat_tags}" ]]; then
+        # Add the @javascript tag, because this is a js run, and skip known chrome bug.
+        final_tags="${behat_tags}&&@javascript&&~@skip_chrome_zerosize"
+    fi
+    ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p DATABASE=pgsql \
+        -p PHPVERSION=${php_version} \
+        -p BROWSER="Chrome (js)" \
+        -p BEHAT_SUITE=classic \
+        -p TAGS="${final_tags}" \
+        -p NAME="${behat_name}" \
+        -p RUNNERVERSION=${runner} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
 # We want to launch always a Behat (Firefox (js) - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
     echo -n "Behat (Firefox - boost / ${behat_options}): " >> "${resultfile}.jenkinscli"

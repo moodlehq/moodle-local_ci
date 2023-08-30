@@ -13,7 +13,7 @@
 #             Trios are colon separated, example: master:customfield_10111:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
-#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-firefox, behat-nonjs, behat-all.
+#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
 #quiet: if enabled ("true"), don't perform any action in the Tracker. When "false", perform Tracker actions.
 #restrictedto: name of the project (MDL) role we want to restrict the comment to. Blank means no restriction.
 
