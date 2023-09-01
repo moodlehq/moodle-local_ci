@@ -1,4 +1,8 @@
 {
+    "name": "moodlehq/moodle-local_ci",
+    "description": "Stuff run by Moodle CI integration servers.",
+    "keywords": ["moodle", "ci", "integration", "jira", "jenkins", "automations"],
+    "license": "GPL-3.0-or-later",
     "require": {
         "moodlehq/moodle-cs": "^3.3.3",
         "mustache/mustache": "^2.14.1",
