@@ -18,7 +18,8 @@ setup () {
     assert_failure
     assert_output --partial "Running mustache lint from $GIT_PREVIOUS_COMMIT to $GIT_COMMIT"
     assert_output --partial "local/test/templates/linting_ok.mustache - OK: Mustache rendered html succesfully"
-    assert_output --partial "local/test/templates/local/mobile/view.mustache - WARNING: HTML Validation info"
+    assert_output --partial "local/test/templates/local/mobile/view.mustache - INFO: HTML Validation info"
+    assert_output --partial "local/test/templates/local/mobile/view.mustache - WARNING: HTML Validation error"
     assert_output --partial "local/test/templates/mobile_view.mustache - WARNING: HTML Validation error"
     assert_output --partial "Mustache lint problems found"
 }

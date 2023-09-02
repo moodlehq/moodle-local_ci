@@ -237,7 +237,11 @@ function check_html_validation($content) {
         //TODO: Sure would be nice if we could 'guess' a more accurate line number here..
         $context = str_replace("\n", '', $problem->extract);
         $message = "HTML Validation {$problem->type}, line {$problem->lastLine}: {$problem->message} ({$context})";
-        print_problem('WARNING', $message);
+        if ($problem->type == 'info') {
+            print_message('INFO', $message);
+        } else {
+            print_problem('WARNING', $message);
+        }
     }
 }
 
