@@ -24,7 +24,28 @@
  */
 
 require_once(__DIR__.'/../phplib/clilib.php');
-require_once(__DIR__.'/../vendor/autoload.php');
+
+// Let's use composer autoload, supporting both standalone and dependency modes.
+// (borrowed from https://github.com/Behat/Behat/blob/a1f2809/bin/behat#L18-L30)
+if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+    // This must work when installed as direct dependency.
+    require_once(__DIR__.'/../vendor/autoload.php');
+} else if (file_exists(__DIR__.'/../../../autoload.php')) {
+    // And also needs to work when installed as a dependency of others.
+    require_once(__DIR__.'/../../../autoload.php');
+}
+
+// Arrived here, something went wrong if we cannot locate the Mustache_Engine class.
+if (!class_exists('Mustache_Engine')) {
+    // Something went wrong, this was not installed using composer,
+    // neither standalone installation or as a dependency.
+    fwrite(STDERR,
+        'You must set up the project dependencies, run the following commands:' . PHP_EOL.
+        'curl -s http://getcomposer.org/installer | php' . PHP_EOL.
+        'php composer.phar install' . PHP_EOL
+    );
+    exit(1);
+}
 
 list($options, $unrecognized) = cli_get_params(
     ['help' => false, 'filename' => '', 'validator' => '', 'basename' => ''],
