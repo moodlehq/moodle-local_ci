@@ -6,7 +6,7 @@
     "require": {
         "moodlehq/moodle-cs": "^3.3.3",
         "mustache/mustache": "^2.14.1",
-        "phpcompatibility/php-compatibility": "dev-develop#70e4ca24"
+        "phpcompatibility/php-compatibility": "dev-develop#0a17f9ed"
     },
     "config": {
         "allow-plugins": {
