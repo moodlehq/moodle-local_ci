@@ -91,7 +91,7 @@ ${basereq} --action getIssueList \
            --file "${resultfile}"
 
 # If there aren't issues, we have finished.
-if ! grep '"components":' "${resultfile}"; then
+if ! grep -q '"components":' "${resultfile}"; then
     echo "No issues to process."
     exit 0
 fi

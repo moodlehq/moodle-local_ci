@@ -22,6 +22,9 @@ function triage_issue() {
     verify_revievers_availability && [[ -n $outcome ]] && return
 
     # To continue... adding more rules until we have all the devpad annotated ones covered.
+
+    # Finished, just return.
+    return 0
 }
 
 function verify_components_are_valid {
@@ -42,7 +45,7 @@ function verify_components_are_valid {
     for component in "${componentsArr[@]}"; do
         component=$(trimstring "$component")
         echo "    - component: $component"
-        if ! jq -e ".trackerComponents[] | select(.component == \"${component}\")" ${clrfile}; then
+        if ! jq -e ".trackerComponents[] | select(.component == \"${component}\") | .group" ${clrfile} >/dev/null; then
             echo "      - Problem: Component is not in the sheet."
             outcome=IR
             outcomedesc="Sending to IR, the \"${component}\" component is not in the sheet."
@@ -113,11 +116,26 @@ function verify_revievers_availability() {
 
     # We have some reviewers, verify that they are available and haven't played
     # any role in the issue (assignee or peer-reviewer)
-
-}
-
-function another {
-    echo "  - another"
+    available=$(tr ',' ' ' <<< "${leadreviewers}")
+    # Check the assignee.
+    if [[ ${available} =~ ${assignee} ]]; then
+        echo "        - ${assignee} is not available because of being the assignee."
+        available=${available//${assignee}/}
+        available=$(trimstring "$available")
+    fi
+    # Check the peer-reviewer.
+    if [[ ${available} =~ ${peerreviewer} ]]; then
+        echo "        - ${peerreviewer} is not available because of being the peer reviewer."
+        available=${available//${peerreviewer}/}
+        available=$(trimstring "$available")
+    fi
+    # Arrived here, if we don't have any reviewer available, this goes to IR.
+    if [[ -z ${available} ]]; then
+        echo "      - Problem: None of the reviewers (${leadreviewers}) are available for the issue."
+        outcome=IR
+        outcomedesc="Sending to IR, none of the reviewers (${leadreviewers}) are available for the issue."
+        return # Outcome set, we are done.
+    fi
 }
 
 function trimstring() {
