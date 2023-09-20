@@ -42,7 +42,7 @@ function verify_components_are_valid {
     for component in "${componentsArr[@]}"; do
         component=$(trimstring "$component")
         echo "    - component: $component"
-        if [[ ! $(jq -e ".trackerComponents[] | select(.component == \"${component}\")" ${clrfile}) ]]; then
+        if ! $(jq -e ".trackerComponents[] | select(.component == \"${component}\")" ${clrfile}); then
             echo "      - Problem: Component is not in the sheet."
             outcome=IR
             outcomedesc="Sending to IR, the \"${component}\" component is not in the sheet."

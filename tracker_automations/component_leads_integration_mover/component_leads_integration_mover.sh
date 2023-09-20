@@ -50,7 +50,7 @@ basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${ji
 # If we don't have the clr.json information at hand, let's download it.
 if [[ ! -r "${clrfile}" ]]; then
     echo "Downloading the CLR metadadata information"
-    if [[ ! $(curl -sL -o ${clrfile} $jsonclrurl) ]]; then
+    if ! $(curl -sL -o ${clrfile} $jsonclrurl); then
         echo "Problem downloading the initial CLR metadata information."
         rm -f ${clrfile}
         exit 1
@@ -58,12 +58,13 @@ if [[ ! -r "${clrfile}" ]]; then
 fi
 
 # If existing clr.json file is older than 48h, let's download it.
-if [[ $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json) ]]; then
+if $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json); then
     echo "Updating the CLR metadadata information."
-    if [[ $(curl -sL -o ${clrfile}.tmp $jsonclrurl) ]]; then
+    echo "curl -sL -o ${clrfile} $jsonclrurl)"
+    if $(curl -sL -o ${clrfile}.tmp $jsonclrurl); then
         mv ${clrfile}.tmp ${clrfile}
     else
-        echo "Problem downloading the CLR metadadata information."
+        echo "Problem updating CLR metadadata information."
         # Touch cached one, so next run will work.
         touch ${clrfile}
         echo "Using existing cached metadata file for next (48h) runs. You can now execute this again."
@@ -73,7 +74,7 @@ if [[ $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json) ]]; then
 fi
 
 # Verify that the CLR metadata is a correct JSON file.
-if [[ ! $(jq empty ${clrfile} 2>/dev/null) ]]; then
+if ! $(jq empty ${clrfile} 2>/dev/null); then
     echo "The CLR metadata information is not valid JSON."
     rm -f ${clrfile}
     exit 1
@@ -91,7 +92,7 @@ ${basereq} --action getIssueList \
            --file "${resultfile}"
 
 # If there aren't issues, we have finished.
-if [[ ! $(grep '"components":' "${resultfile}") ]]; then
+if ! $(grep '"components":' "${resultfile}"); then
     echo "No issues to process."
     exit 0
 fi
