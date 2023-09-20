@@ -97,7 +97,7 @@ function verify_revievers_availability() {
         reviewers=$(trimstring "$reviewers")
         reviewers=$(echo -n "${reviewers}" | tr -s '[:space:]' ',') # Cannot use <<<, it adds a \n.
         if [[ -z ${reviewers} ]]; then
-            echo "      - Problem:: Component \"${component}\" does not have any, specific or group, reviewer available."
+            echo "      - Problem: Component \"${component}\" does not have any, specific or group, reviewer available."
             outcome=IR
             outcomedesc="Sending to IR, component \"${component}\" does not have any, specific or group, reviewer available."
             return # Outcome set, we are done.

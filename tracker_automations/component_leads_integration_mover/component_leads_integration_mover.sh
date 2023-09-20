@@ -6,7 +6,7 @@
 #jirauser: user that will perform the execution
 #jirapass: password of the user
 #jsonclrurl: url to the webservice providing all the groups, components and reviewers data.
-#quiet: if enabled ("true"), don't perform any action in the Tracker.
+#quiet: with any value different from "false", don't perform any action in the Tracker.
 #restrictedto: if set, restrict any comment to that role in the project. Blank means visible to everybody.
 
 # Let's go strict (exit on error)
@@ -145,6 +145,9 @@ jq -c '.[]' ${resultfile} | while read json; do
                            --comment "${outcomedesc}"
             fi
         fi
+
+        # Finally, feed the log file with the processed outcomes.
+        echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} ${outcome} ${outcomedesc}" >> "${logfile}"
     else
         # This is a quiet run, just output the outcome.
         echo "  - Outcome: $outcome"
