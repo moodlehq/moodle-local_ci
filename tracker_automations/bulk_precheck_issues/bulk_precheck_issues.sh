@@ -11,7 +11,7 @@
 #informtofiles: comma separated list of files where each MDL processed will be informed (format MDL-xxxx unixseconds)
 #$maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
 #$maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
-#quiet: if enabled ("true"), don't perform any action in the Tracker.
+#quiet: with any value different from "false", don't perform any action in the Tracker.
 #jenkinsjobname: job in the server that we are going to execute
 #jenkinsserver: private jenkins server url (where the prechecker will be executed.
 #               note this must be a direct url. no proxies/rewrites/redirects allowed. Usually http://localhost:8080.

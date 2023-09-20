@@ -14,7 +14,7 @@
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
-#quiet: if enabled ("true"), don't perform any action in the Tracker. When "false", perform Tracker actions.
+#quiet: with any value different from "false", don't perform any action in the Tracker.
 #restrictedto: name of the project (MDL) role we want to restrict the comment to. Blank means no restriction.
 
 
