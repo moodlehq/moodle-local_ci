@@ -50,13 +50,13 @@ basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${ji
 # If we don't have the clr.json information at hand, let's download it.
 if [[ ! -r "${clrfile}" ]]; then
     echo "Downloading the CLR metadadata information"
-    curl -s -o ${clrfile} $jsonclrurl
+    curl -sL -o ${clrfile} $jsonclrurl
 fi
 
 # If existing clr.json file is older than 48h, let's download it.
 if [[ $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json) ]]; then
     echo "Updating the CLR metadadata information."
-    if [[ $(curl -s -o ${clrfile}.tmp $jsonclrurl) ]]; then
+    if [[ $(curl -sL -o ${clrfile}.tmp $jsonclrurl) ]]; then
         mv ${clrfile}.tmp ${clrfile}
     else
         echo "Problem downloading the CLR metadadata information."
