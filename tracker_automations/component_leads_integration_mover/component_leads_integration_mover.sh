@@ -70,6 +70,8 @@ if $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json); then
         echo "Please, verify the causes of the download problem."
         exit 1
     fi
+else
+    echo "Using cached (since $(date -r "${clrfile}" -u), max 48h) CLR metadata information"
 fi
 
 # Verify that the CLR metadata is a correct JSON file.
@@ -135,7 +137,6 @@ jq -c '.[]' ${resultfile} | while read json; do
                        --field "customfield_15810=No"
         else
             # CLR. Real transition to Waiting for CLR.
-            # Comment not restricted.
             ${basereq} --action transitionIssue \
                        --issue ${issue} \
                        --transition "Send to Component Leads Review"
