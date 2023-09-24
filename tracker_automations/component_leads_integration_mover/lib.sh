@@ -18,10 +18,10 @@ function triage_issue() {
     # Verify that all the components belong to the same group. Send to integration if not.
     verify_components_same_group && [[ -n $outcome ]] && return
 
-    # Verify reviewers availability, checking the assignee and peer reviewers against the list of component reviewers.
+    # Verify reviewers availability, checking the assignee and peer reviewers
+    # against the list of component reviewers.
+    # Note that this verification always end with an outcome (IR or CLR).
     verify_revievers_availability && [[ -n $outcome ]] && return
-
-    # To continue... adding more rules until we have all the devpad annotated ones covered.
 
     # Finished, just return.
     return 0
@@ -136,6 +136,12 @@ function verify_revievers_availability() {
         outcomedesc="Sending to IR, none of the reviewers (${leadreviewers}) are available for the issue."
         return # Outcome set, we are done.
     fi
+
+    # There is some component lead reviewer available, let's send the issue to CLR. This check is done.
+    echo "      - There are available reviewers (${available}) for the issue."
+    outcome=CLR
+    outcomedesc="Sending to CLR, there are available reviewers (${available}) for the issue."
+    return # Outcome set, and function finished we are done.
 }
 
 function trimstring() {

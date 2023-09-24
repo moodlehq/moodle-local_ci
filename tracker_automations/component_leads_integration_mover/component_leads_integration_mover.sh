@@ -58,7 +58,7 @@ if [[ ! -r "${clrfile}" ]]; then
 fi
 
 # If existing clr.json file is older than 48h, let's download it.
-if $(find ${clrfile} -mmin +$((48*60)) -print | grep clr.json); then
+if find ${clrfile} -mmin +$((48*60)) -print | grep -q clr.json; then
     echo "Updating the CLR metadadata information."
     if curl -sL -o ${clrfile}.tmp $jsonclrurl; then
         mv ${clrfile}.tmp ${clrfile}
