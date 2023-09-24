@@ -46,6 +46,7 @@ clrfile=${WORKSPACE}/clr.json
 # Calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # If we don't have the clr.json information at hand, let's download it.
 if [[ ! -r "${clrfile}" ]]; then
