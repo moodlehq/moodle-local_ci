@@ -79,7 +79,7 @@ if find ${clrfile} -mmin +$((48*60)) -print | grep -q clr.json; then
     fi
 else
     validuntil=$(date -d "$(date -r "${clrfile}")+48 hours")
-    echo "Using cached (until ${validuntil}), max 48h) CLR metadata information."
+    echo "Using cached (until ${validuntil}) CLR metadata information."
 fi
 
 # Verify that the CLR metadata is a correct JSON file.
