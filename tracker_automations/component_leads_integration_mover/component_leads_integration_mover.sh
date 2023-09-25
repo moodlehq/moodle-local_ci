@@ -6,6 +6,7 @@
 #jirauser: user that will perform the execution
 #jirapass: password of the user
 #jsonclrurl: url to the webservice providing all the groups, components and reviewers data.
+#clearcache: set it to "true" to force the removal of the (48h) cached groups, components and reviewers data.
 #quiet: with any value different from "false", don't perform any action in the Tracker.
 #restrictedto: if set, restrict any comment to that role in the project. Blank means visible to everybody.
 
@@ -48,9 +49,14 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
+if [[ "${clearcache}" == "true" ]]; then
+    echo "CLR metadata cache deleted."
+    rm -fr ${clrfile}
+fi
+
 # If we don't have the clr.json information at hand, let's download it.
 if [[ ! -r "${clrfile}" ]]; then
-    echo "Downloading the CLR metadadata information"
+    echo "Downloading the CLR metadadata information."
     if ! curl -sL -o ${clrfile} $jsonclrurl; then
         echo "Problem downloading the initial CLR metadata information."
         rm -f ${clrfile}
@@ -72,7 +78,8 @@ if find ${clrfile} -mmin +$((48*60)) -print | grep -q clr.json; then
         exit 1
     fi
 else
-    echo "Using cached (since $(date -r "${clrfile}" -u), max 48h) CLR metadata information"
+    validuntil=$(date -d "$(date -r "${clrfile}")+48 hours")
+    echo "Using cached (until ${validuntil}), max 48h) CLR metadata information."
 fi
 
 # Verify that the CLR metadata is a correct JSON file.
