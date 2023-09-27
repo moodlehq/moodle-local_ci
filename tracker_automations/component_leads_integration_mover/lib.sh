@@ -104,6 +104,11 @@ function verify_revievers_availability() {
             outcome=IR
             outcomedesc="Sending to IR, component \"${component}\" does not have any, specific or group, reviewer available."
             return # Outcome set, we are done.
+        elif [[ -n ${reviewers} ]] && [[ ${reviewers} == "EMPTY_SPECIFIC" ]]; then
+            echo "      - Note: Component \"${component}\" is configured to go straight to integration"
+            outcome=IR
+            outcomedesc="Sending to IR, component \"${component}\" is configured to go straight to integration."
+            return # Outcome set, we are done.
         elif [[ -n ${leadreviewers} ]] && [[ ${leadreviewers} != ${reviewers} ]]; then
             echo "      - Problem: Conflicting component reviewers detected: \"${leadreviewers}\" and \"${reviewers}\"."
             outcome=IR
@@ -181,7 +186,10 @@ function get_lead_component_group() {
 }
 
 # Given a component, return the list of reviewers available for it.
-# First look for component specific reviewer, then for group reviewers.
+# First look for component specific reviewer, and, if there isn't any
+# specific definition for the component, then look for for group reviewers.
+# Note that it returns "EMPTY_SPECIFIC" when the component is configured
+# without any reviewer (empty).
 function get_lead_component_reviewers() {
     if [ $# -ne 1 ]
     then
@@ -190,12 +198,23 @@ function get_lead_component_reviewers() {
     fi
     local component="${1}"
     local reviewers=
+    local specific=
 
-    # First, look for component specific reviewers.
-    reviewers=$(jq -r ".reviewersAvailability[] | select (.component == \"${component}\") .reviewers[]" ${clrfile})
-    reviewers=$(trimstring "$reviewers")
-    if [[ -n ${reviewers} ]]; then
-        echo "${reviewers}"
+    # Does the component have any specific configuration.
+    if jq -e ".reviewersAvailability[] | select (.component == \"${component}\")" ${clrfile} >/dev/null; then
+        specific=true
+    fi
+
+    # If there is a specific configuration, just use it, with or without reviewers.
+    if [[ -n $specific ]]; then
+        reviewers=$(jq -r ".reviewersAvailability[] | select (.component == \"${component}\") .reviewers[]" ${clrfile})
+        reviewers=$(trimstring "$reviewers")
+        if [[ -n ${reviewers} ]]; then
+            echo "${reviewers}"
+        else
+            # Specific component is configured, but it doesn't have any reviewer.
+            echo "EMPTY_SPECIFIC"
+        fi
         return
     fi
 

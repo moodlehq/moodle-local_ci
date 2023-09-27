@@ -77,9 +77,6 @@ if find ${clrfile} -mmin +$((48*60)) -print | grep -q clr.json; then
         echo "Please, verify the causes of the download problem."
         exit 1
     fi
-else
-    validuntil=$(date -d "$(date -r "${clrfile}")+48 hours")
-    echo "Using cached (until ${validuntil}) CLR metadata information."
 fi
 
 # Verify that the CLR metadata is a correct JSON file.
@@ -88,6 +85,10 @@ if ! jq empty ${clrfile} 2>/dev/null; then
     rm -f ${clrfile}
     exit 1
 fi
+
+# Metadata CLR file ok, let's print some details.
+validuntil=$(date -d "$(date -r "${clrfile}")+48 hours" -u)
+echo "Using cached (until ${validuntil}) CLR metadata information."
 
 source ${mydir}/lib.sh # Add all the functions.
 
@@ -103,6 +104,8 @@ ${basereq} --action getIssueList \
 # If there aren't issues, we have finished.
 if ! grep -q '"components":' "${resultfile}"; then
     echo "No issues to process."
+    # Remove the resultfile. We don't want to disclose those details.
+    rm -fr "${resultfile}"
     exit 0
 fi
 
