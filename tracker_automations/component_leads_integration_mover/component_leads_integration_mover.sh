@@ -96,8 +96,8 @@ source ${mydir}/lib.sh # Add all the functions.
 # Note: customfield_10118 is the peer reviewer custom field.
 ${basereq} --action getIssueList \
            --jql "filter = 23535" \
-           --columns="Key,Assignee,Peer reviewer,Components" \
-           --outputFormat=2 \
+           --columns="Key,Assignee,Peer reviewer,Components,Security Level,Summary" \
+           --outputFormat=4 \
            --outputType=json \
            --file "${resultfile}"
 
@@ -118,6 +118,9 @@ jq -c '.[]' ${resultfile} | while read json; do
     assignee=$(jq -r '.assignee' <<< $json)
     peerreviewer=$(jq -r '.peerReviewer' <<< $json)
     components=$(jq -r '.components' <<< $json)
+    # Get summary and security level.
+    summary=$(jq -r '.summary' <<< $json)
+    securitylevel=$(jq -r '.securityLevel' <<< $json)
 
     # Reset the outcome (defaults to no action and no description).
     outcome=

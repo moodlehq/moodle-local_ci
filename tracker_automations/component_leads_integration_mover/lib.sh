@@ -12,6 +12,12 @@ set -e
 function triage_issue() {
     echo "  Issue: $issue, Assignee: $assignee, Peer reviewer: $peerreviewer, Components: $components"
 
+    # Verify if the issue is a backport request. Send to integration if so.
+    verify_backport_request && [[ -n $outcome ]] && return
+
+    # Verify if the issue is a security one. Send to integration if so.
+    verify_security && [[ -n $outcome ]] && return
+
     # Verify that all the components are valid. Send to integration if not.
     verify_components_are_valid && [[ -n $outcome ]] && return
 
@@ -25,6 +31,30 @@ function triage_issue() {
 
     # Finished, just return.
     return 0
+}
+
+function verify_backport_request {
+    echo "  - verify_backport_request"
+    shopt -s nocasematch # case insensitive.
+    if [[ "${summary}" =~ backport.*mdl-[0-9]+ ]]; then
+        echo "    - Issue is a backport request."
+        outcome=IR
+        outcomedesc="Sending to IR, the issue is a backport request."
+    else
+        echo "    - Issue is not a backport request."
+    fi
+    shopt -u nocasematch # case sensitive.
+}
+
+function verify_security {
+    echo "  - verify_security"
+    if [[ -n ${securitylevel} ]]; then
+        echo "    - Issue is a security one."
+        outcome=IR
+        outcomedesc="Sending to IR, the issue is a security one."
+    else
+        echo "    - Issue is not a security one."
+    fi
 }
 
 function verify_components_are_valid {
