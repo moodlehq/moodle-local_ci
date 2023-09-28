@@ -7,6 +7,7 @@ class simple_core_component_mustache_loader extends Mustache_Loader_FilesystemLo
      * Constructor.
      */
     public function __construct($theme = null) {
+        parent::__construct(''); // We need the constructor to have defined baseDir property to avoid php >= 8.1 warnings.
         $this->theme = $theme;
     }
 
