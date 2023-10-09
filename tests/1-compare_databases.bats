@@ -108,18 +108,18 @@ teardown () {
 }
 
 @test "compare_databases/compare_databases.sh: problems are detected" {
-    # Locally, patch master (4.3dev), as of 20230803, so we introduce some differences.
-    create_git_branch compare_databases  a1d5d1b2f758a3178bff4c42883a477f4b1ea50c
+    # Locally, patch v4.3.0, so we introduce some differences. Then compare with upgraded v4.2.2.
+    create_git_branch v4_3_0_wrong v4.3.0
     git_apply_fixture compare_databases_wrong.patch
 
-    export gitbranchinstalled=compare_databases
-    export gitbranchupgraded=MOODLE_402_STABLE
+    export gitbranchinstalled=v4_3_0_wrong
+    export gitbranchupgraded=v4.2.2
 
     ci_run compare_databases/compare_databases.sh
     assert_failure
-    assert_output --partial 'Info: Origin branches: (1) MOODLE_402_STABLE'
-    assert_output --partial 'Info: Target branch: compare_databases'
-    assert_output --partial 'Info: Comparing compare_databases and upgraded MOODLE_402_STABLE'
+    assert_output --partial 'Info: Origin branches: (1) v4.2.2'
+    assert_output --partial 'Info: Target branch: v4_3_0_wrong'
+    assert_output --partial 'Info: Comparing v4_3_0_wrong and upgraded v4.2.2'
     assert_output --partial 'Problems found comparing databases!'
     assert_output --partial 'Number of errors: 6'
     assert_output --partial 'Column username of table user difference found in max_length: 200 !== 100'
@@ -131,6 +131,6 @@ teardown () {
     assert_output --partial 'Error: Problem comparing databases ci_installed_'
     assert_output --partial 'Error: Process ended with 1 errors'
     refute_output --partial 'Ok: Process ended without errors'
-    run [ -f $WORKSPACE/compare_databases_compare_databases_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_v4_3_0_wrong_logfile.txt ]
     assert_success
 }
