@@ -14,17 +14,17 @@ for var in $required; do
     fi
 done
 
-# A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates.
+# A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates (IR & CLR)
 function run_A1() {
     # Note this could be done by one unique "runFromIssueList" action, but we are splitting
     # the search and the update in order to log all the closed issues within jenkins ($logfile)
 
-    # Basically get all the issues in the candidates queue (filter=14000), that are not bug
+    # Basically get all the issues in the candidates queues (filter=14000 OR filter=23329), that are not bug
     # and that haven't received any comment with the standard unholding text (NOT filter = 22054)
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=14000 \
+               --jql "(filter=14000 OR filter=23329) \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = 22054" \
                --file "${resultfile}"
@@ -179,11 +179,11 @@ function run_A3a() {
     fi
 }
 
-# A3b, add the "integration_held" + standard comment to any issue arriving to candidates.
+# A3b, add the "integration_held" + standard comment to any issue arriving to candidates (IR & CLR).
 function run_A3b() {
-    # Get the list of issues in the candidates queue. All them will be held with last week comment.
+    # Get the list of issues in the candidates queues (IR & CLR). All them will be held with last week comment.
     ${basereq} --action getIssueList \
-               --jql "filter=14000" \
+               --jql "filter=14000 OR filter=23329" \
                --file "${resultfile}"
 
     # Iterate over found issues, moving them to the current queue.
@@ -279,17 +279,17 @@ function run_B1b() {
     fi
 }
 
-# B1a, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates.
+# B1a, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates (IR & CLR).
 function run_B1a() {
     # Note this could be done by one unique "runFromIssueList" action, but we are splitting
     # the search and the update in order to log all the closed issues within jenkins ($logfile)
 
-    # Basically get all the issues in the candidates queue (filter=14000), that are not bug
+    # Basically get all the issues in the candidates queues (filter=14000 OR filter=23329), that are not bug
     # and that haven't received any comment with the standard unholding text (NOT filter = 22054)
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=14000 \
+               --jql "(filter=14000 OR filter=23329) \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = 22054" \
                --file "${resultfile}"
