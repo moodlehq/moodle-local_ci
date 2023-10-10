@@ -23,7 +23,10 @@ class js_helper {
      * @param Mustache_LambdaHelper $helper Used to render nested mustache variables.
      */
     public function add_js($content, Mustache_LambdaHelper $helper) {
-        $this->js .= $helper->render($content);
+        // Ensure the JS to be checked doesn't have any trailing whitespace (spaces or tabs)
+        // because of the position of the {{js}}...{{/js}} tags in the mustache file.
+        // This will avoid "no-trailing-spaces" false positives from eslint.
+        $this->js .= trim($helper->render($content), "\t ");
     }
 
     /**

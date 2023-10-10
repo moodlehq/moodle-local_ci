@@ -156,8 +156,10 @@ $eslintproblems = $jshelper->run_eslint();
 if ($eslintproblems === false) {
     // Not an error situation for now, because we might run in situations
     // where npm dependencies including eslint are not installed.
+    echo "INFO: ESLint did not run" . PHP_EOL;
     print_message('INFO', 'ESLint did not run');
 } else {
+    echo "INFO: ESLint did run" . PHP_EOL;
     // When we have no example context, parse errors are common because
     // there are missing variables in the js, thus we ignore them.
     $ignoreparseerrors = empty($example) ? true : false;
