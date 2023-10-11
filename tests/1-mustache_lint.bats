@@ -172,6 +172,7 @@ setup () {
 
     # Assert result
     assert_success
+    assert_output --partial "INFO: ESLint did not run"
     assert_output --partial "lib/templates/js_test.mustache - INFO: ESLint did not run"
     assert_output --partial "No mustache problems found"
 }
@@ -191,6 +192,7 @@ setup () {
 
     # Assert result
     assert_failure
+    assert_output --partial "INFO: ESLint did run"
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [camelcase]: Identifier 'my_message' is not in camel case"
     assert_output --partial "lib/templates/js_test.mustache - WARNING: ESLint warning [no-alert]: Unexpected alert. ( alert(my_message); )"
 }
@@ -210,7 +212,33 @@ setup () {
 
     # Assert result
     assert_failure
+    assert_output --partial "INFO: ESLint did run"
     assert_output --partial "lib/templates/js_token_test.mustache - WARNING: ESLint error []: Parsing error: Unexpected token bar ( var foo bar baz = 'bum'; )"
+}
+
+@test "mustache lint: Test eslint is immune to the {{#js}}...{{#js}} position in templates" {
+    create_git_branch MOODLE_403_STABLE v4.3.0
+
+    # Calculate moodleroot and localciroot.
+    localciroot=$PWD
+    moodleroot=${LOCAL_CI_TESTS_GITDIR}
+
+    # Note, we don't have to apply any fixture because there are real cases in core
+    # which are using {{#js}}...{{/js}} with non-trimmed whitespace around them. So
+    # just let's use one of them to verify that out js helper workarounds the problem.
+
+    # Install npm depends so we have eslint (sourced).
+    source ${localciroot}/prepare_npm_stuff/prepare_npm_stuff.sh
+
+    # Run normally (from moodleroot).
+    cd ${moodleroot}
+    ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/mod/data/templates/action_bar.mustache" \
+        --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
+
+    # Assert result.
+    assert_success
+    assert_output --partial "INFO: ESLint did run"
+    refute_output --partial "ESLint error [no-trailing-spaces]"
 }
 
 @test "mustache_lint: Test eslint runs ok when invoked from any directory" {
@@ -232,6 +260,7 @@ setup () {
     ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
         --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
     assert_success
+    assert_output --partial "INFO: ESLint did run"
     refute_output --partial "INFO: ESLint did not run"
     refute_output --partial "was not found when loaded as a Node module"
 
@@ -240,6 +269,7 @@ setup () {
     ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
         --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
     assert_success
+    assert_output --partial "INFO: ESLint did run"
     refute_output --partial "INFO: ESLint did not run"
     refute_output --partial "was not found when loaded as a Node module"
 
@@ -248,6 +278,7 @@ setup () {
     ci_run_php mustache_lint/mustache_lint.php --filename="${moodleroot}/lib/templates/inplace_editable.mustache" \
         --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
     assert_success
+    assert_output --partial "INFO: ESLint did run"
     refute_output --partial "INFO: ESLint did not run"
     refute_output --partial "was not found when loaded as a Node module"
     refute_output --partial "${LOCAL_CI_TESTS_CACHEDIR}"
