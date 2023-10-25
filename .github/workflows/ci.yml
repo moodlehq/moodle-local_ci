@@ -15,12 +15,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checking out moodle-local_ci
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: local_ci
 
       - name: Checking out moodle
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: moodle/moodle
           fetch-depth: 0 # We need a complete clone, because we use various commits / tags.
@@ -50,7 +50,7 @@ jobs:
           coverage: none
 
       - name: Configuring node & npm
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: 'moodle/.nvmrc'
 
@@ -61,9 +61,15 @@ jobs:
           npm install
 
       - name: Setup Bats
-        uses: amdilabs/setup-bats@v1
+        uses: brokenpip3/setup-bats-libs@1.5.2
         with:
-          bats-version: 1.9.0
+          bats-version: 1.10.0
+          # We need only support and assert libraries, and installed locally for caching to work.
+          # See https://github.com/brokenpip3/setup-bats-libs/issues/18
+          support-path: "${{ github.workspace }}/.bats/bats-support"
+          assert-path: "${{ github.workspace }}/.bats/bats-assert"
+          detik-install: false
+          file-install: false
 
       - name: Run Tests
         working-directory: local_ci # Tests have to start from here, because some use $PWD to detect the local_ci base.
@@ -76,6 +82,9 @@ jobs:
           LOCAL_CI_TESTS_DBHOST: 127.0.0.1
           LOCAL_CI_TESTS_DBUSER: root
           LOCAL_CI_TESTS_DBPASS: test
+          # We need to specify where the libraries are, installed locally for caching to work.
+          # See https://github.com/brokenpip3/setup-bats-libs/issues/18
+          BATS_LIB_PATH: "${{ github.workspace }}/.bats"
         run: |
           mkdir -p ${LOCAL_CI_TESTS_CACHEDIR}
           bats --timing tests/${{ matrix.test }}
