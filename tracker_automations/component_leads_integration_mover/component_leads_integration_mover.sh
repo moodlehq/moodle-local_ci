@@ -110,7 +110,7 @@ if ! grep -q '"components":' "${resultfile}"; then
 fi
 
 # Iterate over found issues and perform the actions with them.
-jq -c '.[]' ${resultfile} | while read json; do
+jq -c '.[]' ${resultfile} | while read -r json; do
     # Get the issue
     issue=$(jq -r '.key' <<< $json)
     echo "Processing ${issue}"
