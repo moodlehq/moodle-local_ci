@@ -16,6 +16,7 @@ backup/bb/bb6_to_moodle.xsl
 backup/cc/schemas/
 backup/cc/schemas11/
 enrol/lti/tests/fixtures/
+jsdoc/
 lib/adodb/
 lib/alfresco/
 lib/bennu/
