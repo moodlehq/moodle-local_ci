@@ -162,10 +162,10 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
 fi
 
 # We want to launch a Behat (latest-test, @app only) job
-# only if the target branch is master.
+# only if the target branch is main.
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-app" ]]; then
-    # Only for master or when behat-app is explicitly asked.
-    if [[ ${target} == "master" ]] || [[ "${jobtype}" == "behat-app" ]]; then
+    # Only for main or when behat-app is explicitly asked.
+    if [[ ${target} == "main" ]] || [[ "${jobtype}" == "behat-app" ]]; then
         echo -n "App tests (stable app version) / ${behat_options}): " >> "${resultfile}.jenkinscli"
         # These are the default tags for any app run.
         final_tags="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip"

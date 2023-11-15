@@ -36,8 +36,8 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # We want to launch a Behat (Firefox (js) - classic) job
-# only if the target branch is master.
-if [[ ${target} == "master" ]]; then
+# only if the target branch is main.
+if [[ ${target} == "main" ]]; then
     echo -n "Behat (Firefox - classic): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
@@ -50,8 +50,8 @@ if [[ ${target} == "master" ]]; then
 fi
 
 # We want to launch a Behat (latest-test, @app only) job
-# only if the target branch is master.
-if [[ ${target} == "master" ]]; then
+# only if the target branch is main.
+if [[ ${target} == "main" ]]; then
     echo -n "App tests (stable app version): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \

@@ -10,7 +10,7 @@
 #  use a combination of user and password or token). See Jenkins CLI docs for more info.
 #cf_repository: id for "Pull from Repository" custom field (customfield_10100)
 #cf_branches: comma separated trios of moodle branch, id for "Pull XXXX Branch" custom field and php version.
-#             Trios are colon separated, example: master:customfield_10111:7.3,....). All them required.
+#             Trios are colon separated, example: main:customfield_10111:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
