@@ -9,8 +9,9 @@
 #gitcmd: git cli path
 #gitdir: git directory with integration.git repo
 #gitremotename: integration.git remote name
+#currentmaster: Deprecated, use devbranches instead. The final major version current master will be (e.g. 32).
 #devbranches: the next major versions ($branch) under development, comma separated. Ordered by release "distance".
-#             Since 3.10 (310) always use 3 digits. The last element in the list is assumed to be "main",
+#             Since 3.10 (310) always use 3 digits. The last element in the list is assumed to be "master",
 #             The rest are MOODLE_branch_STABLE ones. Normally only one, but when we are in parallel
 #             development periods, for example: 310,400 (3.10 and 4.0)
 
@@ -19,6 +20,11 @@ set -e
 
 if [ -z "$gitremotename" ]; then
     gitremotename="origin"
+fi
+
+# TODO: Remove these backward compatibility lines after some prudential time (say, in 2021).
+if [ -z "$devbranches" ] && [ -n "$currentmaster" ]; then
+    devbranches=$currentmaster
 fi
 
 # Verify everything is set
@@ -71,17 +77,17 @@ ${gitcmd} fetch ${gitremotename}
 
 # While looking at all the issues in integration, capture some variables to use
 # for unowned commits check later.
-# Pre-fill them with current development branches, note that last element is main, no MOODLE_branch_STABLE.
+# Pre-fill them with current development branches, note that last element is master, no MOODLE_branch_STABLE.
 for devbranchcode in "${devbranchesarr[@]}"; do
     if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} != ${devbranchcode} ]]; then
         activebranches+=(MOODLE_${devbranchcode}_STABLE)
     else
-        activebranches+=(main)
+        activebranches+=(master)
     fi
 done
 issues=() # The list of issues in current integration.
 declare -A branchesbyissue # Associative array, issues as key, branches from fix versions
-                           # in the tracker as value. Format: [MDL-123]=>MOODLE_311_STABLE, main
+                           # in the tracker as value. Format: [MDL-123]=>MOODLE_311_STABLE, master
 
 ####
 # Iterate over issues in integration and check their commits are integrated in the
@@ -89,7 +95,7 @@ declare -A branchesbyissue # Associative array, issues as key, branches from fix
 ####
 issueslist=$( cat "${resultfile}" )
 while read -r line; do
-    ismainonly=
+    ismasteronly=
     issue=$( echo ${line} | sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' )
     issues+=($issue)
 
@@ -100,9 +106,9 @@ while read -r line; do
 
     echo "Processing ${issue}"
 
-    if [[ $line == *"main-only"* ]]
+    if [[ $line == *"master-only"* ]]
     then
-        ismainonly=1
+        ismasteronly=1
     fi
 
     fixversions=$( echo ${line} \
@@ -118,7 +124,7 @@ while read -r line; do
 
     devfound=0
     stablefound=0
-    mainfixversionfound=
+    masterfixversionfound=
     branchesfromfixversion=
     while read -r tagversion; do
 
@@ -135,10 +141,10 @@ while read -r line; do
 
         if [[ ${devbranchesarr[@]} =~ $majorversion ]]; then
             devfound=$((devfound+1))
-            # Last element corresponds to main, previous ones to MOODLE_branch_STABLE
+            # Last element corresponds to master, previous ones to MOODLE_branch_STABLE
             if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} == $majorversion ]]; then
-                branchname=main
-                mainfixversionfound=${tagversion}
+                branchname=master
+                masterfixversionfound=${tagversion}
             else
                 branchname="MOODLE_${majorversion}_STABLE"
             fi
@@ -165,9 +171,9 @@ while read -r line; do
 
     done <<< "${fixversions}"
 
-    # And, if main is missing... add it, we'll need it later.
-    if [[ ! ${branchesfromfixversion} =~ main ]]; then
-        branchesfromfixversion+=main
+    # And, if master is missing... add it, we'll need it later.
+    if [[ ! ${branchesfromfixversion} =~ master ]]; then
+        branchesfromfixversion+=master
     fi
     # Add the branches from the tracker fix versions to the branchesbyissue associative array.
     branchesbyissue[${issue}]=${branchesfromfixversion}
@@ -181,27 +187,27 @@ while read -r line; do
     # If we haven't checked all dev branches (we don't add dev versions to fixVersion) we
     # check it here. May report false positives, but normally everything going to stables
     # must go also to ALL dev branches (unless the skip-ci-version-check is used for the issue).
-    # Only allowed exception is when an issue only has main commits and the "main-only" label.
+    # Only allowed exception is when an issue only has master commits and the "master-only" label.
     if [ $devfound -lt ${#devbranchesarr[@]} ]; then
-        examiningmain=
+        examiningmaster=
         for devbranchcode in "${devbranchesarr[@]}"; do
             if [[ ${devbranchesarr[${#devbranchesarr[@]}-1]} != ${devbranchcode} ]]; then
                 branch=${gitremotename}/MOODLE_${devbranchcode}_STABLE
-                examiningmain=
+                examiningmaster=
             else
-                branch=${gitremotename}/main
-                examiningmain=1
+                branch=${gitremotename}/master
+                examiningmaster=1
             fi
 
             # If the commit doesn't exits...
             if ! check_issue "${gitcmd}" "${issue}" "${branch}"; then
-                # Only allowed exception is having the main-only label when examining non-main branches
-                if [[ -n "$ismainonly" ]] && [[ -z "$examiningmain" ]]; then
-                    echo "  - has the "main-only" label, not looking for "${branch}" commits."
+                # Only allowed exception is having the master-only label when examining non-master branches
+                if [[ -n "$ismasteronly" ]] && [[ -z "$examiningmaster" ]]; then
+                    echo "  - has the "master-only" label, not looking for "${branch}" commits."
                 else
-                    # If no main-only label and missing commit is not in main, personalize the error about that.
-                    if [[ -z "$ismainonly" ]] && [[ -z "$examiningmain" ]]; then
-                        errors+=("${issue} - no commit present in ${branch}. Maybe correct and the issue is 'main-only' ? Add the label if that's the case.")
+                    # If no master-only label and missing commit is not in master, personalize the error about that.
+                    if [[ -z "$ismasteronly" ]] && [[ -z "$examiningmaster" ]]; then
+                        errors+=("${issue} - no commit present in ${branch}. Maybe correct and the issue is 'master-only' ? Add the label if that's the case.")
                     else
                         errors+=("${issue} - no commit present in ${branch}. Add 'skip-ci-version-check' label if this is expected.")
                     fi
@@ -209,9 +215,9 @@ while read -r line; do
 
             # If the commit exists...
             else
-                # If the issue has the main-only label and we have found commits in non-main dev branches, something is wrong.
-                if [[ -n "$ismainonly" ]] && [[ -z "$examiningmain" ]]; then
-                    errors+=("${issue} - commit found in ${branch}. Check if the 'main-only' label in the issue is correct.")
+                # If the issue has the master-only label and we have found commits in non-master dev branches, something is wrong.
+                if [[ -n "$ismasteronly" ]] && [[ -z "$examiningmaster" ]]; then
+                    errors+=("${issue} - commit found in ${branch}. Check if the 'master-only' label in the issue is correct.")
                 fi
             fi
         done
@@ -228,10 +234,10 @@ while read -r line; do
         errors+=("${issue} - cannot set multiple dev fix versions in the Tracker (earliest to be released wins). Please solve that.")
     fi
 
-    # Under parallel development only, if has main as fix version, then it must have the "main-only" branch.
+    # Under parallel development only, if has master as fix version, then it must have the "master-only" branch.
     if [ ${#devbranchesarr[@]} -gt 1 ]; then
-        if [[ -n "$mainfixversionfound" ]] && [[ -z "$ismainonly" ]]; then
-            errors+=("${issue} - cannot use the main ($mainfixversionfound) fix version without setting the "main-only" label.")
+        if [[ -n "$masterfixversionfound" ]] && [[ -z "$ismasteronly" ]]; then
+            errors+=("${issue} - cannot use the master ($masterfixversionfound) fix version without setting the "master-only" label.")
         fi
     fi
 
