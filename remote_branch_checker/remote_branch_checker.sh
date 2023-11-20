@@ -86,7 +86,7 @@ ${mydir}/../git_garbage_collector/git_garbage_collector.sh
 # to connect to it using jenkins cli..
 displayname=""
 if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]] && [[ -n "${jenkinsserver}" ]]; then
-    if [[ "${integrateto}" = "master" ]]; then
+    if [[ "${integrateto}" = "master" ]] || [[ "${integrateto}" = "main" ]]; then
         displayname="#${BUILD_NUMBER}:${issue}"
     else
         if [[ ${integrateto} =~ ^MOODLE_([0-9]*)_STABLE$ ]]; then
