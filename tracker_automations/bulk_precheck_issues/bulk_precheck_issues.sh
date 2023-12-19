@@ -5,7 +5,7 @@
 #jirauser: user that will perform the execution
 #jirapass: password of the user
 #cf_repository: id for "Pull from Repository" custom field (customfield_10100)
-#cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (master:customfield_10111,....)
+#cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (main:customfield_10111,....)
 #cf_testinginstructions: id for testing instructions custom field (customfield_10117)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
 #informtofiles: comma separated list of files where each MDL processed will be informed (format MDL-xxxx unixseconds)

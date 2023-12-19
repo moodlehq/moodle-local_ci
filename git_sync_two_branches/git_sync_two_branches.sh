@@ -29,8 +29,8 @@ mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 gitdir=${gitdir:-}
 gitremote=${gitremote:-origin}
 gitcmd=${gitcmd:-git}
-source=${source:-master}
-target=${target:-master}
+source=${source:-main}
+target=${target:-main}
 dryrun=${dryrun:-}
 
 # Load some functions

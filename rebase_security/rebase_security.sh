@@ -122,7 +122,7 @@ if [[ ! -d "$gitdir/.git" ]]; then
 fi
 
 
-# This 'lastbased-master' branch, tracks what the tip of integration.git/master was
+# This 'lastbased-xxxx' branch, tracks what the tip of integration.git/xxxx was
 # when we last succesfully rebased.
 referencebranch="lastbased-$gitbranch"
 securitybranch="$gitbranch"
