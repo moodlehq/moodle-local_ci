@@ -54,7 +54,7 @@ teardown () {
     uit="$tmpdir/example space"
     mkdir -p "${uit}"
     export gitdir="${uit}"
-    export gitbranch="master"
+    export gitbranch="main"
     ci_run illegal_whitespace/illegal_whitespace.sh
     assert_success
 }

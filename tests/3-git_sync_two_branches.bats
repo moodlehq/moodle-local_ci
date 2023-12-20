@@ -27,8 +27,8 @@ setup() {
     # Set the rest of env variables needed for the script.
     export gitremote=local_ci_tests
 
-    # Let's checkout master, so we test everything without any local checkout of the branches.
-    git checkout master --quiet
+    # Let's checkout main, so we test everything without any local checkout of the branches.
+    git checkout main --quiet
     cd $OLDPWD
 }
 

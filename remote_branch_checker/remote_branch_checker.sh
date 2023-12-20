@@ -12,7 +12,7 @@
 # $rebasewarn: Max number of days allowed since rebase. Warning if exceeded. Defaults to 20.
 # $rebaseerror: Max number of days allowed since rebase. Error if exceeded. Defaults to 60.
 # $npmcmd: Optional, path to the npm executable (global)
-# $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-master-shorthash
+# $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-main-shorthash
 # $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
 
 # Don't want debugging @ start, but want exit on error

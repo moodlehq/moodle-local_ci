@@ -24,7 +24,7 @@ setup () {
     export dbuser1=$LOCAL_CI_TESTS_DBUSER
     export dbpass1=$LOCAL_CI_TESTS_DBPASS
 
-    create_git_branch master 35d5053ba20432059b497d85e39175d356f44fb4
+    create_git_branch main 35d5053ba20432059b497d85e39175d356f44fb4
 }
 
 teardown () {
@@ -32,14 +32,14 @@ teardown () {
     # Not all tests use the "compare_databases" branch.
     if [[ $BATS_TEST_NAME =~ "problems_are_detected" ]]; then
         cd $gitdir
-        git checkout master
+        git checkout main
         git branch -D compare_databases -q
         cd $OLDPWD
     fi;
 }
 
 @test "compare_databases/compare_databases.sh: missing env variables" {
-    export gitbranchinstalled=master
+    export gitbranchinstalled=main
     export gitbranchupgraded=MOODLE_31_STABLE
     export dbtype=
 
@@ -50,22 +50,22 @@ teardown () {
 
 @test "compare_databases/compare_databases.sh: single actual (> 401_STABLE) branch runs work" {
     # TODO: Change this to stable branches when we have more supporting php82.
-    export gitbranchinstalled=master
+    export gitbranchinstalled=main
     export gitbranchupgraded=MOODLE_402_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
     assert_output --partial 'Info: Origin branches: (1) MOODLE_402_STABLE'
-    assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Installing Moodle master into ci_installed_'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_402_STABLE'
+    assert_output --partial 'Info: Target branch: main'
+    assert_output --partial 'Info: Installing Moodle main into ci_installed_'
+    assert_output --partial 'Info: Comparing main and upgraded MOODLE_402_STABLE'
     assert_output --partial 'Info: Installing Moodle MOODLE_402_STABLE into ci_upgraded_'
-    assert_output --partial 'Info: Upgrading Moodle MOODLE_402_STABLE to master into ci_upgraded_'
+    assert_output --partial 'Info: Upgrading Moodle MOODLE_402_STABLE to main into ci_upgraded_'
     assert_output --partial 'Info: Comparing databases ci_installed_'
     assert_output --partial 'Info: OK. No problems comparing databases ci_installed_'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_main_logfile.txt ]
     assert_success
 }
 
@@ -92,18 +92,18 @@ teardown () {
 
 @test "compare_databases/compare_databases.sh: multiple branch runs work" {
     # TODO: Change this to different stable branches when we have more supporting php82.
-    export gitbranchinstalled=master
+    export gitbranchinstalled=main
     export gitbranchupgraded=v4.2.1,MOODLE_402_STABLE
 
     ci_run compare_databases/compare_databases.sh
     assert_success
     assert_output --partial 'Info: Origin branches: (2) v4.2.1,MOODLE_402_STABLE'
-    assert_output --partial 'Info: Target branch: master'
-    assert_output --partial 'Info: Comparing master and upgraded v4.2.1'
-    assert_output --partial 'Info: Comparing master and upgraded MOODLE_402_STABLE'
+    assert_output --partial 'Info: Target branch: main'
+    assert_output --partial 'Info: Comparing main and upgraded v4.2.1'
+    assert_output --partial 'Info: Comparing main and upgraded MOODLE_402_STABLE'
     assert_output --partial 'Ok: Process ended without errors'
     refute_output --partial 'Error: Process ended with'
-    run [ -f $WORKSPACE/compare_databases_master_logfile.txt ]
+    run [ -f $WORKSPACE/compare_databases_main_logfile.txt ]
     assert_success
 }
 

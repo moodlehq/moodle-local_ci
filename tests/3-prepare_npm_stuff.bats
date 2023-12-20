@@ -3,7 +3,7 @@
 load libs/shared_setup
 
 setup () {
-    create_git_branch master origin/master
+    create_git_branch main origin/main
     rm -fr $gitdir/node_modules
     rm -fr $gitdir/npm-shrinkwrap.json
 }

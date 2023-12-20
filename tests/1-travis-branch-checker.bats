@@ -10,7 +10,7 @@ load libs/shared_setup
     ci_run_php travis/check_branch_status.php --repository=https://github.com/moodlehq/moodle-local_ci
     assert_failure
 
-    ci_run_php travis/check_branch_status.php --branch=master
+    ci_run_php travis/check_branch_status.php --branch=main
     assert_failure
 }
 
@@ -41,7 +41,7 @@ load libs/shared_setup
 
 @test "travis/check_branch_status.php: not github repo" {
     # Travis only works with github repos, so skip non-github ones
-    ci_run_php travis/check_branch_status.php --repository=git://git.moodle.org/moodle.git --branch=master
+    ci_run_php travis/check_branch_status.php --repository=git://git.moodle.org/moodle.git --branch=main
     assert_success
     assert_output 'SKIP: Skipping checks. git://git.moodle.org/moodle.git Not a github repo.'
 }
