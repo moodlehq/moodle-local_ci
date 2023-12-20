@@ -4,7 +4,7 @@ load libs/shared_setup
 
 setup () {
     # This was the first .0 version coming with .nvmrc file, so it's the minimum supported by local_ci.
-    create_git_branch MOODLE_38_STABLE v3.8.0 # Must be always a .0 version coz we precheck it in master.
+    create_git_branch MOODLE_38_STABLE v3.8.0 # Must be always a .0 version coz we precheck it in main.
     export WORKSPACE=$gitdir
     export phpcsstandard=$LOCAL_CI_TESTS_PHPCS_DIR
 }
@@ -22,7 +22,7 @@ assert_prechecker () {
         fail "A smurf.xml fixture must be provided at fixtures/remote_branch_checker/$branch.xml"
     fi
 
-    export integrateto=master
+    export integrateto=main
     export rebaseerror=9999
     export remote=https://git.in.moodle.com/integration/prechecker.git
 
@@ -103,7 +103,7 @@ assert_prechecker () {
 @test "remote_branch_checker/remote_branch_checker.sh: remote which doesnt exist" {
     export branch="a-branch-which-will-never-exist"
     export issue="MDL-12345"
-    export integrateto=master
+    export integrateto=main
     export rebaseerror=9999
     export remote=https://git.in.moodle.com/integration/prechecker.git
 
@@ -117,7 +117,7 @@ assert_prechecker () {
     export remote=https://github.com/danpoltawski/moodle.git
     export branch="https://github.com/danpoltawski/moodle/tree/a-branch-which-doesnt-exist"
     export issue="MDL-12345"
-    export integrateto=master
+    export integrateto=main
     export rebaseerror=9999
 
     ci_run remote_branch_checker/remote_branch_checker.sh
@@ -133,7 +133,7 @@ assert_prechecker () {
     export remote=git://github.com/moodle/moodle.git
     export branch="a-branch-which-doesnt-exist"
     export issue="MDL-12345"
-    export integrateto=master
+    export integrateto=main
     export rebaseerror=9999
 
     ci_run remote_branch_checker/remote_branch_checker.sh

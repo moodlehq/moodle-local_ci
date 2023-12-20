@@ -318,7 +318,7 @@
         <description/>
         <code/>
       </problem>
-      <problem file="90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...master_precheck" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/commit/90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...master_precheck" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="warning" weight="1">
+      <problem file="90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...main_precheck" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/commit/90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...main_precheck" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="warning" weight="1">
         <message>Too many commits (30 &gt; 5) found. Please consider reducing it for normal patches. </message>
         <description/>
         <code/>

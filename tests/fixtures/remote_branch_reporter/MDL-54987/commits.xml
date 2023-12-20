@@ -84,7 +84,7 @@
   <file name="af8ac4d">
     <error line="0" column="0" severity="error" message="The commit message does not contain the expected issue code MDL-54987 and a space. "/>
   </file>
-  <file name="90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...master_precheck">
+  <file name="90a8bdbfc0082651d0a60a4396947ce9cf5d43e5...main_precheck">
     <error line="0" column="0" severity="warning" message="Too many commits (30 &gt; 5) found. Please consider reducing it for normal patches. "/>
   </file>
 </checkstyle>

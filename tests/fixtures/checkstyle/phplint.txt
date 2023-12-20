@@ -1,4 +1,4 @@
-Running php syntax check from aeccf4bd944167f06e1cbe089af040174ef412f1 to master_precheck:
+Running php syntax check from aeccf4bd944167f06e1cbe089af040174ef412f1 to main_precheck:
 /var/lib/jenkins/git_repositories/prechecker/lang/en/error.php - OK
 /var/lib/jenkins/git_repositories/prechecker/lang/en/moodle.php - OK
 /var/lib/jenkins/git_repositories/prechecker/lib/outputrequirementslib.php - OK
