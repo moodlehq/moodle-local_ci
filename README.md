@@ -1,6 +1,6 @@
 # CI local plugin
 
-[![Build Status](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml)
+[![Build Status](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml)
 
 This local_ci plugin contains all the scripts needed
 by Moodle CI servers to automate checks while
@@ -8,7 +8,7 @@ integration happens.
 
 ## Dependencies
 
-+ Some checks require a MySQL, master-based site to be up and running.
++ Some checks require a MySQL, Moodle main-based site to be up and running.
 + Some checks require a PHP engine to run (other are pure shell scripts).
 + Some checks require the installation of 3rd part tools (phpunit...).
 + Some checks require the presence of local_moodlecheck local plugin.
