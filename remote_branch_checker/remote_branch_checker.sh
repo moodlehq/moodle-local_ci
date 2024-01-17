@@ -510,8 +510,17 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 # earlier in the script when the whole code-base was available. Now, for performance
 # reasons, only the patch-modified files are remaining so we cannot use phpcs abilities
 # to detect all components anymore. Hence using the complete, already calculated, list.
+# If we are checking a plugin, there are some differences in the checks performed.
+# TODO: If https://github.com/moodlehq/moodle-cs/issues/92 becomes implemented, then
+# we'll just have to change to the new, plugins specific, standard and forget.
+phpcs_isplugin=""
+if [[ -n "${isplugin}" ]]; then
+    # We exclude some Sniffs that are not applicable to plugins.
+    phpcs_isplugin="--exclude=moodle.Commenting.TodoComment"
+fi
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
+    ${phpcs_isplugin} \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard=moodle ${WORKSPACE}
 
