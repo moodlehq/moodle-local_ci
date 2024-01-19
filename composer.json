@@ -4,7 +4,7 @@
     "keywords": ["moodle", "ci", "integration", "jira", "jenkins", "automations"],
     "license": "GPL-3.0-or-later",
     "require": {
-        "moodlehq/moodle-cs": "^3.3.12",
+        "moodlehq/moodle-cs": "^3.3.13",
         "mustache/mustache": "^2.14.2",
         "phpcompatibility/php-compatibility": "dev-develop#306cd263"
     },
