@@ -518,6 +518,7 @@ if [[ -n "${isplugin}" ]]; then
     # We exclude some Sniffs that are not applicable to plugins.
     phpcs_isplugin="--exclude=moodle.Commenting.TodoComment"
 fi
+echo "Info: Running phpcs..."
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
     ${phpcs_isplugin} \
