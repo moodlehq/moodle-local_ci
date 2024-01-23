@@ -325,7 +325,7 @@ class amos_script_parser {
         $newstyle = trim($newstyle);
 
         // See {@link PARAM_COMPONENT}.
-        if (!preg_match('/^[a-z]+(_[a-z][a-z0-9_]*)?[a-z0-9]+$/', $newstyle)) {
+        if (!preg_match('/^[a-z][a-z0-9]*(_[a-z][a-z0-9_]*)?[a-z0-9]+$/', $newstyle)) {
             return false;
         }
 
