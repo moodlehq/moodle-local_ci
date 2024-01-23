@@ -52,8 +52,8 @@ if [[ $jobtype =~ ^phpunit ]]; then # Only if the job type is phpunit.
     if [[ -n ${phpunit_filter} ]]; then
         phpunit_options="--filter ${phpunit_filter}"
     fi
-    if [[ -n ${phpunit_suite} ]]; then
-        phpunit_options+=" --testsuite ${phpunit_suite}"
+    if [[ -n ${phpunit_testsuite} ]]; then
+        phpunit_options+=" --testsuite ${phpunit_testsuite}"
     fi
     phpunit_options="${phpunit_options:-complete}"
     echo "PHPUnit options: ${phpunit_options}"
@@ -90,7 +90,7 @@ if [[ "${jobtype}" == "phpunit" ]]; then
             -p DATABASE=${dbtype} \
             -p PHPVERSION=${php_version} \
             -p TAGS=${phpunit_filter} \
-            -p TESTSUITE=${phpunit_suite} \
+            -p PHPUNIT_TESTSUITE=${phpunit_testsuite} \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
