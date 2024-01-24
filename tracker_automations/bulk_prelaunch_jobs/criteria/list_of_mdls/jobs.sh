@@ -16,6 +16,7 @@ fi
 
 # We don't allow both phpunit_filter and behat_tags together
 # (because they both use the very same TAGS env variable)
+# TODO: Remove this once we have moved out from TAGS (to PHPUNIT_FILTER and BEHAT_TAGS).
 if [[ -n ${phpunit_filter} ]] && [[ -n ${behat_tags} ]]; then
     echo "ERROR: Cannot use phpunit_filter and behat_tags together"
     exit 1
@@ -52,7 +53,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "phpunit" ]]; then
         -p BRANCH=${branch} \
         -p DATABASE=sqlsrv \
         -p PHPVERSION=${php_version} \
-        -p TAGS=${phpunit_filter} \
+        -p PHPUNIT_FILTER=${phpunit_filter} \
         -p PHPUNIT_TESTSUITE=${phpunit_testsuite} \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
