@@ -62,6 +62,6 @@ if [[ ${target} == "main" ]]; then
         -p BEHAT_INCREASE_TIMEOUT=4 \
         -p MOBILE_VERSION=latest-test \
         -p INSTALL_PLUGINAPP=ci \
-        -p TAGS="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip" \
+        -p BEHAT_TAGS="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip" \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi

@@ -74,7 +74,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER="BrowserKit (non-js)" \
         -p BEHAT_SUITE=ALL \
-        -p TAGS="${final_tags}" \
+        -p BEHAT_TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -94,7 +94,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
-        -p TAGS="${final_tags}" \
+        -p BEHAT_TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -115,7 +115,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
         -p BEHAT_SUITE=classic \
-        -p TAGS="${final_tags}" \
+        -p BEHAT_TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -135,7 +135,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
-        -p TAGS="${final_tags}" \
+        -p BEHAT_TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -156,7 +156,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
         -p BEHAT_SUITE=classic \
-        -p TAGS="${final_tags}" \
+        -p BEHAT_TAGS="${final_tags}" \
         -p NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -183,7 +183,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
             -p BEHAT_INCREASE_TIMEOUT=4 \
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \
-            -p TAGS="${final_tags}" \
+            -p BEHAT_TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null

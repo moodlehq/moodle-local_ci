@@ -116,7 +116,7 @@ if [[ "${jobtype}" == "behat-nonjs" ]]; then
             -p PHPVERSION=${php_version} \
             -p BROWSER="BrowserKit (non-js)" \
             -p BEHAT_SUITE=ALL \
-            -p TAGS="${final_tags}" \
+            -p BEHAT_TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -142,7 +142,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
             -p PHPVERSION=${php_version} \
             -p BROWSER="Chrome (js)" \
             -p BEHAT_SUITE=default \
-            -p TAGS="${final_tags}" \
+            -p BEHAT_TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -168,7 +168,7 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
             -p PHPVERSION=${php_version} \
             -p BROWSER="Firefox (js)" \
             -p BEHAT_SUITE=default \
-            -p TAGS="${final_tags}" \
+            -p BEHAT_TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
@@ -197,7 +197,7 @@ if [[ "${jobtype}" == "behat-app" ]]; then
             -p BEHAT_INCREASE_TIMEOUT=4 \
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \
-            -p TAGS="${final_tags}" \
+            -p BEHAT_TAGS="${final_tags}" \
             -p NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
