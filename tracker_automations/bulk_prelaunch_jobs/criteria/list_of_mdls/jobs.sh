@@ -75,7 +75,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BROWSER="BrowserKit (non-js)" \
         -p BEHAT_SUITE=ALL \
         -p BEHAT_TAGS="${final_tags}" \
-        -p NAME="${behat_name}" \
+        -p BEHAT_NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -95,7 +95,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
         -p BEHAT_TAGS="${final_tags}" \
-        -p NAME="${behat_name}" \
+        -p BEHAT_NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -116,7 +116,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p BROWSER="Chrome (js)" \
         -p BEHAT_SUITE=classic \
         -p BEHAT_TAGS="${final_tags}" \
-        -p NAME="${behat_name}" \
+        -p BEHAT_NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -136,7 +136,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
         -p BEHAT_TAGS="${final_tags}" \
-        -p NAME="${behat_name}" \
+        -p BEHAT_NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -157,7 +157,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BROWSER="Firefox (js)" \
         -p BEHAT_SUITE=classic \
         -p BEHAT_TAGS="${final_tags}" \
-        -p NAME="${behat_name}" \
+        -p BEHAT_NAME="${behat_name}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -184,7 +184,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \
             -p BEHAT_TAGS="${final_tags}" \
-            -p NAME="${behat_name}" \
+            -p BEHAT_NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     fi

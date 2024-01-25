@@ -117,7 +117,7 @@ if [[ "${jobtype}" == "behat-nonjs" ]]; then
             -p BROWSER="BrowserKit (non-js)" \
             -p BEHAT_SUITE=ALL \
             -p BEHAT_TAGS="${final_tags}" \
-            -p NAME="${behat_name}" \
+            -p BEHAT_NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
@@ -143,7 +143,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
             -p BROWSER="Chrome (js)" \
             -p BEHAT_SUITE=default \
             -p BEHAT_TAGS="${final_tags}" \
-            -p NAME="${behat_name}" \
+            -p BEHAT_NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
@@ -169,7 +169,7 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
             -p BROWSER="Firefox (js)" \
             -p BEHAT_SUITE=default \
             -p BEHAT_TAGS="${final_tags}" \
-            -p NAME="${behat_name}" \
+            -p BEHAT_NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
@@ -198,7 +198,7 @@ if [[ "${jobtype}" == "behat-app" ]]; then
             -p MOBILE_VERSION=latest-test \
             -p INSTALL_PLUGINAPP=ci \
             -p BEHAT_TAGS="${final_tags}" \
-            -p NAME="${behat_name}" \
+            -p BEHAT_NAME="${behat_name}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
