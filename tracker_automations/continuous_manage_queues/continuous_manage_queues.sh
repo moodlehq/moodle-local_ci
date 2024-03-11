@@ -27,7 +27,7 @@
 #    b) The issue has the mdlqa label.                                    | => labels IN (mdlqa)
 #
 # This job must be enabled only since freeze day to the end of on-sync period, when normal weeklies begin.
-# (see https://docs.moodle.org/dev/Release_process#5_weeks_prior)
+# (see https://moodledev.io/general/development/process/release#5-weeks-prior)
 #
 # Parameters:
 #  jiraclicmd: fill execution path of the jira cli

@@ -306,7 +306,7 @@ function run_B1a() {
                    --issue ${issue} \
                    --labels "integration_held"
         # Add the standard comment for held issues.
-        comment='We are currently in the on-sync period ( https://docs.moodle.org/dev/Integration_Review#On-sync_period ) so this issue is being held until we leave that period in a few weeks time. Thanks for your patience!'.
+        comment='We are currently in the [On-sync period|https://moodledev.io/general/development/process/integration#on-sync-period] so this issue is being held until we leave that period in a few weeks time. Thanks for your patience!'.
 
         ${basereq} --action addComment \
                    --issue ${issue} \
