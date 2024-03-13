@@ -72,20 +72,10 @@ movemax=${movemax:-3}
 lastweekdate=${lastweekdate:-$(date -d "${releasedate} -7day" +%Y-%m-%d)}
 dryrun=${dryrun:-}
 
-# Verify that $releasedata has a correct YYYY-MM-DD format
-if [[ ! ${releasedate} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-    echo "ERROR: \$releasedate. Incorrect YYYY-MM-DD format detected: ${releasedate}"
-    exit 1
-fi
-
-# Verify that $lastweekdate has a correct YYYY-MM-DD format
-if [[ ! ${lastweekdate} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-    echo "ERROR: \$lastweekdate. Incorrect YYYY-MM-DD format detected: ${lastweekdate}"
-    exit 1
-fi
-
 # Today
 nowdate=$(date +%Y%m%d)
+
+run_param_validation $releasedate $lastweekdate
 
 # Decide if we are going to proceed with behaviour A (before release) or behaviour B (after release)
 behaviorAB=

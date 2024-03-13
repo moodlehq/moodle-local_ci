@@ -389,3 +389,38 @@ function run_C() {
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current: held" >> "${logfile}"
     done
 }
+
+function run_param_validation() {
+    releasedate=$1
+    lastweekdate=$2
+
+    # Verify that $releasedate has a correct YYYY-MM-DD format
+    if [[ ! ${releasedate} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+        echo "ERROR: \$releasedate. Incorrect YYYY-MM-DD format detected: ${releasedate}"
+        exit 1
+    fi
+
+    # Verify that $lastweekdate has a correct YYYY-MM-DD format
+    if [[ ! ${lastweekdate} =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+        echo "ERROR: \$lastweekdate. Incorrect YYYY-MM-DD format detected: ${lastweekdate}"
+        exit 1
+    fi
+
+    # Verify that the last week date is not after the release date.
+    releasedateint=$(date -d "${releasedate}" +%Y%m%d)
+    lastweekdateint=$(date -d "${lastweekdate}" +%Y%m%d)
+    if [ $releasedateint -lt $lastweekdateint ]; then
+        echo "ERROR: The value set for \$lastweekdate ($lastweekdate) is after the \$releasedate ($releasedate)"
+        exit 1
+    fi
+
+    # Verify that the current date is not well past the on-sync period. (Normally 2 weeks but making it 4 weeks just in case).
+    nowdate=$(date +%Y%m%d)
+    onsyncenddate=$(date -d "${releasedate} +28day" +%Y%m%d)
+    if [ $nowdate -gt $onsyncenddate ]; then
+        echo "ERROR: The current date is already past the on-sync period. Please make sure the Release date ($releasedate) is configured correctly"
+        exit 1
+    fi
+
+    echo "Parameters validated"
+}
