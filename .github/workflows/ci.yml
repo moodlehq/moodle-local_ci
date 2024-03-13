@@ -61,7 +61,7 @@ jobs:
           npm install
 
       - name: Setup Bats
-        uses: brokenpip3/setup-bats-libs@1.5.2
+        uses: bats-core/bats-action@1.5.5
         with:
           bats-version: 1.10.0
           # We need only support and assert libraries, and installed locally for caching to work.
