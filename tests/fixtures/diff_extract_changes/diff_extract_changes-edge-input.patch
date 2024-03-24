@@ -1,0 +1,25 @@
+diff --git a/another_binary.png b/another_binary.png
+new file mode 100644
+index 00000000000..3cb4b3d9aaf
+Binary files /dev/null and b/another_binary.png differ
+diff --git a/diff_extract_changes_edge_cases.txt b/diff_extract_changes_edge_cases.txt
+index 4e020b9abcd..21a2225922f 100644
+--- a/diff_extract_changes_edge_cases.txt
++++ b/diff_extract_changes_edge_cases.txt
+@@ -5,10 +5,9 @@ Let's see how out diff extractor behaves with some edge cases.
+ + 
+ - 
+ ++ 
+--- 
+ +++ 
+---- 
+ ++ 
+--- 
++++ 
+ + 
+ - 
++-- 
+diff --git a/some_binary1.png b/some_binary1.png
+deleted file mode 100644
+index f6277460437..00000000000
+Binary files a/some_binary1.png and /dev/null differ

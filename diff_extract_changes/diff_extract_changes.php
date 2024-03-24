@@ -93,7 +93,7 @@ $dec->process();
 class diff_changes_extractor {
 
     /** version of the extractor */
-    const VERSION = '20120120';
+    const VERSION = '20240323';
 
     /** @var string The unified diff file to process */
     protected $file;
@@ -130,9 +130,11 @@ class diff_changes_extractor {
         $inchunk = false; // To determine if we are in a chunk or no
         $deletefile = false; // To detect delete operation and skip those files
         $binaryfile = false; // To detect binary files and handle them specially
+        $afterminus = false; // To detect if we are after a minus (-) line
+        $isnewfile = false; // To detect if we are in a new file
 
         // Skip always these lines
-        $skiplines = array('diff', 'inde', '--- ');
+        $skiplines = array('diff', 'inde');
 
         // Let's read the diff file, line by line.
         $fh = fopen($this->file, 'r');
@@ -155,16 +157,39 @@ class diff_changes_extractor {
                     continue;
                 }
 
+                // If it's the start of a new file (--- ), we mark it for next line.
+                if ($lineheader === '--- ') {
+                    // Only if the line has something looking like a path.
+                    if (preg_match('~^--- a?(/)(.+)$~', $line, $match)) {
+                        if (!empty($match[2]) && !empty($match[1]) && $match[1] === '/') {
+                            $afterminus = true;
+                        }
+                    }
+                }
+
+                // If it's the start of a new file (+++ ), and we are after a minus (--- )
+                // we raise the new file flag.
+                if ($lineheader === '+++ ' && $afterminus) {
+                    // Only if the line has something looking like a path.
+                    if (preg_match('~^\+\+\+ b?(/)(.+)$~', $line, $match)) {
+                        if (!empty($match[2]) && !empty($match[1]) && $match[1] === '/') {
+                            $isnewfile = true;
+                        }
+                    }
+                }
+
                 // If it's one Binary file, we mark it
                 if ($lineheader === 'Bina') {
                     $binaryfile = true;
                 }
 
                 // Detect if we are changing of file
-                if ($lineheader === '+++ ' || $binaryfile) {
+                if ($isnewfile || $binaryfile) {
 
                     $clineinfile = 0;
                     $inchunk = false;
+                    $afterminus = false;
+                    $isnewfile = false;
 
                     // Output interval end
                     if (!empty($clineint)) {
@@ -300,7 +325,7 @@ class diff_changes_extractor {
      */
     private function output_end() {
         if ($this->output == 'xml') {
-            echo '</diffchanges>';
+            echo '</diffchanges>' . PHP_EOL;
         }
     }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<diffchanges version="20240323">
+  <file name="another_binary.png">
+  </file>
+  <file name="diff_extract_changes_edge_cases.txt">
+    <lines from="10" to="10"/>
+    <lines from="13" to="13"/>
+  </file>
+</diffchanges>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<diffchanges version="20120120">
+<diffchanges version="20240323">
   <file name=".stylelintrc">
     <lines from="1" to="93"/>
   </file>
