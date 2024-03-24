@@ -513,15 +513,18 @@ rm ${WORKSPACE}/check_upgrade_savepoints.php
 # If we are checking a plugin, there are some differences in the checks performed.
 # TODO: If https://github.com/moodlehq/moodle-cs/issues/92 becomes implemented, then
 # we'll just have to change to the new, plugins specific, standard and forget.
-phpcs_isplugin=""
+declare -a phpcs_isplugin=()
 if [[ -n "${isplugin}" ]]; then
-    # We exclude some Sniffs that are not applicable to plugins.
-    phpcs_isplugin="--exclude=moodle.Commenting.TodoComment"
+    # Here we can exclude some checks or set runtime config values for the plugin checks.
+    phpcs_isplugin=(
+        "--runtime-set" "moodleTodoCommentRegex" ""
+        "--runtime-set" "moodleLicenseRegex" ""
+    )
 fi
 echo "Info: Running phpcs..."
 ${phpcmd} ${mydir}/../vendor/bin/phpcs \
     --runtime-set moodleComponentsListPath "${WORKSPACE}/work/valid_components.txt" \
-    ${phpcs_isplugin} \
+    "${phpcs_isplugin[@]}" \
     --report=checkstyle --report-file="${WORKSPACE}/work/cs.xml" \
     --extensions=php --standard=moodle ${WORKSPACE}
 
