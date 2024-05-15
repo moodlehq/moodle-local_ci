@@ -57,6 +57,23 @@ class remote_branch_reporter {
 
         $doc->appendChild($smurf);
 
+        // Process the errors output, weighting errors with 5 and warnings with 1.
+        $params = array(
+            'title' => 'Overview',
+            'abbr' => 'overview',
+            'description' => 'This section shows the general problems detected when processing the code',
+            'url' => '',
+            'codedir' => dirname($this->directory) . '/',
+            'errorweight' => 5,
+            'warningweight' => 1,
+            'allowfiltering' => 0);
+        if ($node = $this->apply_xslt($params, $this->directory . '/errors.xml', 'checkstyle2smurf.xsl')) {
+            if ($check = $node->getElementsByTagName('check')->item(0)) {
+                $snode = $doc->importNode($check, true);
+                $smurf->appendChild($snode);
+            }
+        }
+
         // Process the phplint output, weighting errors with 5 and warnings with 1
         $params = array(
             'title' => 'PHP lint problems',
