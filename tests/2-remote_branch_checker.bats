@@ -44,6 +44,8 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {
+    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_all_passing MDL-53572 v3.9.0
 }
 
@@ -52,6 +54,8 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {
+    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     # Ensure we always report each section, even if there are no php/css/js files to check
     assert_prechecker local_ci_fixture_noncode_update MDL-12345 v3.9.0
 }
@@ -67,6 +71,8 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup skipped for plugins" {
+    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     # With branches named PLUGIN-xxxx, the upgrade_external_backup check will be skipped,
     # no matter the verified branch has 3 warnings when running for non plugins.
     assert_prechecker local_ci_fixture_upgrade_external_backup_skipped_for_plugins PLUGIN-12345 v4.0.0
@@ -77,10 +83,14 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
+    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_bad_amos_command MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: good amos commands" {
+    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_good_amos_commit MDL-12345 v3.9.0
 }
 
