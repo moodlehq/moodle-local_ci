@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="1.3.2">
 <file name="/var/lib/jenkins/git_repositories/prechecker/repository/lib.php">
-<error line="892" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/lib.php on line 892 "/>
+<error line="892" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/lib.php on line 892"/>
 </file><file name="/var/lib/jenkins/git_repositories/prechecker/repository/repository_ajax.php">
-<error line="287" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/repository_ajax.php on line 287 "/>
+<error line="287" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/repository_ajax.php on line 287"/>
 </file><file name="/var/lib/jenkins/git_repositories/prechecker/repository/upload/lib.php">
-<error line="195" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/upload/lib.php on line 195 "/>
+<error line="195" column="0" severity="error" message="PHP Parse error: syntax error, unexpected &#039;{&#039; in /repository/upload/lib.php on line 195"/>
 </file></checkstyle>

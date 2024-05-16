@@ -41,7 +41,9 @@ if ($unrecognized) {
 
 }
 
-$validformats = array('phplint', 'thirdparty', 'gruntdiff', 'shifter', 'mustachelint', 'gherkinlint');
+$validformats = [
+    'phplint', 'thirdparty', 'gruntdiff', 'shifter', 'mustachelint', 'gherkinlint', 'errors'
+];
 
 
     $help =
@@ -87,7 +89,7 @@ $output = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL .
 while ($line = fgets(STDIN)) {
     $output.= $parsefunction($line);
 }
-$output .= '</checkstyle>';
+$output .= '</checkstyle>' . PHP_EOL;
 
 echo $output;
 exit;
@@ -156,7 +158,7 @@ function process_phplint($line) {
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="error" ';
-        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= 'message="' .s($message). '"/>' . PHP_EOL;
         $output.= '</file>';
     }
 
@@ -183,7 +185,7 @@ function process_thirdparty($line) {
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="warning" ';
-        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= 'message="' .s($message). '"/>' . PHP_EOL;
         $output.= '</file>';
     }
 
@@ -208,7 +210,7 @@ function process_shifter($line) {
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="error" ';
-        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= 'message="' .s($message). '"/>' . PHP_EOL;
         $output.= '</file>';
     }
 
@@ -236,8 +238,36 @@ function process_mustachelint($line) {
 
         $output.= '<file name="' . $filename. '">'.PHP_EOL;
         $output.= '<error line="'.$lineno.'" column="0" severity="'.$severity.'" ';
-        $output.= 'message="' .s($message). ' "/>' . PHP_EOL;
+        $output.= 'message="' .s($message). '"/>' . PHP_EOL;
         $output.= '</file>';
+    }
+
+    return $output;
+}
+
+/**
+ * Converts errors.txt output to checkstyle format
+ *
+ * Example input:
+ *  Info: blah, blah, blah (ignorable)
+ *  Warn: this is a warning
+ *  Error: this is an error
+ *  Anything else (ignorable)
+ *
+ * @param string $line the line of file
+ * @return string the xml fragment
+ */
+function process_errors($line) {
+    $output = '';
+    if (preg_match('/^(Warn|Error): *(.*)/', $line, $matches)) {
+        $severity = $matches[1] === 'Warn' ? 'warning' : 'error';
+        $message = $matches[2];
+        $lineno = 0;
+
+        $output .= '<file name="">' . PHP_EOL;
+        $output .= '<error line="' . $lineno . '" column="0" severity="' . $severity . '" ';
+        $output .= 'message="' . s($message) . '"/>' . PHP_EOL;
+        $output .= '</file>';
     }
 
     return $output;
@@ -257,7 +287,7 @@ function process_gherkinlint($line) {
             $output .= '<file name="' . $file->filePath . '">'.PHP_EOL;
             foreach ($file->errors as $error) {
                 $output .= '<error line="' . $error->line . '" column="0" severity="error" ';
-                $output .= 'source="' . s($error->rule) . '" message="' . s($error->message) . '" />' . PHP_EOL;
+                $output .= 'source="' . s($error->rule) . '" message="' . s($error->message) . '"/>' . PHP_EOL;
             }
             $output .= '</file>' . PHP_EOL;
         }

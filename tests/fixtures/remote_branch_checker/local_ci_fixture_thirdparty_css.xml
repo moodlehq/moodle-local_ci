@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="0" numwarnings="2">
-  <summary status="warning" numerrors="0" numwarnings="2" condensedresult="smurf,warning,0,2:phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+<smurf version="0.9.1" numerrors="0" numwarnings="3">
+  <summary status="warning" numerrors="0" numwarnings="3" condensedresult="smurf,warning,0,3:overview,warning,0,1;phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;commit,success,0,0;savepoint,success,0,0;thirdparty,warning,0,2;externalbackup,success,0,0;grunt,success,0,0;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0">
+    <detail name="overview" status="warning" numerrors="0" numwarnings="1"/>
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="success" numerrors="0" numwarnings="0"/>
     <detail name="js" status="success" numerrors="0" numwarnings="0"/>
@@ -15,6 +16,16 @@
     <detail name="mustache" status="success" numerrors="0" numwarnings="0"/>
     <detail name="gherkin" status="success" numerrors="0" numwarnings="0"/>
   </summary>
+  <check id="overview" title="Overview" url="" numerrors="0" numwarnings="1" allowfiltering="0">
+    <description>This section shows the general problems detected when processing the code</description>
+    <mess>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a0c15150e51225ee881db15c730ab31850a4ed0d/#L0" ruleset="moodle" rule="" url="" type="warning" weight="1">
+        <message>The local_ci_fixture_thirdparty_css branch at https://git.in.moodle.com/integration/prechecker.git has not been rebased recently (&gt;20 days ago).</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess/>
@@ -47,12 +58,12 @@
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess>
       <problem file="lib/jquery/ui-1.12.1/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a0c15150e51225ee881db15c730ab31850a4ed0d/lib/jquery/ui-1.12.1/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
-        <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt </message>
+        <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt</message>
         <description/>
         <code/>
       </problem>
       <problem file="lib/jquery/ui-1.12.1/jquery-ui.theme.css" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/a0c15150e51225ee881db15c730ab31850a4ed0d/lib/jquery/ui-1.12.1/jquery-ui.theme.css#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" type="warning" weight="1">
-        <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt </message>
+        <message>modification to third party library (lib/jquery) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt</message>
         <description/>
         <code/>
       </problem>

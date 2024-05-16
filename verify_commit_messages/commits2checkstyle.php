@@ -90,13 +90,13 @@ while ($line = trim(fgets(STDIN))) {
         }
         // Use line and column 0, we don't really know the real line in the original format
         $output .= '    <error line="0" column="0" severity="' . $cseverity . '" message="' .
-            s($cmessage) . ' "/>' . PHP_EOL;
+            s($cmessage) . '"/>' . PHP_EOL;
     }
     $lastcommit = $ccommit;
 }
 if ($ccommit) { // There is a commit (aka, file) pending to close.
     $output .= '  </file>' . PHP_EOL;
 }
-$output .= '</checkstyle>';
+$output .= '</checkstyle>' . PHP_EOL;
 
 echo $output;

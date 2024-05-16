@@ -99,7 +99,7 @@ if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]] && [[ -n "${jenkinsserver}
 fi
 
 # Create the work directory where all the tasks will happen/be stored
-mkdir ${WORKSPACE}/work
+mkdir -p ${WORKSPACE}/work
 
 # Prepare the errors and warnings files
 errorfile=${WORKSPACE}/work/errors.txt
@@ -540,6 +540,17 @@ else
     ${phpcmd} ${mydir}/../../moodlecheck/cli/moodlecheck.php \
         --path=${WORKSPACE} --format=xml --componentsfile="${WORKSPACE}/work/valid_components.txt" > "${WORKSPACE}/work/docs.xml"
 fi
+
+# ########## ########## ########## ##########
+
+# It's time, at the end, to create the "overview" report with all the problems that this script
+# has found and accumulated in the errors.txt file. That report will become part of the final
+# reports (smurf files) generated and handled normally, like any other error or warning from
+# the other checks executed above.
+
+# Let's process the errors.txt file and convert it to checkstyle format.
+echo "Info: Converting errors.txt to checkstyle format..."
+${phpcmd} "${mydir}/checkstyle_converter.php" --format=errors < "${WORKSPACE}/work/errors.txt" > "${WORKSPACE}/work/errors.xml"
 
 # ########## ########## ########## ##########
 

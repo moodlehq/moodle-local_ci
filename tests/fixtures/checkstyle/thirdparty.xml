@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="1.3.2">
 <file name="/var/lib/jenkins/git_repositories/prechecker/lib/adodb/drivers/adodb-oci8po.inc.php">
-<error line="0" column="0" severity="warning" message="modification to third party library (lib/adodb) without update to lib/thirdpartylibs.xml or lib/adodb/readme_moodle.txt "/>
+<error line="0" column="0" severity="warning" message="modification to third party library (lib/adodb) without update to lib/thirdpartylibs.xml or lib/adodb/readme_moodle.txt"/>
 </file></checkstyle>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="1.3.2">
   <file name="/var/lib/jenkins/git_repositories/prechecker/lib/db/upgrade.php">
-    <error line="0" column="0" severity="error" message="version 2015082001.00 has wrong savepoint call with version 2015082001.01 "/>
+    <error line="0" column="0" severity="error" message="version 2015082001.00 has wrong savepoint call with version 2015082001.01"/>
   </file>
 </checkstyle>
