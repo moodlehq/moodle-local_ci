@@ -108,6 +108,33 @@ assert_files_same() {
     assert_output ''
 }
 
+# Assert that a file matches all the regular expressions in a file (one per line).
+# Usage: assert_file_matches regexfile file
+assert_file_matches() {
+    regexfile=$1
+    file=$2
+
+    if [ ! -s $regexfile ]; then
+        fail "$regexfile is empty"
+        return 1
+    fi
+
+    if [ ! -s $file ]; then
+        fail "$file is empty"
+        return 1
+    fi
+
+    run cat $file
+    while read -r regex; do
+        # Skip comment and empty lines.
+        if [[ $regex =~ ^\s*$ ]] || [[ $regex =~ ^\s*# ]]; then
+            continue
+        fi
+        # Verify that the file contains the regex.
+        assert_output --regexp "$regex"
+    done < $regexfile
+}
+
 # Get a tmp directory - unique to each test file and run
 get_per_file_tmpdir_name() {
     echo "$BATS_TMPDIR/$( echo $BATS_TEST_FILENAME $PPID | md5sum | awk '{ print $1 }' )"
