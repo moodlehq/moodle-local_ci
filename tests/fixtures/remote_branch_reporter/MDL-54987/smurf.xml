@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<smurf version="0.9.1" numerrors="54" numwarnings="6">
-  <summary status="error" numerrors="54" numwarnings="6" condensedresult="smurf,error,54,6:phplint,success,0,0;phpcs,error,20,2;js,warning,0,3;css,success,0,0;phpdoc,error,3,0;commit,error,28,1;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,3,0;shifter,success,0,0">
+<smurf version="0.9.1" numerrors="56" numwarnings="8">
+  <summary status="error" numerrors="56" numwarnings="8" condensedresult="smurf,error,56,8:overview,error,2,2;phplint,success,0,0;phpcs,error,20,2;js,warning,0,3;css,success,0,0;phpdoc,error,3,0;commit,error,28,1;savepoint,success,0,0;thirdparty,success,0,0;grunt,error,3,0;shifter,success,0,0">
+    <detail name="overview" status="error" numerrors="2" numwarnings="2"/>
     <detail name="phplint" status="success" numerrors="0" numwarnings="0"/>
     <detail name="phpcs" status="error" numerrors="20" numwarnings="2"/>
     <detail name="js" status="warning" numerrors="0" numwarnings="3"/>
@@ -12,6 +13,31 @@
     <detail name="grunt" status="error" numerrors="3" numwarnings="0"/>
     <detail name="shifter" status="success" numerrors="0" numwarnings="0"/>
   </summary>
+  <check id="overview" title="Overview" url="" numerrors="2" numwarnings="2" allowfiltering="0">
+    <description>This section shows the general problems detected when processing the code</description>
+    <mess>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/#L0" ruleset="moodle" rule="" url="" type="warning" weight="1">
+        <message>warning1</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/#L0" ruleset="moodle" rule="" url="" type="error" weight="5">
+        <message>error1</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/#L0" ruleset="moodle" rule="" url="" type="warning" weight="1">
+        <message>another warning</message>
+        <description/>
+        <code/>
+      </problem>
+      <problem file="" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/#L0" ruleset="moodle" rule="" url="" type="error" weight="5">
+        <message>error2</message>
+        <description/>
+        <code/>
+      </problem>
+    </mess>
+  </check>
   <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess/>

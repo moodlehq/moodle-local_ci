@@ -11,15 +11,24 @@ setup () {
 
 # Assert prechecker results
 # usage: assert_prechecker branch issue commit summary
+# Performs a prechecker run and asserts the results against a collection of
+# regular expressions (one by line) or against a complete XML fixture file.
 assert_prechecker () {
     export branch=$1
     export issue=$2
     export resettocommit=$3
 
     smurfxmlfixture=$BATS_TEST_DIRNAME/fixtures/remote_branch_checker/$branch.xml
+    smurfregexfixture=$BATS_TEST_DIRNAME/fixtures/remote_branch_checker/$branch.regex
 
-    if [ ! -f $smurfxmlfixture ]; then
-        fail "A smurf.xml fixture must be provided at fixtures/remote_branch_checker/$branch.xml"
+    if [ ! -r $smurfregexfixture ]; then
+        if [ ! -r $smurfxmlfixture ]; then
+            fail "A .regex with matches or a complete .xml must be provided at fixtures/remote_branch_checker/$branch.[regex|xml]"
+        fi
+    fi
+
+    if [ -r $smurfregexfixture ] && [ -r $smurfxmlfixture ]; then
+        fail "Only one of .regex or .xml must be provided at fixtures/remote_branch_checker/$branch.[regex|xml]"
     fi
 
     export integrateto=main
@@ -28,7 +37,11 @@ assert_prechecker () {
 
     ci_run remote_branch_checker/remote_branch_checker.sh
     assert_success
-    assert_files_same $smurfxmlfixture $WORKSPACE/work/smurf.xml
+    if [ -r $smurfregexfixture ]; then
+        assert_file_matches $smurfregexfixture $WORKSPACE/work/smurf.xml
+    else
+        assert_files_same $smurfxmlfixture $WORKSPACE/work/smurf.xml
+    fi
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: old branch (38_STABLE) failing" {
@@ -44,7 +57,7 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all checks passing" {
-    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebasewarn=999999 # Dont' warn about rebase ever.
     export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_all_passing MDL-53572 v3.9.0
 }
@@ -54,7 +67,7 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: all results reported despite no php/js/css files" {
-    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebasewarn=999999 # Dont' warn about rebase ever.
     export rebaseerror=999999 # Don't fail about rebase ever.
     # Ensure we always report each section, even if there are no php/css/js files to check
     assert_prechecker local_ci_fixture_noncode_update MDL-12345 v3.9.0
@@ -71,7 +84,7 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: upgrade external backup skipped for plugins" {
-    export rebasewarn=999999 # Dont' warn abou rebase ever.
+    export rebasewarn=999999 # Dont' warn about rebase ever.
     export rebaseerror=999999 # Don't fail about rebase ever.
     # With branches named PLUGIN-xxxx, the upgrade_external_backup check will be skipped,
     # no matter the verified branch has 3 warnings when running for non plugins.
@@ -83,14 +96,10 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: bad amos script" {
-    export rebasewarn=999999 # Dont' warn abou rebase ever.
-    export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_bad_amos_command MDL-12345 v3.9.0
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: good amos commands" {
-    export rebasewarn=999999 # Dont' warn abou rebase ever.
-    export rebaseerror=999999 # Don't fail about rebase ever.
     assert_prechecker local_ci_fixture_good_amos_commit MDL-12345 v3.9.0
 }
 

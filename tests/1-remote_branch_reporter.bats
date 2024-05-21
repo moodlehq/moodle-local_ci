@@ -40,9 +40,9 @@ assert_remote_branch_reporter() {
 }
 
 # Replicating https://integration.moodle.org/job/Precheck%20remote%20branch/25634/
-@test "remote_branch_checker/remote_branch_reporter.php: MDL-54987 (55 errors/6 warnings) html" {
+@test "remote_branch_checker/remote_branch_reporter.php: MDL-54987 (56 errors/8 warnings) html" {
     assert_remote_branch_reporter MDL-54987 html https://github.com/FMCorz/moodle.git 1869439cb1a12d82ea5bfc22a49527299f9c9620
 }
-@test "remote_branch_checker/remote_branch_reporter.php: MDL-54987 (55 errors/6 warnings) xml" {
+@test "remote_branch_checker/remote_branch_reporter.php: MDL-54987 (56 errors/8 warnings) xml" {
     assert_remote_branch_reporter MDL-54987 xml https://github.com/FMCorz/moodle.git 1869439cb1a12d82ea5bfc22a49527299f9c9620
 }

@@ -1,0 +1,6 @@
+Info: not important
+Warn: warning1
+Error: error1
+Warn: another warning
+Error: error2
+Ignorable line too

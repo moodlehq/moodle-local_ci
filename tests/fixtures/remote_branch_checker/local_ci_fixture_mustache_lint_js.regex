@@ -1,0 +1,8 @@
+# Add here as many extended regular expressions (one by line)
+# that match the most relevant aspects of the test being executed
+# and its smurf.xml results.
+
+<detail name="mustache" status="warning" numerrors="0" numwarnings="2"/>
+<problem file="lib/templates/js_test.mustache" linefrom="1" lineto="1" method="" class="" package="" api="" .* type="warning" weight="1">
+<message>ESLint warning \[camelcase\]: Identifier 'my_message' is not in camel case.*</message>
+<message>ESLint warning \[no-alert\]: Unexpected alert.*/message>
