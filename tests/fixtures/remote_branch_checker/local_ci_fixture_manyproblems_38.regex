@@ -1,0 +1,21 @@
+# Add here as many extended regular expressions (one by line)
+# that match the most relevant aspects of the test being executed
+# and its smurf.xml results.
+
+<summary status="error" numerrors="[0-9]+" numwarnings="[0-9]+" condensedresult="smurf,error.*>
+<detail name="phplint" status="error" numerrors="[0-9]+"
+<detail name="phpcs" status="error" numerrors="[0-9]+"
+<detail name="js" status="error" numerrors="[0-9]+"
+<detail name="css" status="error" numerrors="[0-9]+"
+<detail name="commit" status="error" numerrors="[0-9]+"
+<detail name="savepoint" status="error" numerrors="[0-9]+"
+<detail name="grunt" status="error" numerrors="[0-9]+"
+PHP Parse error: syntax error, unexpected end of file, expecting
+Inline comments must start with a capital letter, digit or 3-dots sequence
+Expected 1 space before "\+"; 0 found
+Unexpected console statement. \(no-console\)
+Unknown property: local-ci-fake-property
+The commit message does not define a code area ending with a colon
+Detected more 'if' blocks \(5\) than 'savepoint' calls \(4\)
+modification to third party library
+Problems running grunt

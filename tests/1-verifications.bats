@@ -23,9 +23,9 @@ load libs/shared_setup
 @test "repository file & dir permissions are correct" {
     # Define executable and non-executable extensions
     executables=('sh' 'bats')
-    nonexecutables=('bash' 'html' 'jar' 'md' 'out' 'patch' 'php' 'template' 'txt' 'xml' 'xsl' 'yml' 'groovy')
+    nonexecutables=('bash' 'html' 'groovy' 'iml' 'jar' 'md' 'out' 'patch' 'php' 'regex' 'template' 'txt' 'xml' 'xsl' 'yml')
     # Other nonexecutable files, but looked by name, not by extension
-    otherfiles=('.gitignore' '.htaccess' 'package.json' 'package-lock.json')
+    otherfiles=('.htaccess' '.gitignore' '.name' 'package.json' 'package-lock.json')
 
     # git does NOT track directory perms at all, so we comment aout this test. Just kept here for reference.
     # Directories must have execution bits set
@@ -170,6 +170,47 @@ load libs/shared_setup
     # Now should pass..
     run assert_files_same $WORKSPACE/expected $WORKSPACE/actual
     assert_success
+}
+
+@test "assert_file_matches(): empty file validations" {
+    touch $WORKSPACE/regexfile
+    touch $WORKSPACE/file
+
+    # Should fail to operate on empty files
+    run assert_file_matches $WORKSPACE/regexfile $WORKSPACE/file
+    assert_failure
+    assert_output "$WORKSPACE/regexfile is empty"
+
+    # Should fail because actual still empty.
+    echo 'test[0-9]+' > $WORKSPACE/regexfile
+    echo 'a lot$' >> $WORKSPACE/regexfile
+    run assert_file_matches $WORKSPACE/regexfile $WORKSPACE/file
+    assert_failure
+    assert_output "$WORKSPACE/file is empty"
+
+    # Now we pass as file matches the expressions in regexfile
+    echo 'This is test001 and I like it a lot' > $WORKSPACE/file
+    run assert_file_matches $WORKSPACE/regexfile $WORKSPACE/file
+    assert_success
+}
+
+@test "assert_files_matches(): detects unmatches" {
+    echo 'test[0-9]+' > $WORKSPACE/regexfile
+    echo 'a lot$' >> $WORKSPACE/regexfile
+    echo 'This is test001 and I like it a lot' > $WORKSPACE/file
+
+    # Should pass as all the regular expressions match the file
+    run assert_file_matches $WORKSPACE/regexfile $WORKSPACE/file
+    assert_success
+
+    # Let's add some unmatched expression
+    echo 'nonmatching' >> $WORKSPACE/regexfile
+
+    # Now should fail
+    run assert_file_matches $WORKSPACE/regexfile $WORKSPACE/file
+    assert_failure
+    assert_output --partial 'nonmatching'
+    assert_output --partial 'regular expression does not match output'
 }
 
 @test "last_test(): !last reported correctly" {

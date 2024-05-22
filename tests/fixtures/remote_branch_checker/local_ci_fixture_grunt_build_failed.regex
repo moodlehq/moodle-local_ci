@@ -1,0 +1,8 @@
+# Add here as many extended regular expressions (one by line)
+# that match the most relevant aspects of the test being executed
+# and its smurf.xml results.
+
+<detail name="grunt" status="error" numerrors="1" numwarnings="1"/>
+<check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
+<message>Problems running grunt</message>
+<message>Task "stylelint:scss" failed. Use --force to continue.</message>
