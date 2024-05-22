@@ -19,7 +19,7 @@ load libs/shared_setup
     ci_run_php travis/check_branch_status.php --repository=https://github.com/danpoltawski/moodle.git --branch=MDL-52127-master
     assert_success
     assert_line 'SKIP: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
-    # As of 2023 we cannot test this anymore. Just leaving it for reference if sobody enables back travis.
+    # As of 2023 we cannot test this anymore. Just leaving it for reference if somebody enables back travis.
     #assert_line --partial 'SKIP: travis-ci.org integration working, but migration to travis-ci.com required.'
     #assert_line 'OK: Build status was passed, see https://travis-ci.org/danpoltawski/moodle/builds/137772508'
 }

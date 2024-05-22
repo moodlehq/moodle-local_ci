@@ -3,16 +3,31 @@ name: Moodle Local CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  Test:
+  collect:
+    name: Collect tests
+    runs-on: ubuntu-22.04
+    outputs:
+      matrix: ${{steps.collect-tests.outputs.matrix }}
+    steps:
+      - name: Checking out moodle-local_ci
+        uses: actions/checkout@v4
+        with:
+          path: local_ci
+
+      - name: Collecting Bats tests
+        id: collect-tests
+        run: |
+          echo "matrix=$(cd local_ci/tests && find . -name '*.bats' -not -path '*/libs/*' -printf '%P\n'| \
+            jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+  test:
+    name: Unit tests
+    needs: collect
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - test: 0-*
-          - test: 1-*
-          - test: 2-*
-          - test: 3-*
-    runs-on: ubuntu-22.04
+        test: ${{ fromJson(needs.collect.outputs.matrix) }}
     steps:
       - name: Checking out moodle-local_ci
         uses: actions/checkout@v4
@@ -88,3 +103,106 @@ jobs:
         run: |
           mkdir -p ${LOCAL_CI_TESTS_CACHEDIR}
           bats --timing tests/${{ matrix.test }}
+
+  coverage:
+    if: github.repository == 'moodlehq/moodle-local_ci'
+    name: Code coverage
+    needs: collect
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        test: ${{ fromJson(needs.collect.outputs.matrix) }}
+    steps:
+      - name: Install required packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install uuid kcov
+
+      - name: Checking out moodle-local_ci
+        uses: actions/checkout@v4
+        with:
+          path: local_ci
+
+      - name: Checking out moodle
+        uses: actions/checkout@v4
+        with:
+          repository: moodle/moodle
+          fetch-depth: 0 # We need a complete clone, because we use various commits / tags.
+          path: moodle
+
+      - name: Setting user in moodle clone
+        run: | # We need this set because local_ci does perform git write operations.
+          git config --global user.email "local_ci@moodle.com"
+          git config --global user.name "Local CI"
+
+      - name: Setting up DB mysql
+        uses: moodlehq/mysql-action@v1
+        with:
+          collation server: utf8mb4_bin
+          mysql version: 8.0
+          mysql root password: test
+          use tmpfs: true
+          tmpfs size: '1024M'
+          extra conf: --skip-log-bin
+
+      - name: Setting up PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          ini-values: max_input_vars=5000
+          tools: composer
+          coverage: none
+
+      - name: Configuring node & npm
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'moodle/.nvmrc'
+
+      - name: Installing composer and node stuff
+        run: |
+          cd local_ci
+          composer install
+          npm install
+
+      - name: Setup Bats
+        uses: bats-core/bats-action@1.5.5
+        with:
+          bats-version: 1.10.0
+          # We need only support and assert libraries, and installed locally for caching to work.
+          # See https://github.com/brokenpip3/setup-bats-libs/issues/18
+          support-path: "${{ github.workspace }}/.bats/bats-support"
+          assert-path: "${{ github.workspace }}/.bats/bats-assert"
+          detik-install: false
+          file-install: false
+
+      - name: Run Tests (capturing code coverage)
+        working-directory: local_ci # Tests have to start from here, because some use $PWD to detect the local_ci base.
+        env:
+          LOCAL_CI_TESTS_CACHEDIR: ${{ github.workspace }}/cachedir
+          LOCAL_CI_TESTS_GITDIR: ${{ github.workspace }}/moodle
+          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/moodle
+          LOCAL_CI_TESTS_DBLIBRARY: native
+          LOCAL_CI_TESTS_DBTYPE: mysqli
+          LOCAL_CI_TESTS_DBHOST: 127.0.0.1
+          LOCAL_CI_TESTS_DBUSER: root
+          LOCAL_CI_TESTS_DBPASS: test
+          # We need to specify where the libraries are, installed locally for caching to work.
+          # See https://github.com/brokenpip3/setup-bats-libs/issues/18
+          BATS_LIB_PATH: "${{ github.workspace }}/.bats"
+        run: |
+          mkdir -p ${LOCAL_CI_TESTS_CACHEDIR}
+          kcov \
+            --clean \
+            --include-path="${{ github.workspace }}/local_ci" \
+            --exclude-path=".git,.github,remote_branch_checker/xslt,tests,vendor" \
+            --bash-parse-files-in-dir="${{ github.workspace }}/local_ci" \
+            ${{ github.workspace }}/coverage \
+            bats --timing tests/${{ matrix.test }}
+
+      - name: Upload code coverage (codecov)
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/bats/cobertura.xml
+          verbose: true

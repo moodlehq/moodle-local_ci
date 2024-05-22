@@ -15,8 +15,7 @@
 # $pushremote: (optional) Remote to push the results of prechecker to. Will create branches like MDL-1234-main-shorthash
 # $resettocommit: (optional) Should not be used in production runs. Reset $integrateto to a commit for testing purposes.
 
-# Don't want debugging @ start, but want exit on error
-set +x
+# Let's go strict (exit on error)
 set -e
 
 # Verify everything is set
