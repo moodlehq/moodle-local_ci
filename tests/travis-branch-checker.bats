@@ -28,7 +28,10 @@ load libs/shared_setup
     # A branch which Eloy has had integrated and won't touch again (and is protected for this purpose). Using travis-ci.com
     ci_run_php travis/check_branch_status.php --repository=https://github.com/stronk7/moodle.git --branch=local_ci_test_travis_com
     assert_success
-    assert_output 'OK: Build status was passed, see https://travis-ci.com/stronk7/moodle/builds/186304794'
+    assert_line 'SKIP: travis-ci.com integration not setup. See https://docs.moodle.org/dev/Travis_integration'
+    assert_line 'SKIP: travis-ci.org integration not setup. See https://docs.moodle.org/dev/Travis_integration'
+    # As of 2024 we have disabled travis-ci-com for moodle.git. Just leaving if for reference if somebody enables back travis.
+    # assert_output 'OK: Build status was passed, see https://travis-ci.com/stronk7/moodle/builds/186304794'
 }
 
 @test "travis/check_branch_status.php: no travis setup" {
