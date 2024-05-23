@@ -1,6 +1,6 @@
 # CI local plugin
 
-[![Build Status](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/stronk7/moodle-local_ci/graph/badge.svg?token=UOuiBCwsJf)](https://codecov.io/gh/stronk7/moodle-local_ci)
+[![Build Status](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/moodlehq/moodle-local_ci/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/moodlehq/moodle-local_ci/graph/badge.svg?token=0u0rBbFrXj)](https://codecov.io/gh/moodlehq/moodle-local_ci)
 
 This local_ci plugin contains all the scripts needed
 by Moodle CI servers to automate checks while
