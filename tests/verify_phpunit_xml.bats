@@ -13,7 +13,7 @@ teardown () {
     last_test || store_workspace
 }
 
-@test "verify_phpunit_xml: normal run without errors" {
+@test "verify_phpunit_xml: normal run without errors (old branch)" {
     ci_run verify_phpunit_xml/verify_phpunit_xml.sh
 
     assert_success
@@ -21,6 +21,19 @@ teardown () {
     assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "INFO: Ignoring admin/tests, it does not contain any test unit file."
     assert_output --partial "WARNING: message/tests/api_test.php has incorrect (0) number of unit test classes."
+    refute_output --partial "ERROR"
+}
+
+@test "verify_phpunit_xml: normal run without errors and warnings (main branch)" {
+    create_git_branch main origin/main
+
+    ci_run verify_phpunit_xml/verify_phpunit_xml.sh
+
+    assert_success
+    assert_output --partial "OK: competency/tests will be executed"
+    assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
+    assert_output --partial "INFO: Ignoring privacy/classes/tests, it does not contain any test unit file."
+    refute_output --partial "WARNING"
     refute_output --partial "ERROR"
 }
 
