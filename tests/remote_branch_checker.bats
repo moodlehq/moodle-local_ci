@@ -162,3 +162,16 @@ assert_prechecker () {
     # This is just how it will fail because we don't want to run the entire testsuite..
     assert_output --partial "Error: Unable to fetch information from a-branch-which-doesnt-exist branch at https://github.com/moodle/moodle.git"
 }
+
+@test "remote_branch_222checker/remote_branch_checker.sh: detect changes to upgrade.txt and UPGRADING.md (<4.5)" {
+    export rebasewarn=999999 # Dont' warn about rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
+    assert_prechecker local_ci_fixture_upgrade_txt_for_404 MDL-12345 v4.4.0
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: detect changes to upgrade.txt and UPGRADING.md (>=4.5)" {
+    export rebasewarn=999999 # Dont' warn about rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
+    # Use 4.5dev (d32844ce296), May 2024, as the base commit.
+    assert_prechecker local_ci_fixture_upgrade_txt_for_405 MDL-12345 d32844ce296
+}
