@@ -140,6 +140,21 @@ basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 # (NOTE: checkout -B means create if branch doesn't exist or reset if it does.)
 ${gitcmd} checkout -q -B ${integrateto}_precheck $baseref
 
+# Get information about the branch where the patch is going to be integrated (from version.php).
+branchline=$(grep "^\$branch\s*=\s*'[0-9]\+';" version.php || true)
+if [[ -z "${branchline}" ]]; then
+    echo "Error: Unable to find the branch information in version.php." | tee -a ${errorfile}
+    exit 1
+fi
+# Extract the branch version from the line.
+if [[ "${branchline}" =~ \$branch[[:space:]]+=[[:space:]]+\'([0-9]+)\'\; ]]; then
+    versionbranch=${BASH_REMATCH[1]}
+else
+    echo "Error: Unable to extract the branch version from version.php." | tee -a ${errorfile}
+    exit 1
+fi
+echo "Info: The branch ${integrateto} has version.php \$branch: ${versionbranch}" | tee -a ${errorfile}
+
 # Do some cleanup onto the passed details
 
 # Trim whitespace in branch/remote
@@ -280,6 +295,13 @@ $( grep '<file name=' ${WORKSPACE}/work/patchset.xml | \
 # Trim patchset.files from any blank line (cannot use in-place sed).
 sed '/^$/d' ${WORKSPACE}/work/patchset.files > ${WORKSPACE}/work/patchset.files.tmp
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
+
+# For 4.5 and up, verify that the we aren't modifying any upgrade.txt or UPGRADING.md files.
+if [[ ${versionbranch} -ge 405 ]]; then
+    if grep -q 'UPGRADING.md\|upgrade.txt' ${WORKSPACE}/work/patchset.files; then
+        echo "Error: The patchset contains changes to upgrade.txt or UPGRADING.md files." | tee -a ${errorfile}
+    fi
+fi
 
 # Add version.php and config-dist.php to patchset files because they
 # allow us to find moodle dirroot and branch later.
