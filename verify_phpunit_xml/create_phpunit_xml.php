@@ -79,6 +79,10 @@ if (!load_core_component_from_moodle($options['basedir'])) {
     cli_error('Something went wrong. Components not loaded from ' . $options['basedir']);
 }
 
+// We need to register the Moodle autoloader.
+require_once($options['basedir'] . '/lib/classes/component.php');
+spl_autoload_register([\core_component::class, 'classloader']);
+
 // Now, let's invoke phpunit utils to generate the phpunit.xml file
 
 // We need to load a few stuff.
