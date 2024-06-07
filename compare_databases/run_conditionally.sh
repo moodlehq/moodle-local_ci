@@ -45,7 +45,7 @@ else
     # Verify the result file is empty (previous execution ended without error)
     file=$(ls "${WORKSPACE}"/compare_databases_*.txt)
     echo "Correct number of expected files (1) found ($file)"
-    if [[ -s "${file}" ]]; then
+    if ! grep -q "Ok: Process ended without errors" "${file}"; then
         echo "Previous execution failed based on ($file). The job cannot be skipped."
         exit 0
     else
