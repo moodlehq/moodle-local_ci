@@ -20,23 +20,23 @@
     <description>This section shows the general problems detected when processing the code</description>
     <mess/>
   </check>
-  <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="phplint" title="PHP lint problems" url="https://www.php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess/>
   </check>
-  <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="phpcs" title="PHP coding style problems" url="https://moodledev.io/general/development/policies/codingstyle" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by phpcs</description>
     <mess/>
   </check>
-  <check id="js" title="Javascript coding style problems" url="https://docs.moodle.org/dev/Javascript/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="js" title="Javascript coding style problems" url="https://moodledev.io/docs/guides/javascript" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess/>
   </check>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="css" title="CSS problems" url="https://moodledev.io/docs/apis/plugintypes/theme/styles" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows CSS problems detected by stylelint</description>
     <mess/>
   </check>
-  <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="phpdoc" title="PHPDocs style problems" url="https://moodledev.io/general/development/policies/codingstyle#documentation-and-comments" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>
     <mess/>
   </check>
@@ -44,19 +44,19 @@
     <description>This section shows the problems detected in the commit messages by the commits checker</description>
     <mess/>
   </check>
-  <check id="savepoint" title="Update savepoints problems" url="https://docs.moodle.org/dev/Upgrade_API" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="savepoint" title="Update savepoints problems" url="https://moodledev.io/docs/guides/upgrade" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected with the handling of upgrade savepoints</description>
     <mess/>
   </check>
-  <check id="thirdparty" title="Third party library modification problems" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="thirdparty" title="Third party library modification problems" url="https://moodledev.io/general/development/process/peer-review#third-party-code" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess/>
   </check>
-  <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://docs.moodle.org/dev/Peer_reviewing#The_Moodle_mobile_app" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="externalbackup" title="Missing changes in external functions or backup support for new detected tables or columns" url="https://moodledev.io/general/development/process/peer-review#the-moodle-mobile-app" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows potential problems detected when there are new database structures added in a patch and it is detected that nothing has been changed related with external functions (to be used by WS) or backup and restore. It must be checked that everything is correct and nothing is being missed in those areas.</description>
     <mess/>
   </check>
-  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="grunt" title="grunt changes" url="https://moodledev.io/general/development/tools/nodejs" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess/>
   </check>
@@ -64,11 +64,11 @@
     <description>This section shows problems detected by shifter</description>
     <mess/>
   </check>
-  <check id="mustache" title="Mustache template problems" url="https://docs.moodle.org/dev/Templates" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="mustache" title="Mustache template problems" url="https://moodledev.io/docs/guides/templates" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows problems detected in mustache templates</description>
     <mess/>
   </check>
-  <check id="gherkin" title="Gherkin .feature problems" url="https://docs.moodle.org/dev/Writing_acceptance_tests" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="gherkin" title="Gherkin .feature problems" url="https://moodledev.io/general/development/tools/behat/writing" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected in behat .feature files</description>
     <mess/>
   </check>

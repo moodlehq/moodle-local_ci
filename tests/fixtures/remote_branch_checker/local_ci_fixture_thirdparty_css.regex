@@ -4,7 +4,7 @@
 
 <summary status="warning" numerrors="0".*thirdparty,warning,0,2;
 <detail name="thirdparty" status="warning" numerrors="0" numwarnings="2"/>
-<check id="thirdparty" title="Third party library modification problems" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" numerrors="0" numwarnings="2" allowfiltering="0">
+<check id="thirdparty" title="Third party library modification problems" url="https://moodledev.io/general/development/process/peer-review#third-party-code" numerrors="0" numwarnings="2" allowfiltering="0">
 <description>This section shows problems detected with the modification of third party libraries</description>
 <problem file="lib/jquery/ui-1.12.1/jquery-ui.theme.css".* type="warning" weight="1">
 <message>modification to third party library \(lib/jquery\) without update to lib/thirdpartylibs.xml or lib/jquery/readme_moodle.txt</message>

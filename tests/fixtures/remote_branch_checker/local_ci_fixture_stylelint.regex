@@ -9,10 +9,10 @@
 <smurf version="0.9.1" numerrors="4" numwarnings="3">
   <summary status="error" numerrors="[0-9]+" numwarnings="[0-9]+" condensedresult="smurf,error,.*:overview,.*;phplint,.*;phpcs,.*;js,.*;css,.*;phpdoc,.*;commit,.*;savepoint,.*;thirdparty,.*;externalbackup,.*;grunt,.*;shifter,.*;mustache,.*;gherkin,.*">
     <detail name="css" status="error" numerrors="[0-9]+" numwarnings="[0-9]"/>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="[0-9]+" numwarnings="[0-9]+"
+  <check id="css" title="CSS problems" url="https://moodledev.io/docs/apis/plugintypes/theme/styles" numerrors="[0-9]+" numwarnings="[0-9]+"
     <description>This section shows CSS problems detected by stylelint</description>
     <mess>
-      <problem file="report/progress/styles.css" linefrom="5" lineto="5" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/9fd7b2193525d41b201fb6a0107991876de4cfc8/report/progress/styles.css#L5" ruleset="stylelint" rule="rules.color-hex-case" url="https://docs.moodle.org/dev/CSS_coding_style" type="warning" weight="1">
+      <problem file="report/progress/styles.css" linefrom="5" lineto="5" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/9fd7b2193525d41b201fb6a0107991876de4cfc8/report/progress/styles.css#L5" ruleset="stylelint" rule="rules.color-hex-case" url="https://moodledev.io/docs/apis/plugintypes/theme/styles" type="warning" weight="1">
         <message>Expected "#EEE" to be "#eee" \(color-hex-case\)</message>
         <message>Expected single space after ":" with a single-line declaration \(declaration-colon-space-after\)</message>
         <message>Expected newline before "}" \(block-closing-brace-newline-before\)</message>
