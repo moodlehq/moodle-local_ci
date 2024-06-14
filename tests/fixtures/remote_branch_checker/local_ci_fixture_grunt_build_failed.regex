@@ -3,6 +3,6 @@
 # and its smurf.xml results.
 
 <detail name="grunt" status="error" numerrors="1" numwarnings="1"/>
-<check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="1" numwarnings="1" allowfiltering="0">
+<check id="grunt" title="grunt changes" url="https://moodledev.io/general/development/tools/nodejs" numerrors="1" numwarnings="1" allowfiltering="0">
 <message>Problems running grunt</message>
 <message>Task "stylelint:scss" failed. Use --force to continue.</message>

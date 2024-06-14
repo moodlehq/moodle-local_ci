@@ -3,7 +3,7 @@
 # and its smurf.xml results.
 
 <detail name="mustache" status="error" numerrors="1" numwarnings="4"/>
-<problem file="lib/templates/html_validation.mustache" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/23657cddae5d8d2ef45965d3e6d6d17d63f639c8/lib/templates/html_validation.mustache#L1" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Templates" type="warning" weight="1">
+<problem file="lib/templates/html_validation.mustache" linefrom="1" lineto="1" method="" class="" package="" api="" diffurl="https://git.in.moodle.com/integration/prechecker/blob/23657cddae5d8d2ef45965d3e6d6d17d63f639c8/lib/templates/html_validation.mustache#L1" ruleset="moodle" rule="" url="https://moodledev.io/docs/guides/templates" type="warning" weight="1">
 <message>HTML Validation error, line 4: End tag for  &#x201C;body&#x201D; seen, but there were unclosed elements.
 <message>HTML Validation error, line 2: Unclosed element &#x201C;span&#x201D;.
 <message>Mustache syntax exception: Example context JSON is unparsable, fails with: Syntax error

@@ -38,163 +38,163 @@
       </problem>
     </mess>
   </check>
-  <check id="phplint" title="PHP lint problems" url="http://php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="phplint" title="PHP lint problems" url="https://www.php.net/docs.php" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows php lint problems in the code detected by php -l</description>
     <mess/>
   </check>
-  <check id="phpcs" title="PHP coding style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="20" numwarnings="2" allowfiltering="1">
+  <check id="phpcs" title="PHP coding style problems" url="https://moodledev.io/general/development/policies/codingstyle" numerrors="20" numwarnings="2" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by phpcs</description>
     <mess>
-      <problem file="lib/classes/chart_axis.php" linefrom="132" lineto="132" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_axis.php#L132" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_axis.php" linefrom="132" lineto="132" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_axis.php#L132" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Public method name "chart_axis::jsonSerialize" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_bar.php" linefrom="40" lineto="40" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_bar.php#L40" ruleset="Generic" rule="WhiteSpace.ScopeIndent.Incorrect" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_bar.php" linefrom="40" lineto="40" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_bar.php#L40" ruleset="Generic" rule="WhiteSpace.ScopeIndent.Incorrect" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Line indented incorrectly; expected at least 4 spaces, found 3</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_bar.php" linefrom="45" lineto="45" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_bar.php#L45" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_bar.php" linefrom="45" lineto="45" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_bar.php#L45" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Public method name "chart_bar::jsonSerialize" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_base.php" linefrom="78" lineto="78" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_base.php#L78" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_base.php" linefrom="78" lineto="78" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_base.php#L78" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Public method name "chart_base::jsonSerialize" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_base.php" linefrom="269" lineto="269" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_base.php#L269" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_base.php" linefrom="269" lineto="269" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_base.php#L269" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Protected method name "chart_base::validateAxis" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_line.php" linefrom="45" lineto="45" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_line.php#L45" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_line.php" linefrom="45" lineto="45" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_line.php#L45" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Public method name "chart_line::jsonSerialize" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/classes/chart_series.php" linefrom="177" lineto="177" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_series.php#L177" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="lib/classes/chart_series.php" linefrom="177" lineto="177" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_series.php#L177" ruleset="moodle" rule="NamingConventions.ValidFunctionName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Public method name "chart_series::jsonSerialize" must be in lower-case letters only</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/courseoverview/locallib.php" linefrom="47" lineto="47" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L47" ruleset="moodle" rule="WhiteSpace.WhiteSpaceInStrings.EndLine" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="report/courseoverview/locallib.php" linefrom="47" lineto="47" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L47" ruleset="moodle" rule="WhiteSpace.WhiteSpaceInStrings.EndLine" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Whitespace found at end of line within string</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/courseoverview/locallib.php" linefrom="48" lineto="48" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L48" ruleset="moodle" rule="WhiteSpace.WhiteSpaceInStrings.EndLine" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="report/courseoverview/locallib.php" linefrom="48" lineto="48" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L48" ruleset="moodle" rule="WhiteSpace.WhiteSpaceInStrings.EndLine" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Whitespace found at end of line within string</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/log/locallib.php" linefrom="74" lineto="74" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/log/locallib.php#L74" ruleset="Squiz" rule="ControlStructures.ElseIfDeclaration.NotAllowed" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="report/log/locallib.php" linefrom="74" lineto="74" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/log/locallib.php#L74" ruleset="Squiz" rule="ControlStructures.ElseIfDeclaration.NotAllowed" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Usage of ELSEIF not allowed; use ELSE IF instead</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/stats/locallib.php" linefrom="395" lineto="395" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/stats/locallib.php#L395" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="report/stats/locallib.php" linefrom="395" lineto="395" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/stats/locallib.php#L395" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Commas (,) must be followed by white space.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/stats/locallib.php" linefrom="399" lineto="399" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/stats/locallib.php#L399" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="report/stats/locallib.php" linefrom="399" lineto="399" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/stats/locallib.php#L399" ruleset="moodle" rule="WhiteSpace.SpaceAfterComma.NoSpace" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Commas (,) must be followed by white space.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceBefore" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceBefore" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Expected 1 space before "/"; 0 found</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceAfter" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceAfter" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Expected 1 space after "/"; 0 found</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceBefore" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceBefore" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Expected 1 space before "*"; 0 found</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceAfter" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/choice/renderer.php" linefrom="322" lineto="322" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/choice/renderer.php#L322" ruleset="Squiz" rule="WhiteSpace.OperatorSpacing.NoSpaceAfter" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Expected 1 space after "*"; 0 found</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/feedback/item/multichoice/lib.php" linefrom="233" lineto="233" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoice/lib.php#L233" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/feedback/item/multichoice/lib.php" linefrom="233" lineto="233" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoice/lib.php#L233" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Variable "str_quotient" must not contain underscores.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="200" lineto="200" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L200" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="200" lineto="200" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L200" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Variable "str_quotient" must not contain underscores.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="202" lineto="202" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L202" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="202" lineto="202" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L202" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Variable "str_quotient" must not contain underscores.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="207" lineto="207" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L207" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="5">
+      <problem file="mod/feedback/item/multichoicerated/lib.php" linefrom="207" lineto="207" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/feedback/item/multichoicerated/lib.php#L207" ruleset="moodle" rule="NamingConventions.ValidVariableName" url="https://moodledev.io/general/development/policies/codingstyle" type="error" weight="5">
         <message>Variable "str_quotient" must not contain underscores.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="140" lineto="140" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L140" ruleset="moodle" rule="Commenting.InlineComment.InvalidEndChar" url="https://docs.moodle.org/dev/Coding_style" type="warning" weight="1">
+      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="140" lineto="140" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L140" ruleset="moodle" rule="Commenting.InlineComment.InvalidEndChar" url="https://moodledev.io/general/development/policies/codingstyle" type="warning" weight="1">
         <message>Inline comments must end in full-stops, exclamation marks, or question marks</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="140" lineto="140" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L140" ruleset="Squiz" rule="PHP.CommentedOutCode.Found" url="https://docs.moodle.org/dev/Coding_style" type="warning" weight="1">
+      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="140" lineto="140" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L140" ruleset="Squiz" rule="PHP.CommentedOutCode.Found" url="https://moodledev.io/general/development/policies/codingstyle" type="warning" weight="1">
         <message>This comment is 77% valid code; is this commented out code?</message>
         <description/>
         <code/>
       </problem>
     </mess>
   </check>
-  <check id="js" title="Javascript coding style problems" url="https://docs.moodle.org/dev/Javascript/Coding_style" numerrors="0" numwarnings="3" allowfiltering="1">
+  <check id="js" title="Javascript coding style problems" url="https://moodledev.io/docs/guides/javascript" numerrors="0" numwarnings="3" allowfiltering="1">
     <description>This section shows the coding style problems detected in the code by eslint</description>
     <mess>
-      <problem file="lib/amd/src/chart_bar.js" linefrom="72" lineto="72" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_bar.js#L72" ruleset="eslint" rule="rules.valid-jsdoc" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
+      <problem file="lib/amd/src/chart_bar.js" linefrom="72" lineto="72" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_bar.js#L72" ruleset="eslint" rule="rules.valid-jsdoc" url="https://moodledev.io/docs/guides/javascript" type="warning" weight="1">
         <message>Missing JSDoc parameter type for 'horizontal'. (valid-jsdoc)</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/amd/src/chart_series.js" linefrom="276" lineto="276" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_series.js#L276" ruleset="eslint" rule="rules.valid-jsdoc" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
+      <problem file="lib/amd/src/chart_series.js" linefrom="276" lineto="276" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_series.js#L276" ruleset="eslint" rule="rules.valid-jsdoc" url="https://moodledev.io/docs/guides/javascript" type="warning" weight="1">
         <message>Missing JSDoc parameter type for 'labels'. (valid-jsdoc)</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/amd/src/chart_series.js" linefrom="287" lineto="287" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_series.js#L287" ruleset="eslint" rule="rules.valid-jsdoc" url="https://docs.moodle.org/dev/Javascript/Coding_style" type="warning" weight="1">
+      <problem file="lib/amd/src/chart_series.js" linefrom="287" lineto="287" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/src/chart_series.js#L287" ruleset="eslint" rule="rules.valid-jsdoc" url="https://moodledev.io/docs/guides/javascript" type="warning" weight="1">
         <message>Missing JSDoc parameter type for 'smooth'. (valid-jsdoc)</message>
         <description/>
         <code/>
       </problem>
     </mess>
   </check>
-  <check id="css" title="CSS problems" url="https://docs.moodle.org/dev/CSS_coding_style" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="css" title="CSS problems" url="https://moodledev.io/docs/apis/plugintypes/theme/styles" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows CSS problems detected by stylelint</description>
     <mess/>
   </check>
-  <check id="phpdoc" title="PHPDocs style problems" url="https://docs.moodle.org/dev/Coding_style" numerrors="3" numwarnings="0" allowfiltering="1">
+  <check id="phpdoc" title="PHPDocs style problems" url="https://moodledev.io/general/development/policies/codingstyle#documentation-and-comments" numerrors="3" numwarnings="0" allowfiltering="1">
     <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>
     <mess>
-      <problem file="lib/classes/chart_series.php" linefrom="225" lineto="225" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_series.php#L225" ruleset="moodle" rule="functionarguments" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="3">
+      <problem file="lib/classes/chart_series.php" linefrom="225" lineto="225" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/classes/chart_series.php#L225" ruleset="moodle" rule="functionarguments" url="https://moodledev.io/general/development/policies/codingstyle#documentation-and-comments" type="error" weight="3">
         <message>Phpdocs for function chart_series::set_smooth has incomplete parameters list</message>
         <description/>
         <code/>
       </problem>
-      <problem file="report/courseoverview/locallib.php" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L20" ruleset="moodle" rule="packagevalid" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="3">
+      <problem file="report/courseoverview/locallib.php" linefrom="20" lineto="20" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/report/courseoverview/locallib.php#L20" ruleset="moodle" rule="packagevalid" url="https://moodledev.io/general/development/policies/codingstyle#documentation-and-comments" type="error" weight="3">
         <message>Package report is not valid</message>
         <description/>
         <code/>
       </problem>
-      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="146" lineto="146" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L146" ruleset="moodle" rule="functionarguments" url="https://docs.moodle.org/dev/Coding_style" type="error" weight="3">
+      <problem file="mod/quiz/report/overview/tests/report_test.php" linefrom="146" lineto="146" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/mod/quiz/report/overview/tests/report_test.php#L146" ruleset="moodle" rule="functionarguments" url="https://moodledev.io/general/development/policies/codingstyle#documentation-and-comments" type="error" weight="3">
         <message>Phpdocs for function quiz_overview_report_testcase::test_get_bands_count_and_width has incomplete parameters list</message>
         <description/>
         <code/>
@@ -351,28 +351,28 @@
       </problem>
     </mess>
   </check>
-  <check id="savepoint" title="Update savepoints problems" url="https://docs.moodle.org/dev/Upgrade_API" numerrors="0" numwarnings="0" allowfiltering="1">
+  <check id="savepoint" title="Update savepoints problems" url="https://moodledev.io/docs/guides/upgrade" numerrors="0" numwarnings="0" allowfiltering="1">
     <description>This section shows problems detected with the handling of upgrade savepoints</description>
     <mess/>
   </check>
-  <check id="thirdparty" title="Third party library modification problems" url="https://docs.moodle.org/dev/Peer_reviewing#Third_party_code" numerrors="0" numwarnings="0" allowfiltering="0">
+  <check id="thirdparty" title="Third party library modification problems" url="https://moodledev.io/general/development/process/peer-review#third-party-code" numerrors="0" numwarnings="0" allowfiltering="0">
     <description>This section shows problems detected with the modification of third party libraries</description>
     <mess/>
   </check>
-  <check id="grunt" title="grunt changes" url="https://docs.moodle.org/dev/Grunt" numerrors="3" numwarnings="0" allowfiltering="0">
+  <check id="grunt" title="grunt changes" url="https://moodledev.io/general/development/tools/nodejs" numerrors="3" numwarnings="0" allowfiltering="0">
     <description>This section shows files built by grunt and not commited</description>
     <mess>
-      <problem file="lib/amd/build/chart_base.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chart_base.min.js#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="lib/amd/build/chart_base.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chart_base.min.js#L0" ruleset="moodle" rule="" url="https://moodledev.io/general/development/tools/nodejs" type="error" weight="5">
         <message>Uncommitted change detected.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/amd/build/chart_output_htmltable.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chart_output_htmltable.min.js#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="lib/amd/build/chart_output_htmltable.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chart_output_htmltable.min.js#L0" ruleset="moodle" rule="" url="https://moodledev.io/general/development/tools/nodejs" type="error" weight="5">
         <message>Uncommitted change detected.</message>
         <description/>
         <code/>
       </problem>
-      <problem file="lib/amd/build/chartjs-lazy.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chartjs-lazy.min.js#L0" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Grunt" type="error" weight="5">
+      <problem file="lib/amd/build/chartjs-lazy.min.js" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/blob/1869439cb1a12d82ea5bfc22a49527299f9c9620/lib/amd/build/chartjs-lazy.min.js#L0" ruleset="moodle" rule="" url="https://moodledev.io/general/development/tools/nodejs" type="error" weight="5">
         <message>Uncommitted change detected.</message>
         <description/>
         <code/>
