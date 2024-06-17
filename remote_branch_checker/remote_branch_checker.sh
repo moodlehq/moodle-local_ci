@@ -256,7 +256,9 @@ set -e
 # The merge succeded, now push our precheck branch for inspection:
 if [ ! -z ${pushremote} ]; then
     echo "Info: Pushing precheck branch to remote"
-    pushbranchname=${issue}-${integrateto}-$(git rev-list -n1 --abbrev-commit HEAD)
+    # Let's name the branches using 16 chars short commit of the branch being
+    # analysed, that way we can know which commits have been already checked.
+    pushbranchname=${issue}-${integrateto}-$(git rev-parse --short=16 FETCH_HEAD)
     $gitcmd push $pushremote ${integrateto}_precheck:${pushbranchname}
 fi
 
