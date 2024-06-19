@@ -129,7 +129,11 @@ ${basereq} --action getIssueList \
                  )" \
            --file "${resultfile}"
 
-# Iterate over found issues, adding the comment ('Waiting for Feedback Notifications' will be cleaned by the workflow).
+# Iterate over found issues, adding the comment
+# (Note that the 'Waiting for Feedback Notifications' interim filed will be cleaned by the workflow).
+# Here we update:
+#  - Component Lead Review (customfield_15810) = reset to blank/empty.
+#  - Currently in integration (customfield_10211) = reset to blank/empty.
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue} - Reopen notification"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}: Reopen notification" >> "${logfile}"
@@ -138,6 +142,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
                --issue ${issue} \
                --transition "Reopen Issue" \
                --field "customfield_10211=" \
+               --field "customfield_15810=" \
                --comment "${comment}"
 done
 
