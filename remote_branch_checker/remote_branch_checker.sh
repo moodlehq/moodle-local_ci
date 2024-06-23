@@ -258,8 +258,15 @@ if [ ! -z ${pushremote} ]; then
     echo "Info: Pushing precheck branch to remote"
     # Let's name the branches using 16 chars short commit of the branch being
     # analysed, that way we can know which commits have been already checked.
-    pushbranchname=${issue}-${integrateto}-$(git rev-parse --short=16 FETCH_HEAD)
-    $gitcmd push $pushremote ${integrateto}_precheck:${pushbranchname}
+    # The name will be like MDL-1234-main-abcdef12-12345678, where:
+    # - MDL-1234 is the issue being checked.
+    # - main is the upstream branch where the patch is being checked against.
+    # - abcdef12 is the short commit (belonging to the branch above) where we are merging the patch to.
+    # - 12345678 is the short commit of the patch being checked.
+    pushbranchname=${issue}-${integrateto}-$(git rev-parse --short=16 "${baseref}")-$(git rev-parse --short=16 FETCH_HEAD)
+    # Use --force, no matter that, if the branch already exists it means that the very same base+patch
+    # has been already checked previously. Maybe in the future we'll detect this, but not for now.
+    $gitcmd push --force "${pushremote}" "${integrateto}_precheck:${pushbranchname}"
 fi
 
 # Verify the number of commits. Now this is handled by the verify_commit_messages check.
