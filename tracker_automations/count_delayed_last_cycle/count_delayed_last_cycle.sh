@@ -33,7 +33,7 @@ lastintegrationfile="${WORKSPACE}/count_delayed_last_cycle.csv"
 
 # Init the last integration file if needed (with some good date in the past)
 if [ ! -f "${lastintegrationfile}" ]; then
-    lastintegrationjira="01/Jan/14"
+    lastintegrationjira="2014/01/01"
     lastintegrationdate="2014/01/01 17:00"
     lastintegrationnum=0
 else
@@ -70,7 +70,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${tempfile}" ); do
     ${basereq} --action getFieldValue \
         --issue ${issue} \
         --field "${integrationdate_cf}" \
-        --dateFormat "d/MMM/yy" \
+        --dateFormat "yyyy/MM/dd" \
         --quiet \
         --file "${tempfile}"
 done
@@ -78,6 +78,7 @@ done
 # get the contents of the integration date
 integrationjira=$( cat "${tempfile}" )
 integrationjira="${integrationjira//.}" # Some buggy Java AU locales come with dots in month names. Remove them.
+echo "Last integration date in tracker is ${integrationjira}"
 
 # if the last integration at jira has changed... start a new cycle
 if [ "${lastintegrationjira}" != "${integrationjira}" ]; then
