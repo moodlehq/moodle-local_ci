@@ -85,9 +85,15 @@ spl_autoload_register([\core_component::class, 'classloader']);
 
 // Now, let's invoke phpunit utils to generate the phpunit.xml file
 
-// We need to load a few stuff.
+// We need to load a few things manually.
 require_once($options['basedir'] . '/lib/phpunit/classes/util.php');
-require_once($options['basedir'] . '/lib/outputcomponents.php');
+
+if (!class_exists(\core\output\core_renderer::class)) {
+    // From Moodle 4.5 we start to autoload the output components and including outputcomponents.php will throw an exception.
+    // If the core_renderer class can be autoloaded then we do not need to include outputcomponents.php.
+    require_once($options['basedir'] . '/lib/outputcomponents.php');
+}
+
 require_once($options['basedir'] . '/lib/testing/lib.php');
 phpunit_util::build_config_file();
 
