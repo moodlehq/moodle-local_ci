@@ -255,7 +255,7 @@ if [[ ${exitstatus} -ne 0 ]]; then
         echo "Error: Merge conflict(s) in file(s):" | tee -a ${errorfile}
         echo "${mergeconflicts}" | sed 's/^/Error: /' | tee -a ${errorfile}
     fi
-    
+
     exit ${exitstatus}
 fi
 set -e
