@@ -9,6 +9,11 @@ setup () {
     export phpcsstandard=$LOCAL_CI_TESTS_PHPCS_DIR
 }
 
+teardown () {
+    # Some test may end with the repo in rebase/merging conflicts status. Let's reset/abort that always.
+    cd ${gitdir} && ${gitcmd} reset --hard HEAD
+}
+
 # Assert prechecker results
 # usage: assert_prechecker branch issue commit summary
 # Performs a prechecker run and asserts the results against a collection of
@@ -174,4 +179,24 @@ assert_prechecker () {
     export rebaseerror=999999 # Don't fail about rebase ever.
     # Use 4.5dev (d32844ce296), May 2024, as the base commit.
     assert_prechecker local_ci_fixture_upgrade_txt_for_405 MDL-12345 d32844ce296
+}
+
+@test "remote_branch_checker/remote_branch_checker.sh: verify that merge conflicts are properly reported" {
+    export branch="local_ci_fixture_merge_conflict"
+    export issue="MDL-12345"
+    export integrateto=MOODLE_404_STABLE
+    export remote=https://git.in.moodle.com/integration/prechecker.git
+
+    ci_run remote_branch_checker/remote_branch_checker.sh
+    assert_failure
+    assert_output --partial "Info: Attempting merge to origin/MOODLE_404_STABLE"
+    assert_output --partial "Merge conflict in admin/environment.xml"
+    assert_output --partial "Merge conflict in admin/roles/tests/preset_test.php"
+    assert_output --partial "Merge conflict in admin/tests/behat/browse_users.feature"
+    assert_output --partial "Error: The local_ci_fixture_merge_conflict branch"
+    assert_output --partial "does not apply clean to origin/MOODLE_404_STABLE"
+    assert_output --partial "Error: Merge conflict(s) in file(s):"
+    assert_output --partial "Error: admin/environment.xml"
+    assert_output --partial "Error: admin/roles/tests/preset_test.php"
+    assert_output --partial "Error: admin/tests/behat/browse_users.feature"
 }

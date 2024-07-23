@@ -249,6 +249,13 @@ ${gitcmd} merge -q --no-edit FETCH_HEAD
 exitstatus=${PIPESTATUS[0]}
 if [[ ${exitstatus} -ne 0 ]]; then
     echo "Error: The ${branch} branch at ${remote} does not apply clean to ${baseref}" | tee -a ${errorfile}
+
+    mergeconflicts="$( ${gitcmd} diff --name-only --diff-filter=U )"
+    if [[ -n "${mergeconflicts}" ]]; then
+        echo "Error: Merge conflict(s) in file(s):" | tee -a ${errorfile}
+        echo "${mergeconflicts}" | sed 's/^/Error: /' | tee -a ${errorfile}
+    fi
+
     exit ${exitstatus}
 fi
 set -e
