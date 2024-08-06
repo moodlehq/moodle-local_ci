@@ -72,6 +72,7 @@ unittestclasses="
     question_testcase
     repository_googledocs_testcase
     restore_date_testcase
+    route_testcase
 "
 
 # Verify that each existing test is covered by some defined test
