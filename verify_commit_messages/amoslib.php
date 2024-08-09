@@ -30,7 +30,7 @@ function clean_param($param, $type) {
 }
 
 /**
- * Parser for AMOS script, butchered from  https://github.com/moodlehq/moodle-local_amos/blob/master/mlanglib.php
+ * Parser for AMOS script, butchered from  https://github.com/moodlehq/moodle-local_amos/blob/main/mlanglib.php
  * This is an exact copy of execute() extract_script_from_text() and legacy_component_name() from that file, see the marker
  * below where copy/paste of code starts. The code above is to allow us copy and paste thos functions.
  */
