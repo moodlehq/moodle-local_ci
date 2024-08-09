@@ -85,7 +85,7 @@ ${mydir}/../git_garbage_collector/git_garbage_collector.sh
 # to connect to it using jenkins cli..
 displayname=""
 if [[ -n "${BUILD_TAG}" ]] && [[ ! "${issue}" = "" ]] && [[ -n "${jenkinsserver}" ]]; then
-    if [[ "${integrateto}" = "master" ]] || [[ "${integrateto}" = "main" ]]; then
+    if [[ "${integrateto}" = "main" ]]; then
         displayname="#${BUILD_NUMBER}:${issue}"
     else
         if [[ ${integrateto} =~ ^MOODLE_([0-9]*)_STABLE$ ]]; then
@@ -518,7 +518,7 @@ if [ -f $WORKSPACE/.stylelintrc ]; then
     then
         echo "Info: stylelint completed without errors."
     else
-        # https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md#exit-codes
+        # https://github.com/stylelint/stylelint/blob/main/docs/user-guide/cli.md#exit-codes
         stylelintcode=$?
         if [ $stylelintcode -eq 2 ]; then
             echo "Info: stylelint found errors in patchset."
