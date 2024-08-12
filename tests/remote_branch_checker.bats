@@ -186,6 +186,8 @@ assert_prechecker () {
     export issue="MDL-12345"
     export integrateto=MOODLE_404_STABLE
     export remote=https://git.in.moodle.com/integration/prechecker.git
+    export rebasewarn=999999 # Dont' warn about rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
 
     ci_run remote_branch_checker/remote_branch_checker.sh
     assert_failure
