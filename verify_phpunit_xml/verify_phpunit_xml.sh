@@ -61,6 +61,7 @@ unittestclasses="
     googledocs_content_testcase
     grade_base_testcase
     lti_advantage_testcase
+    manage_category_test_base
     messagelib_test
     mod_assign\\\\externallib_advanced_testcase
     mod_lti_testcase
