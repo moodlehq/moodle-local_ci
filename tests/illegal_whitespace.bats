@@ -37,6 +37,18 @@ teardown () {
     assert_output --partial "continue in best results ever"
 }
 
+@test "illegal_whitespace: failure ignored for excluded file" {
+    # Lets introduce a whitespace error and ensure it fails
+    git_apply_fixture 31-whitespace-upgradenotes.patch
+
+    ci_run illegal_whitespace/illegal_whitespace.sh
+    assert_success
+    assert_output --partial "current count: 959"
+    assert_output --partial "previous count: 959"
+    assert_output --partial "best count: 959"
+    assert_output --partial "continue in best results ever"
+}
+
 @test "illegal_whitespace: failure reported when whitespace error detected" {
     # Lets introduce a whitespace error and ensure it fails
     git_apply_fixture 31-whitespace-error.patch

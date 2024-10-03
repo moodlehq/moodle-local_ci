@@ -7,6 +7,7 @@
 
 # Define directories usually excluded by various CI tools
 excluded=".git/
+.upgradenotes/*.yml
 auth/cas/CAS/
 admin/tool/componentlibrary/hugo/dist/css/docs.css.map
 admin/tool/componentlibrary/docs/

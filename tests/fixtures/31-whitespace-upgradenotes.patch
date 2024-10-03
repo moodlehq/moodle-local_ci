@@ -1,0 +1,32 @@
+From d6a28ff1970f63efe4720a81c8feda8b22bdab0b Mon Sep 17 00:00:00 2001
+From: Andrew Nicols <andrew@nicols.co.uk>
+Date: Thu, 3 Oct 2024 23:35:55 +0800
+Subject: [PATCH 1/1] Ignore whitespace issues in upgradenotes
+
+---
+ .upgradenotes/MDL-81675-2024052916042539.yml | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 .upgradenotes/MDL-81675-2024052916042539.yml
+
+diff --git a/.upgradenotes/MDL-81675-2024052916042539.yml b/.upgradenotes/MDL-81675-2024052916042539.yml
+new file mode 100644
+index 0000000000..ed29757e0c
+--- /dev/null
++++ b/.upgradenotes/MDL-81675-2024052916042539.yml
+@@ -0,0 +1,13 @@
++issueNumber: MDL-81675
++notes:
++  core_course:
++    - message: >+
++        - New optional `sectionNum` parameter has been added to `activitychooser`
++        AMD module initializer.
++
++        - New option `sectionnum` parameter has been added to
++        `get_course_content_items()` external function.
++        
++        - New optional `sectionnum` parameter has been added to
++        `get_content_items_for_user_in_course()` function.
++      type: improved
+-- 
+2.42.0
+
