@@ -140,6 +140,7 @@ while read issue; do
             rm "${resultfile}.jenkinscli"
         fi
     done
+    echo "Built on: $(date -u)" >> "${resultfile}.${issue}.txt"
 
     echo ""
     # Verify we have processed some branch.
