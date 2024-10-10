@@ -1,10 +1,5 @@
-# Add the comment with results.
-if [[ -n "${restrictedto}" ]]; then
-    ${basereq} --action addComment \
-        --issue ${issue} \
-        --file "${resultfile}.${issue}.txt" ${restrictiontype} "${restrictedto}"
-else
-    ${basereq} --action addComment \
-        --issue ${issue} \
-        --file "${resultfile}.${issue}.txt"
-fi
+# Update the automated testing field with the results.
+${basereq} --action setFieldValue \
+    --issue ${issue} \
+    --field "Automated test results" \
+    --file "${resultfile}.${issue}.txt"
