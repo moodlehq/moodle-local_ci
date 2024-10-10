@@ -182,6 +182,8 @@ assert_prechecker () {
 }
 
 @test "remote_branch_checker/remote_branch_checker.sh: verify that merge conflicts are properly reported" {
+    export rebasewarn=999999 # Dont' warn about rebase ever.
+    export rebaseerror=999999 # Don't fail about rebase ever.
     export branch="local_ci_fixture_merge_conflict"
     export issue="MDL-12345"
     export integrateto=MOODLE_404_STABLE
