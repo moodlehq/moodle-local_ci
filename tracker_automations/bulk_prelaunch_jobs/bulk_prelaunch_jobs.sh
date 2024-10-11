@@ -15,8 +15,6 @@
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
 #quiet: with any value different from "false", don't perform any action in the Tracker.
-#restrictedto: name of the project (MDL) role we want to restrict the comment to. Blank means no restriction.
-
 
 # Let's go strict (exit on error)
 set -e
@@ -150,12 +148,7 @@ while read issue; do
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
-        # Let's see if there is any restriction to the comment in the Tracker
-        restrictiontype=
-        if [[ -n "${restrictedto}" ]]; then
-            restrictiontype=--role
-        fi
-        echo "  - Sending results to the Tracker (${restrictiontype} ${restrictedto})"
+        echo "  - Sending results to the Tracker"
         . "${mydir}/criteria/${criteria}/postissue.sh"
     fi
 done < "${resultfile}"
