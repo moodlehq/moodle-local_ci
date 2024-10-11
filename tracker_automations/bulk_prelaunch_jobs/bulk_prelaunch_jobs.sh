@@ -131,7 +131,7 @@ while read issue; do
                     echo "    - Build: ${build}"
                     echo "    - URL: ${joburl}"
                     echo "    - Result: ${type}: ${joburl}"
-                    echo "  - ${type}: ${joburl}" >> "${resultfile}.${issue}.txt"
+                    echo "  - ${joburl} ${type}" >> "${resultfile}.${issue}.txt"
                 fi
             done < "${resultfile}.jenkinscli"
             echo "" >> "${resultfile}.${issue}.txt"
