@@ -8,9 +8,8 @@ ${basereq} --action removeLabels \
     --issue ${issue} \
     --labels "cime"
 
-# Add the comment with results.
-# (Eloy 20131223 - restricted to Integrators)
-comment=$(cat "${resultfile}.${issue}.txt")
-${basereq} --action addComment \
+# Update the pre-check field with the results.
+${basereq} --action setFieldValue \
     --issue ${issue} \
-    --comment "${comment}"
+    --field "Pre-check results" \
+    --file "${resultfile}.${issue}.txt"
