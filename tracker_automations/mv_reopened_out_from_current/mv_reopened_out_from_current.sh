@@ -74,11 +74,15 @@ while read line; do
     #    --issue ${issue} \
     #    --field "customfield_10211=" \
     #    --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
+    #
+    # Note: customfield_10211 represents the "Currently in integration" field, and customfield_17112 represents
+    # the "Automated test results" field.
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
         --fixVersions "${keepversion}" \
         --field "customfield_10211=" \
+        --field "customfield_17112=" \
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done < "${resultfile}"

@@ -3,6 +3,7 @@ ${basereq} --action getIssueList \
                  AND status = 'Waiting for integration review' \
                  AND status WAS NOT 'Waiting for integration review' ON '-${schedulemins}' \
                  AND level IS EMPTY \
+                 AND 'Automated test results' IS EMPTY \
                  ORDER BY priority DESC, votes DESC, 'Last comment date' ASC" \
            --outputFormat 101 \
            --file "${resultfile}"
