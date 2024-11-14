@@ -172,14 +172,14 @@ function verify_revievers_availability() {
         return # Outcome set, we are done.
     fi
 
-    # There is some component lead reviewer available, let's send the issue to CLR. This check is done.
+    # There is at least one component lead reviewer available, let's send the issue to CLR. This check is done.
     echo "      - There are available reviewers (${available}) for the issue."
     outcome=CLR
     availableProfiles=()
-    IFS=, read -r -a availableCLRs <<<"$available"
+    IFS=' ' read -r -a availableCLRs <<<"$available"
     for availableCLR in "${availableCLRs[@]}"; do
         availableCLR=$(trimstring "$availableCLR")
-        if [[ -z ${available} ]]; then
+        if [[ -z ${availableCLR} ]]; then
             continue
         fi
         availableProfiles+=("[~${availableCLR}]")
