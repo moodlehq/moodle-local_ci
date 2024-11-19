@@ -80,6 +80,7 @@ teardown() {
     export target=local_ci_git_sync_main
 
     run git_sync_two_branches/git_sync_two_branches.sh
+    echo $output
 
     # Assert result.
     assert_success
