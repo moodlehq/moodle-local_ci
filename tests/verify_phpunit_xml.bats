@@ -20,7 +20,7 @@ teardown () {
     assert_output --partial "OK: competency/tests will be executed"
     assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "INFO: Ignoring admin/tests, it does not contain any test unit file."
-    assert_output --partial "WARNING: message/tests/api_test.php has incorrect (0) number of unit test classes."
+    refute_output --partial "WARNING"
     refute_output --partial "ERROR"
 }
 
@@ -46,7 +46,7 @@ teardown () {
     assert_output --partial "OK: competency/tests will be executed"
     assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "ERROR: admin/tests is not matched/covered by any definition in phpunit.xml !"
-    assert_output --partial "WARNING: message/tests/api_test.php has incorrect (0) number of unit test classes."
+    refute_output --partial "WARNING"
     assert_output --partial "ERROR"
 }
 

@@ -44,36 +44,18 @@ existingtests=$(cd ${gitdir} && find . -name tests | sed 's/^\.\/\(.*\)$/\1/g')
 ignoretests=""
 
 # Unit test classes to look for with each file (must be 1 and only 1). MDLSITE-2096
-# TODO: Some day replace this with the list of abstract classes, using some classmap going up to phpunit top class.
+# TODO: When we stop supporting these class names, we can remove them.
 unittestclasses="
-    advanced_testcase
     area_test_base
     badgeslib_test
-    base_testcase
-    basic_testcase
     cachestore_tests
-    core_backup_backup_restore_base_testcase
-    core_reportbuilder_testcase
     data_loading_method_test_base
-    data_privacy_testcase
-    database_driver_testcase
-    externallib_advanced_testcase
-    googledocs_content_testcase
-    grade_base_testcase
-    lti_advantage_testcase
     manage_category_test_base
     messagelib_test
-    mod_assign\\\\externallib_advanced_testcase
-    mod_lti_testcase
-    mod_quiz_attempt_walkthrough_from_csv_testcase
     mod_quiz\\\\attempt_walkthrough_from_csv_test
-    provider_testcase
     qbehaviour_walkthrough_test_base
     question_attempt_upgrader_test_base
-    question_testcase
-    repository_googledocs_testcase
-    restore_date_testcase
-    route_testcase
+    [\\a-z0-9_]*_testcase
 "
 
 # Verify that each existing test is covered by some defined test
@@ -105,8 +87,10 @@ do
         echo "ERROR: ${existing} is not matched/covered by any definition in phpunit.xml !"
         exitstatus=1
     fi
+
     # Look inside all the test files, counting occurrences of $unittestclasses
     unittestclassesregex=$(echo ${unittestclasses} | sed 's/ /|/g')
+
     for testfile in $(ls ${existing} | grep "_test.php$")
     do
         # This is not the best (more accurate) regexp, but should be ok 99.99% of times.
