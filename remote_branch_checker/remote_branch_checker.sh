@@ -318,11 +318,12 @@ sed '/^$/d' ${WORKSPACE}/work/patchset.files > ${WORKSPACE}/work/patchset.files.
 mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 
 # For 4.5 and up, verify that the we aren't modifying any upgrade.txt or UPGRADING.md files.
+# lib/guzzlehttp/guzzle/UPGRADING.md is a false positive. It's a vendored file.
 if [[ ${versionbranch} -ge 405 ]]; then
-    if grep -q 'UPGRADING.md\|upgrade.txt' ${WORKSPACE}/work/patchset.files; then
+    if sed '/lib\/guzzlehttp\/guzzle\/UPGRADING.md/d' ${WORKSPACE}/work/patchset.files | grep -q 'UPGRADING.md\|upgrade.txt'; then
         echo "Error: The patchset contains changes to upgrade.txt or UPGRADING.md files." | tee -a ${errorfile}
 
-        dirtyupgrades="$( grep 'UPGRADING.md\|upgrade.txt' ${WORKSPACE}/work/patchset.files )"
+        dirtyupgrades="$( sed '/lib\/guzzlehttp\/guzzle\/UPGRADING.md/d' ${WORKSPACE}/work/patchset.files | grep 'UPGRADING.md\|upgrade.txt' )"
         if [[ -n "${dirtyupgrades}" ]]; then
             echo "Error: File(s) affected:" | tee -a ${errorfile}
             echo "${dirtyupgrades}" | sed "/^${WORKSPACE}//g" | sed 's/^/Error: /' | tee -a ${errorfile}
