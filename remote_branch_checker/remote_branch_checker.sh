@@ -321,6 +321,12 @@ mv ${WORKSPACE}/work/patchset.files.tmp ${WORKSPACE}/work/patchset.files
 if [[ ${versionbranch} -ge 405 ]]; then
     if grep -q 'UPGRADING.md\|upgrade.txt' ${WORKSPACE}/work/patchset.files; then
         echo "Error: The patchset contains changes to upgrade.txt or UPGRADING.md files." | tee -a ${errorfile}
+
+        dirtyupgrades="$( grep 'UPGRADING.md\|upgrade.txt' ${WORKSPACE}/work/patchset.files )"
+        if [[ -n "${dirtyupgrades}" ]]; then
+            echo "Error: File(s) affected:" | tee -a ${errorfile}
+            echo "${dirtyupgrades}" | sed "/^${WORKSPACE}//g" | sed 's/^/Error: /' | tee -a ${errorfile}
+        fi
     fi
 fi
 
