@@ -321,7 +321,7 @@ if [[ ${versionbranch} -ge 405 ]]; then
         dirtyupgrades="$( sed '/lib\/guzzlehttp\/guzzle\/UPGRADING.md/d' ${WORKSPACE}/work/patchset.files | grep 'UPGRADING.md\|upgrade.txt' )"
         if [[ -n "${dirtyupgrades}" ]]; then
             echo "Error: File(s) affected:" | tee -a ${errorfile}
-            echo "${dirtyupgrades}" | sed 's/^/Error: /' | tee -a ${errorfile}
+            echo "${dirtyupgrades}" | sed "/^${WORKSPACE}//g" | sed 's/^/Error: /' | tee -a ${errorfile}
         fi
     fi
 fi
