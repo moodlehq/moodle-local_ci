@@ -138,7 +138,9 @@ while read issue; do
             rm "${resultfile}.jenkinscli"
         fi
     done
-    echo "Built on: $(date -u)" >> "${resultfile}.${issue}.txt"
+
+    # Add build timestamp to the bottom of the report
+    echo "Built on: $(date -u '+%a %b %e %H:%M:%S %Z %Y')" >> "${resultfile}.${issue}.txt"
 
     echo ""
     # Verify we have processed some branch.
