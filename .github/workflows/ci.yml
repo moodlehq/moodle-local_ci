@@ -109,7 +109,7 @@ jobs:
     if: github.repository == 'moodlehq/moodle-local_ci'
     name: Code coverage
     needs: collect
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
