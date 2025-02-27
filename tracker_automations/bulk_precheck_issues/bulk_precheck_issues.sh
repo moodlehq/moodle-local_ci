@@ -293,9 +293,10 @@ while read issue; do
     else
         echo "[Should these errors be fixed?|https://moodledev.io/general/development/tools/cibot#should-coding-style-issues-in-existing-code-be-fixed]" >> "${resultfile}.${issue}.txt"
     fi
+
     # Add build timestamp to the bottom of the report
     echo "" >> "${resultfile}.${issue}.txt"
-    echo "Built on: $(date -u)" >> "${resultfile}.${issue}.txt"
+    echo "Built on: $(date -u '+%a %b %e %H:%M:%S %Z %Y')" >> "${resultfile}.${issue}.txt"
 
     # Execute the criteria postissue. It will perform the needed changes in the tracker for the current issue
     if [[ ${quiet} == "false" ]]; then
