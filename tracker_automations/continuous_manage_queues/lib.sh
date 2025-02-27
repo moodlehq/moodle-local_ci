@@ -19,12 +19,12 @@ function run_A1() {
     # Note this could be done by one unique "runFromIssueList" action, but we are splitting
     # the search and the update in order to log all the closed issues within jenkins ($logfile)
 
-    # Basically get all the issues in the candidates queues (filter=14000 OR filter=23329), that are not bug
+    # Basically get all the issues in the candidates queues (filter=14000), that are not bug
     # and that haven't received any comment with the standard unholding text (NOT filter = 22054)
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "(filter=14000 OR filter=23329) \
+               --jql "(filter=14000) \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = 22054" \
                --file "${resultfile}"
