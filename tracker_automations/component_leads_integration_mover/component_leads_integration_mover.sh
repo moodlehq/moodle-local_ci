@@ -9,12 +9,13 @@
 #clearcache: set it to "true" to force the removal of the (48h) cached groups, components and reviewers data.
 #quiet: with any value different from "false", don't perform any action in the Tracker.
 #restrictedto: if set, restrict any comment to that role in the project. Blank means visible to everybody.
+#releasedate: Release date, used to calculate the freeze period. Improvements and new features will not be moved to CLR during freeze. YYYY-MM-DD.
 
 # Let's go strict (exit on error)
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass jsonclrurl"
+required="WORKSPACE jiraclicmd jiraserver jirauser jirapass jsonclrurl releasedate"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -92,10 +93,26 @@ echo "Using cached (until ${validuntil}) CLR metadata information."
 
 source ${mydir}/lib.sh # Add all the functions.
 
+# Code freeze date calculated 6 weeks before the release date.
+freezedate=$(date -d "${releasedate} -6week" +%Y%m%d)
+
+# On-sync end date calculated 2 weeks after the release date.
+onsyncenddate=$(date -d "${releasedate} +2week" +%Y%m%d)
+
+# Today's date.
+nowdate=$(date +%Y%m%d)
+
+# We'll exclude New Features and Improvements from the CLR process during the freeze period.
+excludequery=""
+if [ "${nowdate}" -ge "${freezedate}" ] && [ "${nowdate}" -lt "${onsyncenddate}" ]; then
+    excludequery="AND issuetype NOT IN ('New Feature', Improvement)"
+    echo "Today (${nowdate}) is within the freeze period (${freezedate} - ${onsyncenddate}). Improvements and new features will not be moved to the CLR queue."
+fi
+
 # Search for all the issues awaiting for integration and not being decided between CLR/IR.
 # Note: customfield_10118 is the peer reviewer custom field.
 ${basereq} --action getIssueList \
-           --jql "filter = 23535" \
+           --jql "filter = 23535 ${excludequery}" \
            --columns="Key,Assignee,Peer reviewer,Components,Security Level,Summary" \
            --outputFormat=4 \
            --outputType=json \
