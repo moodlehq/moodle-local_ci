@@ -21,12 +21,14 @@ function run_A1() {
 
     # Basically get all the issues in the candidates queues (filter=14000), that are not bug
     # and that haven't received any comment with the standard unholding text (NOT filter = 22054)
+    # excluding issues recently bumped from CLR back to integration
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
                --jql "(filter=14000) \
                      AND type IN ('New Feature', Improvement) \
-                     AND NOT filter = 22054" \
+                     AND NOT filter = 22054 \
+                     AND NOT (status changed FROM 'Waiting for component lead review' TO 'Waiting for integration review' AFTER -2h)" \
                --file "${resultfile}"
 
     # Iterate over found issues and perform the actions with them.
