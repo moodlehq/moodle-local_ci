@@ -30,6 +30,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER="BrowserKit (non-js)" \
         -p BEHAT_SUITE=ALL \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -43,6 +44,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -57,6 +59,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
         -p BEHAT_SUITE=classic \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 
@@ -69,6 +72,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -83,6 +87,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
         -p BEHAT_SUITE=classic \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi

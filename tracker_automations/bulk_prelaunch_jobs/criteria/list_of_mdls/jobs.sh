@@ -76,6 +76,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BEHAT_SUITE=ALL \
         -p BEHAT_TAGS="${final_tags}" \
         -p BEHAT_NAME="${behat_name}" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -96,6 +97,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p BROWSER="Chrome (js)" \
         -p BEHAT_TAGS="${final_tags}" \
         -p BEHAT_NAME="${behat_name}" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -117,6 +119,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p BEHAT_SUITE=classic \
         -p BEHAT_TAGS="${final_tags}" \
         -p BEHAT_NAME="${behat_name}" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -137,6 +140,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BROWSER="Firefox (js)" \
         -p BEHAT_TAGS="${final_tags}" \
         -p BEHAT_NAME="${behat_name}" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -158,6 +162,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -p BEHAT_SUITE=classic \
         -p BEHAT_TAGS="${final_tags}" \
         -p BEHAT_NAME="${behat_name}" \
+        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
@@ -185,6 +190,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
             -p INSTALL_PLUGINAPP=ci \
             -p BEHAT_TAGS="${final_tags}" \
             -p BEHAT_NAME="${behat_name}" \
+            -p BEHAT_INIT_ARGS="${behat_init_args}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     fi

@@ -118,6 +118,7 @@ if [[ "${jobtype}" == "behat-nonjs" ]]; then
             -p BEHAT_SUITE=ALL \
             -p BEHAT_TAGS="${final_tags}" \
             -p BEHAT_NAME="${behat_name}" \
+            -p BEHAT_INIT_ARGS="${behat_init_args}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
@@ -144,6 +145,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
             -p BEHAT_SUITE=default \
             -p BEHAT_TAGS="${final_tags}" \
             -p BEHAT_NAME="${behat_name}" \
+            -p BEHAT_INIT_ARGS="${behat_init_args}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
@@ -170,6 +172,7 @@ if [[ "${jobtype}" == "behat-firefox" ]]; then
             -p BEHAT_SUITE=default \
             -p BEHAT_TAGS="${final_tags}" \
             -p BEHAT_NAME="${behat_name}" \
+            -p BEHAT_INIT_ARGS="${behat_init_args}" \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     done
