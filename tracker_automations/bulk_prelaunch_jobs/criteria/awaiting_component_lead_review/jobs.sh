@@ -23,7 +23,6 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p PHPVERSION=${php_version} \
     -p BROWSER="BrowserKit (non-js)" \
     -p BEHAT_SUITE=ALL \
-    -p BEHAT_INIT_ARGS="${behat_init_args}" \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # We want to launch always a Behat (Firefox (js) - boost) job
@@ -34,7 +33,6 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p DATABASE=pgsql \
     -p PHPVERSION=${php_version} \
     -p BROWSER="Firefox (js)" \
-    -p BEHAT_INIT_ARGS="${behat_init_args}" \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # We want to launch a Behat (Firefox (js) - classic) job
@@ -48,7 +46,6 @@ if [[ ${target} == "main" ]]; then
         -p PHPVERSION=${php_version} \
         -p BROWSER="Firefox (js)" \
         -p BEHAT_SUITE=classic \
-        -p BEHAT_INIT_ARGS="${behat_init_args}" \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
