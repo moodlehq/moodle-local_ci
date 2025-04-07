@@ -186,7 +186,14 @@ function run_A3a() {
 function run_A3b() {
     # Get the list of issues in the candidates queues (IR & CLR). All them will be held with last week comment.
     ${basereq} --action getIssueList \
-               --jql "filter=14000 OR filter=23329" \
+               --jql "filter=14000 OR
+                  (
+                    filter=23329
+                    AND NOT (
+                      filter = 21363 OR
+                      labels IN (mdlqa)
+                    )
+                  )" \
                --file "${resultfile}"
 
     # Iterate over found issues, moving them to the current queue.
