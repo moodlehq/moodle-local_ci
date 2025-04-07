@@ -62,7 +62,8 @@ function run_A2() {
                      AND NOT filter = 21366
                      AND (
                        filter = 21363 OR
-                       labels IN (mdlqa)
+                       labels IN (mdlqa) OR
+                       level IS NOT EMPTY
                      )" \
                --file "${resultfile}"
 
