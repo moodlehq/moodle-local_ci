@@ -184,16 +184,17 @@ function run_A3a() {
 
 # A3b, add the "integration_held" + standard comment to any issue arriving to candidates (IR & CLR).
 function run_A3b() {
-    # Get the list of issues in the candidates queues (IR & CLR). All them will be held with last week comment.
+    # Get the list of issues in the candidates queues (IR & CLR) and hold with the last week comment, if necessary.
+    # All issues in CLR that don't belong to any criteria below will be held:
+    # - Must-fix issues
+    # - mdlqa issues
     ${basereq} --action getIssueList \
-               --jql "filter=14000 OR
-                  (
-                    filter=23329
-                    AND NOT (
-                      filter = 21363 OR
-                      labels IN (mdlqa)
-                    )
-                  )" \
+               --jql "filter=14000 OR (
+                      filter=23329 AND NOT (
+                        filter = 21363 OR
+                        labels IN (mdlqa)
+                      )
+                    )" \
                --file "${resultfile}"
 
     # Iterate over found issues, moving them to the current queue.
