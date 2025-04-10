@@ -88,76 +88,29 @@ if (!is_bool($options['absolute'])) {
 
 // For Moodle 2.6 and upwards, we execute this specific code that does not require
 // the site to be installed (relying on new classes only available since then).
-if (load_core_component_from_moodle($options['basedir'])) {
-    // Get all the plugins and subplugin types.
-    $types = core_component::get_plugin_types();
-    // Sort types in reverse order, so we get subplugins earlier than plugins.
-    $types = array_reverse($types);
-    // For each type, get their available implementations.
-    foreach ($types as $type => $fullpath) {
-        $plugins = core_component::get_plugin_list($type);
-        // For each plugin, let's calculate the proper component name and output it.
-        foreach ($plugins as $plugin => $pluginpath) {
-            $component = $type . '_' . $plugin;
-            if (!$options['absolute']) {
-                $pluginpath = str_replace($options['basedir'] . '/', '', $pluginpath);
-            }
-            echo 'plugin,' . $component . ',' . $pluginpath . PHP_EOL;
-        }
-    }
-
-    // Get all the subsystems.
-    $subsystems = core_component::get_core_subsystems();
-    $subsystems['core'] = $options['basedir']; // To get the main one too
-    foreach ($subsystems as $subsystem => $subsystempath) {
-        if ($subsystem == 'backup') { // Because I want, yes :-P
-            $subsystempath = $options['basedir'] . '/backup';
-        }
-        // All subsystems are core_ prefixed.
-        $component = 'core_' . $subsystem;
-        if ($subsystem === 'core') { // But core.
-            $component = 'core';
-        }
-        if (!$options['absolute'] and !empty($subsystempath)) {
-            $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
-        }
-        echo 'subsystem,' . $component . ',' . $subsystempath . PHP_EOL;
-    }
-    // We are done, end here.
-    exit(0);
+if (!load_core_component_from_moodle($options['basedir'])) {
+    cli_error('Unable to load core component from moodle dir: ' . $options['basedir']);
 }
 
-// Up to Moodle 2.5, we use the old global API, that requires the site to be installed
-// (the shell script calling this handles those reqs automatically)
-// TODO: Once 2.5 is out we can change this by the new core_component::get_xxx() calls.
-// until then will be using the deprecated ones.
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-
-// Get all the plugin and subplugin types
-$types = get_plugin_types(true);
-// Sort types in reverse order, so we get subplugins earlier than plugins
+// Get all the plugins and subplugin types.
+$types = core_component::get_plugin_types();
+// Sort types in reverse order, so we get subplugins earlier than plugins.
 $types = array_reverse($types);
-// For each type, get their available implementations
+// For each type, get their available implementations.
 foreach ($types as $type => $fullpath) {
-    $plugins = get_plugin_list($type);
-    // For each plugin, let's calculate the proper component name and generate
-    // the corresponding build.xml file
+    $plugins = core_component::get_plugin_list($type);
+    // For each plugin, let's calculate the proper component name and output it.
     foreach ($plugins as $plugin => $pluginpath) {
         $component = $type . '_' . $plugin;
         if (!$options['absolute']) {
-            // Want relatives, clean dirroot.
-            $pluginpath = str_replace($CFG->dirroot . '/', '', $pluginpath);
-        } else {
-            // Want absolutes, replace dirroot by basedir.
-            $pluginpath = str_replace($CFG->dirroot, $options['basedir'] , $pluginpath);
+            $pluginpath = str_replace($options['basedir'] . '/', '', $pluginpath);
         }
         echo 'plugin,' . $component . ',' . $pluginpath . PHP_EOL;
     }
 }
 
-// Get all the subsystems and
-// generate the corresponding build.xml file
-$subsystems = get_core_subsystems(true);
+// Get all the subsystems.
+$subsystems = core_component::get_core_subsystems();
 $subsystems['core'] = $options['basedir']; // To get the main one too
 foreach ($subsystems as $subsystem => $subsystempath) {
     if ($subsystem == 'backup') { // Because I want, yes :-P
@@ -168,15 +121,10 @@ foreach ($subsystems as $subsystem => $subsystempath) {
     if ($subsystem === 'core') { // But core.
         $component = 'core';
     }
-    // If it's a subsystem with path.
-    if (!empty($subsystempath)) {
-        if (!$options['absolute']) {
-            // Want relatives, clean dirroot.
-            $subsystempath = str_replace($CFG->dirroot . '/', '', $subsystempath);
-        } else {
-            // Want absolutes, replace dirroot by basedir.
-            $subsystempath = str_replace($CFG->dirroot, $options['basedir'], $subsystempath);
-        }
+    if (!$options['absolute'] and !empty($subsystempath)) {
+        $subsystempath = str_replace($options['basedir'] . '/', '', $subsystempath);
     }
     echo 'subsystem,' . $component . ',' . $subsystempath . PHP_EOL;
 }
+// We are done, end here.
+exit(0);
