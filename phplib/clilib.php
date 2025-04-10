@@ -222,7 +222,19 @@ function s($var) {
  * @return bool false if core_component wasn't able to be loaded.
  */
 function load_core_component_from_moodle($moodledirroot) {
-    if (!file_exists($moodledirroot . '/lib/classes/component.php')) {
+    if (file_exists($moodledirroot . '/public/lib/classes/component.php')) {
+        // Support the Moodle 5.1 'public' directory structure.
+        $newcfg = (object) [
+            'dirroot' => "{$moodledirroot}/public",
+            'root' => $moodledirroot,
+            'libdir' => "{$moodledirroot}/public/lib",
+        ];
+    } else if (file_exists($moodledirroot . '/lib/classes/component.php')) {
+        $newcfg = (object) [
+            'dirroot' => $moodledirroot,
+            'libdir' => $moodledirroot . '/lib',
+        ];
+    } else {
         return false;
     }
 
@@ -230,12 +242,11 @@ function load_core_component_from_moodle($moodledirroot) {
     define('MOODLE_INTERNAL', 1);
     unset($CFG);
     global $CFG;
-    $CFG = new stdClass();
-    $CFG->dirroot = $moodledirroot;
-    $CFG->libdir = $CFG->dirroot . '/lib';
+    $CFG = $newcfg;
     $CFG->admin = 'admin';
     $CFG->filepermissions = '0666';
-    require_once($CFG->dirroot . '/lib/classes/component.php');
+
+    require_once($CFG->libdir . '/classes/component.php');
 
     return true;
 }
