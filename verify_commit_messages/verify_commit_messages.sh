@@ -129,7 +129,7 @@ for c in ${commits}; do
     else
         # Run AMOS checks.
         modifiedfiles=$(git diff-tree --no-commit-id --name-only -r ${c} | tr '\n' ',')
-        echo "$message" | $phpcmd $mydir/check_amos.php --commitid=${c} --filesmodified=$modifiedfiles
+        $phpcmd $mydir/check_amos.php --git="${gitcmd}" --commitid=${c}
 
         numproblems=$((numproblems+$?))
 
