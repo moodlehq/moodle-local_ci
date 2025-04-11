@@ -32,7 +32,7 @@ teardown () {
     assert_success
     assert_output --partial "OK: competency/tests will be executed"
     assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
-    assert_output --partial "INFO: Ignoring privacy/classes/tests, it does not contain any test unit file."
+    assert_output --partial "INFO: Ignoring theme/boost/scss/bootstrap/tests, it does not contain any test unit file."
     refute_output --partial "WARNING"
     refute_output --partial "ERROR"
 }
