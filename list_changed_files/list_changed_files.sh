@@ -10,6 +10,8 @@
 # Don't be strict. Script has own error control handle
 set +e
 
+difffilter=${1:-"ACDMRTUXB"}
+
 # Verify everything is set
 required="gitcmd gitdir initialcommit finalcommit"
 for var in $required; do
@@ -46,5 +48,5 @@ if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
 fi
 
 # get all the files changed between both commits (no matter the diffs are empty)
-git log --name-only --pretty=oneline --full-index ${initialcommit}..${finalcommit} | \
+git log --diff-filter=${difffilter} --find-renames=100% --name-only --pretty=oneline --full-index ${initialcommit}..${finalcommit} | \
     grep -vE '^[0-9a-f]{40} ' | sort | uniq
