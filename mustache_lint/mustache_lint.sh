@@ -46,7 +46,9 @@ echo "Validating using $validator"
 
 export initialcommit=${GIT_PREVIOUS_COMMIT}
 export finalcommit=${GIT_COMMIT}
-if mfiles=$(${mydir}/../list_changed_files/list_changed_files.sh)
+# Fetch all files, excluding files which are renames.
+# There is no need to check renames.
+if mfiles=$(${mydir}/../list_changed_files/list_changed_files.sh r)
 then
     echo "Running mustache lint from $initialcommit to $finalcommit:"
 else
