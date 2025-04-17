@@ -33,9 +33,9 @@ jobs:
         name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          username2: ${{ env.DOCKERHUB_USERNAME }}
-          username3: ${{ secrets.DOCKERHUB_USERNAME }}
+          # username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          # username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: "FOO"
       - name: Checking out moodle-local_ci
         uses: actions/checkout@v4
