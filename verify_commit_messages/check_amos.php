@@ -17,9 +17,18 @@
 require_once(__DIR__.'/../phplib/clilib.php');
 require_once(__DIR__.'/amoslib.php');
 
-list($options, $unrecognized) = cli_get_params(
-    array('help' => false, 'commitid' => '', 'filesmodified' => ''),
-    array('h' => 'help', 'c' => 'commitid', 'f' => 'filesmodified'));
+[$options, $unrecognized] = cli_get_params(
+    [
+        'help' => false,
+        'commitid' => '',
+        'git' => '/usr/bin/git',
+    ],
+    [
+        'h' => 'help',
+        'c' => 'commitid',
+        'g' => 'git',
+    ]
+);
 
 if ($unrecognized) {
     $unrecognized = implode("\n  ", $unrecognized);
@@ -33,7 +42,7 @@ if ($options['help']) {
 Options:
 -h, --help            Print out this help
 -c, --commitid      git commit hash
--f, --filesmodified files modified by commit (comma seperated)
+-g, --git           The path to the git binary
 ";
     echo $help;
     exit(0);
@@ -43,12 +52,35 @@ if (empty($options['commitid'])) {
     cli_error('--commitid missing. Use --help to get more info.');
 }
 
-if (empty($options['filesmodified'])) {
-    cli_error('--filesmodified missing. Use --help to get more info.');
-}
-
 $COMMIT = $options['commitid'];
 
-$message = file_get_contents("php://stdin");
-$returncode = amos_script_parser::validate_commit_message($message, $options['filesmodified']);
+$commitmessagecmd = [
+    escapeshellcmd($options['git']),
+    "show",
+    "--no-patch",
+    "--format=%B",
+    escapeshellarg($COMMIT),
+];
+exec(join(" ", $commitmessagecmd), $output, $returncode);
+if ($returncode !== 0) {
+    cli_error("Error running git show command: " . implode("\n", $output));
+}
+$message = join("\n", $output);
+
+$filelistcmd = [
+    escapeshellcmd($options['git']),
+    "diff-tree",
+    "--no-commit-id",
+    "--name-only",
+    "-r",
+    escapeshellarg($COMMIT),
+];
+
+exec(join(" ", $filelistcmd), $output, $returncode);
+if ($returncode !== 0) {
+    cli_error("Error running git diff-tree command: " . implode("\n", $output));
+}
+$filesmodified = join(",", $output);
+
+$returncode = amos_script_parser::validate_commit_message($message, $filesmodified);
 exit($returncode);
