@@ -14,13 +14,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/move_to_current_integration.csv
@@ -30,8 +35,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/move_to_current_integration.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
@@ -58,15 +61,15 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # that non-transitional transition and use normal update.
     #${basereq} --action updateIssue \
     #    --issue ${issue} \
-    #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+    #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}}=Yes"
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_10110=" \
-        --field "customfield_10210=" \
-        --field "customfield_10211=Yes" \
-        --field "customfield_15810=No" \
-        --field "customfield_10011=" \
+        --field "customfield_${customfield_integrator}=" \
+        --field "customfield_${customfield_integrationDate}=" \
+        --field "customfield_${customfield_currentlyInIntegration}=Yes" \
+        --field "customfield_${customfield_componentLeadReview}=No" \
+        --field "customfield_${customfield_tester}=" \
         --comment "Moving this issue to current integration cycle, will be reviewed soon. Thanks for the hard work!"
     ${basereq} --action removeLabels \
         --issue ${issue} \

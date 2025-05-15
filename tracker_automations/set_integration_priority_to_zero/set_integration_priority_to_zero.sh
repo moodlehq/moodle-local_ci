@@ -9,13 +9,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/set_integration_priority_to_zero.csv
@@ -25,8 +30,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/set_integration_priority_to_zero.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Note this could be done by one unique "runFromIssueList" action, but we are splitting
@@ -47,13 +50,13 @@ ${basereq} --action getIssueList \
                  )" \
            --file "${resultfile}"
 
-# Iterate over found issues and set their integration priority (customfield_12210) to 0.
+# Iterate over found issues and set their integration priority to 0.
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_12210=0"
+        --field "customfield_${customfield_integrationPriority}=0"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
 
@@ -128,7 +131,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_12210=0"
+        --field "customfield_${customfield_integrationPriority}=0"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
     echo
 done

@@ -10,13 +10,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/remove_ci_label_from_waiting_integration.csv
@@ -27,8 +32,6 @@ logfile=$WORKSPACE/remove_ci_label_from_waiting_integration.log
 lastfile=$WORKSPACE/remove_ci_label_from_waiting_integration_latest.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 now=$(date +%s)
 

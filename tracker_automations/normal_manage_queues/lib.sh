@@ -6,7 +6,7 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -14,14 +14,19 @@ for var in $required; do
     fi
 done
 
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
+
 # A, move "important" issues from candidates to current
 function run_A() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=14000
-                     AND NOT filter = 21366
+               --jql "filter=${filter_candidatesForIntegration}
+                     AND NOT filter = ${filter_issuesHeldUntilAfterRelease}
                      AND (
-                       filter = 21363 OR
+                       filter = ${filter_mustFixIssues} OR
                        labels IN (mdlqa) OR
                        priority IN (Critical, Blocker) OR
                        level IS NOT EMPTY OR
@@ -57,14 +62,14 @@ function run_A() {
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+        #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
         ${basereq} --action transitionIssue \
                    --issue ${issue} \
                    --transition "CI Global Self-Transition" \
-                   --field "customfield_10211=Yes" \
-                   --field "customfield_15810=No" \
-                   --field "customfield_10110=" \
-                   --field "customfield_10011=" \
+                   --field "customfield_${customfield_currentlyInIntegration}=Yes" \
+                   --field "customfield_${customfield_componentLeadReview}=No" \
+                   --field "customfield_${customfield_integrator}=" \
+                   --field "customfield_${customfield_tester}=" \
                    --comment "Normal queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -91,7 +96,7 @@ function run_B() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of up to issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --jql "filter=14000 \
+                   --jql "filter=${filter_candidatesForIntegration} \
                        ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
@@ -129,14 +134,14 @@ function run_B() {
             # that non-transitional transition and use normal update.
             #${basereq} --action updateIssue \
             #    --issue ${issue} \
-            #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+            #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
             ${basereq} --action transitionIssue \
-                       --issue ${issue} \
-                       --transition "CI Global Self-Transition" \
-                       --field "customfield_10211=Yes" \
-                       --field "customfield_15810=No" \
-                       --field "customfield_10110=" \
-                       --field "customfield_10011=" \
+                    --issue ${issue} \
+                    --transition "CI Global Self-Transition" \
+                    --field "customfield_${customfield_currentlyInIntegration}=Yes" \
+                    --field "customfield_${customfield_componentLeadReview}=No" \
+                    --field "customfield_${customfield_integrator}=" \
+                    --field "customfield_${customfield_tester}=" \
                        --comment "Normal queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold" >> "${logfile}"
@@ -147,7 +152,7 @@ function run_B() {
 function run_C() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=14000
+               --jql "filter=${filter_candidatesForIntegration}
                      AND 'Integration priority' = 0
                      AND NOT (issueLinkType = 'blocks' OR issueLinkType = 'is blocked by')
                      AND NOT status CHANGED AFTER -${waitingdays}d" \
@@ -170,11 +175,11 @@ function run_C() {
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --field="customfield_10110=" --field="customfield_10210=" --field="customfield_10211=Yes"
+        #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
         ${basereq} --action transitionIssue \
                    --issue ${issue} \
                    --transition "CI Global Self-Transition" \
-                   --field "customfield_12210=1" \
+                   --field "customfield_${customfield_integrationPriority}=1" \
                    --comment "Normal queues manage: Raising integration priority after ${waitingdays} days awaiting" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} raised integration priority" >> "${logfile}"

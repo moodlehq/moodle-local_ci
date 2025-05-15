@@ -16,13 +16,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/close_tested_issues.csv
@@ -32,8 +37,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/close_tested_issues.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Set closedate and closecomment if not specified
@@ -59,8 +62,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         --issue ${issue} \
         --transition "Mark as committed" \
         --resolution "Fixed" \
-        --field "customfield_10211=" \
-        --field "customfield_10210=${altdate}" \
+        --field "customfield_${customfield_currentlyInIntegration}=" \
+        --field "customfield_${customfield_integrationDate}=${altdate}" \
         --comment "${altcomment}"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done

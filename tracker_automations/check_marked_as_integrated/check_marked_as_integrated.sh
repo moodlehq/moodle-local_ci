@@ -22,7 +22,7 @@ if [ -z "$gitremotename" ]; then
 fi
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass gitcmd gitdir gitremotename devbranches"
+required="WORKSPACE gitcmd gitdir gitremotename devbranches"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
@@ -30,13 +30,16 @@ for var in $required; do
     fi
 done
 
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
+
 # file where results will be sent
 resultfile="$WORKSPACE/check_marked_as_integrated.csv"
 echo -n > "${resultfile}"
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 IFS=',' read -a devbranchesarr <<< "$devbranches" # Convert devbranches to array.
 
 # Include some utility functions

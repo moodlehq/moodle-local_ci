@@ -13,13 +13,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/delay_awaiting_issues.csv
@@ -29,8 +34,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/delay_awaiting_issues.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Set comment if not specified
@@ -56,12 +59,12 @@ ${basereq} --action getIssueList \
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue}"
     # We use transitionIssue instead of updateIssue because some of the fileds are not available in the default screen.
-    # (current in integration = customfield_10211, integration priority = customfield_12210)
+    # (current in integration = customfield_XXXXX, integration priority = customfield_XXXXX)
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_10211=" \
-        --field "customfield_12210=1" \
+        --field "customfield_${customfield_currentlyInIntegration}=" \
+        --field "customfield_${customfield_integrationPriority}=1" \
         --comment "${altcomment}"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done

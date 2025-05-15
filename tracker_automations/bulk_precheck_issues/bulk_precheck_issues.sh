@@ -4,9 +4,9 @@
 #jiraserver: jira server url we are going to connect to
 #jirauser: user that will perform the execution
 #jirapass: password of the user
-#cf_repository: id for "Pull from Repository" custom field (customfield_10100)
-#cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (main:customfield_10111,....)
-#cf_testinginstructions: id for testing instructions custom field (customfield_10117)
+#cf_repository: id for "Pull from Repository" custom field (customfield_XXXXX)
+#cf_branches: pairs of moodle branch and id for "Pull XXXX Branch" custom field (main:customfield_XXXXX,....)
+#cf_testinginstructions: id for testing instructions custom field (customfield_XXXXX)
 #criteria: "awaiting peer review", "awaiting integration", "developer request"
 #informtofiles: comma separated list of files where each MDL processed will be informed (format MDL-xxxx unixseconds)
 #$maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
@@ -22,13 +22,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass cf_repository cf_branches cf_testinginstructions criteria quiet jenkinsjobname jenkinsserver publishserver"
+required="WORKSPACE cf_repository cf_branches cf_testinginstructions criteria quiet jenkinsjobname jenkinsserver publishserver"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # wipe the workspace
 rm -fr "${WORKSPACE}"/*
@@ -38,8 +43,6 @@ resultfile=${WORKSPACE}/bulk_precheck_issues
 echo -n > "${resultfile}"
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 
 # Normalise criteria
 criteria=${criteria// /_}
