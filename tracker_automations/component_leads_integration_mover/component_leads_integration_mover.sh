@@ -15,13 +15,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass jsonclrurl releasedate"
+required="WORKSPACE jsonclrurl releasedate"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # We need curl to execute this script.
 if [[ ! $(which curl) ]]; then
@@ -46,8 +51,6 @@ logfile=${WORKSPACE}/component_leads_integration_mover.log
 clrfile=${WORKSPACE}/clr.json
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 if [[ "${clearcache}" == "true" ]]; then
@@ -110,9 +113,8 @@ if [ "${nowdate}" -ge "${freezedate}" ] && [ "${nowdate}" -lt "${onsyncenddate}"
 fi
 
 # Search for all the issues awaiting for integration and not being decided between CLR/IR.
-# Note: customfield_10118 is the peer reviewer custom field.
 ${basereq} --action getIssueList \
-           --jql "filter = 23535 ${excludequery}" \
+           --jql "filter = ${filter_integrationCLRDecision} ${excludequery}" \
            --columns="Key,Assignee,Peer reviewer,Components,Security Level,Summary" \
            --outputFormat=4 \
            --outputType=json \
@@ -159,13 +161,13 @@ jq -c '.[]' ${resultfile} | while read -r json; do
         # we are setting some custom fields not available (on purpose) on that screen. So we have created a
         # global transition, only available to the bots, not transitioning but bringing access to all the fields
         # via special screen. So we'll ne using that global transition via transitionIssue instead.
-        # customfield_15810 is the "Component Lead Review" field (Yes => CLR, No => IR, empty => undecided).
+        # "Component Lead Review" field: (Yes => CLR, No => IR, empty => undecided).
         if [[ "${outcome}" == "IR" ]]; then
             # No CLR. Just update the field.
             ${basereq} --action transitionIssue \
                        --issue ${issue} \
                        --transition "CI Global Self-Transition" \
-                       --field "customfield_15810=No"
+                       --field "customfield_${customfield_componentLeadReview}=No"
         else
             # CLR. Real transition to Waiting for CLR.
             ${basereq} --action transitionIssue \

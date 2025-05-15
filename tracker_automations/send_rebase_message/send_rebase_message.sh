@@ -17,13 +17,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass"
+required="WORKSPACE"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # file where results will be sent
 resultfile=$WORKSPACE/send_rebase_message.csv
@@ -33,8 +38,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/send_rebase_message.log
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Set altcommentcandidate for candidate queue issues if not specified
@@ -50,7 +53,7 @@ fi
 
 # Let's search all the issues under candidates queue.
 ${basereq} --action getIssueList \
-           --jql "filter = 14000" \
+           --jql "filter = ${filter_candidatesForIntegration}" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them
@@ -72,7 +75,7 @@ TIA and ciao :-)"}
 
 # Let's search all the issues under current integration waiting for review or in progress.
 ${basereq} --action getIssueList \
-           --jql "filter = 22610" \
+           --jql "filter = ${filter_issuesWaitingForReviewOrInProgress}" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them.

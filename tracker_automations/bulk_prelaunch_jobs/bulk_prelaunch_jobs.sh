@@ -8,9 +8,9 @@
 #jenkinsauth: String that defines the method to connect to the jenkins server, can be -ssh
 #  (requiring keys to be in place and jenkins ssh enabled), or also -html (and then
 #  use a combination of user and password or token). See Jenkins CLI docs for more info.
-#cf_repository: id for "Pull from Repository" custom field (customfield_10100)
+#cf_repository: id for "Pull from Repository" custom field (customfield_XXXXX)
 #cf_branches: comma separated trios of moodle branch, id for "Pull XXXX Branch" custom field and php version.
-#             Trios are colon separated, example: main:customfield_10111:7.3,....). All them required.
+#             Trios are colon separated, example: main:customfield_XXXXX:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
 #jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
@@ -20,13 +20,18 @@
 set -e
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass jenkinsserver jenkinsauth cf_repository cf_branches criteria schedulemins quiet"
+required="WORKSPACE jenkinsserver jenkinsauth cf_repository cf_branches criteria schedulemins quiet"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # wipe the workspace
 rm -fr "${WORKSPACE}"/*
@@ -36,8 +41,6 @@ resultfile=${WORKSPACE}/bulk_prelaunch_jobs
 echo -n > "${resultfile}"
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 
 # Normalise criteria
 criteria=${criteria// /_}

@@ -26,13 +26,18 @@
 set -e
 
 # Verify everything is set.
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass daystoreopen"
+required="WORKSPACE daystoreopen"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # File where tracker results will be sent.
 resultfile=$WORKSPACE/manage_waiting_for_feedback.csv
@@ -42,8 +47,6 @@ echo -n > "${resultfile}"
 logfile=$WORKSPACE/manage_waiting_for_feedback.log
 
 # Calculate some variables.
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
 BUILD_TIMESTAMP="$(date +'%Y-%m-%d_%H-%M-%S')"
 
 # Set defaults.
@@ -132,8 +135,8 @@ ${basereq} --action getIssueList \
 # Iterate over found issues, adding the comment
 # (Note that the 'Waiting for Feedback Notifications' interim filed will be cleaned by the workflow).
 # Here we update:
-#  - Component Lead Review (customfield_15810) = reset to blank/empty.
-#  - Currently in integration (customfield_10211) = reset to blank/empty.
+#  - Component Lead Review (customfield_XXXXX) = reset to blank/empty.
+#  - Currently in integration (customfield_XXXXX) = reset to blank/empty.
 for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     echo "Processing ${issue} - Reopen notification"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}: Reopen notification" >> "${logfile}"
@@ -141,8 +144,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
                --issue ${issue} \
                --transition "Reopen Issue" \
-               --field "customfield_10211=" \
-               --field "customfield_15810=" \
+               --field "customfield_${customfield_currentlyInIntegration}=" \
+               --field "customfield_${customfield_componentLeadReview}=" \
                --comment "${comment}"
 done
 

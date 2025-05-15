@@ -4,7 +4,7 @@
 #jiraserver: jira server url we are going to connect to
 #jirauser: user that will perform the execution
 #jirapass: password of the user
-#integrationdate_cf: id of the 'Integration date' custom field (customfield_10210)
+#integrationdate_cf: id of the 'Integration date' custom field
 
 # Let's go strict (exit on error)
 set -e
@@ -13,13 +13,18 @@ set -e
 quiet='--quiet'
 
 # Verify everything is set
-required="WORKSPACE jiraclicmd jiraserver jirauser jirapass integrationdate_cf"
+required="WORKSPACE integrationdate_cf"
 for var in $required; do
     if [ -z "${!var}" ]; then
         echo "Error: ${var} environment variable is not defined. See the script comments."
         exit 1
     fi
 done
+
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Load Jira Configuration.
+source "${mydir}/../../jira.sh"
 
 # temp file for intermediate storing of results
 tempfile="${WORKSPACE}/count_delayed_temp.csv"
@@ -48,8 +53,7 @@ echo "Last integration cycle ended with info ${lastintegrationjira} on ${lastint
 allintegrationfile="${WORKSPACE}/count_delayed_all_cycles.csv"
 
 # Calculate some variables
-mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass} ${quiet}"
+basereq="${basereq} ${quiet}"
 
 # Let's search the latest Integration date in the Tracker
 # (we cannot get the Integration date with this query because
