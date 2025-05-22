@@ -62,8 +62,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
         --issue ${issue} \
         --transition "Mark as committed" \
         --resolution "Fixed" \
-        --field "customfield_${customfield_currentlyInIntegration}=" \
-        --field "customfield_${customfield_integrationDate}=${altdate}" \
+        --field "${customfield_currentlyInIntegration}"= \
+        --field "${customfield_integrationDate}"="${altdate}" \
         --comment "${altcomment}"
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done

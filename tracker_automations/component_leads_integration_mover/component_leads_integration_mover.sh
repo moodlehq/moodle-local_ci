@@ -167,7 +167,7 @@ jq -c '.[]' ${resultfile} | while read -r json; do
             ${basereq} --action transitionIssue \
                        --issue ${issue} \
                        --transition "CI Global Self-Transition" \
-                       --field "customfield_${customfield_componentLeadReview}=No"
+                       --field "${customfield_componentLeadReview}"=No
         else
             # CLR. Real transition to Waiting for CLR.
             ${basereq} --action transitionIssue \

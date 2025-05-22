@@ -61,15 +61,15 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     # that non-transitional transition and use normal update.
     #${basereq} --action updateIssue \
     #    --issue ${issue} \
-    #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}}=Yes"
+    #    --field="${customfield_integrator}"= --field="${customfield_integrationDate}"= --field="${customfield_currentlyInIntegration}"=Yes
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_${customfield_integrator}=" \
-        --field "customfield_${customfield_integrationDate}=" \
-        --field "customfield_${customfield_currentlyInIntegration}=Yes" \
-        --field "customfield_${customfield_componentLeadReview}=No" \
-        --field "customfield_${customfield_tester}=" \
+        --field "${customfield_integrator}"= \
+        --field "${customfield_integrationDate}"= \
+        --field "${customfield_currentlyInIntegration}"=Yes \
+        --field "${customfield_componentLeadReview}"=No \
+        --field "${customfield_tester}"= \
         --comment "Moving this issue to current integration cycle, will be reviewed soon. Thanks for the hard work!"
     ${basereq} --action removeLabels \
         --issue ${issue} \

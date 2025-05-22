@@ -6,14 +6,15 @@
 
 set -e
 
-customfield_automatedTestResults=17112
-customfield_componentLeadReview=15810
-customfield_currentlyInIntegration=10211
-customfield_integrationDate=10210
-customfield_integrationPriority=12210
-customfield_integrator=10110
-customfield_pullFromRepository=10100
-customfield_tester=10011
+customfield_automatedTestResults="Automated test results"
+customfield_componentLeadReview="Component Lead Review"
+customfield_currentlyInIntegration="Currently in integration"
+customfield_integrationDate="Integration date"
+customfield_integrationPriority="Integration priority"
+customfield_integrator="Integrator"
+customfield_pullFromRepository="Pull  from Repository"
+customfield_tester="Tester"
+
 
 filter_candidatesForCLR="Weekly: Candidates for CLR (not held)"
 filter_candidatesForIntegration="Weekly: Candidates for Integration (not held)"

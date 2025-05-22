@@ -56,7 +56,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_${customfield_integrationPriority}=0"
+        --field "${customfield_integrationPriority}"=0
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done
 
@@ -131,7 +131,7 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
-        --field "customfield_${customfield_integrationPriority}=0"
+        --field "${customfield_integrationPriority}"=0
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
     echo
 done
