@@ -30,9 +30,9 @@ function run_A1() {
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "(filter=${filter_candidatesForIntegration}) \
+               --jql "(filter='${filter_candidatesForIntegration}') \
                      AND type IN ('New Feature', Improvement) \
-                     AND NOT filter = ${filter_issuesVotedToUnhold} \
+                     AND NOT filter = '${filter_issuesVotedToUnhold}' \
                      AND NOT (status changed FROM 'Waiting for component lead review' TO 'Waiting for integration review' AFTER -2h)" \
                --file "${resultfile}"
 
@@ -63,10 +63,10 @@ If you want Moodle HQ to consider including it into the incoming major release p
 function run_A2() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=${filter_candidatesForIntegration}
-                     AND NOT filter = ${filter_issuesHeldUntilAfterRelease}
+               --jql "filter='${filter_candidatesForIntegration}'
+                     AND NOT filter = '${filter_issuesHeldUntilAfterRelease}'
                      AND (
-                       filter = ${filter_mustFixIssues} OR
+                       filter = '${filter_mustFixIssues}' OR
                        labels IN (mdlqa) OR
                        level IS NOT EMPTY
                      )" \
@@ -134,7 +134,7 @@ function run_A3a() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --jql "filter=${filter_candidatesForIntegration} \
+                   --jql "filter='${filter_candidatesForIntegration}' \
                        ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
@@ -194,9 +194,9 @@ function run_A3b() {
     # - Must-fix issues
     # - mdlqa issues
     ${basereq} --action getIssueList \
-               --jql "filter=${filter_candidatesForIntegration} OR (
-                      filter=${filter_candidatesForCLR} AND NOT (
-                        filter = ${filter_mustFixIssues} OR
+               --jql "filter='${filter_candidatesForIntegration}' OR (
+                      filter='${filter_candidatesForCLR}' AND NOT (
+                        filter = '${filter_mustFixIssues}' OR
                         labels IN (mdlqa)
                       )
                     )" \
@@ -242,7 +242,7 @@ function run_B1b() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --jql "filter=${filter_candidatesForIntegration} \
+                   --jql "filter='${filter_candidatesForIntegration}' \
                        ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
@@ -305,9 +305,9 @@ function run_B1a() {
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "(filter=${filter_candidatesForIntegration} OR filter=${filter_candidatesForCLR}) \
+               --jql "(filter='${filter_candidatesForIntegration}' OR filter='${filter_candidatesForCLR}') \
                      AND type IN ('New Feature', Improvement) \
-                     AND NOT filter = ${filter_issuesVotedToUnhold}" \
+                     AND NOT filter = '${filter_issuesVotedToUnhold}'" \
                --file "${resultfile}"
 
     # Iterate over found issues and perform the actions with them.

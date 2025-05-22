@@ -23,10 +23,10 @@ source "${mydir}/../../jira.sh"
 function run_A() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=${filter_candidatesForIntegration}
-                     AND NOT filter = ${filter_issuesHeldUntilAfterRelease}
+               --jql "filter='${filter_candidatesForIntegration}'
+                     AND NOT filter = '${filter_issuesHeldUntilAfterRelease}'
                      AND (
-                       filter = ${filter_mustFixIssues} OR
+                       filter = '${filter_mustFixIssues}' OR
                        labels IN (mdlqa) OR
                        priority IN (Critical, Blocker) OR
                        level IS NOT EMPTY OR
@@ -96,7 +96,7 @@ function run_B() {
     if [[ "$counter" -lt "$currentmin" ]]; then
         # Get an ordered list of up to issues in the candidate queue.
         ${basereq} --action getIssueList \
-                   --jql "filter=${filter_candidatesForIntegration} \
+                   --jql "filter='${filter_candidatesForIntegration}' \
                        ORDER BY Rank ASC" \
                    --file "${resultfile}"
 
@@ -152,7 +152,7 @@ function run_B() {
 function run_C() {
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "filter=${filter_candidatesForIntegration}
+               --jql "filter='${filter_candidatesForIntegration}'
                      AND 'Integration priority' = 0
                      AND NOT (issueLinkType = 'blocks' OR issueLinkType = 'is blocked by')
                      AND NOT status CHANGED AFTER -${waitingdays}d" \

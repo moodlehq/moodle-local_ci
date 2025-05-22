@@ -114,7 +114,7 @@ fi
 
 # Search for all the issues awaiting for integration and not being decided between CLR/IR.
 ${basereq} --action getIssueList \
-           --jql "filter = ${filter_integrationCLRDecision} ${excludequery}" \
+           --jql "filter = '${filter_integrationCLRDecision}' ${excludequery}" \
            --columns="Key,Assignee,Peer reviewer,Components,Security Level,Summary" \
            --outputFormat=4 \
            --outputType=json \
