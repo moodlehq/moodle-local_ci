@@ -15,13 +15,13 @@ customfield_integrator=10110
 customfield_pullFromRepository=10100
 customfield_tester=10011
 
-filter_candidatesForCLR=23329
-filter_candidatesForIntegration=14000
-filter_integrationCLRDecision=23535
-filter_issuesHeldUntilAfterRelease=21366
-filter_issuesVotedToUnhold=22054
-filter_issuesWaitingForReviewOrInProgress=22610
-filter_mustFixIssues=21363
+filter_candidatesForCLR="Weekly: Candidates for CLR (not held)"
+filter_candidatesForIntegration="Weekly: Candidates for Integration (not held)"
+filter_integrationCLRDecision="Weekly: Issues to decide between IR/CLR"
+filter_issuesHeldUntilAfterRelease="Issues agreed to be after release"
+filter_issuesVotedToUnhold="Issues that have been voted for unhold"
+filter_issuesWaitingForReviewOrInProgress="Integration: Current queue for issues waiting for peer review or review in progress"
+filter_mustFixIssues="All \"must-fix\" issues"
 
 # Verify everything is set
 required="jiraclicmd jiraserver jirauser jirapass"
