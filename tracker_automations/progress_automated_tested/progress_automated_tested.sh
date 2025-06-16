@@ -40,7 +40,10 @@ ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status = 'Waiting for testing' \
                  AND 'Currently in integration' IS NOT EMPTY \
-                 AND Tester IN (cibot, nobody)" \
+                 AND ( \
+                     Tester = 'integration-team+cibot@moodle.com' OR \
+                     Tester IS EMPTY \
+                 )" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them
@@ -60,7 +63,10 @@ ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status = 'Waiting for security testing' \
                  AND 'Currently in integration' IS NOT EMPTY \
-                 AND Tester IN (cibot, nobody)" \
+                 AND ( \
+                     Tester = 'integration-team+cibot@moodle.com' OR \
+                     Tester IS EMPTY \
+                 )" \
            --file "${resultfile}"
 
 # Iterate over found issues and perform the actions with them
@@ -80,7 +86,10 @@ ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status = 'Testing in progress' \
                  AND 'Currently in integration' IS NOT EMPTY \
-                 AND Tester IN (cibot, nobody) \
+                 AND ( \
+                     Tester = 'integration-team+cibot@moodle.com' OR \
+                     Tester IS EMPTY \
+                 ) \
                  AND NOT status changed AFTER -24h" \
            --file "${resultfile}"
 
@@ -102,7 +111,10 @@ ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND status = 'Security testing in progress' \
                  AND 'Currently in integration' IS NOT EMPTY \
-                 AND Tester IN (cibot, nobody) \
+                 AND ( \
+                     Tester = 'integration-team+cibot@moodle.com' OR \
+                     Tester IS EMPTY \
+                 ) \
                  AND NOT status changed AFTER -24h" \
            --file "${resultfile}"
 
