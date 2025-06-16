@@ -68,7 +68,7 @@ while read issue; do
     # Fetch repository
     ${basereq} --action getFieldValue \
                --issue ${issue} \
-               --field ${cf_repository} \
+               --field "${cf_repository}" \
                --quiet \
                --file "${resultfile}.repository" > /dev/null
     repository=$(cat "${resultfile}.repository" | tr -d ' ')
@@ -99,7 +99,7 @@ while read issue; do
         # Fetch branch information
         ${basereq} --action getFieldValue \
                    --issue ${issue} \
-                   --field ${cf_branch} \
+                   --field "${cf_branch}" \
                    --quiet \
                    --file "${resultfile}.branch" > /dev/null
         branch=$(cat "${resultfile}.branch" | tr -d ' ')
