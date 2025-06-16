@@ -1,7 +1,7 @@
 ${basereq} --action getIssueList \
            --jql "project = 'Moodle' \
                  AND issue IN (${issueslist}) \
-                 AND cf[${customfield_pullFromRepository}] ~ 'integration/security-testing' \
+                 AND ${customfield_pullFromRepository} ~ 'integration/security-testing' \
                  AND level IS NOT EMPTY \
                  ORDER BY priority DESC, votes DESC, 'Last comment date' ASC" \
            --outputFormat 101 \
