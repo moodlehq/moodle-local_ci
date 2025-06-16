@@ -100,14 +100,14 @@ function run_A2() {
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
+        #    --field="${customfield_integrator}"= --field="${customfield_integrationDate}"= --field="${customfield_currentlyInIntegration}"=Yes
         ${basereq} --action transitionIssue \
                    --issue ${issue} \
                    --transition "CI Global Self-Transition" \
-                   --field "customfield_${customfield_currentlyInIntegration}=Yes" \
-                   --field "customfield_${customfield_componentLeadReview}=No" \
-                   --field "customfield_${customfield_integrator}=" \
-                   --field "customfield_${customfield_tester}=" \
+                   --field "${customfield_currentlyInIntegration}"=Yes \
+                   --field "${customfield_componentLeadReview}"=No \
+                   --field "${customfield_integrator}"= \
+                   --field "${customfield_tester}"= \
                    --comment "Continuous queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -172,14 +172,14 @@ function run_A3a() {
             # that non-transitional transition and use normal update.
             #${basereq} --action updateIssue \
             #    --issue ${issue} \
-            #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
+            #    --field="${customfield_integrator}"= --field="${customfield_integrationDate}"= --field="${customfield_currentlyInIntegration}"=Yes
             ${basereq} --action transitionIssue \
                        --issue ${issue} \
                        --transition "CI Global Self-Transition" \
-                       --field "customfield_${customfield_currentlyInIntegration}=Yes" \
-                       --field "customfield_${customfield_componentLeadReview}=No" \
-                       --field "customfield_${customfield_integrator}=" \
-                       --field "customfield_${customfield_tester}=" \
+                       --field "${customfield_currentlyInIntegration}"=Yes \
+                       --field "${customfield_componentLeadReview}"=No \
+                       --field "${customfield_integrator}"= \
+                       --field "${customfield_tester}"= \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})" >> "${logfile}"
@@ -280,14 +280,14 @@ function run_B1b() {
             # that non-transitional transition and use normal update.
             #${basereq} --action updateIssue \
             #    --issue ${issue} \
-            #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
+            #    --field="${customfield_integrator}"= --field="${customfield_integrationDate}"= --field="${customfield_currentlyInIntegration}"=Yes
             ${basereq} --action transitionIssue \
                        --issue ${issue} \
                        --transition "CI Global Self-Transition" \
-                       --field "customfield_${customfield_currentlyInIntegration}=Yes" \
-                       --field "customfield_${customfield_componentLeadReview}=No" \
-                       --field "customfield_${customfield_integrator}=" \
-                       --field "customfield_${customfield_tester}=" \
+                       --field "${customfield_currentlyInIntegration}"=Yes \
+                       --field "${customfield_componentLeadReview}"=No \
+                       --field "${customfield_integrator}"= \
+                       --field "${customfield_tester}"= \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current on-sync: threshold" >> "${logfile}"
@@ -393,13 +393,13 @@ function run_C() {
         # that non-transitional transition and use normal update.
         #${basereq} --action updateIssue \
         #    --issue ${issue} \
-        #    --field="customfield_${customfield_integrator}=" --field="customfield_${customfield_integrationDate}=" --field="customfield_${customfield_currentlyInIntegration}=Yes"
+        #    --field="${customfield_integrator}"= --field="${customfield_integrationDate}"= --field="${customfield_currentlyInIntegration}"=Yes
         ${basereq} --action transitionIssue \
                    --issue ${issue} \
                    --transition "CI Global Self-Transition" \
-                   --field "customfield_${customfield_currentlyInIntegration}=" \
-                   --field "customfield_${customfield_integrator}=" \
-                   --field "customfield_${customfield_tester}=" \
+                   --field "${customfield_currentlyInIntegration}"= \
+                   --field "${customfield_integrator}"= \
+                   --field "${customfield_tester}"= \
                    --comment "Continuous queues manage: Moving out from current because it's held" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current: held" >> "${logfile}"

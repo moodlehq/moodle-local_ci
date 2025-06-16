@@ -144,8 +144,8 @@ for issue in $( sed -n 's/^"\(MDL-[0-9]*\)".*/\1/p' "${resultfile}" ); do
     ${basereq} --action transitionIssue \
                --issue ${issue} \
                --transition "Reopen Issue" \
-               --field "customfield_${customfield_currentlyInIntegration}=" \
-               --field "customfield_${customfield_componentLeadReview}=" \
+               --field "${customfield_currentlyInIntegration}"= \
+               --field "${customfield_componentLeadReview}"= \
                --comment "${comment}"
 done
 

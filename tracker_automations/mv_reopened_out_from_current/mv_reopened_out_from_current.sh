@@ -75,15 +75,15 @@ while read line; do
     # that non-transitional transition and use normal update.
     #${basereq} --action updateIssue \
     #    --issue ${issue} \
-    #    --field "customfield_${customfield_currentlyInIntegration}=" \
+    #    --field "${customfield_currentlyInIntegration}"= \
     #    --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     #
     ${basereq} --action transitionIssue \
         --issue ${issue} \
         --transition "CI Global Self-Transition" \
         --fixVersions "${keepversion}" \
-        --field "customfield_${customfield_currentlyInIntegration}=" \
-        --field "customfield_${customfield_automatedTestResults}=" \
+        --field "${customfield_currentlyInIntegration}"= \
+        --field "${customfield_automatedTestResults}"= \
         --comment "Moving this reopened issue out from current integration. Please, re-submit it for integration once ready."
     echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue}" >> "${logfile}"
 done < "${resultfile}"
