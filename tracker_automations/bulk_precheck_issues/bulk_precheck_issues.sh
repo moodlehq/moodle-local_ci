@@ -202,7 +202,7 @@ while read issue; do
                         elif [[ ${testresult} == "error" ]]; then
                             testcolor="red"
                         fi
-                        details="${details} [{color:${testcolor}}${testname} (${errors}/${warnings}){color}|${joburl}/artifact/work/smurf.html#${testname}],"
+                        details="${details} {color:${testcolor}}${testname}{color} [(${errors}/${warnings})|${joburl}/artifact/work/smurf.html#${testname}],"
                     fi
                     if [[ "${detailslist}" == "${detail}" ]]; then
                         detailslist=''
