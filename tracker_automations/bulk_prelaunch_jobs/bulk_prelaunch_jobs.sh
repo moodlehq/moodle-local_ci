@@ -129,12 +129,14 @@ while read issue; do
                     build=${BASH_REMATCH[3]}
                     joburl="${jenkinsserver}/view/Testing/job/${job}/${build}/"
                     joburl=$(echo ${joburl} | sed 's/ /%20/g')
+                    badgeurl="${jenkinsserver}/buildStatus/icon?job=${job}&build=${build}&subject=CI"
+                    badgeurl=$(echo ${badgeurl} | sed 's/ /%20/g')
                     echo "    - Type: ${type}"
                     echo "    - Job: ${job}"
                     echo "    - Build: ${build}"
                     echo "    - URL: ${joburl}"
                     echo "    - Result: ${type}: ${joburl}"
-                    echo "  - ${joburl} ${type}" >> "${resultfile}.${issue}.txt"
+                    echo "  - [!${badgeurl}!|${joburl}] ${type}" >> "${resultfile}.${issue}.txt"
                 fi
             done < "${resultfile}.jenkinscli"
             echo "" >> "${resultfile}.${issue}.txt"
