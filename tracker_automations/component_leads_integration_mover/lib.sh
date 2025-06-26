@@ -186,10 +186,11 @@ function verify_revievers_availability() {
         # File where accountID will be stored.
         accountfile=${WORKSPACE}/component_leads_integration_mover_accountid.txt
         echo -n > "${accountfile}"
-        ${basereq} --action getUser --userEmail ${availableCLR} --quiet --file "${accountfile}" > /dev/null
-        CLRAccountID=$(cat "${accountfile}")
+        curl -u ${jirauser}:${jirapass} \
+          -X GET "${baseapireq}user/search?query=${availableCLR}" > "${accountfile}"
+        CLRAccountID=$(grep -o '"accountId":"[^"]*"' "${accountfile}" | head -n1 | sed 's/"accountId":"\([^"]*\)"/\1/')
         rm "${accountfile}"
-        availableProfiles+=("[~${CLRAccountID}]")
+        availableProfiles+=("[~accountId:${CLRAccountID}]")
     done
     outcomedesc=$(IFS=, ; echo "Sending to CLR, there are available reviewers for the issue: ${availableProfiles[*]}")
     return # Outcome set, and function finished we are done.

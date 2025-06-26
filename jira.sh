@@ -35,3 +35,7 @@ done
 
 # Set the base request command.
 basereq="${jiraclicmd} --server ${jiraserver} --user ${jirauser} --password ${jirapass}"
+# Set the base API request command.
+# Remove trailing slash from jiraserver if present
+jiraserver_clean="${jiraserver%/}"
+baseapireq="${jiraserver_clean}/rest/api/3/"
