@@ -182,14 +182,8 @@ function verify_revievers_availability() {
         if [[ -z ${availableCLR} ]]; then
             continue
         fi
-        # Due to GDPR, we cannot mention the email address of the reviewer, so we need to get the accountID.
-        # File where accountID will be stored.
-        accountfile=${WORKSPACE}/component_leads_integration_mover_accountid.txt
-        echo -n > "${accountfile}"
-        ${basereq} --action getUser --userEmail ${availableCLR} --quiet --file "${accountfile}" > /dev/null
-        CLRAccountID=$(cat "${accountfile}")
-        rm "${accountfile}"
-        availableProfiles+=("[~${CLRAccountID}]")
+        # Due to GDPR, we cannot mention the email address of the reviewer, so we need to use the accountID.
+        availableProfiles+=("[~accountid:${availableCLR}]")
     done
     outcomedesc=$(IFS=, ; echo "Sending to CLR, there are available reviewers for the issue: ${availableProfiles[*]}")
     return # Outcome set, and function finished we are done.
