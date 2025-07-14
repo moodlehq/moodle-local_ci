@@ -55,9 +55,18 @@ else
     echo "+ INFO: Not applying versions interval check (betweenversions environment variable)" >> "${resultfile}"
 fi
 
+if [[ -d "${gitdir}/public" || -f "${gitdir}/public/version.php" ]]; then
+    # If we have public directory, then use it as rootdir
+    rootdir="${gitdir}/public"
+    echo "+ INFO: Using public directory as rootdir: ${rootdir}" >> "${resultfile}"
+else
+    rootdir="${gitdir}"
+    echo "+ INFO: Using gitdir as rootdir: ${gitdir}" >> "${resultfile}"
+fi
+
 # First of all, guess the current branch from main version.php file ($branch). We'll be using
 # it to decide about different checks later.
-currentbranch="$( grep "\$branch.*=.*;" "${gitdir}/version.php" || true )"
+currentbranch="$( grep "\$branch.*=.*;" "${rootdir}/version.php" || true )"
 if [ -z "${currentbranch}" ]; then
     echo "+ ERROR: Main version.php file is missing: \$branch = 'xx' line." >> "${resultfile}"
 elif [[ ${currentbranch} =~ branch\ *=\ *.([0-9]{2,3}).\; ]]; then
@@ -75,11 +84,15 @@ fi
 #    path (full or null)
 ${mydir}/../list_valid_components/list_valid_components.sh > "${WORKSPACE}/valid_components.txt"
 
-# Find all the version.php files
+# Find all the version.php files in the gitdir.
+# Note: In 501 and earlier the version.php files were in the root of the gitdir.
+#       In 501 and later they are in the public directory.
+# In future plugins may be in the root directory and not public.
+#       So we need to find all version.php files in the gitdir.
 allfiles=$( find "${gitdir}" -name version.php | awk -F "/" '{print NF-1"\t"$0}' | sort -n | cut -f 2- )
 
 # version.php files to ignore
-ignorefiles="(local/(ci|moodlecheck)/version.php|.*/tests/fixtures/.*/version.php)"
+ignorefiles="(public/)?(local/(ci|moodlecheck)/version.php|.*/tests/fixtures/.*/version.php)"
 
 # Perform various checks with the version.php files
 for i in ${allfiles}; do
@@ -98,9 +111,9 @@ for i in ${allfiles}; do
 
     # Calculate prefix for all the regexp operations below
     prefix='\$plugin->'
-    if [ "${i}" == "${gitdir}/version.php" ]; then
+    if [ "${i}" == "${rootdir}/version.php" ]; then
         prefix='\$'
-    elif [[ "${i}" =~ ${gitdir}/mod/[^/]*/version.php ]]; then
+    elif [[ "${i}" =~ ${rootdir}/mod/[^/]*/version.php ]]; then
         # Before 2.7, both "module" and "plugin" were allowed in core for activity modules. For 2.7 and up
         # only the default "plugin" is allowed.
         if [[ "${currentbranch}" -lt "27" ]]; then
@@ -183,7 +196,7 @@ for i in ${allfiles}; do
     fi
 
     # If we are in main version.php
-    if [ "${i}" == "${gitdir}/version.php" ]; then
+    if [[ "${i}" == "${gitdir}/version.php" || "${i}" == "${gitdir}/public/version.php" ]]; then
         mainversion=${version}
 
         mainrelease="$( grep "${prefix}release.*=.*;" ${i} || true )"
@@ -366,12 +379,12 @@ for i in ${allfiles}; do
 done
 
 # Now, look for backup/backup.class.php to ensure it matches main /version.php
-echo "- ${gitdir}/backup/backup.class.php:" >> "${resultfile}"
-if [ ! -f "${gitdir}/backup/backup.class.php" ]; then
+echo "- ${rootdir}/backup/backup.class.php:" >> "${resultfile}"
+if [ ! -f "${rootdir}/backup/backup.class.php" ]; then
     echo "  + ERROR: File backup/backup.class.php not found" >> "${resultfile}"
 else
     # - backup::VERSION must be always >= $version (8 first digits comparison)
-    backupversion="$( grep "const.*VERSION.*=.*;" "${gitdir}/backup/backup.class.php" || true )"
+    backupversion="$( grep "const.*VERSION.*=.*;" "${rootdir}/backup/backup.class.php" || true )"
     if [ -z "${backupversion}" ]; then
         echo "  + ERROR: backup/backup.class.php is missing: const VERSION = XXXXX line." >> "${resultfile}"
     fi
@@ -398,7 +411,7 @@ else
     fi
 
     # - backup::RELEASE must match $release (X.Y only)
-    backuprelease="$( grep "const.*RELEASE.*=.*;" "${gitdir}/backup/backup.class.php" || true )"
+    backuprelease="$( grep "const.*RELEASE.*=.*;" "${rootdir}/backup/backup.class.php" || true )"
     if [ -z "${backuprelease}" ]; then
         echo "  + ERROR: backup/backup.class.php is missing: const RELEASE = 'X.Y' line." >> "${resultfile}"
     fi
@@ -448,7 +461,7 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
                 fi
                 # Skip the main version.php file. Let's force to perform manual update there
                 # (without it, upgrade won't work)
-                if [ "${i}" == "${gitdir}/version.php" ]; then
+                if [ "${i}" == "${rootdir}/version.php" ]; then
                     continue
                 fi
                 echo "- ${i}:" >> "${resultfile}"
@@ -460,7 +473,7 @@ if [ ! -z "${setversion}" ] && (($count == 0)); then
                 perl -p -i -e "${replaceregex}" ${i}
             done
             # also the backup/backup.class.php file
-            i=${gitdir}/backup/backup.class.php
+            i=${rootdir}/backup/backup.class.php
             echo "- ${i}:" >> "${resultfile}"
             replaceregex="s/(const *VERSION *= *)([0-9]{10}(\.[0-9]{2})?)/\${1}${setversion}/g"
             perl -p -i -e "${replaceregex}" ${i}
