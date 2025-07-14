@@ -68,12 +68,19 @@ if (empty($options['dblibrary']) || empty($options['dbtype']) || empty($options[
 if (empty($options['gitdir'])) {
     // Try to find it from env.
     $gitdir = getenv('gitdir');
-    if (is_readable($gitdir . '/lib/dml/moodle_database.php')) {
-        $options['gitdir'] = $gitdir;
-    } else {
-        // Not found, exit. It must be passed.
-        cli_error('Unable to find a suitable Moodle code base. Please use the --gitdir param to specify it');
-    }
+}
+
+if (file_exists("{$gitdir}/public/version.php")) {
+    $dirroot = "{$gitdir}/public";
+} else {
+    $dirroot = $gitdir;
+}
+
+if (is_readable($dirroot . '/lib/dml/moodle_database.php')) {
+    $options['gitdir'] = $dirroot;
+} else {
+    // Not found, exit. It must be passed.
+    cli_error('Unable to find a suitable Moodle code base. Please use the --gitdir param to specify it');
 }
 
 $options['dbhost2'] = empty($options['dbhost2']) ? $options['dbhost1'] : $options['dbhost2'];
