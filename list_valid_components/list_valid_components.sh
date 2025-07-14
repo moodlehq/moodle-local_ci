@@ -24,10 +24,19 @@ done
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+if [[ -d "${gitdir}/public" || -f "${gitdir}/public/version.php" ]]; then
+    # If we have public directory, then use it as rootdir
+    rootdir="${gitdir}/public"
+    echo "+ INFO: Using public directory as rootdir: ${rootdir}"
+else
+    rootdir="${gitdir}"
+    echo "+ INFO: Using gitdir as rootdir: ${gitdir}"
+fi
+
 # Since Moodle 2.6 we don't need to install the moodle site nor copy the php script to it.
-if [[ -f "${gitdir}/lib/classes/component.php" ]]; then
+if [[ -f "${rootdir}/lib/classes/component.php" ]]; then
     cd ${mydir}
-    ${phpcmd} list_valid_components.php --basedir="${gitdir}" --absolute=true
+    ${phpcmd} list_valid_components.php --basedir="${rootdir}" --absolute=true
     exitstatus=${PIPESTATUS[0]}
     if [ $exitstatus -ne 0 ]; then
         echo "Problem executing the >= 2.6 alternative"
