@@ -141,19 +141,24 @@ basecommit=$(${gitcmd} rev-parse --verify ${baseref})
 ${gitcmd} checkout -q -B ${integrateto}_precheck $baseref
 
 # Get information about the branch where the patch is going to be integrated (from version.php).
-branchline=$(grep "^\$branch\s*=\s*'[0-9]\+';" version.php || true)
+if [[ -d "public" || -f "public/version.php" ]]; then
+    branchline=$(grep "^\$branch\s*=\s*'[0-9]\+';" public/version.php || true)
+else
+    branchline=$(grep "^\$branch\s*=\s*'[0-9]\+';" version.php || true)
+fi
+
 if [[ -z "${branchline}" ]]; then
-    echo "Error: Unable to find the branch information in version.php." | tee -a ${errorfile}
+    echo "Error: Unable to find the branch information in version.php or public/version.php." | tee -a ${errorfile}
     exit 1
 fi
 # Extract the branch version from the line.
 if [[ "${branchline}" =~ \$branch[[:space:]]+=[[:space:]]+\'([0-9]+)\'\; ]]; then
     versionbranch=${BASH_REMATCH[1]}
 else
-    echo "Error: Unable to extract the branch version from version.php." | tee -a ${errorfile}
+    echo "Error: Unable to extract the branch version from version.php or public/version.php." | tee -a ${errorfile}
     exit 1
 fi
-echo "Info: The branch ${integrateto} has version.php \$branch: ${versionbranch}" | tee -a ${errorfile}
+echo "Info: The branch ${integrateto} has version.php or public/version.php \$branch: ${versionbranch}" | tee -a ${errorfile}
 
 # Do some cleanup onto the passed details
 
@@ -319,9 +324,13 @@ if [[ ${versionbranch} -ge 405 ]]; then
     fi
 fi
 
-# Add version.php and config-dist.php to patchset files because they
+# Add version.php or public/version.php and config-dist.php to patchset files because they
 # allow us to find moodle dirroot and branch later.
-echo "${WORKSPACE}/version.php" >> ${WORKSPACE}/work/patchset.files
+if [[ -d "public" || -f "public/version.php" ]]; then
+    echo "${WORKSPACE}/public/version.php" >> ${WORKSPACE}/work/patchset.files
+else
+    echo "${WORKSPACE}/version.php" >> ${WORKSPACE}/work/patchset.files
+fi
 echo "${WORKSPACE}/config-dist.php" >> ${WORKSPACE}/work/patchset.files
 
 # Add linting config files to patchset files to avoid it being deleted for use later..
