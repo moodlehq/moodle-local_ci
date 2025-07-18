@@ -72,18 +72,11 @@ foreach ($files as $file) {
         continue;
     }
 
-    /** Commented till MDL-34103 is fixed to avoid getting fails
-    // Find we have some function in code
-    if (! $countfunction = preg_match_all('@' . $anyfunction_regexp . '@is', $contents, $matches)) {
-        echo "    + ERROR: functions not found" . LINEFEED;
-        continue;
-    }
-    // Verify there is only one function
-    if ($countfunction !== 1) {
+    // Verify there is not more than one function
+    if (preg_match_all('@' . $anyfunctionregexp . '@is', $contents, $matches) > 1) {
         echo "    + ERROR: multiple functions detected (use upgradelib, plz)" . LINEFEED;
         continue;
     }
-    */
 
     // Extract all string literals in upgrade code, we are not interested on them and can lead to
     // incorrect calculation of function body later, see MDLSITE-4366. Replace them with simple placeholders.
