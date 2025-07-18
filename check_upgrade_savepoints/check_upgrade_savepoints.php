@@ -35,24 +35,10 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
     define('LINEFEED', "\n");
 }
 
-// Nasty but need this here to include version.php, grrr
-define('MOODLE_INTERNAL',   1);
-define('MATURITY_ALPHA',    50);    // internals can be tested using white box techniques
-define('MATURITY_BETA',     100);   // feature complete, ready for preview and testing
-define('MATURITY_RC',       150);   // tested, will be released unless there are fatal bugs
-define('MATURITY_STABLE',   200);   // ready for production deployment
-define('ANY_VERSION',       'any'); // special value that can be used in $plugin->dependencies in version.php files
 $plugin = new stdClass();
 $module = new stdClass();
 
-// Detect if we are in 2.3 and up by looking for $branch
-if (file_exists('version.php')) {
-    require_once('version.php');
-}
-$moodle23andup = isset($branch) ? true : false;
-
 $dir = dirname(__FILE__);
-
 $files = files_to_check($dir);
 
 foreach ($files as $file) {
@@ -75,34 +61,29 @@ foreach ($files as $file) {
         continue;
     }
 
-    // These checks are only performed for 23_STABLE and up
-    if ($moodle23andup) {
-
-        // Find we have some return true; in code
-        if (! $countreturn = preg_match_all('@' . $return_regexp . '@is', $contents, $matches)) {
-            echo "    + ERROR: 'return true;' not found" . LINEFEED;
-            continue;
-        }
-        // Verify there is only one return true;
-        if ($countreturn !== 1) {
-            echo "    + ERROR: multiple 'return true;' detected" . LINEFEED;
-            continue;
-        }
-
-        /** Commented till MDL-34103 is fixed to avoid getting fails
-        // Find we have some function in code
-        if (! $countfunction = preg_match_all('@' . $anyfunction_regexp . '@is', $contents, $matches)) {
-            echo "    + ERROR: functions not found" . LINEFEED;
-            continue;
-        }
-        // Verify there is only one function
-        if ($countfunction !== 1) {
-            echo "    + ERROR: multiple functions detected (use upgradelib, plz)" . LINEFEED;
-            continue;
-        }
-        */
-
+    // Find we have some return true; in code
+    if (! $countreturn = preg_match_all('@' . $return_regexp . '@is', $contents, $matches)) {
+        echo "    + ERROR: 'return true;' not found" . LINEFEED;
+        continue;
     }
+    // Verify there is only one return true;
+    if ($countreturn !== 1) {
+        echo "    + ERROR: multiple 'return true;' detected" . LINEFEED;
+        continue;
+    }
+
+    /** Commented till MDL-34103 is fixed to avoid getting fails
+    // Find we have some function in code
+    if (! $countfunction = preg_match_all('@' . $anyfunction_regexp . '@is', $contents, $matches)) {
+        echo "    + ERROR: functions not found" . LINEFEED;
+        continue;
+    }
+    // Verify there is only one function
+    if ($countfunction !== 1) {
+        echo "    + ERROR: multiple functions detected (use upgradelib, plz)" . LINEFEED;
+        continue;
+    }
+    */
 
     // Extract all string literals in upgrade code, we are not interested on them and can lead to
     // incorrect calculation of function body later, see MDLSITE-4366. Replace them with simple placeholders.
