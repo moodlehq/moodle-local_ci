@@ -30,8 +30,8 @@ teardown () {
     ci_run verify_phpunit_xml/verify_phpunit_xml.sh
 
     assert_success
-    assert_output --partial "OK: competency/tests will be executed"
-    assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
+    assert_output --partial "OK: public/competency/tests will be executed"
+    assert_output --partial "INFO: public/backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "INFO: Ignoring theme/boost/scss/bootstrap/tests, it does not contain any test unit file."
     refute_output --partial "WARNING"
     refute_output --partial "ERROR"
@@ -43,8 +43,8 @@ teardown () {
     ci_run verify_phpunit_xml/verify_phpunit_xml.sh
 
     assert_failure
-    assert_output --partial "OK: competency/tests will be executed"
-    assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
+    assert_output --partial "OK: public/competency/tests will be executed"
+    assert_output --partial "INFO: public/backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "ERROR: admin/tests is not matched/covered by any definition in phpunit.xml !"
     refute_output --partial "WARNING"
     assert_output --partial "ERROR"
@@ -56,8 +56,8 @@ teardown () {
     ci_run verify_phpunit_xml/verify_phpunit_xml.sh
 
     assert_success
-    assert_output --partial "OK: competency/tests will be executed"
-    assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
+    assert_output --partial "OK: public/competency/tests will be executed"
+    assert_output --partial "INFO: public/backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "INFO: Ignoring admin/tests, it does not contain any test unit file."
     assert_output --partial "WARNING: mod/glossary/tests/lib_test.php has incorrect (2) number of unit test classes."
     refute_output --partial "ERROR"
@@ -71,8 +71,8 @@ teardown () {
     ci_run verify_phpunit_xml/verify_phpunit_xml.sh
 
     assert_failure
-    assert_output --partial "OK: competency/tests will be executed"
-    assert_output --partial "INFO: backup/util/ui/tests will be executed because the backup/util definition"
+    assert_output --partial "OK: public/competency/tests will be executed"
+    assert_output --partial "INFO: public/backup/util/ui/tests will be executed because the backup/util definition"
     assert_output --partial "INFO: Ignoring admin/tests, it does not contain any test unit file."
     assert_output --partial "ERROR: mod/glossary/tests/lib_test.php has incorrect (2) number of unit test classes."
     assert_output --partial "ERROR"
