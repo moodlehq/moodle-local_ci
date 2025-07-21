@@ -2,7 +2,7 @@
 # that match the most relevant aspects of the test being executed
 # and its smurf.xml results.
 
-<detail name="phpcs" status="error" numerrors="2" numwarnings="1"/>
+<detail name="phpcs" status="error" numerrors="3" numwarnings="1"/>
 <description>This section shows the coding style problems detected in the code by phpcs</description>
 <problem file="mod/glossary/tests/lib_test.php"
 PHPUnit class namespace "mod_wrong" does not match expected file namespace "mod_glossary"
