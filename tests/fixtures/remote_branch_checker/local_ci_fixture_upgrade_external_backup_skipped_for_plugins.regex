@@ -3,4 +3,4 @@
 # and its smurf.xml results.
 
 # Just verify that there isn't any externalbackup section in the report
-condensedresult="smurf,success,0,0:overview,success,0,0;phplint,success,0,0;phpcs,success,0,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0"
+condensedresult="smurf,error,1,0:overview,success,0,0;phplint,success,0,0;phpcs,error,1,0;js,success,0,0;css,success,0,0;phpdoc,success,0,0;savepoint,success,0,0;thirdparty,success,0,0;grunt,success,0,0;shifter,success,0,0;mustache,success,0,0;gherkin,success,0,0"
