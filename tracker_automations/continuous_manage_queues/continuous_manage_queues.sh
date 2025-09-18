@@ -104,21 +104,29 @@ if [ -n "${dryrun}" ]; then
 fi
 
 # Behaviour A, before the release (normally the 5 weeks between freeze and release).
+echo "Current time period is ${behaviorAB} the release, lastweekdate is ${lastweekdate}"
+echo "Current behaviour is ${behaviourA3}"
 
 if [ $behaviorAB == "before" ]; then
     # A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates.
+    echo "Holding new features and improvements arriving to candidates queue"
     run_A1
+
     # A2, move "important" issues from candidates to current
     # Note: This has been disabled as of 2023-07-13. See MDLSITE-7296 for more information.
     # Note: This has been (partially) enabled again as of 2023-08-29. See MDLSITE-7296 for more information.
+    echo "Moving important issues from the candidates queue to current queue"
     run_A2
+
     # A3, move all issues aways from candidates queue:
     if [ $behaviorA3 == "move" ]; then
         # A3a, keep the current queue fed with bug issues when it's under a threshold.
+        echo "Keeping the current queue fed with bugs under threshold"
         run_A3a
     fi
     if [ $behaviorA3 == "hold" ]; then
         # A3b, add the "integration_held" + standard comment to any issue arriving to candidates.
+        echo "Holding all issues arriving to candidates queue"
         run_A3b
     fi
 fi
@@ -127,12 +135,16 @@ fi
 
 if [ $behaviorAB == "after" ]; then
     # B1b, add the "integration_held" + standard on-sync comment to any new feature or improvement arriving to candidates.
+    echo "Holding new features and improvements arriving to candidates queue"
     run_B1a
+
     # B1a, keep the current queue fed with bug issues when it's under a threshold.
+    echo "Keeping the current queue fed with bugs under threshold"
     run_B1b
 fi
 
 # Task C, move, always, all held issues awaiting for integration away from current integration.
+echo "Moving all held issues away from current integration"
 run_C
 
 # Remove the resultfile. We don't want to disclose those details.

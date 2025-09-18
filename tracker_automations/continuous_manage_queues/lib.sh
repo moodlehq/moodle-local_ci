@@ -159,7 +159,7 @@ function run_A3a() {
             # Arriving here, we assume we are going to proceed with the move.
             moved=$((moved+1))
             if [ -n "${dryrun}" ]; then
-            echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})"
+                echo "Dry-run: $BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})"
                 continue
             fi
             # For fields available in the default screen, it's ok to use updateIssue or SetField, but in this case
