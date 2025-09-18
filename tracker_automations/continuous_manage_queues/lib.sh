@@ -107,9 +107,13 @@ function run_A2() {
                    --field "${customfield_currentlyInIntegration}"=Yes \
                    --field "${customfield_componentLeadReview}"=No \
                    --field "${customfield_integrator}"= \
-                   --field "${customfield_tester}"= \
+                   --field "${customfield_tester}"=
+
+        ${basereq} --action addComment \
+                   --issue ${issue} \
                    --comment "Continuous queues manage: Moving to current because it's important" \
                    --role "Integrators"
+
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
     done
 }
@@ -179,7 +183,10 @@ function run_A3a() {
                        --field "${customfield_currentlyInIntegration}"=Yes \
                        --field "${customfield_componentLeadReview}"=No \
                        --field "${customfield_integrator}"= \
-                       --field "${customfield_tester}"= \
+                       --field "${customfield_tester}"=
+
+            ${basereq} --action addComment \
+                       --issue ${issue} \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold (before ${lastweekdate})" >> "${logfile}"
@@ -287,7 +294,10 @@ function run_B1b() {
                        --field "${customfield_currentlyInIntegration}"=Yes \
                        --field "${customfield_componentLeadReview}"=No \
                        --field "${customfield_integrator}"= \
-                       --field "${customfield_tester}"= \
+                       --field "${customfield_tester}"=
+
+            ${basereq} --action addComment \
+                       --issue ${issue} \
                        --comment "Continuous queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current on-sync: threshold" >> "${logfile}"
@@ -399,7 +409,10 @@ function run_C() {
                    --transition "CI Global Self-Transition" \
                    --field "${customfield_currentlyInIntegration}"= \
                    --field "${customfield_integrator}"= \
-                   --field "${customfield_tester}"= \
+                   --field "${customfield_tester}"=
+
+        ${basereq} --action addComment \
+                   --issue ${issue} \
                    --comment "Continuous queues manage: Moving out from current because it's held" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved out from current: held" >> "${logfile}"

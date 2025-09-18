@@ -105,7 +105,7 @@ fi
 
 # Behaviour A, before the release (normally the 5 weeks between freeze and release).
 echo "Current time period is ${behaviorAB} the release, lastweekdate is ${lastweekdate}"
-echo "Current behaviour is ${behaviourA3}"
+echo "Current behaviour is ${behaviorA3}"
 
 if [ $behaviorAB == "before" ]; then
     # A1, add the "integration_held" + standard comment to any new feature or improvement arriving to candidates.

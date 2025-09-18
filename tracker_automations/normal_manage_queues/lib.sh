@@ -69,7 +69,10 @@ function run_A() {
                    --field "${customfield_currentlyInIntegration}"=Yes \
                    --field "${customfield_componentLeadReview}"=No \
                    --field "${customfield_integrator}"= \
-                   --field "${customfield_tester}"= \
+                   --field "${customfield_tester}"=
+
+        ${basereq} --action addComment \
+                   --issue ${issue} \
                    --comment "Normal queues manage: Moving to current because it's important" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: important" >> "${logfile}"
@@ -141,7 +144,10 @@ function run_B() {
                     --field "${customfield_currentlyInIntegration}"=Yes \
                     --field "${customfield_componentLeadReview}"=No \
                     --field "${customfield_integrator}"= \
-                    --field "${customfield_tester}"= \
+                    --field "${customfield_tester}"=
+
+            ${basereq} --action addComment \
+                       --issue ${issue} \
                        --comment "Normal queues manage: Moving to current given we are below the threshold ($currentmin)" \
                        --role "Integrators"
             echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} moved to current: threshold" >> "${logfile}"
@@ -179,7 +185,10 @@ function run_C() {
         ${basereq} --action transitionIssue \
                    --issue ${issue} \
                    --transition "CI Global Self-Transition" \
-                   --field "${customfield_integrationPriority}"=1 \
+                   --field "${customfield_integrationPriority}"=1
+
+        ${basereq} --action addComment \
+                   --issue ${issue} \
                    --comment "Normal queues manage: Raising integration priority after ${waitingdays} days awaiting" \
                    --role "Integrators"
         echo "$BUILD_NUMBER $BUILD_TIMESTAMP ${issue} raised integration priority" >> "${logfile}"
