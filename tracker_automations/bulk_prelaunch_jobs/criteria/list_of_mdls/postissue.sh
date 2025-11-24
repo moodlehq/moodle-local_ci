@@ -1,5 +1,12 @@
+if [[ ! -z "${update_test_results_customfield}" ]]; then
 # Update the automated testing field with the results.
-${basereq} --action setFieldValue \
-    --issue ${issue} \
-    --field "Automated test results" \
-    --file "${resultfile}.${issue}.txt"
+    ${basereq} --action setFieldValue \
+        --issue ${issue} \
+        --field "Automated test results" \
+        --file "${resultfile}.${issue}.txt"
+else
+    # Just add the results as a comment.
+    ${basereq} --action addComment \
+        --issue ${issue} \
+        --file "${resultfile}.${issue}.txt"
+fi
