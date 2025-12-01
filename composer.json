@@ -5,8 +5,7 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "moodlehq/moodle-cs": "^3.6",
-        "mustache/mustache": "^2.14.2",
-        "phpcompatibility/php-compatibility": "dev-develop#5e207bcc"
+        "mustache/mustache": "^2.14.2"
     },
     "config": {
         "allow-plugins": {
