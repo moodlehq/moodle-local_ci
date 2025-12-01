@@ -1,4 +1,4 @@
-if [[ ! -z "${post_results_in_customfield}" ]]; then
+if [[ "${post_results_in_customfield}" == "true" ]]; then
     # Update the automated testing field with the results.
     ${basereq} --action setFieldValue \
         --issue ${issue} \
