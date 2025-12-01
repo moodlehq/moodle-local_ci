@@ -1,5 +1,5 @@
-if [[ ! -z "${update_test_results_customfield}" ]]; then
-# Update the automated testing field with the results.
+if [[ ! -z "${post_results_in_customfield}" ]]; then
+    # Update the automated testing field with the results.
     ${basereq} --action setFieldValue \
         --issue ${issue} \
         --field "Automated test results" \
