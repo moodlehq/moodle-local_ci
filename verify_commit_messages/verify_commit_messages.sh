@@ -18,7 +18,7 @@
 #   COMMIT (short) * LEVEL (error or warning) * DESCRIPTION (details)
 # Example:
 #   1234abcd*error*Commit messages does not start with issue code.
-#   2345bcde*warning*Body line too long (184 > 132).
+#   2345bcde*warning*Body line too long (184 > 72).
 #   2345cdef*error*Subject line too long (75 > 72).
 
 # Don't be strict. Script has own error control handle
@@ -200,10 +200,10 @@ for c in ${commits}; do
                 fi
             # check rest of lines
             else
-                # verify 3rd and following lines are <= 132 chars long. Warn.
+                # verify 3rd and following lines are <= 72 chars long. Warn.
                 len=$(echo "${line}" | wc -c)
-                if [[ ${len} -gt 132 ]]; then
-                    echo "${c}*error*The line #${currentline} has more than 132 characters (found: ${len})"
+                if [[ ${len} -gt 72 ]]; then
+                    echo "${c}*error*The line #${currentline} has more than 72 characters (found: ${len})"
                     numproblems=$((numproblems+1))
                 fi
             fi
