@@ -92,7 +92,12 @@ spl_autoload_register([\core_component::class, 'classloader']);
 // Now, let's invoke phpunit utils to generate the phpunit.xml file
 
 // We need to load a few things manually.
-require_once("{$dirroot}/lib/phpunit/classes/util.php");
+if (!class_exists(\phpunit_util::class)) {
+    // From Moodle 5.2 we can autoload the phpunit_util class.
+    // Including the old location will throw debugging notices. In this case, because we do not load the full Moodle
+    // stack, this excepts.
+    require_once("{$dirroot}/lib/phpunit/classes/util.php");
+}
 
 if (!class_exists(\core\output\core_renderer::class)) {
     // From Moodle 4.5 we start to autoload the output components and including outputcomponents.php will throw an exception.
