@@ -30,7 +30,8 @@ function run_A1() {
 
     # Get the list of issues.
     ${basereq} --action getIssueList \
-               --jql "(filter='${filter_candidatesForIntegration}') \
+               --jql "((filter='${filter_candidatesForIntegration}') \
+                     OR (filter='${filter_candidatesForCLR}')) \
                      AND type IN ('New Feature', Improvement) \
                      AND NOT filter = '${filter_issuesVotedToUnhold}' \
                      AND NOT (status changed FROM 'Waiting for component lead review' TO 'Waiting for integration review' AFTER -2h)" \
