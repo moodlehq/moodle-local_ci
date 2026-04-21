@@ -59,7 +59,7 @@ if [[ ${target} == "main" ]]; then
         -p DATABASE=pgsql \
         -p PHPVERSION=${php_version} \
         -p BROWSER="Chrome (js)" \
-        -p USE_SELVERSION='145.0-20260222' \
+        -p SELVERSION='145.0-20260222' \
         -p BEHAT_INCREASE_TIMEOUT=4 \
         -p MOBILE_VERSION=latest-test \
         -p INSTALL_PLUGINAPP=ci \
