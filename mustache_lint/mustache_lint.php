@@ -234,10 +234,38 @@ function print_message($severity, $mesage) {
 }
 
 /**
+ * If the template content has a top‐level tag that needs a container,
+ * wrap it in the appropriate parent before validation.
+ *
+ * @param string $content Raw HTML snippet from Mustache render.
+ * @return string The potentially wrapped snippet.
+ */
+function wrap_disallowed_root_elements($content) {
+    // Map of tag → [open wrapper, close wrapper].
+    $wrappers = [
+        'li' => ['<ul>', '</ul>'],
+        'tr' => ['<table>', '</table>'],
+        'td' => ['<table><tr>', '</tr></table>'],
+    ];
+
+    $trimmed = ltrim($content);
+    foreach ($wrappers as $tag => list($open, $close)) {
+        // If the very first tag is this one, wrap it.
+        if (stripos($trimmed, "<{$tag}") === 0) {
+            return $open . "\n" . $content . "\n" . $close;
+        }
+    }
+
+    return $content;
+}
+
+/**
  * Wrap the template content in a html5 wrapper and validate it
  */
 function check_html_validation($content) {
     if (strpos($content, '<head>') === false) {
+         // Wrap lone <li>, <tr>, etc., into valid wrappers.
+        $content = wrap_disallowed_root_elements($content);
         // Primative detection if we have full html body, if not, wrap it.
         // (This isn't bulletproof, obviously).
         $wrappedcontent = "<!DOCTYPE html><html lang=\"en\"><head><title>Validate</title></head><body>\n{$content}\n</body></html>";
