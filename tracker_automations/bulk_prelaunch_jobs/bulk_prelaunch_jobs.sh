@@ -96,6 +96,20 @@ while read issue; do
             echo "(x) Error: the branch definition ${candidate} is missing branch, custom field or php version. All them are required" | tee -a "${resultfile}.${issue}.txt"
             continue
         fi
+        # Calculate if the target branch still ships theme_classic. It was removed
+        # from Moodle 5.3 (main) onwards, but all the older stables keep it. The
+        # criteria jobs.sh use this to decide about launching the classic suites.
+        classicsupported="true"
+        if [[ ${target} == "main" ]]; then
+            classicsupported="false"
+        elif [[ ${target} =~ ^MOODLE_([0-9]+)_STABLE$ ]] && [[ ${BASH_REMATCH[1]} -ge 503 ]]; then
+            classicsupported="false"
+        fi
+        # Label used by the runs covering all the theme suites available in the branch.
+        allsuiteslabel="boost and classic"
+        if [[ ${classicsupported} == "false" ]]; then
+            allsuiteslabel="boost"
+        fi
         # Fetch branch information
         ${basereq} --action getFieldValue \
                    --issue ${issue} \
