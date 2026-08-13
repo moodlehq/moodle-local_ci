@@ -61,7 +61,7 @@ fi
 
 # We want to launch always a Behat (BrowserKit (non-js)) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-nonjs" ]]; then
-    echo -n "Behat (NonJS - boost and classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (NonJS - ${allsuiteslabel} / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then
         # Add the ~@javascript tag, because this is a non-js run and skip known flaky tests.
@@ -100,8 +100,9 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch sometimes a Behat (Chrome (js) - classic) job.
-if [[ "${jobtype}" == "behat-chrome" ]]; then
+# We want to launch sometimes a Behat (Chrome (js) - classic) job,
+# only if the target branch still ships theme_classic.
+if [[ "${jobtype}" == "behat-chrome" ]] && [[ "${classicsupported}" == "true" ]]; then
     echo -n "Behat (Chrome - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then
@@ -141,8 +142,10 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (Firefox (js) - classic) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
+# We want to launch always a Behat (Firefox (js) - classic) job,
+# only if the target branch still ships theme_classic.
+if { [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; } &&
+        [[ "${classicsupported}" == "true" ]]; then
     echo -n "Behat (Firefox - classic / ${behat_options}): " >> "${resultfile}.jenkinscli"
     final_tags=
     if [[ -n "${behat_tags}" ]]; then

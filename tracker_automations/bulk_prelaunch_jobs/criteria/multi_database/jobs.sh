@@ -103,7 +103,7 @@ if [[ "${jobtype}" == "behat-nonjs" ]]; then
     dbtypesarr=($(echo ${dbtypes} | tr ',' '\n'))
     for dbtype in "${dbtypesarr[@]}"; do
         dbtype=${dbtype//[[:blank:]]/}
-        echo -n "Behat (NonJS - boost and classic - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
+        echo -n "Behat (NonJS - ${allsuiteslabel} - ${dbtype} / ${behat_options}): " >> "${resultfile}.jenkinscli"
         final_tags=
         if [[ -n "${behat_tags}" ]]; then
             # Add the ~@javascript tag, because this is a non-js run and skip known flaky tests.

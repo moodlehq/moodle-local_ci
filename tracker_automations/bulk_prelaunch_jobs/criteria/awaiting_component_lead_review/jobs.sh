@@ -15,7 +15,7 @@ ${jenkinsreq} "DEV.02 - Developer-requested PHPUnit" \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # We want to launch always a Behat (BrowserKit (non-js)) job
-echo -n "Behat (NonJS - boost and classic): " >> "${resultfile}.jenkinscli"
+echo -n "Behat (NonJS - ${allsuiteslabel}): " >> "${resultfile}.jenkinscli"
 ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -p REPOSITORY=${repository} \
     -p BRANCH=${branch} \
@@ -36,8 +36,8 @@ ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
     -w >> "${resultfile}.jenkinscli" < /dev/null
 
 # We want to launch a Behat (Firefox (js) - classic) job
-# only if the target branch is main.
-if [[ ${target} == "main" ]]; then
+# only if the target branch still ships theme_classic.
+if [[ ${classicsupported} == "true" ]]; then
     echo -n "Behat (Firefox - classic): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \

@@ -25,6 +25,15 @@ Configuration is passed via environment variables (as documented in the script h
 - `jobtype` — defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
 - `quiet` — with any value different from "false", don't perform any action in the Tracker.
 
+## Notes
+
+- **Theme classic runs.** `theme_classic` was removed from Moodle 5.3 (`main`) onwards,
+  so the `BEHAT_SUITE=classic` jobs are only launched for the branches that still ship
+  it. `bulk_prelaunch_jobs.sh` calculates `classicsupported` (and `allsuiteslabel`, used
+  by the runs covering all the suites) for every target branch, and the criteria
+  `jobs.sh` rely on it: `main` and `MOODLE_503_STABLE` (and up) get no classic jobs,
+  older stables keep them.
+
 ---
 
 See [CLAUDE.md](../../CLAUDE.md) for repo-wide conventions and [docs/testing.md](../../docs/testing.md) for the testing workflow.

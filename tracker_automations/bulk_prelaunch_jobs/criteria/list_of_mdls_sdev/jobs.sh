@@ -22,7 +22,7 @@ fi
 
 # We want to launch always a Behat (BrowserKit (non-js)) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-nonjs" ]]; then
-    echo -n "Behat (NonJS - boost and classic): " >> "${resultfile}.jenkinscli"
+    echo -n "Behat (NonJS - ${allsuiteslabel}): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
@@ -47,8 +47,9 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch sometimes a Behat (Chrome (js) - classic) job.
-if [[ "${jobtype}" == "behat-chrome" ]]; then
+# We want to launch sometimes a Behat (Chrome (js) - classic) job,
+# only if the target branch still ships theme_classic.
+if [[ "${jobtype}" == "behat-chrome" ]] && [[ "${classicsupported}" == "true" ]]; then
     echo -n "Behat (Chrome - classic): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
@@ -59,6 +60,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p BEHAT_SUITE=classic \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
 
 # We want to launch always a Behat (Firefox (js) - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
@@ -73,9 +75,11 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
-# We want to launch always a Behat (Firefox (js) - classic) job
-if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
-    echo -n "Behat (Firefox -classic): " >> "${resultfile}.jenkinscli"
+# We want to launch always a Behat (Firefox (js) - classic) job,
+# only if the target branch still ships theme_classic.
+if { [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; } &&
+        [[ "${classicsupported}" == "true" ]]; then
+    echo -n "Behat (Firefox - classic): " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "SDEV.01 - Developer-requested Behat" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
