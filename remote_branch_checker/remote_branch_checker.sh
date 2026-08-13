@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Runs all the prechecks against a remote branch and generates the smurf report with the results.
+# This is the aggregator (the "prechecker") invoking many of the other checks in this repository.
+#
 # $gitcmd: Path to git executable.
 # $phpcmd: Path to php executable.
 # $remote: Remote repo where the branch to check resides.

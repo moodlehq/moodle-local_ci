@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Syncs a source branch onto a target branch and pushes the result to a remote.
+#
 # WORKSPACE: Path to the workspace directory.
 # $gitcmd: Path to git executable.
 # $gitdir: Directory containing git repo.

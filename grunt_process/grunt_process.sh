@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Runs the grunt build and detects when the committed built assets (JS/CSS) are out of date.
+#
 # $WORKSPACE: Directory where results are saved.
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to install the DB

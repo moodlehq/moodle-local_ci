@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Verifies the phpunit.xml files and the layout of the PHPUnit test files.
+#
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine

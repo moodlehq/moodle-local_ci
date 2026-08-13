@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Lists all the files changed between two commits. Used as a building block by other checks.
+#
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 # $initialcommit: hash of the initial commit

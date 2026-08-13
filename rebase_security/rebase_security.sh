@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Rebases the security branches onto integration and pushes them to the security remote.
+#
 # $gitcmd: Path to git executable.
 # $gitdir: Directory containing git repo (will be cloned to if .git doesn't exist)
 # $gitbranch: Branch we are rebasing onto

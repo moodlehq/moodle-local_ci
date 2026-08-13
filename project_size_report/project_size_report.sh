@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Generates the code size and metrics reports for the project.
+#
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to check
 # $pearpath: Path where the pear executables are available
