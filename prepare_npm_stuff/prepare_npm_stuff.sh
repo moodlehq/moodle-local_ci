@@ -40,12 +40,10 @@ npmcmd=${npmcmd:-npm}
 # GitHub blocks plain HTTPS git access. Switching the clone to git@github.com (SSH) isn't
 # a fix either: GitHub requires an authenticated key for every SSH clone, even of public
 # repos, and CI has no SSH key configured for it.
-for cmd in curl jq; do
-    if ! hash ${cmd} 2>/dev/null; then
-        echo "ERROR: ${cmd} not found in the system. It's required to install nvm from the CDN."
-        exit 1
-    fi
-done
+if ! hash curl 2>/dev/null; then
+    echo "ERROR: curl not found in the system. It's required to install nvm from the CDN."
+    exit 1
+fi
 
 export NVM_DIR="$HOME/.nvm"
 if [[ ! -d "${NVM_DIR}" ]]; then
@@ -54,10 +52,12 @@ if [[ ! -d "${NVM_DIR}" ]]; then
 fi
 
 # Always fetch the latest release (nvm.sh and nvm-exec are just overwritten each run).
-# Note: the curl call is kept separate from the jq call (rather than piped) so that a
-# failed download (empty/partial response) can't be masked by jq happily parsing it.
+# Note: the curl call is kept separate from the version-extraction below (rather than
+# piped) so that a failed download (empty/partial response) can't be masked by the
+# extraction happily parsing it. Parsed with sed rather than jq since the latter isn't
+# guaranteed to be installed everywhere this script runs.
 nvmreleasejson=$(curl --silent --fail "https://data.jsdelivr.com/v1/packages/gh/nvm-sh/nvm/resolved?specifier=latest")
-NVM_VERSION=$(echo "${nvmreleasejson}" | jq -r '.version // empty')
+NVM_VERSION=$(echo "${nvmreleasejson}" | sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
 if [[ -z "${NVM_VERSION}" ]]; then
     echo "ERROR: Unable to determine latest nvm version from jsdelivr"
     exit 1
