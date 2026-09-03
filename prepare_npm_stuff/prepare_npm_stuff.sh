@@ -40,6 +40,13 @@ npmcmd=${npmcmd:-npm}
 # GitHub blocks plain HTTPS git access. Switching the clone to git@github.com (SSH) isn't
 # a fix either: GitHub requires an authenticated key for every SSH clone, even of public
 # repos, and CI has no SSH key configured for it.
+for cmd in curl jq; do
+    if ! hash ${cmd} 2>/dev/null; then
+        echo "ERROR: ${cmd} not found in the system. It's required to install nvm from the CDN."
+        exit 1
+    fi
+done
+
 export NVM_DIR="$HOME/.nvm"
 if [[ ! -d "${NVM_DIR}" ]]; then
     echo "INFO: nvm not found, installing via jsdelivr CDN"
@@ -47,15 +54,20 @@ if [[ ! -d "${NVM_DIR}" ]]; then
 fi
 
 # Always fetch the latest release (nvm.sh and nvm-exec are just overwritten each run).
-NVM_VERSION=$(curl --silent --fail "https://data.jsdelivr.com/v1/packages/gh/nvm-sh/nvm/resolved?specifier=latest" | jq -r '.version')
-if [[ -z "${NVM_VERSION}" || "${NVM_VERSION}" == "null" ]]; then
+# Note: the curl call is kept separate from the jq call (rather than piped) so that a
+# failed download (empty/partial response) can't be masked by jq happily parsing it.
+nvmreleasejson=$(curl --silent --fail "https://data.jsdelivr.com/v1/packages/gh/nvm-sh/nvm/resolved?specifier=latest")
+NVM_VERSION=$(echo "${nvmreleasejson}" | jq -r '.version // empty')
+if [[ -z "${NVM_VERSION}" ]]; then
     echo "ERROR: Unable to determine latest nvm version from jsdelivr"
     exit 1
 fi
+# Normalise away any leading "v" so we don't end up with a "vv..." version/URL below.
+NVM_VERSION="${NVM_VERSION#v}"
 export NVM_VERSION
 echo "INFO: using nvm version: v${NVM_VERSION}"
-curl --silent --fail -o "${NVM_DIR}/nvm.sh" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@${NVM_VERSION}/nvm.sh"
-curl --silent --fail -o "${NVM_DIR}/nvm-exec" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@${NVM_VERSION}/nvm-exec"
+curl --silent --fail -o "${NVM_DIR}/nvm.sh" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v${NVM_VERSION}/nvm.sh"
+curl --silent --fail -o "${NVM_DIR}/nvm-exec" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v${NVM_VERSION}/nvm-exec"
 chmod +x "${NVM_DIR}/nvm-exec"
 
 # Move to base directory

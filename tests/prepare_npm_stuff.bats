@@ -23,7 +23,7 @@ setup () {
     assert_output --partial "INFO:    - Installed grunt"
 }
 
-@test "prepare_npm_stuff: No HOME/.nvm installs via git" {
+@test "prepare_npm_stuff: No HOME/.nvm installs via jsdelivr CDN" {
     # Set up.
     rm -fr $HOME/.nvm
 
@@ -31,8 +31,7 @@ setup () {
 
     # Assert result.
     assert_success
-    assert_output --partial "INFO: nvm not found, installing via git"
-    assert_output --partial "INFO: nvm git installation found, updating to latest release"
+    assert_output --partial "INFO: nvm not found, installing via jsdelivr CDN"
     assert_output --partial "INFO: using nvm version:"
     assert_output --partial "INFO: .nvmrc file found: $(<$gitdir/.nvmrc). Installing node..."
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
@@ -67,8 +66,7 @@ setup () {
     # Note this can end with some warnings if npm/node is not installed elsewhere and with
     # exit status = 2, but, as commented above, we are not asserting that here (success / failure...)
     # so that's ok.
-    assert_output --partial "INFO: nvm not found, installing via git"
-    assert_output --partial "INFO: nvm git installation found, updating to latest release"
+    assert_output --partial "INFO: nvm not found, installing via jsdelivr CDN"
     assert_output --partial "INFO: using nvm version:"
     assert_output --partial "INFO: .nvmrc not found, nvm install skipped"
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
