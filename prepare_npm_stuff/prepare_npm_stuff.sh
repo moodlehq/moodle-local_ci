@@ -3,7 +3,6 @@
 # $gitbranch: Branch we are going to install the DB
 # $nodecmd: Optional, path to the node executable (global)
 # $npmcmd: Optional, path to the npm executable (global)
-# $gitcmd: Optional, path to the git executable
 # $shifterversion: Optional, defaults to 0.4.6. Not installed if there is a package.json file (present in 29 and up)
 # $recessversion: Optional, defaults to 1.1.9 (Important! it's the only legacy version working. Older ones
 #    lead to empty results). Not installed if there is a package.json file (present in 29 and up)
@@ -34,29 +33,42 @@ shifterversion=${shifterversion:-0.4.6}
 recessversion=${recessversion:-1.1.9}
 nodecmd=${nodecmd:-node}
 npmcmd=${npmcmd:-npm}
-gitcmd=${gitcmd:-git}
 
 # Check if we have nvm installed @ home.
+# Note: nvm is fetched from the jsdelivr CDN (a mirror of GitHub content, served from
+# jsdelivr's own domain) rather than "git clone https://github.com/...". In some regions
+# GitHub blocks plain HTTPS git access. Switching the clone to git@github.com (SSH) isn't
+# a fix either: GitHub requires an authenticated key for every SSH clone, even of public
+# repos, and CI has no SSH key configured for it.
+for cmd in curl jq; do
+    if ! hash ${cmd} 2>/dev/null; then
+        echo "ERROR: ${cmd} not found in the system. It's required to install nvm from the CDN."
+        exit 1
+    fi
+done
+
 export NVM_DIR="$HOME/.nvm"
-if [[ ! -r "${NVM_DIR}/nvm.sh" ]];then
-    # nvm not installed, let's install it with git
-    echo "INFO: nvm not found, installing via git"
-    $gitcmd clone --quiet https://github.com/nvm-sh/nvm.git "${NVM_DIR}"
+if [[ ! -d "${NVM_DIR}" ]]; then
+    echo "INFO: nvm not found, installing via jsdelivr CDN"
+    mkdir -p "${NVM_DIR}"
 fi
 
-# Try to update to latest release (if git based installation only).
-if [[ -d "${NVM_DIR}/.git" ]]; then
-    # nvm installed via git, fetch updates
-    cd "${NVM_DIR}"
-    echo "INFO: nvm git installation found, updating to latest release"
-    $gitcmd fetch --quiet --tags origin
-    # Get latest nvm release and use it
-    export NVM_VERSION=$($gitcmd describe --abbrev=0 --tags --match "v[0-9]*" $($gitcmd rev-list --tags --max-count=1))
-    echo "INFO: using nvm version: ${NVM_VERSION}"
-    $gitcmd checkout --quiet ${NVM_VERSION}
-else
-    echo "INFO: nvm installation is not git-based, updating skipped"
+# Always fetch the latest release (nvm.sh and nvm-exec are just overwritten each run).
+# Note: the curl call is kept separate from the jq call (rather than piped) so that a
+# failed download (empty/partial response) can't be masked by jq happily parsing it.
+nvmreleasejson=$(curl --silent --fail "https://data.jsdelivr.com/v1/packages/gh/nvm-sh/nvm/resolved?specifier=latest")
+NVM_VERSION=$(echo "${nvmreleasejson}" | jq -r '.version // empty')
+if [[ -z "${NVM_VERSION}" ]]; then
+    echo "ERROR: Unable to determine latest nvm version from jsdelivr"
+    exit 1
 fi
+# Normalise away any leading "v" so we don't end up with a "vv..." version/URL below.
+NVM_VERSION="${NVM_VERSION#v}"
+export NVM_VERSION
+echo "INFO: using nvm version: v${NVM_VERSION}"
+curl --silent --fail -o "${NVM_DIR}/nvm.sh" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v${NVM_VERSION}/nvm.sh"
+curl --silent --fail -o "${NVM_DIR}/nvm-exec" "https://cdn.jsdelivr.net/gh/nvm-sh/nvm@v${NVM_VERSION}/nvm-exec"
+chmod +x "${NVM_DIR}/nvm-exec"
 
 # Move to base directory
 cd ${gitdir}
