@@ -117,6 +117,12 @@ $mustache = new Mustache_Engine([
             $content = preg_replace('([{}]{2,3})', '{{=<% %>=}}${0}<%={{ }}=%>', $content);
             return '"' . $content . '"';
         },
+        'shortentext' => function ($text) {
+            [$length, $content] = explode(',', $text, 2);
+            $length = intval(trim($length));
+            $content = trim($content);
+            return substr($content, 0, $length) . (strlen($content > $length) ? '...' : '');
+        },
         'js' => [$jshelper, 'add_js'],
     ],
     'partials_loader' => new simple_core_component_mustache_loader($theme),
