@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Verifies the commit messages in the branch (issue code, line length...) and the AMOS script syntax.
+#
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 # $initialcommit: hash of the initial commit

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Detects any illegal (trailing) whitespace introduced in the branch.
+#
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
 

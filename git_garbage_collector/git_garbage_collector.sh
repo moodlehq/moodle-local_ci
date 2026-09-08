@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Performs a periodic (every N runs) git gc of the CI repository, to keep it healthy.
+#
 # $gitcmd: Path to git executable.
 # $gitdir:  Directory containing git repo.
 # $gcinterval: Number of runs before performing a manual gc of the repo. Defaults to 25. 0 means disabled.

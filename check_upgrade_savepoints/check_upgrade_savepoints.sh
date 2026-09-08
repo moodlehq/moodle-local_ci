@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Verifies that all the DB upgrade steps declare their upgrade savepoints correctly.
+#
 # $WORKSPACE
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo

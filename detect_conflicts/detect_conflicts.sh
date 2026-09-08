@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Detects any leftover merge conflict marker in the branch.
+#
 # $gitdir: Directory containing git repo
 # $gitbranch: Branch we are going to examine
 

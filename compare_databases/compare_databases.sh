@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Installs the DB on one branch, upgrades it from another one, and compares both schemas
+# in order to detect any install vs upgrade drift.
+#
 # $gitcmd: Path to the git executable
 # $phpcmd: Path to the PHP CLI executable
 # $mysqlcmd: Path to the mysql CLI executable

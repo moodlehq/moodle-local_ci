@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Checks that all the plugin versions are within the allowed range, optionally setting them.
+#
 # $WORKSPACE: Path to the directory where test reults will be sent
 # $phpcmd: Path to the PHP CLI executable
 # $gitdir: Directory containing git repo

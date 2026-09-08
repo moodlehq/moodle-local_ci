@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Outputs the list of all the valid components. Requires a working site/DB.
+#
 # $phpcmd: Path to the PHP CLI executable
 # $mysqlcmd: Path to the mysql CLI executable
 # $gitdir: Directory containing git repo

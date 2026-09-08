@@ -16,6 +16,7 @@
 /cscope.*
 /.patches/
 /.idea/
+/.ai/
 /nbproject/
 CVS
 .DS_Store
