@@ -145,6 +145,16 @@ if ! $($gitcmd remote -v | grep '^integration[[:space:]]]*' | grep -q $integrati
     $gitcmd remote add integration $integrationremote
 fi
 
+# Remove index.lock, but only if it is stale (older than any single run of this
+# script should take). A fresh lock may belong to another rebase_security run
+# that is genuinely in progress against this same $gitdir, so it must be left
+# alone. This must run before the rebase --abort cleanup below, since an abort
+# needs to update the index and will itself fail while the lock is present.
+if [ -f ".git/index.lock" ] && [ -n "$(find ".git/index.lock" -mmin +15 2>/dev/null)" ]; then
+    info "Removing stale .git/index.lock from a previous uncontrolled run"
+    rm -f ".git/index.lock"
+fi
+
 # Cancel possible rebases in progress if last run finished with an uncontrolled error.
 if [ -d ".git/rebase-merge" ] || [ -d ".git/rebase-apply" ]; then
     $gitcmd rebase --abort
