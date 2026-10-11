@@ -50,9 +50,9 @@ emptycheckstyle='<?xml version="1.0" encoding="utf-8"?><checkstyle></checkstyle>
 # First of all, we need a clean clone of moodle.git in the repository,
 # verify if it's there or no.
 if [[ ! -d "$WORKSPACE/.git" ]]; then
-    echo "Warn: git not found, proceeding to clone git://git.moodle.org/moodle.git"
+    echo "Warn: git not found, proceeding to clone https://github.com/moodle/moodle.git"
     rm -fr "${WORKSPACE}/"
-    ${gitcmd} clone -q git://git.moodle.org/moodle.git "${WORKSPACE}"
+    ${gitcmd} clone -q https://github.com/moodle/moodle.git "${WORKSPACE}"
 fi
 
 cd "${WORKSPACE}"

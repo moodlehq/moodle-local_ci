@@ -6,7 +6,7 @@ set -e
 # (since last roll happened, aka, since upstream last commit)
 function check_issue () {
     # Fetch the equivalent moodle.git branch (from where we are looking for existing commits).
-    if ! $(${1} fetch -q git://git.moodle.org/moodle.git ${3#"origin/"}); then
+    if ! $(${1} fetch -q https://github.com/moodle/moodle.git ${3#"origin/"}); then
         echo "  WARNING: moodle.git ${3#"origin/"} fetching problems, cannot look for commits. Please check if that's correct."
         return 0
     fi
