@@ -12,6 +12,11 @@ class js_helper {
      * @param string $moodleroot path to moodle $CFG->dirroot.
      */
     public function __construct($moodleroot) {
+        // Moodle 5.1+ keeps Node dependencies and configuration above the public directory.
+        if (!file_exists($moodleroot . '/package.json') && file_exists(dirname($moodleroot) . '/package.json')) {
+            $moodleroot = dirname($moodleroot);
+        }
+
         $this->moodleroot = $moodleroot;
         $this->js = '';
     }
