@@ -258,12 +258,12 @@ for branch in "${activebranches[@]}"
 do
     echo "Looking for unowned commits in $branch"
     # Verify the branch exists.
-    if [[ -z $($gitcmd ls-remote --heads git://git.moodle.org/moodle.git ${branch#"origin/"}) ]]; then
+    if [[ -z $($gitcmd ls-remote --heads https://github.com/moodle/moodle.git ${branch#"origin/"}) ]]; then
         echo "  WARNING: moodle.git ${branch#"origin/"} fetching problems, cannot look for commits. Please check if that's correct."
         continue
     fi
     # Fetch the equivalent moodle.git branch
-    $gitcmd fetch -q git://git.moodle.org/moodle.git $branch
+    $gitcmd fetch -q https://github.com/moodle/moodle.git $branch
     # Find unowned commits since moodle.git
     unownedcommits=$($gitcmd log origin/${branch}...FETCH_HEAD \
         --pretty=format:"  %h %s (%an)" --no-merges \
@@ -281,7 +281,7 @@ for branch in "${activebranches[@]}"
 do
     echo "Looking for $branch issues and matching against tracker fix versions"
     # Fetch the equivalent moodle.git branch
-    $gitcmd fetch -q git://git.moodle.org/moodle.git $branch
+    $gitcmd fetch -q https://github.com/moodle/moodle.git $branch
     # Look for all the issues having commits in the branch.
     foundissues=$($gitcmd log origin/${branch}...FETCH_HEAD \
         --pretty=format:"%s" --no-merges \

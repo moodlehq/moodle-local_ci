@@ -120,7 +120,7 @@ npmcmd=${npmcmd:-npm}
 
 if [[ ! -d "$gitdir/.git" ]]; then
     info "Doing initial clone of moodle.git, git repo not found"
-    $gitcmd clone git://git.moodle.org/moodle.git "${gitdir}"
+    $gitcmd clone https://github.com/moodle/moodle.git "${gitdir}"
 fi
 
 
