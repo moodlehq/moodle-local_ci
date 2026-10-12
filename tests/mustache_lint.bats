@@ -147,6 +147,18 @@ setup () {
     assert_output --partial "No mustache problems found"
 }
 
+@test "mustache_lint: Test userdate renders dates in attributes and headings" {
+    git_apply_fixture 31-mustache_lint-userdate.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    assert_success
+    assert_output --partial "lib/templates/test_userdate.mustache - OK: Mustache rendered html succesfully"
+    refute_output --partial "Empty heading"
+}
+
 @test "mustache_lint: Test quote and uniq helpers are working" {
     # Set up.
     git_apply_fixture 31-mustache_lint-quote_and_uniq.patch

@@ -111,6 +111,11 @@ $mustache = new Mustache_Engine([
         'str' => function($text) { return '((' . urlencode($text) . '))'; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
         'uniqid' => function() { return "would-be-a-uniqid"; },
+        'userdate' => function($text, $helper) {
+            $timestamp = explode(',', $text, 2)[0];
+            // Use a UTC ISO date for HTML validation, regardless of the requested display format.
+            return gmdate('c', trim($helper->render($timestamp)));
+        },
         'quote' => function($text, $helper) {
             $content = $helper->render(trim($text));
             $content = str_replace('"', '\\"', $content);
