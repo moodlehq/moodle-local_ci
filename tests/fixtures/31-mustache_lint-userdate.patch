@@ -1,0 +1,32 @@
+From cb144ffbf6686bf5ae20bbc3dfe0e611e111c21d Mon Sep 17 00:00:00 2001
+From: Cameron Ball <cameron@cameron1729.xyz>
+Date: Mon, 12 Oct 2026 21:12:52 +0800
+Subject: [PATCH] Test userdate helper rendering
+
+---
+ lib/templates/test_userdate.mustache | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 lib/templates/test_userdate.mustache
+
+diff --git a/lib/templates/test_userdate.mustache b/lib/templates/test_userdate.mustache
+new file mode 100644
+index 00000000..f9fc796a
+--- /dev/null
++++ b/lib/templates/test_userdate.mustache
+@@ -0,0 +1,16 @@
++{{!
++    @template core/test_userdate
++
++    Example context (json):
++    {
++        "timestamp": 1521531208,
++        "epoch": 0,
++        "event": {
++            "timestamp": 946684800
++        }
++    }
++}}
++<time datetime="{{#userdate}} {{timestamp}}, %Y-%m-%dT%T%z {{/userdate}}">Date</time>
++<time datetime="{{#userdate}} {{epoch}}, %Y-%m-%dT%T%z {{/userdate}}">Epoch</time>
++<h2>{{#userdate}} {{timestamp}}, {{#str}} strftimedatetime, core_langconfig {{/str}} {{/userdate}}</h2>
++<h2>{{#userdate}} {{event.timestamp}}, {{#str}} strftimedatetime, core_calendar {{/str}} {{/userdate}}</h2>
