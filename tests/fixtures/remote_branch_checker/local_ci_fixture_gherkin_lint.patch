@@ -1,0 +1,27 @@
+From 9b6576ae8f0b9d1b3a080480e63d3e944f2cb4c7 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 glossary: introduce Gherkin lint errors
+
+---
+ mod/glossary/tests/behat/local_ci.feature | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 mod/glossary/tests/behat/local_ci.feature
+
+diff --git a/mod/glossary/tests/behat/local_ci.feature b/mod/glossary/tests/behat/local_ci.feature
+new file mode 100644
+index 00000000..26b29fe9
+--- /dev/null
++++ b/mod/glossary/tests/behat/local_ci.feature
+@@ -0,0 +1,11 @@
++@mod @mod_glossary
++Feature: Glossary entries can be organised in categories
++  In order to organise glossary entries
++  As a teacher
++  I need to manage categories
++
++
++  Scenario: A fixture for Gherkin linting
++    Given I log in as "admin"
++      And I am on site homepage
++    Then I should see "Dashboard"

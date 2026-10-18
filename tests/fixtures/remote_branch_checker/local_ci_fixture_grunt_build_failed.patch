@@ -1,0 +1,21 @@
+From b0065338eeb959b84e6bb1a2e05cf240fb2eb933 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 theme: introduce an SCSS style error
+
+---
+ theme/boost/scss/moodle/reports.scss | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/theme/boost/scss/moodle/reports.scss b/theme/boost/scss/moodle/reports.scss
+index 79289a17..9e9b619b 100644
+--- a/theme/boost/scss/moodle/reports.scss
++++ b/theme/boost/scss/moodle/reports.scss
+@@ -12,3 +12,7 @@
+ #page-report-participation-index .participationselectform div label[for=menuinstanceid] {
+     margin-left: 0; // No left margin for LTR.
+ }
++
++.local-ci-fixture {
++    color:red;
++}

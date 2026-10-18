@@ -1,0 +1,22 @@
+From f6b3ec67144cce5e4180cb5dcca7c06fcd746705 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-53572 mathjax: change the fallback language
+
+---
+ filter/mathjaxloader/filter.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/filter/mathjaxloader/filter.php b/filter/mathjaxloader/filter.php
+index 9fab93b9..2839f961 100644
+--- a/filter/mathjaxloader/filter.php
++++ b/filter/mathjaxloader/filter.php
+@@ -69,7 +69,7 @@ class filter_mathjaxloader extends moodle_text_filter {
+         }
+ 
+         // No more guessing, use English.
+-        return 'en';
++        return 'en-gb';
+     }
+ 
+     /*

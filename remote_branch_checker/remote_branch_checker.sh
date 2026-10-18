@@ -57,8 +57,8 @@ fi
 
 cd "${WORKSPACE}"
 
-# Define the integration.git if does not exist.
-if ! $(git remote -v | grep -q '^integration[[:space:]]\+.*integration.git'); then
+# Add the integration remote if it has not been configured.
+if ! ${gitcmd} remote get-url integration > /dev/null 2>&1; then
     echo "Warn: integration remote not found, adding https://github.com/moodle/integration.git"
     ${gitcmd} remote add integration https://github.com/moodle/integration.git
 fi

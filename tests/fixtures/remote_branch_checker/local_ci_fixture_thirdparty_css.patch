@@ -1,0 +1,19 @@
+From 913d24b4c15d97e79d1f44dcd24316c794a2b6f1 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 jquery: change a third party stylesheet
+
+---
+ lib/jquery/ui-1.12.1/jquery-ui.theme.css | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/jquery/ui-1.12.1/jquery-ui.theme.css b/lib/jquery/ui-1.12.1/jquery-ui.theme.css
+index 6089438c..0b3b0735 100644
+--- a/lib/jquery/ui-1.12.1/jquery-ui.theme.css
++++ b/lib/jquery/ui-1.12.1/jquery-ui.theme.css
+@@ -441,3 +441,5 @@ a.ui-button:active,
+ 	-webkit-box-shadow: 0px 0px 5px #666666;
+ 	box-shadow: 0px 0px 5px #666666;
+ }
++
++.local-ci-fixture { unknown-property: 0; }

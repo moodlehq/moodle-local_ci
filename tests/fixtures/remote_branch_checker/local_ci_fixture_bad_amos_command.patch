@@ -1,0 +1,51 @@
+From 4a36b89c92cc457b3f7792e9572d401e70d0175f Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 1/2] MDL-12345 data: move strings with an invalid AMOS command
+
+AMOS BEGIN
+ MOV [nametextarea, mod_data][fieldtypelabel, datafield_textarea]
+ MOV [nameurl, data],[fieldtypelabel, datafield_url]
+AMOS END
+---
+ mod/data/lang/en/data.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mod/data/lang/en/data.php b/mod/data/lang/en/data.php
+index d96f7f5f..36092158 100644
+--- a/mod/data/lang/en/data.php
++++ b/mod/data/lang/en/data.php
+@@ -23,7 +23,7 @@
+  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
+ 
+-$string['action'] = 'Action';
++$string['action'] = 'Action!';
+ $string['add'] = 'Add entry';
+ $string['addcomment'] = 'Add comment';
+ $string['addentries'] = 'Add entries';
+
+From 0012cde38e4dee320b2d619774b2e56f1b0ec6fe Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 2/2] MDL-12345 admin: include an incomplete AMOS block
+
+AMOS BEGIN
+ CPY [accessdenied, admin],[accessdenied, core]
+---
+ lang/en/admin.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lang/en/admin.php b/lang/en/admin.php
+index 40807129..245bc96f 100644
+--- a/lang/en/admin.php
++++ b/lang/en/admin.php
+@@ -22,7 +22,7 @@
+  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
+ 
+-$string['accessdenied'] = 'Access denied';
++$string['accessdenied'] = 'Access denied!';
+ $string['accounts'] = 'Accounts';
+ $string['addcategory'] = 'Add a category';
+ $string['additionalhtml'] = 'Additional HTML';

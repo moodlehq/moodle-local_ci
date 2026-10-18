@@ -1,0 +1,25 @@
+From ad1b39dbb03b7bcb87b707ff2addb3dee0da5fb3 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 data: move strings with valid AMOS commands
+
+AMOS BEGIN
+ MOV [nameurl, data],[fieldtypelabel, datafield_url]
+AMOS END
+---
+ mod/data/lang/en/data.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mod/data/lang/en/data.php b/mod/data/lang/en/data.php
+index d96f7f5f..36092158 100644
+--- a/mod/data/lang/en/data.php
++++ b/mod/data/lang/en/data.php
+@@ -23,7 +23,7 @@
+  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
+ 
+-$string['action'] = 'Action';
++$string['action'] = 'Action!';
+ $string['add'] = 'Add entry';
+ $string['addcomment'] = 'Add comment';
+ $string['addentries'] = 'Add entries';

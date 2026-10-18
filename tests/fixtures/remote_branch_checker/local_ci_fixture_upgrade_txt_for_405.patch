@@ -1,0 +1,30 @@
+From bce86bfdd433b82b394e1c0384485bdb19f64e72 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 docs: update upgrade notes
+
+---
+ UPGRADING.md    | 2 ++
+ lib/upgrade.txt | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/UPGRADING.md b/UPGRADING.md
+index 1a57aa9a..60672af0 100644
+--- a/UPGRADING.md
++++ b/UPGRADING.md
+@@ -121,3 +121,5 @@ The format of this change log follows the advice given at [Keep a CHANGELOG](htt
+   If `istrackeduser` is pre-computed for the course module's course, it can be provided here to avoid an additional function call.
+ 
+   For more information see [MDL-81610](https://tracker.moodle.org/browse/MDL-81610)
++
++A local_ci fixture changes the upgrade notes.
+diff --git a/lib/upgrade.txt b/lib/upgrade.txt
+index fa87a508..620c3e36 100644
+--- a/lib/upgrade.txt
++++ b/lib/upgrade.txt
+@@ -2587,3 +2587,5 @@ API changes:
+ * changed blog API
+ * new text editor API
+ * new my moodle and profiles API
++
++* A local_ci fixture changes the upgrade notes.
