@@ -159,6 +159,30 @@ setup () {
     refute_output --partial "Empty heading"
 }
 
+@test "mustache_lint: Test htmldatetime renders timestamps and preserves overrides" {
+    git_apply_fixture 31-mustache_lint-htmldatetime.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    assert_success
+    assert_output --partial "lib/templates/test_htmldatetime.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}
+
+@test "mustache_lint: Test htmldatetime exposes invalid overrides to validation" {
+    git_apply_fixture 31-mustache_lint-htmldatetime-invalid.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    assert_failure
+    assert_output --partial 'Bad value “2/1/1933” for attribute “datetime”'
+    assert_output --partial 'Bad value “0” for attribute “datetime”'
+}
+
 @test "mustache_lint: Test quote and uniq helpers are working" {
     # Set up.
     git_apply_fixture 31-mustache_lint-quote_and_uniq.patch

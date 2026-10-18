@@ -116,6 +116,12 @@ $mustache = new Mustache_Engine([
             // Use a UTC ISO date for HTML validation, regardless of the requested display format.
             return gmdate('c', trim($helper->render($timestamp)));
         },
+        'htmldatetime' => function($text, $helper) {
+            [$datetime, $timestamp] = explode(',', $text, 3);
+            $datetime = (string) $helper->render(trim($datetime));
+            // Preserve supplied values and use a UTC ISO date when formatting timestamps for validation.
+            return $datetime !== '' ? $datetime : gmdate('c', trim($helper->render($timestamp)));
+        },
         'quote' => function($text, $helper) {
             $content = $helper->render(trim($text));
             $content = str_replace('"', '\\"', $content);
