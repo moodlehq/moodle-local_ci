@@ -20,11 +20,13 @@ require_once(__DIR__.'/amoslib.php');
 [$options, $unrecognized] = cli_get_params(
     [
         'help' => false,
+        'debug' => false,
         'commitid' => '',
         'git' => '/usr/bin/git',
     ],
     [
         'h' => 'help',
+        'd' => 'debug',
         'c' => 'commitid',
         'g' => 'git',
     ]
@@ -41,6 +43,7 @@ if ($options['help']) {
 
 Options:
 -h, --help            Print out this help
+-d, --debug         Show valid AMOS instructions
 -c, --commitid      git commit hash
 -g, --git           The path to the git binary
 ";
@@ -82,5 +85,5 @@ if ($returncode !== 0) {
 }
 $filesmodified = join(",", $output);
 
-$returncode = amos_script_parser::validate_commit_message($message, $filesmodified);
+$returncode = amos_script_parser::validate_commit_message($message, $filesmodified, $options['debug']);
 exit($returncode);
