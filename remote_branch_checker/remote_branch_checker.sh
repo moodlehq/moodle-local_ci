@@ -58,9 +58,9 @@ fi
 cd "${WORKSPACE}"
 
 # Define the integration.git if does not exist.
-if ! $(git remote -v | grep -q '^integration[[:space:]]]*git:.*integration.git'); then
-    echo "Warn: integration remote not found, adding git://git.moodle.org/integration.git"
-    ${gitcmd} remote add integration git://git.moodle.org/integration.git
+if ! $(git remote -v | grep -q '^integration[[:space:]]\+.*integration.git'); then
+    echo "Warn: integration remote not found, adding https://github.com/moodle/integration.git"
+    ${gitcmd} remote add integration https://github.com/moodle/integration.git
 fi
 
 # We are into a _precheck branch from previous run. We don't like any leftover
