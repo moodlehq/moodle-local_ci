@@ -1,0 +1,55 @@
+From 82097693e063ec7240d788e53a194f514bb07b01 Mon Sep 17 00:00:00 2001
+From: Test <test@test.com>
+Date: Fri, 23 Oct 2026 15:49:31 +0200
+Subject: [PATCH] Add dialog closedby test template
+
+---
+ .../linting_dialog_closedby.mustache          | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 lib/templates/linting_dialog_closedby.mustache
+
+diff --git a/lib/templates/linting_dialog_closedby.mustache b/lib/templates/linting_dialog_closedby.mustache
+new file mode 100644
+index 0000000..3aee6ca
+--- /dev/null
++++ b/lib/templates/linting_dialog_closedby.mustache
+@@ -0,0 +1,36 @@
++{{!
++    This file is part of Moodle - http://moodle.org/
++
++    Moodle is free software: you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation, either version 3 of the License, or
++    (at your option) any later version.
++
++    Moodle is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++
++    You should have received a copy of the GNU General Public License
++    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
++}}
++{{!
++    @template core/linting_dialog_closedby
++
++    A test for mustache linting tests: the dialog element with the closedby
++    attribute (HTML spec feature added in late 2025).
++
++    Classes required for JS:
++    * none
++
++    Data attributes required for JS:
++    * none
++
++    Context variables required for this template:
++    * none
++
++    Example context (json):
++    {
++    }
++}}
++<dialog id="example-dialog" closedby="closerequest">Hello</dialog>
+-- 
+2.56.0
+

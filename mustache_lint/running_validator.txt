@@ -3,3 +3,12 @@ Running a local instance of the validator for more reliability..
 
 1/ npm install
 2/ The mustache_lint.sh script should use the npm-installed version of validator automatically.
+
+Requirements:
+
+- Java 17 or above is needed to run the vnu.jar. If java is not available on
+  the PATH, the vnu-jar npm package downloads a JRE automatically during
+  npm install (node_modules/.cache/vnu-jar/java/). Failing that, the check
+  exits with an error suggesting how to install Java, or how to point the
+  check at a validator service instead (e.g. a local Docker container or
+  the public https://html5.validator.nu) via the $validator variable.
