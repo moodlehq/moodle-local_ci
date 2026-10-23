@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cameron Ball <cameron@cameron1729.xyz>
+Date: Sun, 18 Oct 2026 08:55:33 +0000
+Subject: [PATCH] Test invalid htmldatetime overrides
+
+---
+ lib/templates/test_htmldatetime_invalid.mustache | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 lib/templates/test_htmldatetime_invalid.mustache
+
+diff --git a/lib/templates/test_htmldatetime_invalid.mustache b/lib/templates/test_htmldatetime_invalid.mustache
+new file mode 100644
+--- /dev/null
++++ b/lib/templates/test_htmldatetime_invalid.mustache
+@@ -0,0 +1,15 @@
++{{!
++    @template core/test_htmldatetime_invalid
++
++    Example context (json):
++    {
++        "timestamp": 0,
++        "dates": [
++            {"datetime": "2/1/1933"},
++            {"datetime": "0"}
++        ]
++    }
++}}
++{{#dates}}
++<time datetime="{{#htmldatetime}} {{datetime}}, {{timestamp}}, %Y-%m-%d {{/htmldatetime}}">Date</time>
++{{/dates}}

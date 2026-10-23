@@ -111,10 +111,16 @@ $mustache = new Mustache_Engine([
         'str' => function($text) { return '((' . urlencode($text) . '))'; },
         'pix' => function($text) { return "<img src='pix-placeholder.png' alt='$text'>"; },
         'uniqid' => function() { return "would-be-a-uniqid"; },
-        'userdate' => function($text, $helper) {
+        'userdate' => function(string $text, Mustache_LambdaHelper $helper): string {
             $timestamp = explode(',', $text, 2)[0];
             // Use a UTC ISO date for HTML validation, regardless of the requested display format.
             return gmdate('c', trim($helper->render($timestamp)));
+        },
+        'htmldatetime' => function(string $text, Mustache_LambdaHelper $helper): string {
+            [$datetime, $timestamp] = explode(',', $text, 3);
+            $datetime = (string) $helper->render(trim($datetime));
+            // Preserve supplied values and use a UTC ISO date when formatting timestamps for validation.
+            return $datetime !== '' ? $datetime : gmdate('c', trim($helper->render($timestamp)));
         },
         'quote' => function($text, $helper) {
             $content = $helper->render(trim($text));

@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cameron Ball <cameron@cameron1729.xyz>
+Date: Sun, 18 Oct 2026 08:55:33 +0000
+Subject: [PATCH] Test htmldatetime helper rendering
+
+---
+ lib/templates/test_htmldatetime.mustache | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 lib/templates/test_htmldatetime.mustache
+
+diff --git a/lib/templates/test_htmldatetime.mustache b/lib/templates/test_htmldatetime.mustache
+new file mode 100644
+--- /dev/null
++++ b/lib/templates/test_htmldatetime.mustache
+@@ -0,0 +1,21 @@
++{{!
++    @template core/test_htmldatetime
++
++    Example context (json):
++    {
++        "timestamp": -1167523200,
++        "epoch": 0,
++        "datetime": "1933-01-02",
++        "event": {
++            "timestamp": 946684800
++        }
++    }
++}}
++<time datetime="{{#htmldatetime}}
++    {{$datetimeval}}{{missing}}{{/datetimeval}},
++    {{$timestampval}}{{timestamp}}{{/timestampval}},
++    {{$datetimeformatval}}%Y-%m-%dT%H:%M%z{{/datetimeformatval}}
++{{/htmldatetime}}">Date</time>
++<time datetime="{{#htmldatetime}} , {{epoch}}, %Y-%m-%dT%H:%M%z {{/htmldatetime}}">Epoch</time>
++<time datetime="{{#htmldatetime}} , {{event.timestamp}}, %Y-%m-%d {{/htmldatetime}}">Event</time>
++<time datetime="{{#htmldatetime}} {{datetime}}, unused, unused {{/htmldatetime}}">Existing date</time>
