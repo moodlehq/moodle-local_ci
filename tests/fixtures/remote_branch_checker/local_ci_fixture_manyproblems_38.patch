@@ -1,0 +1,157 @@
+From ef081b5364f514072cc19a047e8b6e83ab30e464 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 1/7] MDL-53136 phpcs: introduce warning and error
+
+---
+ lib/weblib.php | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/lib/weblib.php b/lib/weblib.php
+index f786ba92..5bf1d57a 100644
+--- a/lib/weblib.php
++++ b/lib/weblib.php
+@@ -211,6 +211,9 @@ function qualified_me() {
+ function is_https() {
+     global $CFG;
+ 
++    // this is a warning and next line is an error here for local_ci tests
++    $foo = 1+1;
++
+     return (strpos($CFG->wwwroot, 'https://') === 0);
+ }
+ 
+
+From 567944dd442d6d02714e82f3f2175bb93de9b2ec Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 2/7] MDL-53136 eslint: introduce a warning and an error
+
+---
+ lib/javascript-static.js | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/javascript-static.js b/lib/javascript-static.js
+index a4296ee3..0f5f8776 100644
+--- a/lib/javascript-static.js
++++ b/lib/javascript-static.js
+@@ -6,6 +6,7 @@
+  * @param {Array} modules
+  */
+ M.yui.add_module = function(modules) {
++    console.log('This is a local_ci test');
+     for (var modname in modules) {
+         YUI_config.modules[modname] = modules[modname];
+     }
+
+From 9dbbbc3ac11120cab155fd5552871fb048a7a5d9 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 3/7] MDL-53136 phplint: introduce a php lint error
+
+---
+ help.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/help.php b/help.php
+index 39053dbf..d16f043a 100644
+--- a/help.php
++++ b/help.php
+@@ -55,4 +55,4 @@ echo $data->text;
+ if (isset($data->completedoclink)) {
+     echo $data->completedoclink;
+ }
+-echo $OUTPUT->footer();
++echo $OUTPUT->footer()
+
+From 115ac64632230880285797ec66d3f2b7fa47ab98 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 4/7] MDL-53136 csslint: introduce a warning and error
+
+---
+ mod/assign/styles.css | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/mod/assign/styles.css b/mod/assign/styles.css
+index 66bae378..7a72b14f 100644
+--- a/mod/assign/styles.css
++++ b/mod/assign/styles.css
+@@ -1242,3 +1242,7 @@
+     padding: 0;
+ }
+ /** End of YUI tree fix **/
++
++.local-ci-fixture {
++    local-ci-fake-property: 0;
++}
+
+From 4008c69109e20bcc61f1b7004847a1a03513eb36 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 5/7] MDL-53136 savepoint make an unmatched savepoint
+
+---
+ mod/quiz/db/upgrade.php | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/mod/quiz/db/upgrade.php b/mod/quiz/db/upgrade.php
+index 0435aed4..ea295143 100644
+--- a/mod/quiz/db/upgrade.php
++++ b/mod/quiz/db/upgrade.php
+@@ -145,7 +145,6 @@ function xmldb_quiz_upgrade($oldversion) {
+         // Delete orphaned group overrides.
+         $DB->delete_records_select('quiz_overrides', 'groupid = 0 AND userid IS NULL');
+ 
+-        upgrade_mod_savepoint(true, 2019062400, 'quiz');
+     }
+ 
+     // Automatically generated Moodle v3.5.0 release upgrade line.
+
+From 1fb37cc532f85f334d4054618fdf1e39857a2b9a Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 6/7] MDL-12345 commit: error in commit message due to wrong
+ issue id
+
+---
+ CONTRIBUTING.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CONTRIBUTING.txt b/CONTRIBUTING.txt
+index cfadb71b..2a03475c 100644
+--- a/CONTRIBUTING.txt
++++ b/CONTRIBUTING.txt
+@@ -1,7 +1,7 @@
+ CONTRIBUTING TO MOODLE
+ ======================
+ 
+-Moodle is made by people like you. We are members of a big worldwide community
++Moodle! is made by people like you. We are members of a big worldwide community
+ of developers, designers, teachers, testers, translators and other users. We
+ work in universities, schools, companies and other places. You are very welcome
+ to join us and contribute to the project.
+
+From 07c5bddd922778192ebabdd043da7d22db80ba31 Mon Sep 17 00:00:00 2001
+From: Dan Poltawski <dan@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH 7/7] MDL-53136 thirdparty: undocumented change to third party
+ file
+
+---
+ lib/amd/src/loglevel.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/amd/src/loglevel.js b/lib/amd/src/loglevel.js
+index 0c319469..b132ee41 100644
+--- a/lib/amd/src/loglevel.js
++++ b/lib/amd/src/loglevel.js
+@@ -23,7 +23,7 @@
+ //
+ 
+ // Description of import into Moodle:
+-// Download from https://github.com/pimterry/loglevel/dist
++// Local CI fixture: download from https://github.com/pimterry/loglevel/dist
+ // Copy loglevel.js into lib/amd/src/ in Moodle folder.
+ // Add the license as a comment to the file and these instructions.
+ 

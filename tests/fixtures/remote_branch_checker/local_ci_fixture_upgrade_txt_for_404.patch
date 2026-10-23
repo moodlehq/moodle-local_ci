@@ -1,0 +1,29 @@
+From 4a5d1a5eab7b9415d55a3d5b3f1ec7d934ff63bf Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 docs: update upgrade notes
+
+---
+ UPGRADING.md    | 2 ++
+ lib/upgrade.txt | 2 ++
+ 2 files changed, 4 insertions(+)
+ create mode 100644 UPGRADING.md
+
+diff --git a/UPGRADING.md b/UPGRADING.md
+new file mode 100644
+index 00000000..608a3574
+--- /dev/null
++++ b/UPGRADING.md
+@@ -0,0 +1,2 @@
++
++A local_ci fixture changes the upgrade notes.
+diff --git a/lib/upgrade.txt b/lib/upgrade.txt
+index 49ec5e12..6b22602d 100644
+--- a/lib/upgrade.txt
++++ b/lib/upgrade.txt
+@@ -2581,3 +2581,5 @@ API changes:
+ * changed blog API
+ * new text editor API
+ * new my moodle and profiles API
++
++* A local_ci fixture changes the upgrade notes.

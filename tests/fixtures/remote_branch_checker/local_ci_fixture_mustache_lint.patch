@@ -1,0 +1,64 @@
+From 023b59e349c7f9da2ebacadc20f561ebe12ee79e Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 templates: introduce validation and example errors
+
+---
+ lib/templates/html_validation.mustache | 8 ++++++++
+ lib/templates/invalid_json.mustache    | 8 ++++++++
+ lib/templates/no_example.mustache      | 7 +++++++
+ lib/templates/no_template.mustache     | 1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 lib/templates/html_validation.mustache
+ create mode 100644 lib/templates/invalid_json.mustache
+ create mode 100644 lib/templates/no_example.mustache
+ create mode 100644 lib/templates/no_template.mustache
+
+diff --git a/lib/templates/html_validation.mustache b/lib/templates/html_validation.mustache
+new file mode 100644
+index 00000000..74d9c85f
+--- /dev/null
++++ b/lib/templates/html_validation.mustache
+@@ -0,0 +1,8 @@
++{{!
++    @template core/html_validation
++
++    Fixture for Mustache linting.
++    Example context (json):
++    {}
++}}
++<span>Hello World
+diff --git a/lib/templates/invalid_json.mustache b/lib/templates/invalid_json.mustache
+new file mode 100644
+index 00000000..3452c82f
+--- /dev/null
++++ b/lib/templates/invalid_json.mustache
+@@ -0,0 +1,8 @@
++{{!
++    @template core/invalid_json
++
++    Fixture for Mustache linting.
++    Example context (json):
++    {"text": "World",}
++}}
++<p>Hello {{text}}</p>
+diff --git a/lib/templates/no_example.mustache b/lib/templates/no_example.mustache
+new file mode 100644
+index 00000000..4db21c73
+--- /dev/null
++++ b/lib/templates/no_example.mustache
+@@ -0,0 +1,7 @@
++{{!
++    @template core/no_example
++
++    Fixture for Mustache linting.
++
++}}
++<p>Hello World</p>
+diff --git a/lib/templates/no_template.mustache b/lib/templates/no_template.mustache
+new file mode 100644
+index 00000000..cb179d16
+--- /dev/null
++++ b/lib/templates/no_template.mustache
+@@ -0,0 +1 @@
++<p>Hello World</p>

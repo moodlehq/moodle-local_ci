@@ -1,0 +1,59 @@
+From 8816df445b063ef91f42053dc88374586ff4ddb1 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 forum: add a field without external or backup
+ support
+
+---
+ mod/forum/db/install.xml |  1 +
+ mod/forum/db/upgrade.php | 13 +++++++++++++
+ mod/forum/version.php    |  2 +-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/mod/forum/db/install.xml b/mod/forum/db/install.xml
+index 0edb6ab2..75a0fbd5 100644
+--- a/mod/forum/db/install.xml
++++ b/mod/forum/db/install.xml
+@@ -6,6 +6,7 @@
+   <TABLES>
+     <TABLE NAME="forum" COMMENT="Forums contain and structure discussion">
+       <FIELDS>
++        <FIELD NAME="bats" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="general" SEQUENCE="false"/>
+         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+         <FIELD NAME="type" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="general" SEQUENCE="false"/>
+diff --git a/mod/forum/db/upgrade.php b/mod/forum/db/upgrade.php
+index c6b87ef5..e0422adf 100644
+--- a/mod/forum/db/upgrade.php
++++ b/mod/forum/db/upgrade.php
+@@ -335,5 +335,18 @@ function xmldb_forum_upgrade($oldversion) {
+         upgrade_mod_savepoint(true, 2021101101, 'forum');
+     }
+ 
++    if ($oldversion < 2022041901) {
++        // Define field bats to be added to forum.
++        $table = new xmldb_table('forum');
++        $field = new xmldb_field('bats', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'bats', 'id');
++
++        // Conditionally launch add field bats.
++        if (!$dbman->field_exists($table, $field)) {
++            $dbman->add_field($table, $field);
++        }
++
++        upgrade_mod_savepoint(true, 2022041901, 'forum');
++    }
++
+     return true;
+ }
+diff --git a/mod/forum/version.php b/mod/forum/version.php
+index 1f9bc3a3..dcbbb6af 100644
+--- a/mod/forum/version.php
++++ b/mod/forum/version.php
+@@ -24,6 +24,6 @@
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+-$plugin->version   = 2022041900;       // The current module version (Date: YYYYMMDDXX).
++$plugin->version   = 2022041901;       // The current module version (Date: YYYYMMDDXX).
+ $plugin->requires  = 2022041200;       // Requires this Moodle version.
+ $plugin->component = 'mod_forum';      // Full name of the plugin (used for diagnostics)

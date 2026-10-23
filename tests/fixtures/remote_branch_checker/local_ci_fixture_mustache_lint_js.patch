@@ -1,0 +1,32 @@
+From 5145841db7139101a5ac978d042cb5f98a791687 Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 templates: introduce JavaScript warnings
+
+---
+ lib/templates/js_test.mustache | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 lib/templates/js_test.mustache
+
+diff --git a/lib/templates/js_test.mustache b/lib/templates/js_test.mustache
+new file mode 100644
+index 00000000..4cc8914f
+--- /dev/null
++++ b/lib/templates/js_test.mustache
+@@ -0,0 +1,16 @@
++{{!
++    @template core/js_test
++
++    Fixture for detecting eslint problems.
++
++    Example context (json):
++    {
++        "text": "World!"
++    }
++
++}}
++<p>Hello {{text}}</p>
++{{#js}}
++    var my_message = 'Hello {{text}}';
++    alert(my_message);
++{{/js}}

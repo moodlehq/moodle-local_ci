@@ -3,20 +3,31 @@
 load libs/shared_setup
 
 setup_file() {
-    # All these tests need a moodle git clone with a remote available, called "local_ci_tests"
-    # pointing to the https://git.in.moodle.com/integration/prechecker.git repository.
-    cd "${gitdir}"
-    git remote add local_ci_tests https://git.in.moodle.com/integration/prechecker.git
-    cd $OLDPWD
+    # Only the commit histories matter, so use empty commits in a temporary local remote.
+    local fixture="$BATS_FILE_TMPDIR/remote.git"
+    git init --quiet --bare --initial-branch=main "$fixture"
+    git -C "$fixture" config user.name "Local CI"
+    git -C "$fixture" config user.email "local_ci@moodle.com"
 
-    # Note that we'll be removing this custom remote at the end of the tests in this file.
-}
+    local tree basecommit targetcommit
+    tree=$(git -C "$fixture" mktree </dev/null)
+    basecommit=$(git -C "$fixture" commit-tree "$tree" -m "Common ancestor")
+    sourcecommit=$(git -C "$fixture" commit-tree "$tree" -p "$basecommit" -m "Original source")
+    divergedcommit=$(git -C "$fixture" commit-tree "$tree" -p "$basecommit" -m "Rewritten source")
+    fastforwardcommit=$(git -C "$fixture" commit-tree "$tree" -p "$sourcecommit" -m "New source commit")
+    targetcommit=$(git -C "$fixture" commit-tree "$tree" -p "$sourcecommit" -m "Unexpected target commit")
+    export sourcecommit divergedcommit fastforwardcommit
 
-teardown_file() {
-    # Remove the custom remote we added in setup_file.
-    cd "${gitdir}"
-    git remote remove local_ci_tests
-    cd $OLDPWD
+    git -C "$fixture" branch main "$basecommit"
+    git -C "$fixture" branch local_ci_git_sync_master "$sourcecommit"
+    git -C "$fixture" branch local_ci_git_sync_main "$sourcecommit"
+    git -C "$fixture" branch local_ci_git_sync_master_diverged "$divergedcommit"
+    git -C "$fixture" branch local_ci_git_sync_master_fast_forward "$fastforwardcommit"
+    git -C "$fixture" branch local_ci_git_sync_main_advanced "$targetcommit"
+
+    export LOCAL_CI_TESTS_GITDIR="$BATS_FILE_TMPDIR/checkout"
+    export gitdir="$LOCAL_CI_TESTS_GITDIR"
+    git clone --quiet --origin local_ci_tests "$fixture" "$gitdir"
 }
 
 setup() {
@@ -56,7 +67,7 @@ teardown() {
     assert_output --partial "Creating local source branch ${source}"
     assert_output --partial "Creating local target branch ${target}"
     assert_output --partial "Branches ${source} and ${target} are the same"
-    assert_output --partial "Current HEAD: d76e211be6ae65fe"
+    assert_output --partial "Current HEAD: ${sourcecommit:0:16}"
 }
 
 @test "git_sync_two_branches: Both branches have diverged (reset)" {
@@ -71,7 +82,7 @@ teardown() {
 
     assert_output --partial "Diverged branches (surely because of some rewrite"
     assert_output --partial "Hard-resetting target branch ${target} to source branch ${source}"
-    assert_output --partial "New HEAD: 150d134fa2d519cd"
+    assert_output --partial "New HEAD: ${divergedcommit:0:16}"
 }
 
 @test "git_sync_two_branches: There are new commits in source branch (fast forward)" {
@@ -86,7 +97,7 @@ teardown() {
 
     assert_output --partial "The source ${source} branch got new commits."
     assert_output --partial "Fast-forwarding target branch ${target} to source branch ${source}"
-    assert_output --partial "New HEAD: 5f3a55f6f01142d8"
+    assert_output --partial "New HEAD: ${fastforwardcommit:0:16}"
 }
 
 @test "git_sync_two_branches: There are new commits in target branch (error)" {
@@ -102,5 +113,5 @@ teardown() {
     assert_output --partial "The target ${target} branch got new commits."
     assert_output --partial "Error: target ${target} branch has some unexpected commits, not available in the source"
     assert_output --partial "fix the target ${target} branch manually"
-    assert_output --partial "Expected HEAD: d76e211be6ae65fe"
+    assert_output --partial "Expected HEAD: ${sourcecommit:0:16}"
 }

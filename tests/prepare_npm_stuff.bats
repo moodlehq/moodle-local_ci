@@ -5,7 +5,6 @@ load libs/shared_setup
 setup () {
     create_git_branch main origin/main
     rm -fr $gitdir/node_modules
-    rm -fr $gitdir/npm-shrinkwrap.json
 }
 
 @test "prepare_npm_stuff: Verify that .nvm existence is checked" {
@@ -72,19 +71,19 @@ setup () {
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
 }
 
-@test "prepare_npm_stuff: Install custom node v16.11.0 works ok" {
+@test "prepare_npm_stuff: Install custom node v22.11.0 works ok" {
     # Set up.
-    echo "v16.11.0" > $gitdir/.nvmrc
+    echo "v22.11.0" > $gitdir/.nvmrc
 
     ci_run prepare_npm_stuff/prepare_npm_stuff.sh
 
     # Assert result.
     assert_success
     assert_output --partial "INFO: using nvm version:"
-    assert_output --partial "INFO: .nvmrc file found: v16.11.0. Installing node.."
+    assert_output --partial "INFO: .nvmrc file found: v22.11.0. Installing node.."
     assert_output --partial "INFO: node installation completed"
-    assert_output --partial "INFO: node version: v16.11.0"
-    assert_output --partial "INFO: npm version: 8.0.0"
+    assert_output --partial "INFO: node version: v22.11.0"
+    assert_output --partial "INFO: npm version: 10.9.0"
     assert_output --partial "INFO: Installing npm stuff following package/shrinkwrap details"
     assert_output --partial "INFO:    - Installed grunt"
 }

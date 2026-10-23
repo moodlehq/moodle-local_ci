@@ -1,0 +1,22 @@
+From 7382badc8d81e544a8a107d36f3a09beba40151a Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 docs: update contributing information
+
+---
+ CONTRIBUTING.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CONTRIBUTING.txt b/CONTRIBUTING.txt
+index cfadb71b..2a03475c 100644
+--- a/CONTRIBUTING.txt
++++ b/CONTRIBUTING.txt
+@@ -1,7 +1,7 @@
+ CONTRIBUTING TO MOODLE
+ ======================
+ 
+-Moodle is made by people like you. We are members of a big worldwide community
++Moodle! is made by people like you. We are members of a big worldwide community
+ of developers, designers, teachers, testers, translators and other users. We
+ work in universities, schools, companies and other places. You are very welcome
+ to join us and contribute to the project.

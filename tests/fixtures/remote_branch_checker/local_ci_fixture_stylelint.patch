@@ -1,0 +1,32 @@
+From f750a257752f2b34d49c2304f697f7640377782e Mon Sep 17 00:00:00 2001
+From: Local CI <local_ci@moodle.com>
+Date: Mon, 20 May 2024 12:00:00 +0000
+Subject: [PATCH] MDL-12345 css: introduce stylelint errors
+
+---
+ report/progress/styles.css | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/report/progress/styles.css b/report/progress/styles.css
+index ede47d06..508b24e2 100644
+--- a/report/progress/styles.css
++++ b/report/progress/styles.css
+@@ -2,8 +2,7 @@
+ #page-report-progress-index #completion-progress td {
+     padding: 2px 2px;
+     font-weight: normal;
+-    border-right: 1px solid #eee;
+-}
++    border-right:1px solid #EEE; }
+ 
+ #page-report-progress-index .progress-actions {
+     text-align: center;
+@@ -11,7 +10,7 @@
+ }
+ 
+ #page-report-progress-index .completion_pagingbar {
+-    margin: 1em 0;
++    margin:1em 0;
+     text-align: center;
+ }
+ 
