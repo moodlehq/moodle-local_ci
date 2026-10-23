@@ -64,7 +64,8 @@ Options:
 -h, --help            Print out this help
 -f, --filename        Path to file
 -v, --validator       Validator URL (e.g. https://html5.validator.nu/ or http://localhost:8080/)
-                      or path to validator JAR file (e.g. /path/to/vnu.jar)
+                      or path to validator JAR file (e.g. /path/to/vnu.jar). A Java 17+
+                      runtime is required when using a JAR.
 -b, --basename        Full path to the moodle base dir
 ";
     echo $help;
@@ -304,6 +305,50 @@ function print_eslint_problems($problems, $ignoreparseerrors) {
 }
 
 /**
+ * Locate a Java 17+ runtime usable to run the vnu.jar validator.
+ *
+ * Order: JAVACMD env var (resolved by mustache_lint.sh), system java, then the
+ * JRE auto-installed by the vnu-jar npm package during npm install
+ * (node_modules/.cache/vnu-jar/java/).
+ *
+ * @param string $validator path to the validator jar.
+ * @return string|false java executable path, or false when no usable runtime is found.
+ */
+function resolve_validator_java($validator) {
+    // Honour a runtime already resolved by the caller (mustache_lint.sh).
+    $javacmd = getenv('JAVACMD');
+    if ($javacmd !== false && $javacmd !== '') {
+        return $javacmd;
+    }
+
+    // System java: needs to be 17 or above for vnu.jar 26.x.
+    $javaoutput = @shell_exec('java -version 2>&1');
+    if ($javaoutput !== null && preg_match('/version "(\d+)(?:\.(\d+))?/', $javaoutput, $matches)) {
+        $major = (int)$matches[1];
+        if ($major == 1 && isset($matches[2])) {
+            // Java 8 and older report as "1.8".
+            $major = (int)$matches[2];
+        }
+        if ($major >= 17) {
+            return 'java';
+        }
+    }
+
+    // JRE auto-installed by the vnu-jar npm package during postinstall.
+    // The jar lives at <node_modules>/vnu-jar/build/dist/vnu.jar.
+    $nodemodules = dirname(dirname(dirname(dirname($validator))));
+    $cachedir = $nodemodules . '/.cache/vnu-jar/java';
+    foreach (['/jdk-*/bin/java', '/jdk-*/bin/java.exe', '/jdk-*/Contents/Home/bin/java'] as $glob) {
+        $candidates = glob($cachedir . $glob);
+        if (!empty($candidates)) {
+            return $candidates[0];
+        }
+    }
+
+    return false;
+}
+
+/**
  * Call the html validator with example content
  * @return mixed false if a problem occured or the response from validator
  */
@@ -311,6 +356,15 @@ function validate_html($content) {
     global $VALIDATOR;
 
     if (strpos($VALIDATOR, 'http') !== 0) {
+        $javacmd = resolve_validator_java($VALIDATOR);
+        if ($javacmd === false) {
+            cli_error(
+                "The vnu.jar HTML validator requires Java 17 or above, but no Java runtime was found.\n" .
+                "Please install Java 17 or above (e.g. apt install openjdk-17-jre or brew install openjdk@17), or use one of the alternatives:\n" .
+                "  - the self-contained vnu binary (https://validator.github.io/validator/)\n" .
+                "  - a validator service URL, e.g. --validator=https://html5.validator.nu/ or http://localhost:8888/");
+        }
+
         $file = tempnam(sys_get_temp_dir(), 'mustache_lint');
 
         if ($file === false) {
@@ -319,7 +373,8 @@ function validate_html($content) {
         file_put_contents($file, $content);
 
         // The "2>&1" part redirects stderr to stdout because the JSON is sent to stderr and PHP does not capture that.
-        $output = shell_exec(sprintf('java -jar %s --format json --exit-zero-always %s 2>&1', $VALIDATOR, $file));
+        $output = shell_exec(sprintf('%s -jar %s --format json --exit-zero-always %s 2>&1',
+            escapeshellarg($javacmd), escapeshellarg($VALIDATOR), escapeshellarg($file)));
 
         unlink($file);
 

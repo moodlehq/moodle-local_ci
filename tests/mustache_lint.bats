@@ -21,6 +21,22 @@ setup () {
     assert_output --partial "No mustache problems found"
 }
 
+@test "mustache_lint: Dialog closedby attribute is accepted" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-dialog-closedby.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    ci_run mustache_lint/mustache_lint.sh
+
+    # Assert result. The dialog "closedby" attribute (HTML spec, late 2025) is only
+    # accepted by vnu-jar 25.12.5+; keep this test as a regression guard for the pin.
+    assert_success
+    assert_output --partial "Running mustache lint from $GIT_PREVIOUS_COMMIT to $GIT_COMMIT"
+    assert_output --partial "lib/templates/linting_dialog_closedby.mustache - OK: Mustache rendered html succesfully"
+    assert_output --partial "No mustache problems found"
+}
+
 @test "mustache_lint: No example content" {
     # Set up.
     git_apply_fixture 31-mustache_lint-no-example.patch
@@ -81,6 +97,159 @@ setup () {
     assert_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: End tag “p” seen, but there were open elements. (ello World</p></bo)"
     assert_output --partial "lib/templates/linting.mustache - WARNING: HTML Validation error, line 2: Unclosed element “span”. (<body><p><span>Hello )"
     assert_output --partial "Mustache lint problems found"
+}
+
+@test "mustache_lint: Fails with guidance when Java is missing" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-ok.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    # Hide any JRE auto-installed by the vnu-jar npm package.
+    cachedjava="$PWD/node_modules/.cache/vnu-jar/java"
+    if [ -d "$cachedjava" ]; then
+        mv "$cachedjava" "${cachedjava}.hidden"
+    fi
+
+    # Simulate a system without java: prepend a failing java stub to PATH.
+    fakebindir=$(mktemp -d)
+    cat > "$fakebindir/java" <<'EOF'
+#!/bin/sh
+# Simulate "java: command not found".
+exit 127
+EOF
+    chmod +x "$fakebindir/java"
+
+    PATH="$fakebindir:$PATH" ci_run mustache_lint/mustache_lint.sh
+
+    # Restore.
+    if [ -d "${cachedjava}.hidden" ]; then
+        mv "${cachedjava}.hidden" "$cachedjava"
+    fi
+
+    # Assert result
+    assert_failure
+    assert_output --partial "NPM installed validator available, but java not found in path."
+    assert_output --partial "Please install Java 17 or above"
+    assert_output --partial "the self-contained vnu binary"
+}
+
+@test "mustache_lint: Fails with guidance when Java is too old" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-ok.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    # Hide any JRE auto-installed by the vnu-jar npm package.
+    cachedjava="$PWD/node_modules/.cache/vnu-jar/java"
+    if [ -d "$cachedjava" ]; then
+        mv "$cachedjava" "${cachedjava}.hidden"
+    fi
+
+    # Simulate an old java (1.8) reporting its version.
+    fakebindir=$(mktemp -d)
+    cat > "$fakebindir/java" <<'EOF'
+#!/bin/sh
+echo 'java version "1.8.0_412"' >&2
+exit 0
+EOF
+    chmod +x "$fakebindir/java"
+
+    PATH="$fakebindir:$PATH" ci_run mustache_lint/mustache_lint.sh
+
+    # Restore.
+    if [ -d "${cachedjava}.hidden" ]; then
+        mv "${cachedjava}.hidden" "$cachedjava"
+    fi
+
+    # Assert result
+    assert_failure
+    assert_output --partial "NPM installed validator available, but java version too low: 1.8"
+    assert_output --partial "Please install Java 17 or above"
+}
+
+@test "mustache_lint: Uses the JRE auto-installed by the vnu-jar npm package when Java is missing" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-ok.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    realjava=$(command -v java)
+
+    # Simulate the JRE auto-installed by the vnu-jar npm package postinstall,
+    # delegating to the real system java.
+    cachedjava="$PWD/node_modules/.cache/vnu-jar/java"
+    if [ -d "$cachedjava" ]; then
+        mv "$cachedjava" "${cachedjava}.hidden"
+    fi
+    cachedbin="$cachedjava/jdk-17.0.17+10-jre/bin"
+    mkdir -p "$cachedbin"
+    cat > "$cachedbin/java" <<EOF
+#!/bin/sh
+exec "$realjava" "\$@"
+EOF
+    chmod +x "$cachedbin/java"
+
+    # Simulate a system without java.
+    fakebindir=$(mktemp -d)
+    cat > "$fakebindir/java" <<'EOF'
+#!/bin/sh
+exit 127
+EOF
+    chmod +x "$fakebindir/java"
+
+    PATH="$fakebindir:$PATH" ci_run mustache_lint/mustache_lint.sh
+
+    # Clean up the simulated JRE and restore any pre-existing one.
+    rm -rf "$cachedjava"
+    if [ -d "${cachedjava}.hidden" ]; then
+        mv "${cachedjava}.hidden" "$cachedjava"
+    fi
+
+    # Assert result
+    assert_success
+    assert_output --partial "NPM installed validator found."
+    assert_output --partial "No mustache problems found"
+}
+
+@test "mustache_lint: PHP script fails with guidance when Java is missing" {
+    # Set up.
+    git_apply_fixture 31-mustache_lint-ok.patch
+    export GIT_PREVIOUS_COMMIT=$FIXTURE_HASH_BEFORE
+    export GIT_COMMIT=$FIXTURE_HASH_AFTER
+
+    localciroot=$PWD
+    moodleroot=${LOCAL_CI_TESTS_GITDIR}
+
+    # Hide any JRE auto-installed by the vnu-jar npm package.
+    cachedjava="$PWD/node_modules/.cache/vnu-jar/java"
+    if [ -d "$cachedjava" ]; then
+        mv "$cachedjava" "${cachedjava}.hidden"
+    fi
+
+    # Simulate a system without java.
+    fakebindir=$(mktemp -d)
+    cat > "$fakebindir/java" <<'EOF'
+#!/bin/sh
+exit 127
+EOF
+    chmod +x "$fakebindir/java"
+
+    # Run the PHP script directly (as moodle-plugin-ci does), with the jar
+    # passed explicitly and no java available.
+    PATH="$fakebindir:$PATH" ci_run_php mustache_lint/mustache_lint.php \
+        --filename="${moodleroot}/lib/templates/linting_ok.mustache" \
+        --basename="${moodleroot}" --validator="${localciroot}/node_modules/vnu-jar/build/dist/vnu.jar"
+
+    # Restore.
+    if [ -d "${cachedjava}.hidden" ]; then
+        mv "${cachedjava}.hidden" "$cachedjava"
+    fi
+
+    # Assert result
+    assert_failure
+    assert_output --partial "The vnu.jar HTML validator requires Java 17 or above, but no Java runtime was found."
+    assert_output --partial "Please install Java 17 or above"
 }
 
 @test "mustache_lint: Partials are loaded" {
