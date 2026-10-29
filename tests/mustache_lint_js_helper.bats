@@ -24,7 +24,9 @@ check_eslint () {
         require $argv[1] . "/vendor/autoload.php";
         require $argv[1] . "/mustache_lint/js_helper.php";
         $helper = new js_helper($argv[2]);
-        $engine = new Mustache_Engine(["helpers" => ["js" => [$helper, "add_js"]]]);
+        $engine = new Mustache_Engine(["helpers" => ["js" => function($content, \Mustache_LambdaHelper $lambdahelper) use ($helper) {
+            $helper->add_js($content, $lambdahelper);
+        }]]);
         $engine->render("{{#js}}var example = true;{{/js}}");
         $messages = $helper->run_eslint();
         echo $messages[0]->message ?? "ESLint did not run";

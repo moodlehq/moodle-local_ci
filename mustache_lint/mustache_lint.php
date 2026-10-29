@@ -128,7 +128,9 @@ $mustache = new Mustache_Engine([
             $content = preg_replace('([{}]{2,3})', '{{=<% %>=}}${0}<%={{ }}=%>', $content);
             return '"' . $content . '"';
         },
-        'js' => [$jshelper, 'add_js'],
+        'js' => function($content, Mustache_LambdaHelper $helper) use ($jshelper) {
+            $jshelper->add_js($content, $helper);
+        },
     ],
     'partials_loader' => new simple_core_component_mustache_loader($theme),
 ]);

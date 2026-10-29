@@ -5,7 +5,7 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "moodlehq/moodle-cs": "^3.7",
-        "mustache/mustache": "^2.14.2"
+        "mustache/mustache": "^3.2"
     },
     "config": {
         "allow-plugins": {
