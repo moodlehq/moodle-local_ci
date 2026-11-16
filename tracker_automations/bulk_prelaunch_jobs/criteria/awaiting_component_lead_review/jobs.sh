@@ -66,3 +66,26 @@ if [[ ${target} == "main" ]]; then
         -p BEHAT_TAGS="@app&&~@performance&&~@local_behatsnapshots&&~@ci_jenkins_skip" \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
+
+# We want to launch a Jest job
+# only if the target branch is main.
+if [[ ${target} == "main" ]]; then
+    echo -n "Jest: " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "DEV.03 - Developer-requested Jest" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -p PHPVERSION=${php_version} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
+
+# We want to launch a Rector job
+# only if the target branch is main.
+# Note that the job only supports a reduced set of PHP versions (8.4 and up),
+# so we don't pass PHPVERSION and let the job use its own default.
+if [[ ${target} == "main" ]]; then
+    echo -n "Rector: " >> "${resultfile}.jenkinscli"
+    ${jenkinsreq} "DEV.04 - Developer requested Rector" \
+        -p REPOSITORY=${repository} \
+        -p BRANCH=${branch} \
+        -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
