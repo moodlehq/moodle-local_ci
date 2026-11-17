@@ -13,7 +13,7 @@
 #             Trios are colon separated, example: main:customfield_XXXXX:7.3,....). All them required.
 #criteria: "awaiting integration"...
 #schedulemins: Frecuency (in minutes) of the schedule (cron) of this job. IMPORTANT to ensure that they match or there will be issues processed more than once or skipped.
-#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|all).
+#jobtype: defaulting to "all", allows to just pick one of the available jobs: phpunit, behat-(firefox|chrome|nonjs|app|all), jest, rector.
 #quiet: with any value different from "false", don't perform any action in the Tracker.
 
 # Let's go strict (exit on error)

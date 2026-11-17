@@ -190,3 +190,32 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
             -w >> "${resultfile}.jenkinscli" < /dev/null
     fi
 fi
+
+# We want to launch a Jest job.
+# Note that Jest only runs on node, so the job doesn't need PHPVERSION at all.
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "jest" ]]; then
+    # Only for main or when jest is explicitly asked.
+    if [[ ${target} == "main" ]] || [[ "${jobtype}" == "jest" ]]; then
+        echo -n "Jest: " >> "${resultfile}.jenkinscli"
+        ${jenkinsreq} "DEV.03 - Developer-requested Jest" \
+            -p REPOSITORY=${repository} \
+            -p BRANCH=${branch} \
+            -p RUNNERVERSION=${runner} \
+            -w >> "${resultfile}.jenkinscli" < /dev/null
+    fi
+fi
+
+# We want to launch a Rector job.
+# Note that the job only supports a reduced set of PHP versions (8.4 and up),
+# so we don't pass PHPVERSION and let the job use its own default.
+if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "rector" ]]; then
+    # Only for main or when rector is explicitly asked.
+    if [[ ${target} == "main" ]] || [[ "${jobtype}" == "rector" ]]; then
+        echo -n "Rector: " >> "${resultfile}.jenkinscli"
+        ${jenkinsreq} "DEV.04 - Developer requested Rector" \
+            -p REPOSITORY=${repository} \
+            -p BRANCH=${branch} \
+            -p RUNNERVERSION=${runner} \
+            -w >> "${resultfile}.jenkinscli" < /dev/null
+    fi
+fi
