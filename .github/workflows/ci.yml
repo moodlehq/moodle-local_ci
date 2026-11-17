@@ -20,7 +20,6 @@ jobs:
           # Get all the test files without extension.
           echo "matrix=$(cd local_ci/tests && find . -name '*.bats' -not -path '*/libs/*' -exec basename {} .bats ';' | \
             jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-
   test:
     name: Unit tests
     needs: collect
@@ -30,6 +29,14 @@ jobs:
       matrix:
         test: ${{ fromJson(needs.collect.outputs.matrix) }}
     steps:
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          # username: ${{ vars.DOCKERHUB_USERNAME }}
+          # username: ${{ env.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: "FOO"
       - name: Checking out moodle-local_ci
         uses: actions/checkout@v4
         with:
