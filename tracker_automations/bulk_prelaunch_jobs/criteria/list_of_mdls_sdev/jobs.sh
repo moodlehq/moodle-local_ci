@@ -110,6 +110,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${job
 fi
 
 # We want to launch a Jest job.
+# Note that Jest only runs on node, so the job doesn't need PHPVERSION at all.
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "jest" ]]; then
     # Only for main or when jest is explicitly asked.
     if [[ ${target} == "main" ]] || [[ "${jobtype}" == "jest" ]]; then
@@ -117,7 +118,6 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "jest" ]]; then
         ${jenkinsreq} "SDEV.03 - Developer-requested Jest" \
             -p REPOSITORY=${repository} \
             -p BRANCH=${branch} \
-            -p PHPVERSION=${php_version} \
             -p RUNNERVERSION=${runner} \
             -w >> "${resultfile}.jenkinscli" < /dev/null
     fi
