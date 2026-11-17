@@ -59,6 +59,7 @@ if [[ "${jobtype}" == "behat-chrome" ]]; then
         -p BEHAT_SUITE=classic \
         -p RUNNERVERSION=${runner} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
+fi
 
 # We want to launch always a Behat (Firefox (js) - boost) job
 if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "behat-all" ]] || [[ "${jobtype}" == "behat-firefox" ]]; then
