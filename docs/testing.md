@@ -32,7 +32,7 @@ The shared setup (`tests/libs/shared_setup.bash`) refuses to run unless these ar
 |----------|---------|
 | `LOCAL_CI_TESTS_CACHEDIR` | A directory bats can use as a cache. Must exist. |
 | `LOCAL_CI_TESTS_GITDIR` | A clone of `moodle.git` to test against. **⚠️ Tests make destructive git changes to it** (`checkout`, `clean -fdx`, `reset --hard`, applying patches). Use a dedicated throwaway clone — never your working checkout. |
-| `LOCAL_CI_TESTS_PHPCS_DIR` | Path to the moodle-cs coding standard (after `composer install`, that is `vendor/moodlehq/moodle-cs/moodle`). |
+| `LOCAL_CI_TESTS_PHPCS_DIR` | Path to the moodle-cs coding standard (after `composer install`, that is `vendor/moodlehq/moodle-cs/Standards/moodle`). |
 
 Database-backed suites (e.g. `compare_databases`, `list_valid_components`) additionally
 need: `LOCAL_CI_TESTS_DBLIBRARY`, `LOCAL_CI_TESTS_DBTYPE`, `LOCAL_CI_TESTS_DBHOST`,
@@ -54,7 +54,7 @@ git clone https://github.com/moodle/moodle.git /path/to/throwaway/moodle
 # 3. Configure the environment.
 export LOCAL_CI_TESTS_CACHEDIR=/tmp/ci-cache
 export LOCAL_CI_TESTS_GITDIR=/path/to/throwaway/moodle
-export LOCAL_CI_TESTS_PHPCS_DIR="$PWD/vendor/moodlehq/moodle-cs/moodle"
+export LOCAL_CI_TESTS_PHPCS_DIR="$PWD/vendor/moodlehq/moodle-cs/Standards/moodle"
 mkdir -p "$LOCAL_CI_TESTS_CACHEDIR"
 
 # 4. Run a single suite (recommended while developing)...
