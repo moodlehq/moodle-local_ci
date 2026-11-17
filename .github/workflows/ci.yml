@@ -92,7 +92,7 @@ jobs:
         env:
           LOCAL_CI_TESTS_CACHEDIR: ${{ github.workspace }}/cachedir
           LOCAL_CI_TESTS_GITDIR: ${{ github.workspace }}/moodle
-          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/moodle
+          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/Standards/moodle
           LOCAL_CI_TESTS_DBLIBRARY: native
           LOCAL_CI_TESTS_DBTYPE: mysqli
           LOCAL_CI_TESTS_DBHOST: 127.0.0.1
@@ -183,7 +183,7 @@ jobs:
         env:
           LOCAL_CI_TESTS_CACHEDIR: ${{ github.workspace }}/cachedir
           LOCAL_CI_TESTS_GITDIR: ${{ github.workspace }}/moodle
-          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/moodle
+          LOCAL_CI_TESTS_PHPCS_DIR: ${{ github.workspace }}/local_ci/vendor/moodlehq/moodle-cs/Standards/moodle
           LOCAL_CI_TESTS_DBLIBRARY: native
           LOCAL_CI_TESTS_DBTYPE: mysqli
           LOCAL_CI_TESTS_DBHOST: 127.0.0.1

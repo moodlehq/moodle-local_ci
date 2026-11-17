@@ -73,7 +73,7 @@ one job per `*.bats` file against a fresh `moodle.git` clone and MySQL. To run l
 composer install && npm install
 export LOCAL_CI_TESTS_CACHEDIR=/tmp/ci-cache
 export LOCAL_CI_TESTS_GITDIR=/path/to/throwaway/moodle   # DESTRUCTIVE — dedicated clone!
-export LOCAL_CI_TESTS_PHPCS_DIR="$PWD/vendor/moodlehq/moodle-cs/moodle"
+export LOCAL_CI_TESTS_PHPCS_DIR="$PWD/vendor/moodlehq/moodle-cs/Standards/moodle"
 mkdir -p "$LOCAL_CI_TESTS_CACHEDIR"
 bats tests/php_lint.bats        # a single suite
 ```
