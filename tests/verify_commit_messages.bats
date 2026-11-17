@@ -90,7 +90,7 @@ commit_apply_fixture_and_run() {
 @test "verify_commit_messages/verify_commit_messages.sh: body too long" {
     commit_apply_fixture_and_run too-long-body.patch
     assert_failure
-    assert_output "${shorthash}*error*The line #3 has more than 132 characters (found: 181)"
+    assert_output "${shorthash}*error*The line #3 has more than 72 characters (found: 181)"
 }
 
 @test "verify_commit_messages/verify_commit_messages.sh: backslash ended lines" {
@@ -98,7 +98,7 @@ commit_apply_fixture_and_run() {
     assert_failure
     refute_output "#3"
     refute_output "#5"
-    assert_output "${shorthash}*error*The line #7 has more than 132 characters (found: 141)"
+    assert_output "${shorthash}*error*The line #7 has more than 72 characters (found: 141)"
 }
 
 @test "verify_commit_messages/verify_commit_messages.sh: AMOS bad syntax" {
