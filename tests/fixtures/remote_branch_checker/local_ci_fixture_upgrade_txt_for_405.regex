@@ -5,3 +5,8 @@
 condensedresult="smurf,error,1,0:overview,error,1,0
 <detail name="overview" status="error" numerrors="1" numwarnings="0"/>
 <message>The patchset contains changes to upgrade.txt or UPGRADING.md files.</message>
+<message>File(s) affected:</message>
+<message>UPGRADING.md</message>
+<message>lib/upgrade.txt</message>
+<message>mod/assign/UPGRADING.md</message>
+<message>mod/assign/upgrade.txt</message>
