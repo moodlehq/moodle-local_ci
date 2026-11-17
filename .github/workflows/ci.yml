@@ -10,7 +10,7 @@ jobs:
       matrix: ${{steps.collect-tests.outputs.matrix }}
     steps:
       - name: Checking out moodle-local_ci
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: local_ci
 
@@ -31,12 +31,12 @@ jobs:
         test: ${{ fromJson(needs.collect.outputs.matrix) }}
     steps:
       - name: Checking out moodle-local_ci
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: local_ci
 
       - name: Checking out moodle
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: moodle/moodle
           fetch-depth: 0 # We need a complete clone, because we use various commits / tags.
@@ -66,7 +66,7 @@ jobs:
           coverage: none
 
       - name: Configuring node & npm
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: 'moodle/.nvmrc'
 
@@ -77,7 +77,7 @@ jobs:
           npm install
 
       - name: Setup Bats
-        uses: bats-core/bats-action@2.0.0
+        uses: bats-core/bats-action@4.0.0
         with:
           bats-version: 1.11.0
           # We need only support and assert libraries, and installed locally for caching to work.
@@ -122,12 +122,12 @@ jobs:
           sudo apt-get install uuid kcov
 
       - name: Checking out moodle-local_ci
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: local_ci
 
       - name: Checking out moodle
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: moodle/moodle
           fetch-depth: 0 # We need a complete clone, because we use various commits / tags.
@@ -157,7 +157,7 @@ jobs:
           coverage: none
 
       - name: Configuring node & npm
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: 'moodle/.nvmrc'
 
@@ -168,7 +168,7 @@ jobs:
           npm install
 
       - name: Setup Bats
-        uses: bats-core/bats-action@2.0.0
+        uses: bats-core/bats-action@4.0.0
         with:
           bats-version: 1.11.0
           # We need only support and assert libraries, and installed locally for caching to work.
@@ -203,7 +203,7 @@ jobs:
             bats tests/${{ matrix.test }}.bats
 
       - name: Upload code coverage (codecov)
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ github.workspace }}/coverage
