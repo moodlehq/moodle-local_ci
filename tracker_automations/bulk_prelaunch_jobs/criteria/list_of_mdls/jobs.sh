@@ -215,7 +215,7 @@ if [[ "${jobtype}" == "all" ]] || [[ "${jobtype}" == "rector" ]]; then
     # Only for main or when rector is explicitly asked.
     if [[ ${target} == "main" ]] || [[ "${jobtype}" == "rector" ]]; then
         echo -n "Rector: " >> "${resultfile}.jenkinscli"
-        ${jenkinsreq} "DEV.04 - Developer requested Rector" \
+        ${jenkinsreq} "DEV.04 - Developer-requested Rector" \
             -p REPOSITORY=${repository} \
             -p BRANCH=${branch} \
             -p RUNNERVERSION=${runner} \

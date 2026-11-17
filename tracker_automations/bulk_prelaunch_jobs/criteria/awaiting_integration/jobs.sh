@@ -84,7 +84,7 @@ fi
 # so we don't pass PHPVERSION and let the job use its own default.
 if [[ ${target} == "main" ]]; then
     echo -n "Rector: " >> "${resultfile}.jenkinscli"
-    ${jenkinsreq} "DEV.04 - Developer requested Rector" \
+    ${jenkinsreq} "DEV.04 - Developer-requested Rector" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
