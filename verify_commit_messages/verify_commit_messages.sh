@@ -8,7 +8,7 @@
 # $issuecode: code of the issue to verify
 # $maxcommitswarn: Max number of commits accepted per run. Warning if exceeded. Defaults to 10.
 # $maxcommitserror: Max number of commits accepted per run. Error if exceeded. Defaults to 100.
-# $debug: to return results in human-readable format for debugging
+# $debug: to return results in human-readable format, including valid AMOS instructions, for debugging
 # $verifyissuecodeinmerge: to apply the issue code matching checks to merge commits.
 # $phpcmd: Path to the PHP CLI executable
 
@@ -131,7 +131,7 @@ for c in ${commits}; do
     else
         # Run AMOS checks.
         modifiedfiles=$(git diff-tree --no-commit-id --name-only -r ${c} | tr '\n' ',')
-        $phpcmd $mydir/check_amos.php --git="${gitcmd}" --commitid=${c}
+        $phpcmd $mydir/check_amos.php --git="${gitcmd}" --commitid=${c} ${debug:+--debug}
 
         numproblems=$((numproblems+$?))
 

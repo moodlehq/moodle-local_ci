@@ -3,7 +3,6 @@
 # and its smurf.xml results.
 
 <detail name="commit" status="error" numerrors="2" numwarnings="0"/>
-<description>This section shows the problems detected in the commit messages by the commits checker</description>
+<description>This section shows the results of the commit message checks</description>
 <message>AMOS - No valid commands parsed, but 'AMOS BEGIN' in commit. Syntax is wrong.</message>
 <message>AMOS - Instruction not understood 'MOV \[nametextarea, mod_data\]\[fieldtypelabel, datafield_textarea\]'</message>
-<message>AMOS - String to be moved: nameurl/data to fieldtypelabel/datafield_url</message>

@@ -161,9 +161,9 @@ class remote_branch_reporter {
 
         // Process the commits output, weighting errors with 3 and warnings with 1
         $params = array(
-            'title' => 'Commit messages problems',
+            'title' => 'Commit message checks',
             'abbr' => 'commit',
-            'description' => 'This section shows the problems detected in the commit messages by the commits checker',
+            'description' => 'This section shows the results of the commit message checks',
             'url' => 'https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages',
             'codedir' => '', // We are storing the commit hashes so, nothing to trim from them.
             'errorweight' => 3,

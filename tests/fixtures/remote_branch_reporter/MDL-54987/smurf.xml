@@ -201,8 +201,8 @@
       </problem>
     </mess>
   </check>
-  <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="28" numwarnings="1" allowfiltering="1">
-    <description>This section shows the problems detected in the commit messages by the commits checker</description>
+  <check id="commit" title="Commit message checks" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="28" numwarnings="1" allowfiltering="1">
+    <description>This section shows the results of the commit message checks</description>
     <mess>
       <problem file="1869439" linefrom="0" lineto="0" method="" class="" package="" api="" diffurl="https://github.com/FMCorz/moodle/commit/1869439" ruleset="moodle" rule="" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" type="error" weight="3">
         <message>The commit message does not contain the expected issue code MDL-54987 and a space. </message>

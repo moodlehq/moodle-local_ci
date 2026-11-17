@@ -41,14 +41,19 @@ class amos_script_parser {
     const STATUS_SYNTAX_ERROR = 2;
     const STATUS_UNKNOWN_INSTRUCTION = 3;
 
+    /** @var bool Whether to report valid AMOS instructions. */
+    protected static bool $debug = false;
+
     /**
      * Validate a commit message for amos comamnds.
      *
      * @param string $text the commit message text
      * @param string $filesmodified comma seperated list of files modified by the commit
+     * @param bool $debug Whether to report valid AMOS instructions
      * @return int the number of problems found
      */
-    public static function validate_commit_message($text, $filesmodified) {
+    public static function validate_commit_message($text, $filesmodified, bool $debug = false) {
+        self::$debug = $debug;
         if (!preg_match('/(AMOS\s+(BEGIN|START)|AMOS\s+END)/', $text, $amosmatches)) {
             // No sign of amos command.
             return 0;
@@ -102,6 +107,10 @@ class amos_script_parser {
 
     public static function print_message($message, $severity = 'info') {
         global $COMMIT;
+
+        if ($severity === 'info' && !self::$debug) {
+            return;
+        }
         echo "{$COMMIT}*{$severity}*AMOS - {$message}\n";
     }
 

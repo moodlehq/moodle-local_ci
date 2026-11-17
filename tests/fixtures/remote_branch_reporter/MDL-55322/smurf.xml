@@ -32,8 +32,8 @@
     <description>This section shows the phpdocs problems detected in the code by local_moodlecheck</description>
     <mess/>
   </check>
-  <check id="commit" title="Commit messages problems" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="0" numwarnings="0" allowfiltering="1">
-    <description>This section shows the problems detected in the commit messages by the commits checker</description>
+  <check id="commit" title="Commit message checks" url="https://docs.moodle.org/dev/Commit_cheat_sheet#Provide_clear_commit_messages" numerrors="0" numwarnings="0" allowfiltering="1">
+    <description>This section shows the results of the commit message checks</description>
     <mess/>
   </check>
   <check id="savepoint" title="Update savepoints problems" url="https://moodledev.io/docs/guides/upgrade" numerrors="0" numwarnings="0" allowfiltering="1">
