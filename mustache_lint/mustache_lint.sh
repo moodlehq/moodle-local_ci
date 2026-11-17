@@ -2,10 +2,16 @@
 # $gitcmd: Path to the git CLI executable
 # $gitdir: Directory containing git repo
 # $phpcmd: Path to php CLI exectuable
-# $validator: (optional) url for validator - defaults to https://html5.validator.nu
+# $validator: (optional) validator URL or path to the vnu.jar. When unset, the
+# NPM-installed vnu.jar is used if present (requires Java 17+); otherwise the
+# script fails with guidance instead of silently using the public validator.
 #
 # Based on GIT_PREVIOUS_COMMIT and GIT_COMMIT will list all changed php
 # files and run lint on them.
+#
+# When the NPM-installed validator is used, a Java 17+ runtime is required
+# (system java first, then the JRE auto-installed by the vnu-jar npm package
+# during npm install). If none is found the script fails with guidance.
 #
 set -e
 
@@ -21,23 +27,81 @@ done
 # calculate some variables
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-validator=${validator:-"https://html5.validator.nu"}
-if [ -f "$mydir/../node_modules/vnu-jar/build/dist/vnu.jar" ]
-then
+# Print a Java-missing/too-old error and exit.
+# $1: reason why the NPM-installed validator cannot be used.
+validator_java_error() {
+    echo "NPM installed validator available, but $1"
+    echo "Please install Java 17 or above (e.g. apt install openjdk-17-jre or brew install openjdk@17), or use one of the alternatives:"
+    echo "  - the self-contained vnu binary (https://validator.github.io/validator/)"
+    echo "  - a validator service, passed via the \$validator variable (e.g. validator=http://localhost:8888/)"
+    exit 1
+}
+
+# Locate a Java 17+ runtime to run the NPM-installed vnu.jar:
+# 1. java available on the PATH.
+# 2. JRE auto-installed by the vnu-jar npm package during npm install
+#    (node_modules/.cache/vnu-jar/java/).
+# Sets $VALIDATOR_JAVA_CMD to the executable path on success and returns 0.
+# On failure returns 1 and leaves $VALIDATOR_JAVA_CMD empty.
+find_validator_java() {
+    VALIDATOR_JAVA_CMD=""
     if java -version 2>&1 >/dev/null | grep -Eq "(java|openjdk) version"
     then
         # Extract major and minor digits of version and compare it as float
-        # numbers. Not error proof, but sufficient to ensure it is >= 1.8
-        javaversion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/')
-        if [ $( echo "${javaversion} >= 1.8" | bc ) == 1 ]
+        # numbers. Not error proof, but sufficient to ensure it is >= 17
+        # (vnu.jar 26.x requires Java 17 or above).
+        validator_java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | sed 's/^\([0-9]*\.[0-9]*\).*$/\1/')
+        if [ $( echo "${validator_java_version} >= 17" | bc ) == 1 ]
+        then
+            VALIDATOR_JAVA_CMD="java"
+            return 0
+        fi
+    fi
+
+    # The vnu-jar npm package auto-installs a JRE during postinstall when no
+    # system java is found: node_modules/.cache/vnu-jar/java/jdk-*/bin/java.
+    for cachedjava in "$mydir/../node_modules/.cache/vnu-jar/java/"*/bin/java \
+                      "$mydir/../node_modules/.cache/vnu-jar/java/"*/Contents/Home/bin/java
+    do
+        if [ -x "$cachedjava" ]; then
+            VALIDATOR_JAVA_CMD="$cachedjava"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+# Determine the validator to use.
+# Precedence:
+#   1. An explicitly configured $validator (URL or jar path) is always respected.
+#   2. Otherwise, if the NPM-installed vnu.jar is present, use it (requires a
+#      Java 17+ runtime, resolved by find_validator_java).
+#   3. Otherwise, fail with guidance instead of silently using the public service.
+validator_set=${validator:-}
+if [ -z "$validator_set" ]; then
+    if [ -f "$mydir/../node_modules/vnu-jar/build/dist/vnu.jar" ]
+    then
+        # Note: not called via command substitution - the function sets globals
+        # (VALIDATOR_JAVA_CMD, validator_java_version) that we need afterwards,
+        # and a subshell would lose them.
+        if find_validator_java
         then
             echo "NPM installed validator found."
             validator="$( cd $mydir/../node_modules/ && pwd)/vnu-jar/build/dist/vnu.jar"
+            # Pass the runtime along, so mustache_lint.php does not re-resolve it
+            # (and does not mistake the auto-installed JRE for a missing java).
+            export MUSTACHE_LINT_JAVACMD="$VALIDATOR_JAVA_CMD"
+        elif [ -n "$validator_java_version" ]
+        then
+            validator_java_error "java version too low: $validator_java_version (Java 17 or above is required)."
         else
-            echo "NPM installed validator available, but java version too low: $javaversion"
+            validator_java_error "java not found in path."
         fi
     else
-        echo "NPM installed validator available, but java not found in path"
+        echo "No NPM-installed validator found (node_modules/vnu-jar is missing) and no validator was configured."
+        echo "Run 'npm install' in the local_ci directory to install vnu-jar, or configure one explicitly via the \$validator variable (e.g. validator=http://localhost:8888/)."
+        exit 1
     fi
 fi
 

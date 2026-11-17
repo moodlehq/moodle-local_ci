@@ -109,8 +109,10 @@ jobs:
     if: github.repository == 'moodlehq/moodle-local_ci'
     name: Code coverage
     needs: collect
-    # Ubuntu 24.04 is missing the kcov package. We can switch back to ubuntu-latest, once it points to 26.04
-    runs-on: ubuntu-22.04
+    # Ubuntu 24.04 (noble) is missing the kcov package, so we pin to 26.04 explicitly.
+    # Once the ubuntu-latest label points to 26.04 (migration started Oct 19 2026, expected complete by Nov 19 2026), we can switch back to it.
+    # Note: ubuntu-22.04 is deprecated since Sep 17 2026 and fully unsupported by Apr 17 2027.
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
