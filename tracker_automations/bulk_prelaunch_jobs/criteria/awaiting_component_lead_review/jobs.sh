@@ -69,12 +69,12 @@ fi
 
 # We want to launch a Jest job
 # only if the target branch is main.
+# Note that Jest only runs on node, so the job doesn't need PHPVERSION at all.
 if [[ ${target} == "main" ]]; then
     echo -n "Jest: " >> "${resultfile}.jenkinscli"
     ${jenkinsreq} "DEV.03 - Developer-requested Jest" \
         -p REPOSITORY=${repository} \
         -p BRANCH=${branch} \
-        -p PHPVERSION=${php_version} \
         -w >> "${resultfile}.jenkinscli" < /dev/null
 fi
 
